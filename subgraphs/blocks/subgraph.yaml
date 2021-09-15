@@ -19,6 +19,6 @@ dataSources:
         - Block
       abis:
         - name: DepositContract
-          file: ./abis/EIP1155.json
+          file: ./abis/DepositContract.json
       blockHandlers:
         - handler: handleBlock
