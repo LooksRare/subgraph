@@ -1,0 +1,13 @@
+{
+  "name": "eip1155",
+  "description": "LooksRare Subgraph",
+  "version": "1.0.0",
+  "repository": "git@github.com:looksrare/rare-subgraph.git",
+  "author": "LooksRare",
+  "license": "GPL-3.0-or-later",
+  "scripts": {
+    "codegen": "graph codegen subgraph.yaml",
+    "build": "graph build subgraph.yaml",
+    "deploy": "graph deploy --product hosted-service --node https://api.thegraph.com/deploy/ --ipfs https://api.thegraph.com/ipfs/ looksrare/eip1155 subgraph.yaml"
+  }
+}
