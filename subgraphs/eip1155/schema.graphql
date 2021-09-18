@@ -1,5 +1,5 @@
 """
-ERC721 Contract(s)
+Blockchain
 """
 type Blockchain @entity {
     "ID"
@@ -16,7 +16,7 @@ type Blockchain @entity {
 }
 
 """
-ERC721 Collection(s)
+EIP-1155 Collection(s)
 """
 type Collection @entity {
     "ID"
@@ -47,7 +47,7 @@ type Collection @entity {
 }
 
 """
-Owners
+EIP-1155 Owner(s)
 """
 type Owner @entity {
     "ID"
@@ -76,7 +76,7 @@ type Owner @entity {
 }
 
 """
-ERC721 Token(s)
+EIP-1155 Token(s)
 """
 type Token @entity {
     "ID"
@@ -122,7 +122,7 @@ enum TransactionType {
 }
 
 """
-Transactions
+EIP-1155 Transaction(s)
 """
 type Transaction @entity {
     "ID (hash)"
