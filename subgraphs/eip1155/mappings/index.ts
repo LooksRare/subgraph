@@ -5,24 +5,17 @@ import { TransferBatch, TransferSingle, URI } from "../generated/EIP1155/EIP1155
 import { toBigDecimal } from "./utils";
 import { fetchName, fetchSymbol, fetchURI } from "./utils/eip1155";
 
-// Constants
-let ZERO_ADDRESS = "0x0000000000000000000000000000000000000000";
-
-// BigNumber-like references
-let ZERO_BI = BigInt.fromI32(0);
-let ONE_BI = BigInt.fromI32(1);
-
 export function handleTransferBatch(event: TransferBatch): void {
   let blockchain = Blockchain.load("ETH");
   if (blockchain === null) {
     // Blockchain
     blockchain = new Blockchain("ETH");
-    blockchain.totalCollections = ZERO_BI;
-    blockchain.totalTokens = ZERO_BI;
-    blockchain.totalTransactions = ZERO_BI;
+    blockchain.totalCollections = BigInt.zero();
+    blockchain.totalTokens = BigInt.zero();
+    blockchain.totalTransactions = BigInt.zero();
     blockchain.save();
   }
-  blockchain.totalTransactions = blockchain.totalTransactions.plus(ONE_BI);
+  blockchain.totalTransactions = blockchain.totalTransactions.plus(BigInt.fromI32(1));
   blockchain.save();
 
   let collection = Collection.load(event.address.toHex());
@@ -31,18 +24,18 @@ export function handleTransferBatch(event: TransferBatch): void {
     collection = new Collection(event.address.toHex());
     collection.name = fetchName(event.address);
     collection.symbol = fetchSymbol(event.address);
-    collection.totalTokens = ZERO_BI;
-    collection.totalTransactions = ZERO_BI;
+    collection.totalTokens = BigInt.zero();
+    collection.totalTransactions = BigInt.zero();
     collection.block = event.block.number;
     collection.createdAt = event.block.timestamp;
     collection.updatedAt = event.block.timestamp;
     collection.save();
 
     // Blockchain
-    blockchain.totalCollections = blockchain.totalCollections.plus(ONE_BI);
+    blockchain.totalCollections = blockchain.totalCollections.plus(BigInt.fromI32(1));
     blockchain.save();
   }
-  collection.totalTransactions = collection.totalTransactions.plus(ONE_BI);
+  collection.totalTransactions = collection.totalTransactions.plus(BigInt.fromI32(1));
   collection.updatedAt = event.block.timestamp;
   collection.save();
 
@@ -50,18 +43,18 @@ export function handleTransferBatch(event: TransferBatch): void {
   if (from === null) {
     // Owner - as Sender
     from = new Owner(event.params._from.toHex());
-    from.totalTokens = ZERO_BI;
-    from.totalTokensMinted = ZERO_BI;
-    from.totalTransactions = ZERO_BI;
+    from.totalTokens = BigInt.zero();
+    from.totalTokensMinted = BigInt.zero();
+    from.totalTransactions = BigInt.zero();
     from.block = event.block.number;
     from.createdAt = event.block.timestamp;
     from.updatedAt = event.block.timestamp;
     from.save();
   }
-  from.totalTokens = event.params._from.equals(Address.fromString(ZERO_ADDRESS))
+  from.totalTokens = event.params._from.equals(Address.zero())
     ? from.totalTokens
-    : from.totalTokens.minus(ONE_BI);
-  from.totalTransactions = from.totalTransactions.plus(ONE_BI);
+    : from.totalTokens.minus(BigInt.fromI32(1));
+  from.totalTransactions = from.totalTransactions.plus(BigInt.fromI32(1));
   from.updatedAt = event.block.timestamp;
   from.save();
 
@@ -69,16 +62,16 @@ export function handleTransferBatch(event: TransferBatch): void {
   if (to === null) {
     // Owner - as Receiver
     to = new Owner(event.params._to.toHex());
-    to.totalTokens = ZERO_BI;
-    to.totalTokensMinted = ZERO_BI;
-    to.totalTransactions = ZERO_BI;
+    to.totalTokens = BigInt.zero();
+    to.totalTokensMinted = BigInt.zero();
+    to.totalTransactions = BigInt.zero();
     to.block = event.block.number;
     to.createdAt = event.block.timestamp;
     to.updatedAt = event.block.timestamp;
     to.save();
   }
-  to.totalTokens = to.totalTokens.plus(ONE_BI);
-  to.totalTransactions = to.totalTransactions.plus(ONE_BI);
+  to.totalTokens = to.totalTokens.plus(BigInt.fromI32(1));
+  to.totalTransactions = to.totalTransactions.plus(BigInt.fromI32(1));
   to.updatedAt = event.block.timestamp;
   to.save();
 
@@ -94,27 +87,27 @@ export function handleTransferBatch(event: TransferBatch): void {
       token.owner = to.id;
       token.burned = false;
       token.tokenURI = fetchURI(event.address, ids[i]);
-      token.totalTransactions = ZERO_BI;
+      token.totalTransactions = BigInt.zero();
       token.block = event.block.number;
       token.createdAt = event.block.timestamp;
       token.updatedAt = event.block.timestamp;
       token.save();
 
       // Owner - as Receiver
-      to.totalTokensMinted = to.totalTokensMinted.plus(ONE_BI);
+      to.totalTokensMinted = to.totalTokensMinted.plus(BigInt.fromI32(1));
       to.save();
 
       // Collection
-      collection.totalTokens = collection.totalTokens.plus(ONE_BI);
+      collection.totalTokens = collection.totalTokens.plus(BigInt.fromI32(1));
       collection.save();
 
       // Blockchain
-      blockchain.totalTokens = blockchain.totalTokens.plus(ONE_BI);
+      blockchain.totalTokens = blockchain.totalTokens.plus(BigInt.fromI32(1));
       blockchain.save();
     }
     token.owner = to.id;
-    token.burned = event.params._to.equals(Address.fromString(ZERO_ADDRESS));
-    token.totalTransactions = token.totalTransactions.plus(ONE_BI);
+    token.burned = event.params._to.equals(Address.zero());
+    token.totalTransactions = token.totalTransactions.plus(BigInt.fromI32(1));
     token.updatedAt = event.block.timestamp;
     token.save();
 
@@ -126,7 +119,7 @@ export function handleTransferBatch(event: TransferBatch): void {
     transaction.collection = collection.id;
     transaction.token = token.id;
     transaction.type = "Batch";
-    transaction.gasUsed = event.transaction.gasUsed;
+    transaction.gasLimit = event.transaction.gasLimit;
     transaction.gasPrice = toBigDecimal(event.transaction.gasPrice, 9);
     transaction.block = event.block.number;
     transaction.timestamp = event.block.timestamp;
@@ -139,12 +132,12 @@ export function handleTransferSingle(event: TransferSingle): void {
   if (blockchain === null) {
     // Blockchain
     blockchain = new Blockchain("ETH");
-    blockchain.totalCollections = ZERO_BI;
-    blockchain.totalTokens = ZERO_BI;
-    blockchain.totalTransactions = ZERO_BI;
+    blockchain.totalCollections = BigInt.zero();
+    blockchain.totalTokens = BigInt.zero();
+    blockchain.totalTransactions = BigInt.zero();
     blockchain.save();
   }
-  blockchain.totalTransactions = blockchain.totalTransactions.plus(ONE_BI);
+  blockchain.totalTransactions = blockchain.totalTransactions.plus(BigInt.fromI32(1));
   blockchain.save();
 
   let collection = Collection.load(event.address.toHex());
@@ -153,18 +146,18 @@ export function handleTransferSingle(event: TransferSingle): void {
     collection = new Collection(event.address.toHex());
     collection.name = fetchName(event.address);
     collection.symbol = fetchSymbol(event.address);
-    collection.totalTokens = ZERO_BI;
-    collection.totalTransactions = ZERO_BI;
+    collection.totalTokens = BigInt.zero();
+    collection.totalTransactions = BigInt.zero();
     collection.block = event.block.number;
     collection.createdAt = event.block.timestamp;
     collection.updatedAt = event.block.timestamp;
     collection.save();
 
     // Blockchain
-    blockchain.totalCollections = blockchain.totalCollections.plus(ONE_BI);
+    blockchain.totalCollections = blockchain.totalCollections.plus(BigInt.fromI32(1));
     blockchain.save();
   }
-  collection.totalTransactions = collection.totalTransactions.plus(ONE_BI);
+  collection.totalTransactions = collection.totalTransactions.plus(BigInt.fromI32(1));
   collection.updatedAt = event.block.timestamp;
   collection.save();
 
@@ -172,18 +165,18 @@ export function handleTransferSingle(event: TransferSingle): void {
   if (from === null) {
     // Owner - as Sender
     from = new Owner(event.params._from.toHex());
-    from.totalTokens = ZERO_BI;
-    from.totalTokensMinted = ZERO_BI;
-    from.totalTransactions = ZERO_BI;
+    from.totalTokens = BigInt.zero();
+    from.totalTokensMinted = BigInt.zero();
+    from.totalTransactions = BigInt.zero();
     from.block = event.block.number;
     from.createdAt = event.block.timestamp;
     from.updatedAt = event.block.timestamp;
     from.save();
   }
-  from.totalTokens = event.params._from.equals(Address.fromString(ZERO_ADDRESS))
+  from.totalTokens = event.params._from.equals(Address.zero())
     ? from.totalTokens
-    : from.totalTokens.minus(ONE_BI);
-  from.totalTransactions = from.totalTransactions.plus(ONE_BI);
+    : from.totalTokens.minus(BigInt.fromI32(1));
+  from.totalTransactions = from.totalTransactions.plus(BigInt.fromI32(1));
   from.updatedAt = event.block.timestamp;
   from.save();
 
@@ -191,16 +184,16 @@ export function handleTransferSingle(event: TransferSingle): void {
   if (to === null) {
     // Owner - as Receiver
     to = new Owner(event.params._to.toHex());
-    to.totalTokens = ZERO_BI;
-    to.totalTokensMinted = ZERO_BI;
-    to.totalTransactions = ZERO_BI;
+    to.totalTokens = BigInt.zero();
+    to.totalTokensMinted = BigInt.zero();
+    to.totalTransactions = BigInt.zero();
     to.block = event.block.number;
     to.createdAt = event.block.timestamp;
     to.updatedAt = event.block.timestamp;
     to.save();
   }
-  to.totalTokens = to.totalTokens.plus(ONE_BI);
-  to.totalTransactions = to.totalTransactions.plus(ONE_BI);
+  to.totalTokens = to.totalTokens.plus(BigInt.fromI32(1));
+  to.totalTransactions = to.totalTransactions.plus(BigInt.fromI32(1));
   to.updatedAt = event.block.timestamp;
   to.save();
 
@@ -214,27 +207,27 @@ export function handleTransferSingle(event: TransferSingle): void {
     token.owner = to.id;
     token.burned = false;
     token.tokenURI = fetchURI(event.address, event.params._id);
-    token.totalTransactions = ZERO_BI;
+    token.totalTransactions = BigInt.zero();
     token.block = event.block.number;
     token.createdAt = event.block.timestamp;
     token.updatedAt = event.block.timestamp;
     token.save();
 
     // Owner - as Receiver
-    to.totalTokensMinted = to.totalTokensMinted.plus(ONE_BI);
+    to.totalTokensMinted = to.totalTokensMinted.plus(BigInt.fromI32(1));
     to.save();
 
     // Collection
-    collection.totalTokens = collection.totalTokens.plus(ONE_BI);
+    collection.totalTokens = collection.totalTokens.plus(BigInt.fromI32(1));
     collection.save();
 
     // Blockchain
-    blockchain.totalTokens = blockchain.totalTokens.plus(ONE_BI);
+    blockchain.totalTokens = blockchain.totalTokens.plus(BigInt.fromI32(1));
     blockchain.save();
   }
   token.owner = to.id;
-  token.burned = event.params._to.equals(Address.fromString(ZERO_ADDRESS));
-  token.totalTransactions = token.totalTransactions.plus(ONE_BI);
+  token.burned = event.params._to.equals(Address.zero());
+  token.totalTransactions = token.totalTransactions.plus(BigInt.fromI32(1));
   token.updatedAt = event.block.timestamp;
   token.save();
 
@@ -246,7 +239,7 @@ export function handleTransferSingle(event: TransferSingle): void {
   transaction.collection = collection.id;
   transaction.token = token.id;
   transaction.type = "Single";
-  transaction.gasUsed = event.transaction.gasUsed;
+  transaction.gasLimit = event.transaction.gasLimit;
   transaction.gasPrice = toBigDecimal(event.transaction.gasPrice, 9);
   transaction.block = event.block.number;
   transaction.timestamp = event.block.timestamp;

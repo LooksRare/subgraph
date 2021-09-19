@@ -144,8 +144,8 @@ type Transaction @entity {
     "Type"
     type: TransactionType!
 
-    "Gas Used"
-    gasUsed: BigInt!
+    "Gas Limit"
+    gasLimit: BigInt!
     "Gas Price (in wei)"
     gasPrice: BigDecimal!
 
