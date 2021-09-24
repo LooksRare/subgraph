@@ -24,7 +24,7 @@ export function fetchSymbol(address: Address): string {
   return "unknown";
 }
 
-export function fetchURI(address: Address, tokenID: BigInt): string {
+export function fetchTokenURI(address: Address, tokenID: BigInt): string | null {
   let contract = EIP721.bind(address);
 
   let uriResult = contract.try_tokenURI(tokenID);

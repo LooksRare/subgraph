@@ -3,7 +3,7 @@ import { Address, BigInt } from "@graphprotocol/graph-ts";
 import { Blockchain, Collection, Owner, Token, Transaction } from "../generated/schema";
 import { Transfer } from "../generated/EIP721/EIP721";
 import { toBigDecimal } from "./utils";
-import { fetchName, fetchSymbol, fetchURI } from "./utils/eip721";
+import { fetchName, fetchSymbol, fetchTokenURI } from "./utils/eip721";
 
 export function handleTransfer(event: Transfer): void {
   let blockchain = Blockchain.load("ETH");
@@ -81,7 +81,7 @@ export function handleTransfer(event: Transfer): void {
     token = new Token(event.address.toHex() + "-" + event.params.tokenId.toString());
     token.collection = collection.id;
     token.tokenID = event.params.tokenId;
-    token.tokenURI = fetchURI(event.address, event.params.tokenId);
+    token.tokenURI = fetchTokenURI(event.address, event.params.tokenId);
     token.minter = to.id;
     token.owner = to.id;
     token.burned = false;
@@ -116,7 +116,7 @@ export function handleTransfer(event: Transfer): void {
   transaction.to = to.id;
   transaction.collection = collection.id;
   transaction.token = token.id;
-  transaction.gasUsed = event.transaction.gasUsed;
+  transaction.gasLimit = event.transaction.gasLimit;
   transaction.gasPrice = toBigDecimal(event.transaction.gasPrice, 9);
   transaction.block = event.block.number;
   transaction.timestamp = event.block.timestamp;

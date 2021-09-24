@@ -1,5 +1,5 @@
 """
-EIP721 Contract(s)
+Blockchain
 """
 type Blockchain @entity {
     "ID"
@@ -16,7 +16,7 @@ type Blockchain @entity {
 }
 
 """
-EIP721 Collection(s)
+EIP-721 Collection(s)
 """
 type Collection @entity {
     "ID"
@@ -47,7 +47,7 @@ type Collection @entity {
 }
 
 """
-EIP721 Owner(s)
+EIP-721 Owner(s)
 """
 type Owner @entity {
     "ID"
@@ -60,9 +60,9 @@ type Owner @entity {
     "Total of Tokens Minted"
     totalTokensMinted: BigInt!
 
-    "Transactions (as Sender)"
+    "List of Transactions (as Sender)"
     fromTransactions: [Transaction!]! @derivedFrom(field: "from")
-    "Transactions (as Receiver)"
+    "List of Transactions (as Receiver)"
     toTransactions: [Transaction!]! @derivedFrom(field: "to")
     "Total of Transactions"
     totalTransactions: BigInt!
@@ -76,7 +76,7 @@ type Owner @entity {
 }
 
 """
-EIP721 Token(s)
+EIP-721 Token(s)
 """
 type Token @entity {
     "ID"
@@ -114,7 +114,7 @@ type Token @entity {
 }
 
 """
-EIP721 Transaction(s)
+EIP-721 Transaction(s)
 """
 type Transaction @entity {
     "ID (hash)"
@@ -133,8 +133,8 @@ type Transaction @entity {
     "Token"
     token: Token!
 
-    "Gas Used"
-    gasUsed: BigInt!
+    "Gas Limit"
+    gasLimit: BigInt!
     "Gas Price (in wei)"
     gasPrice: BigDecimal!
 
