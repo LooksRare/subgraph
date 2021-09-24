@@ -1,0 +1,145 @@
+"""
+Blockchain
+"""
+type Blockchain @entity {
+    "ID"
+    id: ID!
+
+    "Total of Collections"
+    totalCollections: BigInt!
+
+    "Total of Tokens"
+    totalTokens: BigInt!
+
+    "Total of Transactions"
+    totalTransactions: BigInt!
+}
+
+"""
+EIP-721 Collection(s)
+"""
+type Collection @entity {
+    "ID"
+    id: ID!
+
+    "Name"
+    name: String!
+
+    "Symbol"
+    symbol: String!
+
+    "List of Tokens"
+    tokens: [Token!]! @derivedFrom(field: "collection")
+    "Total of Tokens"
+    totalTokens: BigInt!
+
+    "List of Transactions"
+    transactions: [Transaction!]! @derivedFrom(field: "collection")
+    "Total of Transactions"
+    totalTransactions: BigInt!
+
+    "Block number"
+    block: BigInt!
+    "Created At"
+    createdAt: BigInt!
+    "Updated At"
+    updatedAt: BigInt!
+}
+
+"""
+EIP-721 Owner(s)
+"""
+type Owner @entity {
+    "ID"
+    id: ID!
+
+    "List of Tokens"
+    tokens: [Token!]! @derivedFrom(field: "owner")
+    "Total of Tokens"
+    totalTokens: BigInt!
+    "Total of Tokens Minted"
+    totalTokensMinted: BigInt!
+
+    "List of Transactions (as Sender)"
+    fromTransactions: [Transaction!]! @derivedFrom(field: "from")
+    "List of Transactions (as Receiver)"
+    toTransactions: [Transaction!]! @derivedFrom(field: "to")
+    "Total of Transactions"
+    totalTransactions: BigInt!
+
+    "Block number"
+    block: BigInt!
+    "Created At"
+    createdAt: BigInt!
+    "Updated At"
+    updatedAt: BigInt!
+}
+
+"""
+EIP-721 Token(s)
+"""
+type Token @entity {
+    "ID"
+    id: ID!
+
+    "Collection"
+    collection: Collection!
+
+    "Token ID"
+    tokenID: BigInt!
+
+    "Token URI"
+    tokenURI: String
+
+    "Minter"
+    minter: Owner!
+
+    "Owner"
+    owner: Owner!
+
+    "Burned"
+    burned: Boolean!
+
+    "List of Transactions"
+    transactions: [Transaction!]! @derivedFrom(field: "token")
+    "Total of Transactions"
+    totalTransactions: BigInt!
+
+    "Block number"
+    block: BigInt!
+    "Created At"
+    createdAt: BigInt!
+    "Updated At"
+    updatedAt: BigInt!
+}
+
+"""
+EIP-721 Transaction(s)
+"""
+type Transaction @entity {
+    "ID (hash)"
+    id: ID!
+
+    "Hash"
+    hash: Bytes!
+
+    "Sender"
+    from: Owner!
+    "Receiver"
+    to: Owner!
+
+    "Collection"
+    collection: Collection!
+    "Token"
+    token: Token!
+
+    "Gas Limit"
+    gasLimit: BigInt!
+    "Gas Price (in wei)"
+    gasPrice: BigDecimal!
+
+    "Block number"
+    block: BigInt!
+    "Block timestamp"
+    timestamp: BigInt!
+}
