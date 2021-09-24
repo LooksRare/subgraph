@@ -203,10 +203,10 @@ export function handleTransferSingle(event: TransferSingle): void {
     token = new Token(event.address.toHex() + "-" + event.params._id.toString());
     token.collection = collection.id;
     token.tokenID = event.params._id;
+    token.tokenURI = fetchURI(event.address, event.params._id);
     token.minter = to.id;
     token.owner = to.id;
     token.burned = false;
-    token.tokenURI = fetchURI(event.address, event.params._id);
     token.totalTransactions = BigInt.zero();
     token.block = event.block.number;
     token.createdAt = event.block.timestamp;
