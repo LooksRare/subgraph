@@ -6,10 +6,12 @@ import { fetchName, fetchSymbol } from "./utils/erc20";
 import { currencies, toBigDecimal } from "./utils";
 
 export function handleAtomicMatch(call: AtomicMatch_Call): void {
+  // If the currency used for the trade isn't whitelisted, skipping.
   if (!currencies.includes(call.inputs.addrs[6].toHex())) {
     return;
   }
 
+  // Currency
   let currency = Currency.load(call.inputs.addrs[6].toHex());
   if (currency === null) {
     currency = new Currency(call.inputs.addrs[6].toHex());
@@ -21,6 +23,7 @@ export function handleAtomicMatch(call: AtomicMatch_Call): void {
   currency.totalTrades = currency.totalTrades.plus(BigInt.fromI32(1));
   currency.save();
 
+  // Taker a.k.a. Buyer
   let taker = User.load(call.inputs.addrs[1].toHex());
   if (taker === null) {
     taker = new User(call.inputs.addrs[1].toHex());
@@ -50,6 +53,7 @@ export function handleAtomicMatch(call: AtomicMatch_Call): void {
   takerBalance.updatedAt = call.block.timestamp;
   takerBalance.save();
 
+  // Maker a.k.a. Seller
   let maker = User.load(call.inputs.addrs[8].toHex());
   if (maker === null) {
     maker = new User(call.inputs.addrs[8].toHex());

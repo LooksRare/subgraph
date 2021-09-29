@@ -1,5 +1,5 @@
 specVersion: 0.0.2
-description: OpenSea
+description: OpenSea indexer for LooksRare airdrop
 repository: https://github.com/looksrare
 schema:
   file: ./schema.graphql
