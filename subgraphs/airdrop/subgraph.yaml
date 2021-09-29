@@ -1,0 +1,28 @@
+specVersion: 0.0.2
+description: OpenSea
+repository: https://github.com/looksrare
+schema:
+  file: ./schema.graphql
+dataSources:
+  - kind: ethereum/contract
+    name: WyvernExchange
+    network: mainnet
+    source:
+      address: '0x7Be8076f4EA4A4AD08075C2508e481d6C946D12b'
+      abi: WyvernExchange
+      startBlock: 5774644
+    mapping:
+      kind: ethereum/events
+      apiVersion: 0.0.5
+      language: wasm/assemblyscript
+      file: ./mappings/index.ts
+      entities:
+        - User
+      abis:
+        - name: WyvernExchange
+          file: ./abis/WyvernExchange.json
+        - name: ERC20
+          file: ./abis/ERC20.json
+      callHandlers:
+        - function: atomicMatch_(address[14],uint256[18],uint8[8],bytes,bytes,bytes,bytes,bytes,bytes,uint8[2],bytes32[5])
+          handler: handleAtomicMatch

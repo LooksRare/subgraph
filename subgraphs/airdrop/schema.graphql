@@ -1,0 +1,64 @@
+"""
+Currencies
+"""
+type Currency @entity {
+    "ID"
+    id: ID!
+
+    "Name"
+    name: String!
+
+    "Symbol"
+    symbol: String!
+
+    "Total of Trades"
+    totalTrades: BigInt!
+
+    "List of Balances"
+    balances: [Balance!]! @derivedFrom(field: "currency")
+}
+
+"""
+User
+"""
+type User @entity {
+    "ID"
+    id: ID!
+
+    "Total of Buy (as taker)"
+    totalBuy: BigInt!
+    "Total of Sell (as maker)"
+    totalSell: BigInt!
+
+    "First Trade At"
+    firstTradeAt: BigInt!
+    "First Trade With"
+    firstTradeWith: Currency!
+    "Last Trade At"
+    lastTradeAt: BigInt!
+    "Last Trade With"
+    lastTradeWith: Currency!
+
+    "List of Balances"
+    balances: [Balance!]! @derivedFrom(field: "user")
+}
+
+"""
+Balance
+"""
+type Balance @entity {
+    "ID"
+    id: ID!
+
+    "Currency"
+    currency: Currency!
+
+    "User"
+    user: User!
+
+    "Volume"
+    volume: BigDecimal!
+
+    "Updated At"
+    updatedAt: BigInt!
+}
