@@ -11,6 +11,9 @@ type Currency @entity {
     "Symbol"
     symbol: String!
 
+    "Decimals"
+    decimals: BigInt!
+
     "Total of Trades"
     totalTrades: BigInt!
 

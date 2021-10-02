@@ -2,7 +2,7 @@
 import { BigDecimal, BigInt } from "@graphprotocol/graph-ts";
 import { Balance, Currency, User } from "../generated/schema";
 import { AtomicMatch_Call } from "../generated/WyvernExchange/WyvernExchange";
-import { fetchName, fetchSymbol } from "./utils/erc20";
+import { fetchDecimals, fetchName, fetchSymbol } from "./utils/erc20";
 import { currencies, toBigDecimal } from "./utils";
 
 export function handleAtomicMatch(call: AtomicMatch_Call): void {
@@ -17,12 +17,13 @@ export function handleAtomicMatch(call: AtomicMatch_Call): void {
     currency = new Currency(call.inputs.addrs[6].toHex());
     currency.name = fetchName(call.inputs.addrs[6]);
     currency.symbol = fetchSymbol(call.inputs.addrs[6]);
+    currency.decimals = fetchDecimals(call.inputs.addrs[6]);
     currency.totalTrades = BigInt.zero();
     currency.volume = BigDecimal.zero();
     currency.save();
   }
   currency.totalTrades = currency.totalTrades.plus(BigInt.fromI32(1));
-  currency.volume = currency.volume.plus(toBigDecimal(call.inputs.uints[4]));
+  currency.volume = currency.volume.plus(toBigDecimal(call.inputs.uints[4], currency.decimals.toI32()));
   currency.save();
 
   // Taker a.k.a. Buyer
@@ -51,7 +52,7 @@ export function handleAtomicMatch(call: AtomicMatch_Call): void {
     takerBalance.updatedAt = call.block.timestamp;
     takerBalance.save();
   }
-  takerBalance.volume = takerBalance.volume.plus(toBigDecimal(call.inputs.uints[4]));
+  takerBalance.volume = takerBalance.volume.plus(toBigDecimal(call.inputs.uints[4], currency.decimals.toI32()));
   takerBalance.updatedAt = call.block.timestamp;
   takerBalance.save();
 
@@ -81,7 +82,7 @@ export function handleAtomicMatch(call: AtomicMatch_Call): void {
     makerBalance.updatedAt = call.block.timestamp;
     makerBalance.save();
   }
-  makerBalance.volume = makerBalance.volume.plus(toBigDecimal(call.inputs.uints[4]));
+  makerBalance.volume = makerBalance.volume.plus(toBigDecimal(call.inputs.uints[4], currency.decimals.toI32()));
   makerBalance.updatedAt = call.block.timestamp;
   makerBalance.save();
 }
