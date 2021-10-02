@@ -14,6 +14,9 @@ type Currency @entity {
     "Total of Trades"
     totalTrades: BigInt!
 
+    "Volume"
+    volume: BigDecimal!
+
     "List of Balances"
     balances: [Balance!]! @derivedFrom(field: "currency")
 }

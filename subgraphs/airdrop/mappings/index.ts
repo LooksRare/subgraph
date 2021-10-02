@@ -18,9 +18,11 @@ export function handleAtomicMatch(call: AtomicMatch_Call): void {
     currency.name = fetchName(call.inputs.addrs[6]);
     currency.symbol = fetchSymbol(call.inputs.addrs[6]);
     currency.totalTrades = BigInt.zero();
+    currency.volume = BigDecimal.zero();
     currency.save();
   }
   currency.totalTrades = currency.totalTrades.plus(BigInt.fromI32(1));
+  currency.volume = currency.volume.plus(toBigDecimal(call.inputs.uints[4]));
   currency.save();
 
   // Taker a.k.a. Buyer
