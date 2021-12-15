@@ -1,5 +1,5 @@
 /* eslint-disable prefer-const */
-import { Address, BigInt, BigDecimal, ethereum } from "@graphprotocol/graph-ts";
+import { Address, BigInt, BigDecimal } from "@graphprotocol/graph-ts";
 import {
   CollectionDailyData,
   ExchangeDailyData,

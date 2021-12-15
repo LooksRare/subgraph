@@ -1,6 +1,6 @@
 /* eslint-disable prefer-const */
-import { Address, BigDecimal, BigInt } from "@graphprotocol/graph-ts";
-import { Collection, ExecutionStrategy, Trade, User } from "../generated/schema";
+import { BigDecimal, BigInt } from "@graphprotocol/graph-ts";
+import { Collection, ExecutionStrategy, RoyaltyTransfer, Trade, User } from "../generated/schema";
 import { RoyaltyPayment, TakerAsk, TakerBid } from "../generated/LooksRareExchange/LooksRareExchange";
 import { toBigDecimal } from "./utils";
 import { fetchProtocolFee } from "./utils/fetchProtocolFee";
@@ -15,9 +15,6 @@ import {
 let ZERO_BI = BigInt.fromI32(0);
 let ONE_BI = BigInt.fromI32(1);
 let ZERO_BD = BigDecimal.fromString("0");
-
-// Other
-let PRIVATE_SALE_ADDRESS = "0x0000000000000000000000000000000000000000";
 
 export function handleTakerAsk(event: TakerAsk): void {
   // 1. Collection
@@ -160,7 +157,8 @@ export function handleTakerBid(event: TakerBid): void {
   takerBidUser.save();
 
   // 5. Trade
-  let trade = new Trade(event.params.orderHash.toHex());
+  let name = event.params.orderHash.toHex() + "-" + event.transaction.hash.toHex();
+  let trade = new Trade(name);
 
   trade.isTakerAsk = false;
   trade.collection = event.params.collection.toHex();
@@ -177,4 +175,42 @@ export function handleTakerBid(event: TakerBid): void {
   updateExecutionStrategyDailyData(event.params.strategy, toBigDecimal(event.params.price), event.block.timestamp);
   updateUserDailyData(event.params.maker, toBigDecimal(event.params.price), event.block.timestamp);
   updateUserDailyData(event.params.taker, toBigDecimal(event.params.price), event.block.timestamp);
+}
+
+export function handleRoyaltyPayment(event: RoyaltyPayment): void {
+  // 1. Collection
+  let collection = Collection.load(event.params.collection.toHex());
+  if (collection === null) {
+    collection = new Collection(event.params.collection.toHex());
+    collection.totalTransactions = ZERO_BI;
+    collection.totalVolume = ZERO_BD;
+    collection.totalRoyaltyPaid = ZERO_BD;
+  }
+  collection.totalRoyaltyPaid = collection.totalRoyaltyPaid.plus(toBigDecimal(event.params.amount));
+  collection.save();
+
+  // 2. User
+  let user = User.load(event.params.royaltyRecipient.toHex());
+  if (user === null) {
+    user = new User(event.params.royaltyRecipient.toHex());
+    user.totalRoyaltyCollected = ZERO_BD;
+    user.totalTransactions = ZERO_BI;
+    user.totalBidVolume = ZERO_BD;
+    user.totalAskVolume = ZERO_BD;
+    user.totalVolume = ZERO_BD;
+    user.totalTransactions = ZERO_BI;
+  }
+  user.totalRoyaltyCollected = user.totalRoyaltyCollected.plus(toBigDecimal(event.params.amount));
+  user.save();
+
+  // 3. RoyaltyTransfer
+  let name =
+    event.params.collection.toHex() + "-" + event.params.tokenId.toHex() + "-" + event.transaction.hash.toHex();
+  let royaltyTransfer = new RoyaltyTransfer(name);
+  royaltyTransfer.collection = event.params.collection.toHex();
+  royaltyTransfer.tokenId = event.params.tokenId;
+  royaltyTransfer.user = event.params.royaltyRecipient.toHex();
+  royaltyTransfer.amount = toBigDecimal(event.params.amount);
+
+  royaltyTransfer.save();
 }
