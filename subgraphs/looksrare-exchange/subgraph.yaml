@@ -1,0 +1,39 @@
+specVersion: 0.0.2
+description: LooksRare exchange subgraph
+repository: https://github.com/looksrare
+schema:
+  file: ./schema.graphql
+dataSources:
+  - kind: ethereum/contract
+    name: LooksRareExchange
+    network: rinkeby
+    source:
+      abi: LooksRareExchange
+      startBlock: 9999999999999 # TODO
+    mapping:
+      kind: ethereum/events
+      apiVersion: 0.0.6
+      language: wasm/assemblyscript
+      file: ./mappings/index.ts
+      entities:
+        - Collection
+        - ExecutionStrategy
+        - User
+        - CollectionDailyData
+        - ExchangeDailyData
+        - ExecutionStrategyDailyData
+        - UserDailyData
+        - RoyaltyPayment
+        - Trade
+      abis:
+        - name: LooksRareExchange
+          file: ./abis/LooksRareExchange.json
+        - name: IExecutionStrategy
+          file: ./abis/IExecutionStrategy.json
+      eventHandlers:
+        - event: RoyaltyPayment(indexed address,indexed uint256,indexed address,address,uint256)
+          handler: handleRoyaltyPayment
+        - event: TakerAsk(bytes32,uint256,indexed address,indexed address,indexed address,address,address,uint256,uint256,uint256)
+          handler: handleTakerAsk
+        - event: TakerBid(bytes32,uint256,indexed address,indexed address,indexed address,address,address,uint256,uint256,uint256)
+          handler: handleTakerBid

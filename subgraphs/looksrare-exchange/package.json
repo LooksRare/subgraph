@@ -1,0 +1,13 @@
+{
+  "name": "looksrare-exchange",
+  "description": "LooksRare Exchange subgraph",
+  "version": "1.0.0",
+  "repository": "git@github.com:looksrare/subgraphs.git",
+  "author": "LooksRare",
+  "license": "GPL-3.0-or-later",
+  "scripts": {
+    "codegen": "graph codegen subgraph.yaml",
+    "build": "graph build subgraph.yaml",
+    "deploy": "graph deploy --product hosted-service --node https://api.thegraph.com/deploy/ --ipfs https://api.thegraph.com/ipfs/ looksrare/looksrare-exchange subgraph.yaml"
+  }
+}
