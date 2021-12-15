@@ -88,12 +88,27 @@ export function handleTakerAsk(event: TakerAsk): void {
   trade.taker = event.params.taker.toHex();
   trade.save();
 
-  // 6. Update the daily data
-  updateCollectionDailyData(event.params.collection, toBigDecimal(event.params.price), event.block.timestamp);
-  updateExchangeDailyData(toBigDecimal(event.params.price), event.block.timestamp);
+  // 6. Update daily data entities
+  updateCollectionDailyData(
+    event.params.collection,
+    toBigDecimal(event.params.price),
+    event.params.strategy,
+    event.block.timestamp
+  );
+  updateExchangeDailyData(toBigDecimal(event.params.price), event.params.strategy, event.block.timestamp);
   updateExecutionStrategyDailyData(event.params.strategy, toBigDecimal(event.params.price), event.block.timestamp);
-  updateUserDailyData(event.params.maker, toBigDecimal(event.params.price), event.block.timestamp);
-  updateUserDailyData(event.params.taker, toBigDecimal(event.params.price), event.block.timestamp);
+  updateUserDailyData(
+    event.params.maker,
+    toBigDecimal(event.params.price),
+    event.params.strategy,
+    event.block.timestamp
+  );
+  updateUserDailyData(
+    event.params.taker,
+    toBigDecimal(event.params.price),
+    event.params.strategy,
+    event.block.timestamp
+  );
 }
 
 export function handleTakerBid(event: TakerBid): void {
@@ -169,12 +184,27 @@ export function handleTakerBid(event: TakerBid): void {
   trade.taker = event.params.taker.toHex();
   trade.save();
 
-  // 6. Update the daily data
-  updateCollectionDailyData(event.params.collection, toBigDecimal(event.params.price), event.block.timestamp);
-  updateExchangeDailyData(toBigDecimal(event.params.price), event.block.timestamp);
+  // 6. Update daily data entities
+  updateCollectionDailyData(
+    event.params.collection,
+    toBigDecimal(event.params.price),
+    event.params.strategy,
+    event.block.timestamp
+  );
+  updateExchangeDailyData(toBigDecimal(event.params.price), event.params.strategy, event.block.timestamp);
   updateExecutionStrategyDailyData(event.params.strategy, toBigDecimal(event.params.price), event.block.timestamp);
-  updateUserDailyData(event.params.maker, toBigDecimal(event.params.price), event.block.timestamp);
-  updateUserDailyData(event.params.taker, toBigDecimal(event.params.price), event.block.timestamp);
+  updateUserDailyData(
+    event.params.maker,
+    toBigDecimal(event.params.price),
+    event.params.strategy,
+    event.block.timestamp
+  );
+  updateUserDailyData(
+    event.params.taker,
+    toBigDecimal(event.params.price),
+    event.params.strategy,
+    event.block.timestamp
+  );
 }
 
 export function handleRoyaltyPayment(event: RoyaltyPayment): void {

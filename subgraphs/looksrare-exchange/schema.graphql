@@ -67,6 +67,9 @@ type CollectionDailyData @entity {
   "Daily volume (in ETH)"
   dailyVolume: BigDecimal!
 
+  "Daily volume excluding zero-fee strategy (in ETH)"
+  dailyVolumeExcludingZeroFee: BigDecimal!
+
   "Royalty payment"
   dailyRoyalty: BigDecimal!
 }
