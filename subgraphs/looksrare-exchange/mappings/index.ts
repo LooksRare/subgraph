@@ -11,10 +11,10 @@ import {
   updateUserDailyData,
 } from "./utils/updateDailyData";
 
-// BigNumber-like references
-let ZERO_BI = BigInt.fromI32(0);
+// BigNumber helpers
+let ZERO_BI = BigInt.zero();
 let ONE_BI = BigInt.fromI32(1);
-let ZERO_BD = BigDecimal.fromString("0");
+let ZERO_BD = BigDecimal.zero();
 
 export function handleTakerAsk(event: TakerAsk): void {
   // 1. Collection
@@ -31,22 +31,18 @@ export function handleTakerAsk(event: TakerAsk): void {
 
   // 2. Execution strategy
   let executionStrategy = ExecutionStrategy.load(event.params.strategy.toHex());
-
   if (executionStrategy == null) {
     executionStrategy = new ExecutionStrategy(event.params.strategy.toHex());
     executionStrategy.protocolFee = fetchProtocolFee(event.params.strategy);
     executionStrategy.totalTransactions = ZERO_BI;
     executionStrategy.totalVolume = ZERO_BD;
   }
-
   executionStrategy.totalTransactions = executionStrategy.totalTransactions.plus(ONE_BI);
   executionStrategy.totalVolume = executionStrategy.totalVolume.plus(toBigDecimal(event.params.price));
-
   executionStrategy.save();
 
   // 3. Maker bid user
   let makerBidUser = User.load(event.params.maker.toHex());
-
   if (makerBidUser == null) {
     makerBidUser = new User(event.params.maker.toHex());
     makerBidUser.totalRoyaltyCollected = ZERO_BD;
@@ -62,7 +58,6 @@ export function handleTakerAsk(event: TakerAsk): void {
 
   // 4. Taker ask user
   let takerAskUser = User.load(event.params.taker.toHex());
-
   if (takerAskUser == null) {
     takerAskUser = new User(event.params.taker.toHex());
     takerAskUser.totalRoyaltyCollected = ZERO_BD;
@@ -77,8 +72,8 @@ export function handleTakerAsk(event: TakerAsk): void {
   takerAskUser.save();
 
   // 5. Trade
-  let trade = new Trade(event.params.orderHash.toHex());
-
+  let name = event.params.orderHash.toHex() + "-" + event.transaction.hash.toHex();
+  let trade = new Trade(name);
   trade.isTakerAsk = true;
   trade.collection = event.params.collection.toHex();
   trade.strategy = event.params.strategy.toHex();
@@ -126,22 +121,18 @@ export function handleTakerBid(event: TakerBid): void {
 
   // 2. Execution strategy
   let executionStrategy = ExecutionStrategy.load(event.params.strategy.toHex());
-
   if (executionStrategy == null) {
     executionStrategy = new ExecutionStrategy(event.params.strategy.toHex());
     executionStrategy.protocolFee = fetchProtocolFee(event.params.strategy);
     executionStrategy.totalTransactions = ZERO_BI;
     executionStrategy.totalVolume = ZERO_BD;
   }
-
   executionStrategy.totalTransactions = executionStrategy.totalTransactions.plus(ONE_BI);
   executionStrategy.totalVolume = executionStrategy.totalVolume.plus(toBigDecimal(event.params.price));
-
   executionStrategy.save();
 
   // 3. Maker ask user
   let makerAskUser = User.load(event.params.maker.toHex());
-
   if (makerAskUser == null) {
     makerAskUser = new User(event.params.maker.toHex());
     makerAskUser.totalRoyaltyCollected = ZERO_BD;
@@ -157,7 +148,6 @@ export function handleTakerBid(event: TakerBid): void {
 
   // 4. Taker bid user
   let takerBidUser = User.load(event.params.taker.toHex());
-
   if (takerBidUser == null) {
     takerBidUser = new User(event.params.taker.toHex());
     takerBidUser.totalRoyaltyCollected = ZERO_BD;
@@ -174,7 +164,6 @@ export function handleTakerBid(event: TakerBid): void {
   // 5. Trade
   let name = event.params.orderHash.toHex() + "-" + event.transaction.hash.toHex();
   let trade = new Trade(name);
-
   trade.isTakerAsk = false;
   trade.collection = event.params.collection.toHex();
   trade.strategy = event.params.strategy.toHex();
@@ -241,6 +230,5 @@ export function handleRoyaltyPayment(event: RoyaltyPayment): void {
   royaltyTransfer.tokenId = event.params.tokenId;
   royaltyTransfer.user = event.params.royaltyRecipient.toHex();
   royaltyTransfer.amount = toBigDecimal(event.params.amount);
-
   royaltyTransfer.save();
 }

@@ -8,10 +8,10 @@ import {
   UserDailyData,
 } from "../../generated/schema";
 
-// BigNumber-like references
-let ZERO_BI = BigInt.fromI32(0);
+// BigNumber helpers
+let ZERO_BI = BigInt.zero();
 let ONE_BI = BigInt.fromI32(1);
-let ZERO_BD = BigDecimal.fromString("0");
+let ZERO_BD = BigDecimal.zero();
 
 export function updateCollectionDailyData(
   collection: Address,
@@ -25,7 +25,6 @@ export function updateCollectionDailyData(
   let ID = dayID.toString() + "-" + collection.toHex();
 
   let collectionDailyData = CollectionDailyData.load(ID);
-
   if (collectionDailyData === null) {
     collectionDailyData = new CollectionDailyData(ID);
     collectionDailyData.date = dayStartTimestamp;
@@ -34,12 +33,10 @@ export function updateCollectionDailyData(
     collectionDailyData.dailyTransactions = ZERO_BI;
     collectionDailyData.dailyVolumeExcludingZeroFee = ZERO_BD;
   }
-
   collectionDailyData.dailyVolume = collectionDailyData.dailyVolume.plus(volume);
   collectionDailyData.dailyTransactions = collectionDailyData.dailyTransactions.plus(ONE_BI);
 
   let executionStrategy = ExecutionStrategy.load(strategy.toHex());
-
   if (executionStrategy !== null) {
     if (executionStrategy.protocolFee !== ZERO_BI) {
       collectionDailyData.dailyVolumeExcludingZeroFee = collectionDailyData.dailyVolumeExcludingZeroFee.plus(volume);
@@ -56,7 +53,6 @@ export function updateExchangeDailyData(volume: BigDecimal, strategy: Address, t
   let ID = dayID.toString();
 
   let exchangeDailyData = ExchangeDailyData.load(ID);
-
   if (exchangeDailyData === null) {
     exchangeDailyData = new ExchangeDailyData(ID);
     exchangeDailyData.date = dayStartTimestamp;
@@ -64,12 +60,10 @@ export function updateExchangeDailyData(volume: BigDecimal, strategy: Address, t
     exchangeDailyData.dailyVolume = ZERO_BD;
     exchangeDailyData.dailyVolumeExcludingZeroFee = ZERO_BD;
   }
-
   exchangeDailyData.dailyTransactions = exchangeDailyData.dailyTransactions.plus(ONE_BI);
   exchangeDailyData.dailyVolume = exchangeDailyData.dailyVolume.plus(volume);
 
   let executionStrategy = ExecutionStrategy.load(strategy.toHex());
-
   if (executionStrategy !== null) {
     if (executionStrategy.protocolFee !== ZERO_BI) {
       exchangeDailyData.dailyVolumeExcludingZeroFee = exchangeDailyData.dailyVolumeExcludingZeroFee.plus(volume);
@@ -86,14 +80,12 @@ export function updateExecutionStrategyDailyData(strategy: Address, volume: BigD
   let ID = dayID.toString() + "-" + strategy.toHex();
 
   let strategyDailyData = ExecutionStrategyDailyData.load(ID);
-
   if (strategyDailyData === null) {
     strategyDailyData = new ExecutionStrategyDailyData(ID);
     strategyDailyData.date = dayStartTimestamp;
     strategyDailyData.dailyTransactions = ZERO_BI;
     strategyDailyData.dailyVolume = ZERO_BD;
   }
-
   strategyDailyData.dailyTransactions = strategyDailyData.dailyTransactions.plus(ONE_BI);
   strategyDailyData.dailyVolume = strategyDailyData.dailyVolume.plus(volume);
   strategyDailyData.save();
@@ -106,7 +98,6 @@ export function updateUserDailyData(user: Address, volume: BigDecimal, strategy:
   let ID = dayID.toString() + "-" + user.toHex();
 
   let userDailyData = UserDailyData.load(ID);
-
   if (userDailyData === null) {
     userDailyData = new UserDailyData(ID);
     userDailyData.date = dayStartTimestamp;
@@ -114,12 +105,10 @@ export function updateUserDailyData(user: Address, volume: BigDecimal, strategy:
     userDailyData.dailyVolume = ZERO_BD;
     userDailyData.dailyVolumeExcludingZeroFee = ZERO_BD;
   }
-
   userDailyData.dailyTransactions = userDailyData.dailyTransactions.plus(ONE_BI);
   userDailyData.dailyVolume = userDailyData.dailyVolume.plus(volume);
 
   let executionStrategy = ExecutionStrategy.load(strategy.toHex());
-
   if (executionStrategy !== null) {
     if (executionStrategy.protocolFee !== ZERO_BI) {
       userDailyData.dailyVolumeExcludingZeroFee = userDailyData.dailyVolumeExcludingZeroFee.plus(volume);
