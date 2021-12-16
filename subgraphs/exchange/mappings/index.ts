@@ -30,16 +30,16 @@ export function handleTakerAsk(event: TakerAsk): void {
   collection.save();
 
   // 2. Execution strategy
-  let executionStrategy = ExecutionStrategy.load(event.params.strategy.toHex());
-  if (executionStrategy == null) {
-    executionStrategy = new ExecutionStrategy(event.params.strategy.toHex());
-    executionStrategy.protocolFee = fetchProtocolFee(event.params.strategy);
-    executionStrategy.totalTransactions = ZERO_BI;
-    executionStrategy.totalVolume = ZERO_BD;
+  let strategy = ExecutionStrategy.load(event.params.strategy.toHex());
+  if (strategy == null) {
+    strategy = new ExecutionStrategy(event.params.strategy.toHex());
+    strategy.protocolFee = fetchProtocolFee(event.params.strategy);
+    strategy.totalTransactions = ZERO_BI;
+    strategy.totalVolume = ZERO_BD;
   }
-  executionStrategy.totalTransactions = executionStrategy.totalTransactions.plus(ONE_BI);
-  executionStrategy.totalVolume = executionStrategy.totalVolume.plus(toBigDecimal(event.params.price));
-  executionStrategy.save();
+  strategy.totalTransactions = strategy.totalTransactions.plus(ONE_BI);
+  strategy.totalVolume = strategy.totalVolume.plus(toBigDecimal(event.params.price));
+  strategy.save();
 
   // 3. Maker bid user
   let makerBidUser = User.load(event.params.maker.toHex());
@@ -75,8 +75,8 @@ export function handleTakerAsk(event: TakerAsk): void {
   let name = event.params.orderHash.toHex() + "-" + event.transaction.hash.toHex();
   let trade = new Trade(name);
   trade.isTakerAsk = true;
-  trade.collection = event.params.collection.toHex();
-  trade.strategy = event.params.strategy.toHex();
+  trade.collection = collection.id;
+  trade.strategy = strategy.id;
   trade.tokenId = event.params.tokenId;
   trade.price = toBigDecimal(event.params.price);
   trade.maker = event.params.maker.toHex();
@@ -120,16 +120,16 @@ export function handleTakerBid(event: TakerBid): void {
   collection.save();
 
   // 2. Execution strategy
-  let executionStrategy = ExecutionStrategy.load(event.params.strategy.toHex());
-  if (executionStrategy == null) {
-    executionStrategy = new ExecutionStrategy(event.params.strategy.toHex());
-    executionStrategy.protocolFee = fetchProtocolFee(event.params.strategy);
-    executionStrategy.totalTransactions = ZERO_BI;
-    executionStrategy.totalVolume = ZERO_BD;
+  let strategy = ExecutionStrategy.load(event.params.strategy.toHex());
+  if (strategy == null) {
+    strategy = new ExecutionStrategy(event.params.strategy.toHex());
+    strategy.protocolFee = fetchProtocolFee(event.params.strategy);
+    strategy.totalTransactions = ZERO_BI;
+    strategy.totalVolume = ZERO_BD;
   }
-  executionStrategy.totalTransactions = executionStrategy.totalTransactions.plus(ONE_BI);
-  executionStrategy.totalVolume = executionStrategy.totalVolume.plus(toBigDecimal(event.params.price));
-  executionStrategy.save();
+  strategy.totalTransactions = strategy.totalTransactions.plus(ONE_BI);
+  strategy.totalVolume = strategy.totalVolume.plus(toBigDecimal(event.params.price));
+  strategy.save();
 
   // 3. Maker ask user
   let makerAskUser = User.load(event.params.maker.toHex());
@@ -165,8 +165,8 @@ export function handleTakerBid(event: TakerBid): void {
   let name = event.params.orderHash.toHex() + "-" + event.transaction.hash.toHex();
   let trade = new Trade(name);
   trade.isTakerAsk = false;
-  trade.collection = event.params.collection.toHex();
-  trade.strategy = event.params.strategy.toHex();
+  trade.collection = collection.id;
+  trade.strategy = strategy.id;
   trade.tokenId = event.params.tokenId;
   trade.price = toBigDecimal(event.params.price);
   trade.maker = event.params.maker.toHex();
@@ -226,7 +226,7 @@ export function handleRoyaltyPayment(event: RoyaltyPayment): void {
   let name =
     event.params.collection.toHex() + "-" + event.params.tokenId.toHex() + "-" + event.transaction.hash.toHex();
   let royaltyTransfer = new RoyaltyTransfer(name);
-  royaltyTransfer.collection = event.params.collection.toHex();
+  royaltyTransfer.collection = collection.id;
   royaltyTransfer.tokenId = event.params.tokenId;
   royaltyTransfer.user = event.params.royaltyRecipient.toHex();
   royaltyTransfer.amount = toBigDecimal(event.params.amount);
