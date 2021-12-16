@@ -1,25 +1,31 @@
+"""
+Collection
+"""
 type Collection @entity {
-  "ID (address)"
+  "ID (collection address)"
   id: ID!
 
   "Total number of transactions"
   totalTransactions: BigInt!
 
-  "Total volume of collection traded (in ETH)"
+  "Total traded volume of collection (in ETH)"
   totalVolume: BigDecimal!
 
-  "Total royalty paid (in ETH)"
+  "Total royalty paid (in ETH) from trading"
   totalRoyaltyPaid: BigDecimal!
 
   "Daily history"
   dayData: [CollectionDailyData!]! @derivedFrom(field: "collection")
 }
 
+"""
+ExecutionStrategy
+"""
 type ExecutionStrategy @entity {
-  "ID (address)"
+  "ID (execution strategy address)"
   id: ID!
 
-  "Protocol fee (500 --> 5%)"
+  "Protocol fee (e.g., 500 --> 5%)"
   protocolFee: BigInt!
 
   "Total number of transactions"
@@ -29,8 +35,11 @@ type ExecutionStrategy @entity {
   totalVolume: BigDecimal!
 }
 
+"""
+User
+"""
 type User @entity {
-  "User address"
+  "ID (user address)"
   id: ID!
 
   "Total royalty collected (in ETH)"
@@ -52,7 +61,11 @@ type User @entity {
   dayData: [UserDailyData!]! @derivedFrom(field: "user")
 }
 
+"""
+CollectionDailyData
+"""
 type CollectionDailyData @entity {
+  "ID"
   id: ID!
 
   "Start date (timestamp)"
@@ -67,14 +80,18 @@ type CollectionDailyData @entity {
   "Daily volume (in ETH)"
   dailyVolume: BigDecimal!
 
-  "Daily volume excluding zero-fee strategy (in ETH)"
+  "Daily volume (in ETH) excluding zero-fee strategy"
   dailyVolumeExcludingZeroFee: BigDecimal!
 
   "Royalty payment"
   dailyRoyalty: BigDecimal!
 }
 
+"""
+ExchangeDailyData
+"""
 type ExchangeDailyData @entity {
+  "ID"
   id: ID!
 
   "Start date (timestamp)"
@@ -86,11 +103,15 @@ type ExchangeDailyData @entity {
   "Daily volume (in ETH)"
   dailyVolume: BigDecimal!
 
-  "Daily volume excluding zero-fee strategy (in ETH)"
+  "Daily volume (in ETH) excluding zero-fee strategy"
   dailyVolumeExcludingZeroFee: BigDecimal!
 }
 
+"""
+ExecutionStrategyDailyData
+"""
 type ExecutionStrategyDailyData @entity {
+  "ID"
   id: ID!
 
   "Execution strategy"
@@ -106,7 +127,11 @@ type ExecutionStrategyDailyData @entity {
   dailyVolume: BigDecimal!
 }
 
+"""
+UserDailyData
+"""
 type UserDailyData @entity {
+  "ID"
   id: ID!
 
   "Start date (timestamp)"
@@ -121,11 +146,15 @@ type UserDailyData @entity {
   "Daily volume (in ETH)"
   dailyVolume: BigDecimal!
 
-  "Daily volume excluding zero-fee strategy (in ETH)"
+  "Daily volume (in ETH) excluding zero-fee strategy"
   dailyVolumeExcludingZeroFee: BigDecimal!
 }
 
+"""
+RoyaltyTransfer
+"""
 type RoyaltyTransfer @entity {
+  "ID"
   id: ID!
 
   "Collection"
@@ -141,7 +170,11 @@ type RoyaltyTransfer @entity {
   amount: BigDecimal!
 }
 
+"""
+Trade
+"""
 type Trade @entity {
+  "ID"
   id: ID!
 
   "Whether the trade is a takerAsk"
