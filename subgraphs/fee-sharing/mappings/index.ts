@@ -103,7 +103,7 @@ export function handleWithdrawFeeSharing(event: WithdrawFeeSharing): void {
   user.save();
 }
 
-function handleRewardAddedFeeSharing(event: RewardAddedFeeSharing): void {
+export function handleRewardAddedFeeSharing(event: RewardAddedFeeSharing): void {
   let rewardPeriod = new RewardPeriod(event.block.timestamp.toHex());
   rewardPeriod.block = event.block.number;
   rewardPeriod.rewardPerBlock = toBigDecimal(event.params.rewardPerBlock);
