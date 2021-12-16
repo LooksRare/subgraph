@@ -1,0 +1,42 @@
+"""
+User
+"""
+type User @entity {
+  "ID"
+  id: ID!
+
+  "Adjusted deposit amount (LOOKS)"
+  adjustedDepositAmountLOOKS: BigDecimal!
+
+  "Total LOOKS collected"
+  totalLOOKSCollected: BigDecimal!
+
+  "Total of WETH collected"
+  totalWETHCollected: BigDecimal!
+
+  "Total of Transactions"
+  lastLOOKSDepositDate: BigInt!
+
+  "Total of Transactions"
+  lastLOOKSWithdrawDate: BigInt!
+
+  "Total of Transactions"
+  lastHarvestDate: BigInt!
+}
+
+"""
+RewardDepositWETH
+"""
+type RewardDepositWETH @entity {
+  "ID (timestamp)"
+  id: ID!
+
+  "Block number"
+  block: BigInt!
+
+  "Reward per block (in WETH)"
+  rewardPerBlock: BigDecimal!
+
+  "Amount (in WETH)"
+  amount: BigDecimal!
+}
