@@ -10,5 +10,5 @@ export function fetchProtocolFee(strategy: Address): BigInt {
     return protocolFee.value;
   }
 
-  return BigInt.fromI32(0);
+  return BigInt.zero();
 }

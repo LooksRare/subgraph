@@ -19,9 +19,9 @@ export function updateCollectionDailyData(
   strategy: Address,
   timestamp: BigInt
 ): void {
-  let adjustedTimestamp = timestamp.toI32();
-  let dayID = adjustedTimestamp / 86400;
-  let dayStartTimestamp = dayID * 86400;
+  let dailyTimestampBigInt = BigInt.fromI32(86400);
+  let dayID = timestamp.div(dailyTimestampBigInt);
+  let dayStartTimestamp = dayID.times(dailyTimestampBigInt);
   let ID = dayID.toString() + "-" + collection.toHex();
 
   let collectionDailyData = CollectionDailyData.load(ID);
@@ -47,9 +47,9 @@ export function updateCollectionDailyData(
 }
 
 export function updateExchangeDailyData(volume: BigDecimal, strategy: Address, timestamp: BigInt): void {
-  let adjustedTimestamp = timestamp.toI32();
-  let dayID = adjustedTimestamp / 86400;
-  let dayStartTimestamp = dayID * 86400;
+  let dailyTimestampBigInt = BigInt.fromI32(86400);
+  let dayID = timestamp.div(dailyTimestampBigInt);
+  let dayStartTimestamp = dayID.times(dailyTimestampBigInt);
   let ID = dayID.toString();
 
   let exchangeDailyData = ExchangeDailyData.load(ID);
@@ -74,9 +74,9 @@ export function updateExchangeDailyData(volume: BigDecimal, strategy: Address, t
 }
 
 export function updateExecutionStrategyDailyData(strategy: Address, volume: BigDecimal, timestamp: BigInt): void {
-  let adjustedTimestamp = timestamp.toI32();
-  let dayID = adjustedTimestamp / 86400;
-  let dayStartTimestamp = dayID * 86400;
+  let dailyTimestampBigInt = BigInt.fromI32(86400);
+  let dayID = timestamp.div(dailyTimestampBigInt);
+  let dayStartTimestamp = dayID.times(dailyTimestampBigInt);
   let ID = dayID.toString() + "-" + strategy.toHex();
 
   let strategyDailyData = ExecutionStrategyDailyData.load(ID);
@@ -92,9 +92,9 @@ export function updateExecutionStrategyDailyData(strategy: Address, volume: BigD
 }
 
 export function updateUserDailyData(user: Address, volume: BigDecimal, strategy: Address, timestamp: BigInt): void {
-  let adjustedTimestamp = timestamp.toI32();
-  let dayID = adjustedTimestamp / 86400;
-  let dayStartTimestamp = dayID * 86400;
+  let dailyTimestampBigInt = BigInt.fromI32(86400);
+  let dayID = timestamp.div(dailyTimestampBigInt);
+  let dayStartTimestamp = dayID.times(dailyTimestampBigInt);
   let ID = dayID.toString() + "-" + user.toHex();
 
   let userDailyData = UserDailyData.load(ID);

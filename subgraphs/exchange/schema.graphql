@@ -69,7 +69,7 @@ type CollectionDailyData @entity {
   id: ID!
 
   "Start date (timestamp)"
-  date: Int!
+  date: BigInt!
 
   "Collection"
   collection: Collection!
@@ -95,7 +95,7 @@ type ExchangeDailyData @entity {
   id: ID!
 
   "Start date (timestamp)"
-  date: Int!
+  date: BigInt!
 
   "Daily unique transactions"
   dailyTransactions: BigInt!
@@ -118,7 +118,7 @@ type ExecutionStrategyDailyData @entity {
   executionStrategy: ExecutionStrategy!
 
   "Start date (timestamp)"
-  date: Int!
+  date: BigInt!
 
   "Daily unique transactions"
   dailyTransactions: BigInt!
@@ -135,7 +135,7 @@ type UserDailyData @entity {
   id: ID!
 
   "Start date (timestamp)"
-  date: Int!
+  date: BigInt!
 
   "User"
   user: User!

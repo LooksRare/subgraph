@@ -79,8 +79,8 @@ export function handleTakerAsk(event: TakerAsk): void {
   trade.strategy = strategy.id;
   trade.tokenId = event.params.tokenId;
   trade.price = toBigDecimal(event.params.price);
-  trade.maker = event.params.maker.toHex();
-  trade.taker = event.params.taker.toHex();
+  trade.maker = makerBidUser.id;
+  trade.taker = takerAskUser.id;
   trade.save();
 
   // 6. Update daily data entities
@@ -169,8 +169,8 @@ export function handleTakerBid(event: TakerBid): void {
   trade.strategy = strategy.id;
   trade.tokenId = event.params.tokenId;
   trade.price = toBigDecimal(event.params.price);
-  trade.maker = event.params.maker.toHex();
-  trade.taker = event.params.taker.toHex();
+  trade.maker = makerAskUser.id;
+  trade.taker = takerBidUser.id;
   trade.save();
 
   // 6. Update daily data entities
@@ -228,7 +228,7 @@ export function handleRoyaltyPayment(event: RoyaltyPayment): void {
   let royaltyTransfer = new RoyaltyTransfer(name);
   royaltyTransfer.collection = collection.id;
   royaltyTransfer.tokenId = event.params.tokenId;
-  royaltyTransfer.user = event.params.royaltyRecipient.toHex();
+  royaltyTransfer.user = user.id;
   royaltyTransfer.amount = toBigDecimal(event.params.amount);
   royaltyTransfer.save();
 }
