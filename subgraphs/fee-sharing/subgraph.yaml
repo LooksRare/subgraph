@@ -1,5 +1,5 @@
 specVersion: 0.0.2
-description: LooksRare fee-sharing system and LOOKS autocompounding
+description: LooksRare staking contracts
 repository: https://github.com/looksrare
 schema:
   file: ./schema.graphql
@@ -23,10 +23,34 @@ dataSources:
           file: ./abis/FeeSharingSystem.json
       eventHandlers:
         - event: Deposit(indexed address,uint256,uint256)
-          handler: handleDeposit
+          handler: handleDepositFeeSharing
         - event: Harvest(indexed address,uint256)
-          handler: handleHarvest
-        - event: RewardAdded(uint256,uint256)
-          handler: handleRewardAdded
+          handler: handleHarvestFeeSharing
         - event: Withdraw(indexed address,uint256,uint256)
-          handler: handleWithdraw
+          handler: handleWithdrawFeeSharing
+        - event: RewardAdded(uint256,uint256)
+          handler: handleRewardAddedFeeSharing
+  - kind: ethereum/contract
+    name: StakingPoolForUniswapV2Tokens
+    network: rinkeby
+    source:
+      abi: StakingPoolForUniswapV2Tokens
+      startBlock: 999999999
+    mapping:
+      kind: ethereum/events
+      apiVersion: 0.0.5
+      language: wasm/assemblyscript
+      file: ./mappings/index.ts
+      entities:
+        - User
+      abis:
+        - name: StakingPoolForUniswapV2Tokens
+          file: ./abis/StakingPoolForUniswapV2Tokens.json
+      eventHandlers:
+        - event: Deposit(indexed address,uint256,uint256)
+          handler: handleDepositStakingV2
+        - event: Harvest(indexed address,uint256)
+          handler: handleHarvestStakingV2
+        - event: Withdraw(indexed address,uint256,uint256)
+          handler: handleWithdrawStakingV2
+

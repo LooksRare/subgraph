@@ -5,23 +5,35 @@ type User @entity {
   "ID"
   id: ID!
 
-  "Adjusted deposit amount (LOOKS)"
-  adjustedDepositAmountLOOKS: BigDecimal!
+  "Fee Sharing - Adjusted deposit amount (LOOKS)"
+  feeSharingAdjustedDepositAmount: BigDecimal!
 
-  "Total LOOKS collected"
-  totalLOOKSCollected: BigDecimal!
+  "Fee Sharing - Total LOOKS collected"
+  feeSharingTotalCollectedLOOKS: BigDecimal!
 
-  "Total of WETH collected"
-  totalWETHCollected: BigDecimal!
+  "Fee Sharing - Total WETH collected"
+  feeSharingTotalCollectedWETH: BigDecimal!
 
-  "Last deposit date"
-  lastLOOKSDepositDate: BigInt!
+  "Fee Sharing - Last deposit date"
+  feeSharingLastDepositDate: BigInt!
 
-  "Last withdraw date"
-  lastLOOKSWithdrawDate: BigInt!
+  "Fee Sharing - Last harvest date"
+  feeSharingLastHarvestDate: BigInt!
 
-  "Last harvest date"
-  lastHarvestDate: BigInt!
+  "Fee Sharing - Last withdraw date"
+  feeSharingLastWithdrawDate: BigInt!
+
+  "UniswapV2 Staking - Total LOOKS collected"
+  stakingPoolUniswapV2TotalCollectedLOOKS: BigDecimal!
+
+  "UniswapV2 Staking - Last deposit date"
+  stakingPoolUniswapV2LastDepositDate: BigInt!
+
+  "UniswapV2 Staking - Last harvest date"
+  stakingPoolUniswapV2LastHarvestDate: BigInt!
+
+  "UniswapV2 Staking - Last withdraw date"
+  stakingPoolUniswapV2LastWithdrawDate: BigInt!
 }
 
 """
