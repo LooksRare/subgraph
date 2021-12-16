@@ -17,6 +17,7 @@ dataSources:
       file: ./mappings/index.ts
       entities:
         - User
+        - RewardDepositWETH
       abis:
         - name: FeeSharingSystem
           file: ./abis/FeeSharingSystem.json
@@ -26,6 +27,6 @@ dataSources:
         - event: Harvest(indexed address,uint256)
           handler: handleHarvest
         - event: RewardAdded(uint256,uint256)
-          handler: handleReward
+          handler: handleRewardAdded
         - event: Withdraw(indexed address,uint256,uint256)
           handler: handleWithdraw

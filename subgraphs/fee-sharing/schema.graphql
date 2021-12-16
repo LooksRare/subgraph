@@ -34,9 +34,9 @@ type RewardDepositWETH @entity {
   "Block number"
   block: BigInt!
 
+  "Reward amount for the period (in WETH)"
+  reward: BigDecimal!
+
   "Reward per block (in WETH)"
   rewardPerBlock: BigDecimal!
-
-  "Amount (in WETH)"
-  amount: BigDecimal!
 }
