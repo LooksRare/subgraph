@@ -16,8 +16,8 @@ dataSources:
       language: wasm/assemblyscript
       file: ./mappings/index.ts
       entities:
+        - RewardPeriod
         - User
-        - RewardDepositWETH
       abis:
         - name: FeeSharingSystem
           file: ./abis/FeeSharingSystem.json

@@ -1,6 +1,6 @@
 /* eslint-disable prefer-const */
 import { BigDecimal, BigInt } from "@graphprotocol/graph-ts";
-import { User, RewardDepositWETH } from "../generated/schema";
+import { User, RewardPeriod } from "../generated/schema";
 import { Deposit, Withdraw, Harvest, RewardAdded } from "../generated/FeeSharingSystem/FeeSharingSystem";
 import { toBigDecimal } from "./utils";
 
@@ -79,10 +79,10 @@ export function handleWithdraw(event: Withdraw): void {
 }
 
 function handleRewardAdded(event: RewardAdded): void {
-  let rewardDeposit = new RewardDepositWETH(event.block.timestamp.toHex());
-  rewardDeposit.block = event.block.number;
-  rewardDeposit.rewardPerBlock = toBigDecimal(event.params.rewardPerBlock);
-  rewardDeposit.reward = toBigDecimal(event.params.reward);
+  let rewardPeriod = new RewardPeriod(event.block.timestamp.toHex());
+  rewardPeriod.block = event.block.number;
+  rewardPeriod.rewardPerBlock = toBigDecimal(event.params.rewardPerBlock);
+  rewardPeriod.reward = toBigDecimal(event.params.reward);
 
-  rewardDeposit.save();
+  rewardPeriod.save();
 }

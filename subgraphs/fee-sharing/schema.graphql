@@ -14,20 +14,20 @@ type User @entity {
   "Total of WETH collected"
   totalWETHCollected: BigDecimal!
 
-  "Total of Transactions"
+  "Last deposit date"
   lastLOOKSDepositDate: BigInt!
 
-  "Total of Transactions"
+  "Last withdraw date"
   lastLOOKSWithdrawDate: BigInt!
 
-  "Total of Transactions"
+  "Last harvest date"
   lastHarvestDate: BigInt!
 }
 
 """
-RewardDepositWETH
+RewardPeriod
 """
-type RewardDepositWETH @entity {
+type RewardPeriod @entity {
   "ID (timestamp)"
   id: ID!
 
@@ -37,6 +37,6 @@ type RewardDepositWETH @entity {
   "Reward amount for the period (in WETH)"
   reward: BigDecimal!
 
-  "Reward per block (in WETH)"
+  "Reward per block for the period (in WETH)"
   rewardPerBlock: BigDecimal!
 }
