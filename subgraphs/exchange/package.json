@@ -1,6 +1,6 @@
 {
-  "name": "looksrare-exchange",
-  "description": "LooksRare Exchange subgraph",
+  "name": "exchange",
+  "description": "LooksRare exchange subgraph",
   "version": "1.0.0",
   "repository": "git@github.com:looksrare/subgraphs.git",
   "author": "LooksRare",
