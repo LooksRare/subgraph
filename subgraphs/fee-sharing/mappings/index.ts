@@ -11,7 +11,6 @@ import {
   Deposit as DepositStakingV2,
   Withdraw as WithdrawStakingV2,
   Harvest as HarvestStakingV2,
-  EmergencyWithdraw as EmergencyWithdrawStakingV2,
 } from "../generated/StakingPoolForUniswapV2Tokens/StakingPoolForUniswapV2Tokens";
 
 import { toBigDecimal } from "./utils";
