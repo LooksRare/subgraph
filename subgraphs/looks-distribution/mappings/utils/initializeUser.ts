@@ -1,5 +1,5 @@
 import { User } from "../../generated/schema";
-import { ZERO_BI, ZERO_BD } from "../utils";
+import { ZERO_BI, ZERO_BD } from ".";
 
 export function initializeUser(userID: string): User {
   const user = new User(userID);
