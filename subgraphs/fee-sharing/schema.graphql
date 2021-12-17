@@ -5,6 +5,12 @@ type User @entity {
   "ID"
   id: ID!
 
+  "Airdrop - Amount claimed (LOOKS)"
+  airdropAmount: BigDecimal!
+
+  "Airdrop - Claim date"
+  airdropClaimDate: BigInt!
+
   "Fee Sharing - Adjusted deposit amount (LOOKS)"
   feeSharingAdjustedDepositAmount: BigDecimal!
 
@@ -34,6 +40,12 @@ type User @entity {
 
   "UniswapV2 Staking - Last withdraw date"
   stakingPoolUniswapV2LastWithdrawDate: BigInt!
+
+  "Trading Rewards - Total LOOKS collected"
+  tradingRewardsAmount: BigDecimal!
+
+  "Airdrop - Claim date"
+  tradingRewardsLastClaimDate: BigInt!
 }
 
 """

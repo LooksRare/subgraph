@@ -53,4 +53,42 @@ dataSources:
           handler: handleHarvestStakingV2
         - event: Withdraw(indexed address,uint256,uint256)
           handler: handleWithdrawStakingV2
+  - kind: ethereum/contract
+    name: LooksRareAirdrop
+    network: rinkeby
+    source:
+      abi: LooksRareAirdrop
+      startBlock: 999999999
+    mapping:
+      kind: ethereum/events
+      apiVersion: 0.0.5
+      language: wasm/assemblyscript
+      file: ./mappings/index.ts
+      entities:
+        - User
+      abis:
+        - name: LooksRareAirdrop
+          file: ./abis/LooksRareAirdrop.json
+      eventHandlers:
+        - event: AirdropRewardsClaim(indexed address,uint256)
+          handler: handleAirdropClaim
+  - kind: ethereum/contract
+    name: TradingRewardsDistributor
+    network: rinkeby
+    source:
+      abi: TradingRewardsDistributor
+      startBlock: 999999999
+    mapping:
+      kind: ethereum/events
+      apiVersion: 0.0.5
+      language: wasm/assemblyscript
+      file: ./mappings/index.ts
+      entities:
+        - User
+      abis:
+        - name: TradingRewardsDistributor
+          file: ./abis/TradingRewardsDistributor.json
+      eventHandlers:
+        - event: RewardsClaimed(indexed address,indexed uint256,uint256)
+          handler: handleTradingRewardsClaim
 

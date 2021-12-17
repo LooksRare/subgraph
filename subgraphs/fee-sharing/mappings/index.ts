@@ -1,5 +1,4 @@
 /* eslint-disable prefer-const */
-import { BigDecimal, BigInt } from "@graphprotocol/graph-ts";
 import { User, RewardPeriod } from "../generated/schema";
 import {
   Deposit as DepositFeeSharing,
@@ -12,28 +11,18 @@ import {
   Withdraw as WithdrawStakingV2,
   Harvest as HarvestStakingV2,
 } from "../generated/StakingPoolForUniswapV2Tokens/StakingPoolForUniswapV2Tokens";
+import { AirdropRewardsClaim } from "../generated/LooksRareAirdrop/LooksRareAirdrop";
+import { RewardsClaimed } from "../generated/TradingRewardsDistributor/TradingRewardsDistributor";
 
-import { toBigDecimal } from "./utils";
-
-// BigNumber helpers
-let ZERO_BI = BigInt.zero();
-let ZERO_BD = BigDecimal.zero();
+import { toBigDecimal, ZERO_BI, ZERO_BD } from "./utils";
+import { initializeUser } from "./utils/initializeUser";
 
 export function handleDepositFeeSharing(event: DepositFeeSharing): void {
   let user = User.load(event.params.user.toHex());
   if (user === null) {
-    user = new User(event.params.user.toHex());
-    user.feeSharingAdjustedDepositAmount = ZERO_BD;
-    user.feeSharingTotalCollectedLOOKS = ZERO_BD;
-    user.feeSharingTotalCollectedWETH = ZERO_BD;
-    user.feeSharingLastDepositDate = ZERO_BI;
-    user.feeSharingLastWithdrawDate = ZERO_BI;
-    user.feeSharingLastHarvestDate = ZERO_BI;
-    user.stakingPoolUniswapV2TotalCollectedLOOKS = ZERO_BD;
-    user.stakingPoolUniswapV2LastDepositDate = ZERO_BI;
-    user.stakingPoolUniswapV2LastHarvestDate = ZERO_BI;
-    user.stakingPoolUniswapV2LastWithdrawDate = ZERO_BI;
+    user = initializeUser(event.params.user.toHex());
   }
+
   user.feeSharingAdjustedDepositAmount = user.feeSharingAdjustedDepositAmount.plus(toBigDecimal(event.params.amount));
   user.feeSharingLastDepositDate = event.block.timestamp;
 
@@ -48,17 +37,7 @@ export function handleDepositFeeSharing(event: DepositFeeSharing): void {
 export function handleHarvestFeeSharing(event: HarvestFeeSharing): void {
   let user = User.load(event.params.user.toHex());
   if (user === null) {
-    user = new User(event.params.user.toHex());
-    user.feeSharingAdjustedDepositAmount = ZERO_BD;
-    user.feeSharingTotalCollectedLOOKS = ZERO_BD;
-    user.feeSharingTotalCollectedWETH = ZERO_BD;
-    user.feeSharingLastDepositDate = ZERO_BI;
-    user.feeSharingLastWithdrawDate = ZERO_BI;
-    user.feeSharingLastHarvestDate = ZERO_BI;
-    user.stakingPoolUniswapV2TotalCollectedLOOKS = ZERO_BD;
-    user.stakingPoolUniswapV2LastDepositDate = ZERO_BI;
-    user.stakingPoolUniswapV2LastHarvestDate = ZERO_BI;
-    user.stakingPoolUniswapV2LastWithdrawDate = ZERO_BI;
+    user = initializeUser(event.params.user.toHex());
   }
   user.feeSharingTotalCollectedWETH = toBigDecimal(event.params.harvestedAmount);
   user.feeSharingLastHarvestDate = event.block.timestamp;
@@ -69,17 +48,7 @@ export function handleHarvestFeeSharing(event: HarvestFeeSharing): void {
 export function handleWithdrawFeeSharing(event: WithdrawFeeSharing): void {
   let user = User.load(event.params.user.toHex());
   if (user === null) {
-    user = new User(event.params.user.toHex());
-    user.feeSharingAdjustedDepositAmount = ZERO_BD;
-    user.feeSharingTotalCollectedLOOKS = ZERO_BD;
-    user.feeSharingTotalCollectedWETH = ZERO_BD;
-    user.feeSharingLastDepositDate = ZERO_BI;
-    user.feeSharingLastWithdrawDate = ZERO_BI;
-    user.feeSharingLastHarvestDate = ZERO_BI;
-    user.stakingPoolUniswapV2TotalCollectedLOOKS = ZERO_BD;
-    user.stakingPoolUniswapV2LastDepositDate = ZERO_BI;
-    user.stakingPoolUniswapV2LastHarvestDate = ZERO_BI;
-    user.stakingPoolUniswapV2LastWithdrawDate = ZERO_BI;
+    user = initializeUser(event.params.user.toHex());
   }
 
   if (user.feeSharingAdjustedDepositAmount >= toBigDecimal(event.params.amount)) {
@@ -114,17 +83,7 @@ export function handleRewardAddedFeeSharing(event: RewardAddedFeeSharing): void 
 export function handleDepositStakingV2(event: DepositStakingV2): void {
   let user = User.load(event.params.user.toHex());
   if (user === null) {
-    user = new User(event.params.user.toHex());
-    user.feeSharingAdjustedDepositAmount = ZERO_BD;
-    user.feeSharingTotalCollectedLOOKS = ZERO_BD;
-    user.feeSharingTotalCollectedWETH = ZERO_BD;
-    user.feeSharingLastDepositDate = ZERO_BI;
-    user.feeSharingLastWithdrawDate = ZERO_BI;
-    user.feeSharingLastHarvestDate = ZERO_BI;
-    user.stakingPoolUniswapV2TotalCollectedLOOKS = ZERO_BD;
-    user.stakingPoolUniswapV2LastDepositDate = ZERO_BI;
-    user.stakingPoolUniswapV2LastHarvestDate = ZERO_BI;
-    user.stakingPoolUniswapV2LastWithdrawDate = ZERO_BI;
+    user = initializeUser(event.params.user.toHex());
   }
 
   user.stakingPoolUniswapV2LastDepositDate = event.block.timestamp;
@@ -142,17 +101,7 @@ export function handleDepositStakingV2(event: DepositStakingV2): void {
 export function handleHarvestV2(event: HarvestStakingV2): void {
   let user = User.load(event.params.user.toHex());
   if (user === null) {
-    user = new User(event.params.user.toHex());
-    user.feeSharingAdjustedDepositAmount = ZERO_BD;
-    user.feeSharingTotalCollectedLOOKS = ZERO_BD;
-    user.feeSharingTotalCollectedWETH = ZERO_BD;
-    user.feeSharingLastDepositDate = ZERO_BI;
-    user.feeSharingLastWithdrawDate = ZERO_BI;
-    user.feeSharingLastHarvestDate = ZERO_BI;
-    user.stakingPoolUniswapV2TotalCollectedLOOKS = ZERO_BD;
-    user.stakingPoolUniswapV2LastDepositDate = ZERO_BI;
-    user.stakingPoolUniswapV2LastHarvestDate = ZERO_BI;
-    user.stakingPoolUniswapV2LastWithdrawDate = ZERO_BI;
+    user = initializeUser(event.params.user.toHex());
   }
 
   user.stakingPoolUniswapV2LastHarvestDate = event.block.timestamp;
@@ -166,17 +115,7 @@ export function handleHarvestV2(event: HarvestStakingV2): void {
 export function handleWithdrawStakingV2(event: WithdrawStakingV2): void {
   let user = User.load(event.params.user.toHex());
   if (user === null) {
-    user = new User(event.params.user.toHex());
-    user.feeSharingAdjustedDepositAmount = ZERO_BD;
-    user.feeSharingTotalCollectedLOOKS = ZERO_BD;
-    user.feeSharingTotalCollectedWETH = ZERO_BD;
-    user.feeSharingLastDepositDate = ZERO_BI;
-    user.feeSharingLastWithdrawDate = ZERO_BI;
-    user.feeSharingLastHarvestDate = ZERO_BI;
-    user.stakingPoolUniswapV2TotalCollectedLOOKS = ZERO_BD;
-    user.stakingPoolUniswapV2LastDepositDate = ZERO_BI;
-    user.stakingPoolUniswapV2LastHarvestDate = ZERO_BI;
-    user.stakingPoolUniswapV2LastWithdrawDate = ZERO_BI;
+    user = initializeUser(event.params.user.toHex());
   }
 
   user.stakingPoolUniswapV2LastWithdrawDate = event.block.timestamp;
@@ -188,5 +127,25 @@ export function handleWithdrawStakingV2(event: WithdrawStakingV2): void {
     );
   }
 
+  user.save();
+}
+
+export function handleAirdropClaim(event: AirdropRewardsClaim): void {
+  let user = User.load(event.params.user.toHex());
+  if (user === null) {
+    user = initializeUser(event.params.user.toHex());
+  }
+  user.airdropAmount = toBigDecimal(event.params.amount);
+  user.airdropClaimDate = event.block.timestamp;
+  user.save();
+}
+
+export function handleTradingRewardsClaim(event: RewardsClaimed): void {
+  let user = User.load(event.params.user.toHex());
+  if (user === null) {
+    user = initializeUser(event.params.user.toHex());
+  }
+  user.tradingRewardsAmount = toBigDecimal(event.params.amount);
+  user.tradingRewardsLastClaimDate = event.block.timestamp;
   user.save();
 }
