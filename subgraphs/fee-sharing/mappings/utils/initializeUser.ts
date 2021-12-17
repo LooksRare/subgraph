@@ -2,7 +2,7 @@ import { User } from "../../generated/schema";
 import { ZERO_BI, ZERO_BD } from "../utils";
 
 export function initializeUser(userID: string): User {
-  let user = new User(userID);
+  const user = new User(userID);
   user.airdropAmount = ZERO_BD;
   user.airdropClaimDate = ZERO_BI;
   user.feeSharingAdjustedDepositAmount = ZERO_BD;
