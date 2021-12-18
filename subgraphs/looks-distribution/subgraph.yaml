@@ -8,8 +8,9 @@ dataSources:
     name: FeeSharingSystem
     network: rinkeby
     source:
+      address: "0x0a15135f42cd331b56225a070E50c9108631544D" # TODO
       abi: FeeSharingSystem
-      startBlock: 999999999
+      startBlock: 9817000 # TODO
     mapping:
       kind: ethereum/events
       apiVersion: 0.0.5
@@ -34,8 +35,9 @@ dataSources:
     name: StakingPoolForUniswapV2Tokens
     network: rinkeby
     source:
+      address: "0x55bF35f73269da84B5c116198B630cf51261203E" # TODO
       abi: StakingPoolForUniswapV2Tokens
-      startBlock: 999999999
+      startBlock: 9817000 # TODO
     mapping:
       kind: ethereum/events
       apiVersion: 0.0.5
@@ -57,8 +59,9 @@ dataSources:
     name: LooksRareAirdrop
     network: rinkeby
     source:
+      address: "0x7981648f3945f2f986C9c7B405c0E8e995e7BE42" # TODO
       abi: LooksRareAirdrop
-      startBlock: 999999999
+      startBlock: 9817000 # TODO
     mapping:
       kind: ethereum/events
       apiVersion: 0.0.5
@@ -76,8 +79,9 @@ dataSources:
     name: TradingRewardsDistributor
     network: rinkeby
     source:
+      address: "0x81a5aD23f7E0C49585B08A12C71B6CCCE21a49fE" # TODO
       abi: TradingRewardsDistributor
-      startBlock: 999999999
+      startBlock: 9817000 # TODO
     mapping:
       kind: ethereum/events
       apiVersion: 0.0.5
@@ -91,4 +95,3 @@ dataSources:
       eventHandlers:
         - event: RewardsClaimed(indexed address,indexed uint256,uint256)
           handler: handleTradingRewardsClaim
-
