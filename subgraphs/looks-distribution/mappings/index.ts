@@ -41,6 +41,7 @@ export function handleHarvestFeeSharing(event: HarvestFeeSharing): void {
   if (user === null) {
     user = initializeUser(event.params.user.toHex());
   }
+
   user.feeSharingTotalCollectedWETH = user.feeSharingTotalCollectedWETH.plus(
     toBigDecimal(event.params.harvestedAmount)
   );
@@ -104,7 +105,7 @@ export function handleDepositStakingV2(event: DepositStakingV2): void {
   user.save();
 }
 
-export function handleHarvestV2(event: HarvestStakingV2): void {
+export function handleHarvestStakingV2(event: HarvestStakingV2): void {
   let user = User.load(event.params.user.toHex());
   if (user === null) {
     user = initializeUser(event.params.user.toHex());
