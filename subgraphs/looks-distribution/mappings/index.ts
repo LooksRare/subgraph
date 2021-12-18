@@ -27,7 +27,9 @@ export function handleDepositFeeSharing(event: DepositFeeSharing): void {
   user.feeSharingLastDepositDate = event.block.timestamp;
 
   if (event.params.harvestedAmount !== ZERO_BI) {
-    user.feeSharingTotalCollectedWETH = toBigDecimal(event.params.harvestedAmount);
+    user.feeSharingTotalCollectedWETH = user.feeSharingTotalCollectedWETH.plus(
+      toBigDecimal(event.params.harvestedAmount)
+    );
     user.feeSharingLastHarvestDate = event.block.timestamp;
   }
 
@@ -39,7 +41,9 @@ export function handleHarvestFeeSharing(event: HarvestFeeSharing): void {
   if (user === null) {
     user = initializeUser(event.params.user.toHex());
   }
-  user.feeSharingTotalCollectedWETH = toBigDecimal(event.params.harvestedAmount);
+  user.feeSharingTotalCollectedWETH = user.feeSharingTotalCollectedWETH.plus(
+    toBigDecimal(event.params.harvestedAmount)
+  );
   user.feeSharingLastHarvestDate = event.block.timestamp;
 
   user.save();
@@ -65,7 +69,9 @@ export function handleWithdrawFeeSharing(event: WithdrawFeeSharing): void {
   user.feeSharingLastWithdrawDate = event.block.timestamp;
 
   if (event.params.harvestedAmount !== ZERO_BI) {
-    user.feeSharingTotalCollectedWETH = toBigDecimal(event.params.harvestedAmount);
+    user.feeSharingTotalCollectedWETH = user.feeSharingTotalCollectedWETH.plus(
+      toBigDecimal(event.params.harvestedAmount)
+    );
     user.feeSharingLastHarvestDate = event.block.timestamp;
   }
 
