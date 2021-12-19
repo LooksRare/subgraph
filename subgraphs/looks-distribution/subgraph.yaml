@@ -1,0 +1,97 @@
+specVersion: 0.0.2
+description: LooksRare staking contracts
+repository: https://github.com/looksrare
+schema:
+  file: ./schema.graphql
+dataSources:
+  - kind: ethereum/contract
+    name: FeeSharingSystem
+    network: rinkeby
+    source:
+      address: "0x0a15135f42cd331b56225a070E50c9108631544D" # TODO
+      abi: FeeSharingSystem
+      startBlock: 9817000 # TODO
+    mapping:
+      kind: ethereum/events
+      apiVersion: 0.0.5
+      language: wasm/assemblyscript
+      file: ./mappings/index.ts
+      entities:
+        - RewardPeriod
+        - User
+      abis:
+        - name: FeeSharingSystem
+          file: ./abis/FeeSharingSystem.json
+      eventHandlers:
+        - event: Deposit(indexed address,uint256,uint256)
+          handler: handleDepositFeeSharing
+        - event: Harvest(indexed address,uint256)
+          handler: handleHarvestFeeSharing
+        - event: Withdraw(indexed address,uint256,uint256)
+          handler: handleWithdrawFeeSharing
+        - event: RewardAdded(uint256,uint256)
+          handler: handleRewardAddedFeeSharing
+  - kind: ethereum/contract
+    name: StakingPoolForUniswapV2Tokens
+    network: rinkeby
+    source:
+      address: "0x55bF35f73269da84B5c116198B630cf51261203E" # TODO
+      abi: StakingPoolForUniswapV2Tokens
+      startBlock: 9817000 # TODO
+    mapping:
+      kind: ethereum/events
+      apiVersion: 0.0.5
+      language: wasm/assemblyscript
+      file: ./mappings/index.ts
+      entities:
+        - User
+      abis:
+        - name: StakingPoolForUniswapV2Tokens
+          file: ./abis/StakingPoolForUniswapV2Tokens.json
+      eventHandlers:
+        - event: Deposit(indexed address,uint256,uint256)
+          handler: handleDepositStakingV2
+        - event: Harvest(indexed address,uint256)
+          handler: handleHarvestStakingV2
+        - event: Withdraw(indexed address,uint256,uint256)
+          handler: handleWithdrawStakingV2
+  - kind: ethereum/contract
+    name: LooksRareAirdrop
+    network: rinkeby
+    source:
+      address: "0x7981648f3945f2f986C9c7B405c0E8e995e7BE42" # TODO
+      abi: LooksRareAirdrop
+      startBlock: 9817000 # TODO
+    mapping:
+      kind: ethereum/events
+      apiVersion: 0.0.5
+      language: wasm/assemblyscript
+      file: ./mappings/index.ts
+      entities:
+        - User
+      abis:
+        - name: LooksRareAirdrop
+          file: ./abis/LooksRareAirdrop.json
+      eventHandlers:
+        - event: AirdropRewardsClaim(indexed address,uint256)
+          handler: handleAirdropClaim
+  - kind: ethereum/contract
+    name: TradingRewardsDistributor
+    network: rinkeby
+    source:
+      address: "0x81a5aD23f7E0C49585B08A12C71B6CCCE21a49fE" # TODO
+      abi: TradingRewardsDistributor
+      startBlock: 9817000 # TODO
+    mapping:
+      kind: ethereum/events
+      apiVersion: 0.0.5
+      language: wasm/assemblyscript
+      file: ./mappings/index.ts
+      entities:
+        - User
+      abis:
+        - name: TradingRewardsDistributor
+          file: ./abis/TradingRewardsDistributor.json
+      eventHandlers:
+        - event: RewardsClaimed(indexed address,indexed uint256,uint256)
+          handler: handleTradingRewardsClaim
