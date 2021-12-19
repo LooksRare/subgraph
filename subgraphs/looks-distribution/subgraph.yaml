@@ -1,4 +1,4 @@
-specVersion: 0.0.2
+specVersion: 0.0.4
 description: LooksRare staking contracts
 repository: https://github.com/looksrare
 schema:
@@ -13,7 +13,7 @@ dataSources:
       startBlock: 9817000 # TODO
     mapping:
       kind: ethereum/events
-      apiVersion: 0.0.5
+      apiVersion: 0.0.6
       language: wasm/assemblyscript
       file: ./mappings/index.ts
       entities:
@@ -40,7 +40,7 @@ dataSources:
       startBlock: 9817000 # TODO
     mapping:
       kind: ethereum/events
-      apiVersion: 0.0.5
+      apiVersion: 0.0.6
       language: wasm/assemblyscript
       file: ./mappings/index.ts
       entities:
@@ -64,7 +64,7 @@ dataSources:
       startBlock: 9817000 # TODO
     mapping:
       kind: ethereum/events
-      apiVersion: 0.0.5
+      apiVersion: 0.0.6
       language: wasm/assemblyscript
       file: ./mappings/index.ts
       entities:
@@ -84,7 +84,7 @@ dataSources:
       startBlock: 9817000 # TODO
     mapping:
       kind: ethereum/events
-      apiVersion: 0.0.5
+      apiVersion: 0.0.6
       language: wasm/assemblyscript
       file: ./mappings/index.ts
       entities:
