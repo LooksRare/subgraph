@@ -1,16 +1,18 @@
 /* eslint-disable prefer-const */
-import { Address, BigDecimal, BigInt } from "@graphprotocol/graph-ts";
-import { Balance, Currency, ExchangeRate, User } from "../generated/schema";
+import { BigDecimal, BigInt } from "@graphprotocol/graph-ts";
+import { Balance, Currency, User } from "../generated/schema";
 import { AtomicMatch_Call } from "../generated/WyvernExchange/WyvernExchange";
 
-import { currencies, ONE_BD, toBigDecimal, ZERO_BD, ZERO_BI } from "./utils";
+import { currencies, ONE_BD, ONE_BI, toBigDecimal, ZERO_BD, ZERO_BI } from "./utils";
 import { fetchDecimals, fetchName, fetchSymbol } from "./utils/erc20";
 import { getPrice } from "./utils/getPrice";
 
+const END_BLOCK = BigInt.fromString("13812868"); // TODO
+
 function initializeUser(user: string, currency: string, timestamp: BigInt): User {
   const newUser = new User(user);
-  newUser.totalBuy = ZERO_BI;
-  newUser.totalSell = ZERO_BI;
+  newUser.totalBuyTransactions = ZERO_BI;
+  newUser.totalSellTransactions = ZERO_BI;
   newUser.totalVolumeInETH = ZERO_BD;
   newUser.firstTradeAt = timestamp;
   newUser.firstTradeWith = currency;
@@ -29,6 +31,11 @@ function initializeUserBalance(user: string, currency: string): Balance {
 }
 
 export function handleAtomicMatch(call: AtomicMatch_Call): void {
+  // Stop indexing after end block
+  if (call.block.number > END_BLOCK) {
+    return;
+  }
+
   // If the currency used for the trade isn't in the whitelist, skip.
   if (!currencies.includes(call.inputs.addrs[6].toHex())) {
     return;
@@ -43,52 +50,54 @@ export function handleAtomicMatch(call: AtomicMatch_Call): void {
     currency.decimals = fetchDecimals(call.inputs.addrs[6]);
     currency.totalTrades = ZERO_BI;
     currency.volume = ZERO_BD;
-    currency.save();
+    currency.priceOfOneETH = ONE_BD;
+    currency.updatedAt = ZERO_BI;
+    currency.minPriceOfOneETH = BigDecimal.fromString("9999999999"); // Arbitrary large number
+    currency.maxPriceOfOneETH = ZERO_BD;
   }
 
-  currency.totalTrades = currency.totalTrades.plus(BigInt.fromI32(1));
+  currency.totalTrades = currency.totalTrades.plus(ONE_BI);
   currency.volume = currency.volume.plus(toBigDecimal(call.inputs.uints[4], currency.decimals.toI32()));
-  currency.save();
 
-  // 2. Exchange rate logic
   let adjustedCurrencyVolume = currency.volume;
   let priceOfOneETH = ONE_BD;
 
   // Exclude if traded currency is WETH/ETH
   if (
-    currency.id != "0x0000000000000000000000000000000000000000" &&
-    currency.id != "0xc02aaa39b223fe8d0a0e5c4f27ead9083c756cc2"
+    call.inputs.addrs[6].toHex() != "0x0000000000000000000000000000000000000000" &&
+    call.inputs.addrs[6].toHex() != "0xc02aaa39b223fe8d0a0e5c4f27ead9083c756cc2"
   ) {
-    let exchangeRate = ExchangeRate.load(currency.id);
-    if (exchangeRate == null) {
-      exchangeRate = new ExchangeRate(currency.id);
-      exchangeRate.currency = currency.id;
-      exchangeRate.priceOfOneETH = ZERO_BD;
-      exchangeRate.updatedAt = ZERO_BI;
+    priceOfOneETH = getPrice(currency.id);
+    adjustedCurrencyVolume = adjustedCurrencyVolume.div(priceOfOneETH);
+
+    currency.priceOfOneETH = priceOfOneETH;
+    if (priceOfOneETH > currency.maxPriceOfOneETH) {
+      currency.maxPriceOfOneETH = priceOfOneETH;
     }
 
-    priceOfOneETH = getPrice(currency.id);
-    adjustedCurrencyVolume = adjustedCurrencyVolume.times(priceOfOneETH);
+    if (priceOfOneETH < currency.minPriceOfOneETH) {
+      currency.minPriceOfOneETH = priceOfOneETH;
+    }
 
-    exchangeRate.priceOfOneETH = priceOfOneETH;
-    exchangeRate.updatedAt = call.block.timestamp;
-    exchangeRate.save();
+    currency.updatedAt = call.block.timestamp;
   }
 
-  // 3. Buyer
-  // 3.1 Buyer
+  currency.save();
+
+  // 2. Buyer
+  // 2.1 Buyer
   let buyer = User.load(call.inputs.addrs[1].toHex());
   if (buyer === null) {
     buyer = initializeUser(call.inputs.addrs[1].toHex(), currency.id, call.block.timestamp);
   }
 
-  buyer.totalBuy = buyer.totalBuy.plus(BigInt.fromI32(1));
+  buyer.totalBuyTransactions = buyer.totalBuyTransactions.plus(ONE_BI);
   buyer.lastTradeAt = call.block.timestamp;
   buyer.lastTradeWith = currency.id;
   buyer.totalVolumeInETH = buyer.totalVolumeInETH.plus(adjustedCurrencyVolume);
   buyer.save();
 
-  // 3.2 Buyer's balance in the currency
+  // 2.2 Buyer's balance in the currency
   let buyerBalance = Balance.load(call.inputs.addrs[1].toHex() + "-" + call.inputs.addrs[6].toHex());
 
   if (buyerBalance === null) {
@@ -99,20 +108,20 @@ export function handleAtomicMatch(call: AtomicMatch_Call): void {
   buyerBalance.updatedAt = call.block.timestamp;
   buyerBalance.save();
 
-  // 4. Seller
-  // 4.1 Seller
+  // 3. Seller
+  // 3.1 Seller
   let seller = User.load(call.inputs.addrs[8].toHex());
   if (seller === null) {
     seller = initializeUser(call.inputs.addrs[8].toHex(), currency.id, call.block.timestamp);
   }
 
-  seller.totalSell = seller.totalSell.plus(BigInt.fromI32(1));
+  seller.totalSellTransactions = seller.totalSellTransactions.plus(ONE_BI);
   seller.totalVolumeInETH = seller.totalVolumeInETH.plus(adjustedCurrencyVolume);
   seller.lastTradeAt = call.block.timestamp;
   seller.lastTradeWith = currency.id;
   seller.save();
 
-  // 4.2 Seller's balance
+  // 3.2 Seller's balance
   let sellerBalance = Balance.load(call.inputs.addrs[8].toHex() + "-" + call.inputs.addrs[6].toHex());
   if (sellerBalance === null) {
     sellerBalance = initializeUserBalance(call.inputs.addrs[8].toHex(), call.inputs.addrs[6].toHex());
