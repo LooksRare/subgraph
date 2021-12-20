@@ -52,8 +52,16 @@ export function handleAtomicMatch(call: AtomicMatch_Call): void {
     currency.volume = ZERO_BD;
     currency.priceOfOneETH = ONE_BD;
     currency.updatedAt = ZERO_BI;
-    currency.minPriceOfOneETH = BigDecimal.fromString("9999999999"); // Arbitrary large number
-    currency.maxPriceOfOneETH = ZERO_BD;
+    if (
+      currency.id != "0x0000000000000000000000000000000000000000" &&
+      currency.id != "0xc02aaa39b223fe8d0a0e5c4f27ead9083c756cc2"
+    ) {
+      currency.minPriceOfOneETH = BigDecimal.fromString("9999999999"); // Arbitrary large number
+      currency.maxPriceOfOneETH = ZERO_BD;
+    } else {
+      currency.minPriceOfOneETH = ONE_BD;
+      currency.maxPriceOfOneETH = ONE_BD;
+    }
   }
 
   currency.totalTrades = currency.totalTrades.plus(ONE_BI);
@@ -64,22 +72,26 @@ export function handleAtomicMatch(call: AtomicMatch_Call): void {
 
   // Exclude if traded currency is WETH/ETH
   if (
-    call.inputs.addrs[6].toHex() != "0x0000000000000000000000000000000000000000" &&
-    call.inputs.addrs[6].toHex() != "0xc02aaa39b223fe8d0a0e5c4f27ead9083c756cc2"
+    currency.id != "0x0000000000000000000000000000000000000000" &&
+    currency.id != "0xc02aaa39b223fe8d0a0e5c4f27ead9083c756cc2"
   ) {
-    priceOfOneETH = getPrice(currency.id);
-    adjustedCurrencyVolume = adjustedCurrencyVolume.div(priceOfOneETH);
+    // Refresh only if not updated for 1 hour
+    if (currency.updatedAt.plus(BigInt.fromString("3600")) < call.block.number) {
+      priceOfOneETH = getPrice(currency.id);
+      adjustedCurrencyVolume = toBigDecimal(call.inputs.uints[4], currency.decimals.toI32()).div(priceOfOneETH);
 
-    currency.priceOfOneETH = priceOfOneETH;
-    if (priceOfOneETH > currency.maxPriceOfOneETH) {
-      currency.maxPriceOfOneETH = priceOfOneETH;
+      currency.priceOfOneETH = priceOfOneETH;
+
+      if (priceOfOneETH > currency.maxPriceOfOneETH) {
+        currency.maxPriceOfOneETH = priceOfOneETH;
+      }
+
+      if (priceOfOneETH < currency.minPriceOfOneETH) {
+        currency.minPriceOfOneETH = priceOfOneETH;
+      }
+
+      currency.updatedAt = call.block.timestamp;
     }
-
-    if (priceOfOneETH < currency.minPriceOfOneETH) {
-      currency.minPriceOfOneETH = priceOfOneETH;
-    }
-
-    currency.updatedAt = call.block.timestamp;
   }
 
   currency.save();
