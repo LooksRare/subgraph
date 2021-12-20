@@ -3,7 +3,7 @@ import { BigDecimal, BigInt } from "@graphprotocol/graph-ts";
 import { Balance, Currency, User } from "../generated/schema";
 import { AtomicMatch_Call } from "../generated/WyvernExchange/WyvernExchange";
 
-import { currencies, ONE_BD, ONE_BI, toBigDecimal, ZERO_BD, ZERO_BI } from "./utils";
+import { currencies, etherAddresses, ONE_BD, ONE_BI, toBigDecimal, ZERO_BD, ZERO_BI } from "./utils";
 import { fetchDecimals, fetchName, fetchSymbol } from "./utils/erc20";
 import { getPrice } from "./utils/getPrice";
 
@@ -52,10 +52,7 @@ export function handleAtomicMatch(call: AtomicMatch_Call): void {
     currency.volume = ZERO_BD;
     currency.priceOfOneETH = ONE_BD;
     currency.updatedAt = ZERO_BI;
-    if (
-      currency.id != "0x0000000000000000000000000000000000000000" &&
-      currency.id != "0xc02aaa39b223fe8d0a0e5c4f27ead9083c756cc2"
-    ) {
+    if (!etherAddresses.includes(currency.id)) {
       currency.minPriceOfOneETH = BigDecimal.fromString("9999999999"); // Arbitrary large number
       currency.maxPriceOfOneETH = ZERO_BD;
     } else {
@@ -71,10 +68,7 @@ export function handleAtomicMatch(call: AtomicMatch_Call): void {
   let adjustedCurrencyVolume = toBigDecimal(call.inputs.uints[4], currency.decimals.toI32());
 
   // Exclude if traded currency is WETH/ETH
-  if (
-    currency.id != "0x0000000000000000000000000000000000000000" &&
-    currency.id != "0xc02aaa39b223fe8d0a0e5c4f27ead9083c756cc2"
-  ) {
+  if (!etherAddresses.includes(currency.id)) {
     // Refresh only if not updated for 1 hour
     if (currency.updatedAt.plus(BigInt.fromString("3600")) < call.block.timestamp) {
       priceOfOneETH = getPrice(currency.id, currency.decimals.toI32());
