@@ -76,8 +76,8 @@ export function handleAtomicMatch(call: AtomicMatch_Call): void {
     currency.id != "0xc02aaa39b223fe8d0a0e5c4f27ead9083c756cc2"
   ) {
     // Refresh only if not updated for 1 hour
-    if (currency.updatedAt.plus(BigInt.fromString("3600")) < call.block.number) {
-      priceOfOneETH = getPrice(currency.id);
+    if (currency.updatedAt.plus(BigInt.fromString("3600")) < call.block.timestamp) {
+      priceOfOneETH = getPrice(currency.id, currency.decimals.toI32());
       adjustedCurrencyVolume = toBigDecimal(call.inputs.uints[4], currency.decimals.toI32()).div(priceOfOneETH);
 
       currency.priceOfOneETH = priceOfOneETH;

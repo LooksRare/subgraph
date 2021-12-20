@@ -20,7 +20,7 @@ function getLpAddress(currency: string): string {
   }
 }
 
-export function getPrice(currency: string): BigDecimal {
+export function getPrice(currency: string, decimals: i32): BigDecimal {
   let lpAddress = getLpAddress(currency);
 
   if (lpAddress == "0x0000000000000000000000000000000000000000") {
@@ -31,7 +31,7 @@ export function getPrice(currency: string): BigDecimal {
 
   let reserves = uniswapPair.try_getReserves();
   if (!reserves.reverted) {
-    let reserve0 = toBigDecimal(reserves.value.value0);
+    let reserve0 = toBigDecimal(reserves.value.value0, decimals);
     let reserve1 = toBigDecimal(reserves.value.value1);
     return reserve0.div(reserve1);
   } else {
