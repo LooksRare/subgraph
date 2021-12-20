@@ -31,17 +31,24 @@ type User @entity {
     "ID"
     id: ID!
 
-    "Total of Buy (as taker)"
+    "Total of Buy"
     totalBuy: BigInt!
-    "Total of Sell (as maker)"
+
+    "Total of Sell"
     totalSell: BigInt!
+
+    "Total volume in ETH"
+    totalVolumeInETH: BigDecimal!
 
     "First Trade At"
     firstTradeAt: BigInt!
+
     "First Trade With"
     firstTradeWith: Currency!
+
     "Last Trade At"
     lastTradeAt: BigInt!
+
     "Last Trade With"
     lastTradeWith: Currency!
 
@@ -68,3 +75,22 @@ type Balance @entity {
     "Updated At"
     updatedAt: BigInt!
 }
+
+
+"""
+ExchangeRate
+"""
+type ExchangeRate @entity {
+    "ID"
+    id: ID!
+
+    "Currency"
+    currency: Currency!
+
+    "Price of 1 ETH in the currency"
+    priceOfOneETH: BigDecimal!
+
+    "Updated At"
+    updatedAt: BigInt!
+}
+
