@@ -67,8 +67,8 @@ export function handleAtomicMatch(call: AtomicMatch_Call): void {
   currency.totalTrades = currency.totalTrades.plus(ONE_BI);
   currency.volume = currency.volume.plus(toBigDecimal(call.inputs.uints[4], currency.decimals.toI32()));
 
-  let adjustedCurrencyVolume = currency.volume;
-  let priceOfOneETH = ONE_BD;
+  let priceOfOneETH = currency.priceOfOneETH;
+  let adjustedCurrencyVolume = toBigDecimal(call.inputs.uints[4], currency.decimals.toI32());
 
   // Exclude if traded currency is WETH/ETH
   if (
@@ -78,7 +78,6 @@ export function handleAtomicMatch(call: AtomicMatch_Call): void {
     // Refresh only if not updated for 1 hour
     if (currency.updatedAt.plus(BigInt.fromString("3600")) < call.block.timestamp) {
       priceOfOneETH = getPrice(currency.id, currency.decimals.toI32());
-      adjustedCurrencyVolume = toBigDecimal(call.inputs.uints[4], currency.decimals.toI32()).div(priceOfOneETH);
 
       currency.priceOfOneETH = priceOfOneETH;
 
@@ -92,6 +91,7 @@ export function handleAtomicMatch(call: AtomicMatch_Call): void {
 
       currency.updatedAt = call.block.timestamp;
     }
+    adjustedCurrencyVolume = adjustedCurrencyVolume.div(priceOfOneETH);
   }
 
   currency.save();
