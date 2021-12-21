@@ -12,7 +12,7 @@ function getLpAddress(currency: string): string {
   } else if (currency == "0x6b175474e89094c44da98b954eedeac495271d0f") {
     // DAI
     return "0xa478c2975ab1ea89e8196811f51a7b7ade33eb11";
-  } else if (currency == "0x3845badAde8e6dFF049820680d1F14bD3903a5d0") {
+  } else if (currency == "0x3845badade8e6dff049820680d1f14bd3903a5d0") {
     // SAND
     return "0x3dd49f67e9d5bc4c5e6634b3f70bfd9dc1b6bd74";
   } else {
