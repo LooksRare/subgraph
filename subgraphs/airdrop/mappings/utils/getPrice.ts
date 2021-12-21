@@ -1,5 +1,5 @@
 /* eslint-disable prefer-const */
-import { Address, BigDecimal, BigInt } from "@graphprotocol/graph-ts";
+import { Address, BigDecimal } from "@graphprotocol/graph-ts";
 import { toBigDecimal, ZERO_BD } from ".";
 import { IUniswapV2Pair } from "../../generated/WyvernExchange/IUniswapV2Pair";
 
