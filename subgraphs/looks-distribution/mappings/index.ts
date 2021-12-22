@@ -12,7 +12,7 @@ import {
   Harvest as HarvestStakingV2,
 } from "../generated/StakingPoolForUniswapV2Tokens/StakingPoolForUniswapV2Tokens";
 import { AirdropRewardsClaim } from "../generated/LooksRareAirdrop/LooksRareAirdrop";
-import { RewardsClaimed } from "../generated/TradingRewardsDistributor/TradingRewardsDistributor";
+import { RewardsClaim } from "../generated/TradingRewardsDistributor/TradingRewardsDistributor";
 
 import { toBigDecimal, ZERO_BI, ZERO_BD } from "./utils";
 import { initializeUser } from "./utils/initializeUser";
@@ -147,7 +147,7 @@ export function handleAirdropClaim(event: AirdropRewardsClaim): void {
   user.save();
 }
 
-export function handleTradingRewardsClaim(event: RewardsClaimed): void {
+export function handleTradingRewardsClaim(event: RewardsClaim): void {
   let user = User.load(event.params.user.toHex());
   if (user === null) {
     user = initializeUser(event.params.user.toHex());
