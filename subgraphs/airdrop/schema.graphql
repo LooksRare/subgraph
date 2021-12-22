@@ -2,69 +2,88 @@
 Currencies
 """
 type Currency @entity {
-    "ID"
-    id: ID!
+  "ID"
+  id: ID!
 
-    "Name"
-    name: String!
+  "Name"
+  name: String!
 
-    "Symbol"
-    symbol: String!
+  "Symbol"
+  symbol: String!
 
-    "Decimals"
-    decimals: BigInt!
+  "Decimals"
+  decimals: BigInt!
 
-    "Total of Trades"
-    totalTrades: BigInt!
+  "Total of Trades"
+  totalTrades: BigInt!
 
-    "Volume"
-    volume: BigDecimal!
+  "Volume"
+  volume: BigDecimal!
 
-    "List of Balances"
-    balances: [Balance!]! @derivedFrom(field: "currency")
+  "Price of 1 ETH in the currency"
+  priceOfOneETH: BigDecimal!
+
+  "Minimum price of 1 ETH"
+  minPriceOfOneETH: BigDecimal!
+
+  "Maximum price of 1 ETH"
+  maxPriceOfOneETH: BigDecimal!
+
+  "Last update for exchange rate of 1 ETH"
+  updatedAt: BigInt!
+
+  "List of Balances"
+  balances: [Balance!]! @derivedFrom(field: "currency")
 }
 
 """
 User
 """
 type User @entity {
-    "ID"
-    id: ID!
+  "ID"
+  id: ID!
 
-    "Total of Buy (as taker)"
-    totalBuy: BigInt!
-    "Total of Sell (as maker)"
-    totalSell: BigInt!
+  "Total of Buy transactions"
+  totalBuyTransactions: BigInt!
 
-    "First Trade At"
-    firstTradeAt: BigInt!
-    "First Trade With"
-    firstTradeWith: Currency!
-    "Last Trade At"
-    lastTradeAt: BigInt!
-    "Last Trade With"
-    lastTradeWith: Currency!
+  "Total of Sell transactions"
+  totalSellTransactions: BigInt!
 
-    "List of Balances"
-    balances: [Balance!]! @derivedFrom(field: "user")
+  "Total volume in ETH"
+  totalVolumeInETH: BigDecimal!
+
+  "First Trade At"
+  firstTradeAt: BigInt!
+
+  "First Trade With"
+  firstTradeWith: Currency!
+
+  "Last Trade At"
+  lastTradeAt: BigInt!
+
+  "Last Trade With"
+  lastTradeWith: Currency!
+
+  "List of Balances"
+  balances: [Balance!]! @derivedFrom(field: "user")
 }
 
 """
 Balance
 """
 type Balance @entity {
-    "ID"
-    id: ID!
+  "ID"
+  id: ID!
 
-    "Currency"
-    currency: Currency!
+  "Currency"
+  currency: Currency!
 
-    "User"
-    user: User!
+  "User"
+  user: User!
 
-    "Volume"
-    volume: BigDecimal!
+  "Volume"
+  volume: BigDecimal!
 
-    "Updated At"
-    updatedAt: BigInt!
+  "Updated At"
+  updatedAt: BigInt!
 }
