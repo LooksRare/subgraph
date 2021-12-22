@@ -7,7 +7,7 @@ import { currencies, etherAddresses, ONE_BD, ONE_BI, toBigDecimal, ZERO_BD, ZERO
 import { fetchDecimals, fetchName, fetchSymbol } from "./utils/erc20";
 import { getPrice } from "./utils/getPrice";
 
-const END_BLOCK = BigInt.fromString("13812868"); // TODO
+const END_BLOCK = BigInt.fromString("13812868");
 
 function initializeUser(user: string, currency: string, timestamp: BigInt): User {
   const newUser = new User(user);
