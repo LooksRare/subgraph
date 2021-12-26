@@ -85,7 +85,7 @@ export function handleAtomicMatch(call: AtomicMatch_Call): void {
 
       currency.updatedAt = call.block.timestamp;
     }
-    adjustedCurrencyVolume = adjustedCurrencyVolume.div(priceOfOneETH);
+    adjustedCurrencyVolume = adjustedCurrencyVolume.div(priceOfOneETH).truncate(currency.decimals.isI32());
   }
 
   currency.save();
