@@ -93,5 +93,5 @@ dataSources:
         - name: TradingRewardsDistributor
           file: ./abis/TradingRewardsDistributor.json
       eventHandlers:
-        - event: RewardsClaimed(indexed address,indexed uint256,uint256)
+        - event: RewardsClaim(indexed address,indexed uint256,uint256)
           handler: handleTradingRewardsClaim
