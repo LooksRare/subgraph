@@ -29,8 +29,8 @@ dataSources:
           handler: handleHarvestFeeSharing
         - event: Withdraw(indexed address,uint256,uint256)
           handler: handleWithdrawFeeSharing
-        - event: RewardAdded(uint256,uint256)
-          handler: handleRewardAddedFeeSharing
+        - event: NewRewardPeriod(uint256,uint256,uint256)
+          handler: handleNewRewardPeriod
   - kind: ethereum/contract
     name: StakingPoolForUniswapV2Tokens
     network: rinkeby

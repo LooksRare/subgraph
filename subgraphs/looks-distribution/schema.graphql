@@ -58,6 +58,9 @@ type RewardPeriod @entity {
   "Block number"
   block: BigInt!
 
+  "Period length (in blocks)"
+  numberBlocks: BigInt!
+
   "Reward amount for the period (in WETH)"
   reward: BigDecimal!
 
