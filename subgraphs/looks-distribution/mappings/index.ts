@@ -4,7 +4,6 @@ import {
   Deposit as DepositFeeSharing,
   Withdraw as WithdrawFeeSharing,
   Harvest as HarvestFeeSharing,
-  NewRewardPeriod as RewardAddedFeeSharing,
   NewRewardPeriod,
 } from "../generated/FeeSharingSystem/FeeSharingSystem";
 import {
