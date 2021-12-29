@@ -20,6 +20,9 @@ type Currency @entity {
   "Volume"
   volume: BigDecimal!
 
+  "Volume in ETH"
+  volumeInETH: BigDecimal!
+
   "Price of 1 ETH in the currency"
   priceOfOneETH: BigDecimal!
 

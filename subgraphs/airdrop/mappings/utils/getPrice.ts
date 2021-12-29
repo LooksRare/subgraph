@@ -15,6 +15,12 @@ function getLpAddress(currency: string): string {
   } else if (currency == "0x3845badade8e6dff049820680d1f14bd3903a5d0") {
     // SAND
     return "0x3dd49f67e9d5bc4c5e6634b3f70bfd9dc1b6bd74";
+  } else if (currency == "0x0f5d2fb29fb7d3cfee444a200298f468908cc942") {
+    // MANA
+    return "0x11b1f53204d03e5529f09eb3091939e4fd8c9cf3";
+  } else if (currency == "0x15d4c048f83bd7e37d49ea4c83a07267ec4203da") {
+    // GALA
+    return "0xbe19c32b4cd202407e8eeb73e4e2949438461ae3";
   } else {
     return "0x0000000000000000000000000000000000000000";
   }

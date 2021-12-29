@@ -55,6 +55,7 @@ export function handleAtomicMatch(call: AtomicMatch_Call): void {
     currency.decimals = fetchDecimals(call.inputs.addrs[6]);
     currency.totalTrades = ZERO_BI;
     currency.volume = ZERO_BD;
+    currency.volumeInETH = ZERO_BD;
     currency.priceOfOneETH = ONE_BD;
     currency.updatedAt = ZERO_BI;
     if (!etherAddresses.includes(currency.id)) {
@@ -93,6 +94,7 @@ export function handleAtomicMatch(call: AtomicMatch_Call): void {
     adjustedCurrencyVolume = adjustedCurrencyVolume.div(priceOfOneETH).truncate(currency.decimals.isI32());
   }
 
+  currency.volumeInETH = adjustedCurrencyVolume;
   currency.save();
 
   // 2. Buyer
