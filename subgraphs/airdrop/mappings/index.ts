@@ -91,10 +91,10 @@ export function handleAtomicMatch(call: AtomicMatch_Call): void {
 
       currency.updatedAt = call.block.timestamp;
     }
-    adjustedCurrencyVolume = adjustedCurrencyVolume.div(priceOfOneETH).truncate(currency.decimals.isI32());
+    adjustedCurrencyVolume = adjustedCurrencyVolume.div(priceOfOneETH).truncate(18);
   }
 
-  currency.volumeInETH = adjustedCurrencyVolume;
+  currency.volumeInETH = currency.volumeInETH.plus(adjustedCurrencyVolume);
   currency.save();
 
   // 2. Buyer
