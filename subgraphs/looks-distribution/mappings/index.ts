@@ -4,7 +4,7 @@ import {
   Deposit as DepositFeeSharing,
   Withdraw as WithdrawFeeSharing,
   Harvest as HarvestFeeSharing,
-  RewardAdded as RewardAddedFeeSharing,
+  NewRewardPeriod,
 } from "../generated/FeeSharingSystem/FeeSharingSystem";
 import {
   Deposit as DepositStakingV2,
@@ -79,9 +79,10 @@ export function handleWithdrawFeeSharing(event: WithdrawFeeSharing): void {
   user.save();
 }
 
-export function handleRewardAddedFeeSharing(event: RewardAddedFeeSharing): void {
+export function handleNewRewardPeriod(event: NewRewardPeriod): void {
   let rewardPeriod = new RewardPeriod(event.block.timestamp.toHex());
   rewardPeriod.block = event.block.number;
+  rewardPeriod.numberBlocks = event.params.numberBlocks;
   rewardPeriod.rewardPerBlock = toBigDecimal(event.params.rewardPerBlock);
   rewardPeriod.reward = toBigDecimal(event.params.reward);
   rewardPeriod.save();
