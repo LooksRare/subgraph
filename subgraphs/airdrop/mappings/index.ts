@@ -41,6 +41,11 @@ export function handleAtomicMatch(call: AtomicMatch_Call): void {
     return;
   }
 
+  // If the order value is equal zero, skip.
+  if (call.inputs.uints[4].equals(BigInt.zero())) {
+    return;
+  }
+
   // 1. Currency
   let currency = Currency.load(call.inputs.addrs[6].toHex());
   if (currency === null) {
