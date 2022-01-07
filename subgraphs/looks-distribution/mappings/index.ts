@@ -26,7 +26,7 @@ export function handleDepositFeeSharing(event: DepositFeeSharing): void {
   user.feeSharingAdjustedDepositAmount = user.feeSharingAdjustedDepositAmount.plus(toBigDecimal(event.params.amount));
   user.feeSharingLastDepositDate = event.block.timestamp;
 
-  if (event.params.harvestedAmount !== ZERO_BI) {
+  if (event.params.harvestedAmount.gt(ZERO_BI)) {
     user.feeSharingTotalCollectedWETH = user.feeSharingTotalCollectedWETH.plus(
       toBigDecimal(event.params.harvestedAmount)
     );
@@ -56,7 +56,7 @@ export function handleWithdrawFeeSharing(event: WithdrawFeeSharing): void {
     user = initializeUser(event.params.user.toHex());
   }
 
-  if (user.feeSharingAdjustedDepositAmount >= toBigDecimal(event.params.amount)) {
+  if (user.feeSharingAdjustedDepositAmount.ge(toBigDecimal(event.params.amount))) {
     user.feeSharingAdjustedDepositAmount = user.feeSharingAdjustedDepositAmount.minus(
       toBigDecimal(event.params.amount)
     );
@@ -69,7 +69,7 @@ export function handleWithdrawFeeSharing(event: WithdrawFeeSharing): void {
 
   user.feeSharingLastWithdrawDate = event.block.timestamp;
 
-  if (event.params.harvestedAmount !== ZERO_BI) {
+  if (event.params.harvestedAmount.gt(ZERO_BI)) {
     user.feeSharingTotalCollectedWETH = user.feeSharingTotalCollectedWETH.plus(
       toBigDecimal(event.params.harvestedAmount)
     );
@@ -96,7 +96,7 @@ export function handleDepositStakingV2(event: DepositStakingV2): void {
 
   user.stakingPoolUniswapV2LastDepositDate = event.block.timestamp;
 
-  if (event.params.harvestedAmount !== ZERO_BI) {
+  if (event.params.harvestedAmount.gt(ZERO_BI)) {
     user.stakingPoolUniswapV2LastHarvestDate = event.block.timestamp;
     user.stakingPoolUniswapV2TotalCollectedLOOKS = user.stakingPoolUniswapV2TotalCollectedLOOKS.plus(
       toBigDecimal(event.params.harvestedAmount)
