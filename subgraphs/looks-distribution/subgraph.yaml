@@ -1,16 +1,16 @@
 specVersion: 0.0.4
-description: LooksRare staking contracts
+description: LooksRare LOOKS distribution contracts
 repository: https://github.com/looksrare
 schema:
   file: ./schema.graphql
 dataSources:
   - kind: ethereum/contract
     name: FeeSharingSystem
-    network: rinkeby
+    network: mainnet
     source:
-      address: "0xF32E6141d54512814fB94584fc17BAaf0C1203dE" # TODO
+      address: "0xbcd7254a1d759efa08ec7c3291b2e85c5dcc12ce"
       abi: FeeSharingSystem
-      startBlock: 9941000 # TODO
+      startBlock: 13975044
     mapping:
       kind: ethereum/events
       apiVersion: 0.0.6
@@ -33,11 +33,11 @@ dataSources:
           handler: handleNewRewardPeriod
   - kind: ethereum/contract
     name: StakingPoolForUniswapV2Tokens
-    network: rinkeby
+    network: mainnet
     source:
-      address: "0x81E06b62b9d21f3b249162Ab3811E172Ab32AF19" # TODO
+      address: "0x2a70e7f51f6cd40c3e9956aa964137668cbfadc5"
       abi: StakingPoolForUniswapV2Tokens
-      startBlock: 9941000 # TODO
+      startBlock: 13975044
     mapping:
       kind: ethereum/events
       apiVersion: 0.0.6
@@ -57,11 +57,11 @@ dataSources:
           handler: handleWithdrawStakingV2
   - kind: ethereum/contract
     name: LooksRareAirdrop
-    network: rinkeby
+    network: mainnet
     source:
-      address: "0x89BbbCe49C6e7fe7D86589f7E72744469266f306" # TODO
+      address: "0xa35dce3e0e6ceb67a30b8d7f4aee721c949b5970"
       abi: LooksRareAirdrop
-      startBlock: 9941000 # TODO
+      startBlock: 13975044
     mapping:
       kind: ethereum/events
       apiVersion: 0.0.6
@@ -77,11 +77,11 @@ dataSources:
           handler: handleAirdropClaim
   - kind: ethereum/contract
     name: TradingRewardsDistributor
-    network: rinkeby
+    network: mainnet
     source:
-      address: "0x8f1aB228E892Ad2a7E10605531C9EC23D5cbA4fD" # TODO
+      address: "0x453c1208b400fe47acf275315f14e8f9f9fbc3cd"
       abi: TradingRewardsDistributor
-      startBlock: 9941000 # TODO
+      startBlock: 13975044
     mapping:
       kind: ethereum/events
       apiVersion: 0.0.6
