@@ -42,23 +42,38 @@ type User @entity {
   "ID (user address)"
   id: ID!
 
-  "Total royalty collected (in ETH)"
-  totalRoyaltyCollected: BigDecimal!
-
   "Total number of transactions"
   totalTransactions: BigInt!
-
-  "Total bid volume (in ETH)"
-  totalBidVolume: BigDecimal!
 
   "Total ask volume (in ETH)"
   totalAskVolume: BigDecimal!
 
+  "Total bid volume (in ETH)"
+  totalBidVolume: BigDecimal!
+
+  "Total maker volume (in ETH)"
+  totalMakerVolume: BigDecimal!
+
+  "Total taker volume (in ETH)"
+  totalTakerVolume: BigDecimal!
+
   "Total volume (in ETH)"
   totalVolume: BigDecimal!
 
+  "Total royalty collected (in ETH)"
+  totalRoyaltyCollected: BigDecimal!
+
   "Daily history"
   dayData: [UserDailyData!]! @derivedFrom(field: "user")
+
+  "Maker trades"
+  makerTrades: [Trade!]! @derivedFrom(field: "maker")
+
+  "Taker trades"
+  takerTrades: [Trade!]! @derivedFrom(field: "taker")
+
+  "Royalty payments"
+  royaltyPayments: [RoyaltyTransfer!]! @derivedFrom(field: "user")
 }
 
 """
