@@ -11,8 +11,8 @@ import {
 } from "./utils/updateDailyData";
 
 // Initialize a new user entity
-function initializeUser(user: string): User {
-  const user = new User(user);
+function initializeUser(userID: string): User {
+  const user = new User(userID);
   user.totalTransactions = ZERO_BI;
   user.totalAskVolume = ZERO_BD;
   user.totalBidVolume = ZERO_BD;
