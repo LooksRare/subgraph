@@ -12,15 +12,15 @@ import {
 
 // Initialize a new user entity
 function initializeUser(user: string): User {
-  const newUser = new User(user);
-  newUser.totalTransactions = ZERO_BI;
-  newUser.totalAskVolume = ZERO_BD;
-  newUser.totalBidVolume = ZERO_BD;
-  newUser.totalMakerVolume = ZERO_BD;
-  newUser.totalTakerVolume = ZERO_BD;
-  newUser.totalVolume = ZERO_BD;
-  newUser.totalRoyaltyCollected = ZERO_BD;
-  return newUser;
+  const user = new User(user);
+  user.totalTransactions = ZERO_BI;
+  user.totalAskVolume = ZERO_BD;
+  user.totalBidVolume = ZERO_BD;
+  user.totalMakerVolume = ZERO_BD;
+  user.totalTakerVolume = ZERO_BD;
+  user.totalVolume = ZERO_BD;
+  user.totalRoyaltyCollected = ZERO_BD;
+  return user;
 }
 
 export function handleTakerAsk(event: TakerAsk): void {
@@ -62,7 +62,7 @@ export function handleTakerAsk(event: TakerAsk): void {
   // 4. Taker ask user
   let takerAskUser = User.load(event.params.taker.toHex());
   if (takerAskUser == null) {
-    takerAskUser = makerBidUser = initializeUser(event.params.taker.toHex());
+    takerAskUser = initializeUser(event.params.taker.toHex());
   }
   takerAskUser.totalTransactions = takerAskUser.totalTransactions.plus(ONE_BI);
   takerAskUser.totalAskVolume = takerAskUser.totalAskVolume.plus(toBigDecimal(event.params.price));
