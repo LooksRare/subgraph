@@ -6,7 +6,7 @@ schema:
 dataSources:
   - kind: ethereum/contract
     name: LooksRareExchange
-    network: rinkeby
+    network: mainnet
     source:
       address: "0x59728544b08ab483533076417fbbb2fd0b17ce3a"
       abi: LooksRareExchange
