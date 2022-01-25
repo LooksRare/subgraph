@@ -1,5 +1,6 @@
 /* eslint-disable prefer-const */
 import { Address, BigInt, BigDecimal } from "@graphprotocol/graph-ts";
+import { ONE_BI, ZERO_BD, ZERO_BI } from ".";
 import {
   CollectionDailyData,
   ExchangeDailyData,
@@ -7,11 +8,6 @@ import {
   ExecutionStrategyDailyData,
   UserDailyData,
 } from "../../generated/schema";
-
-// BigNumber helpers
-let ZERO_BI = BigInt.zero();
-let ONE_BI = BigInt.fromI32(1);
-let ZERO_BD = BigDecimal.zero();
 
 export function updateCollectionDailyData(
   collection: Address,

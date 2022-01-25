@@ -1,8 +1,7 @@
 /* eslint-disable prefer-const */
-import { BigDecimal, BigInt } from "@graphprotocol/graph-ts";
 import { Collection, ExecutionStrategy, RoyaltyTransfer, Trade, User } from "../generated/schema";
 import { RoyaltyPayment, TakerAsk, TakerBid } from "../generated/LooksRareExchange/LooksRareExchange";
-import { toBigDecimal } from "./utils";
+import { toBigDecimal, ZERO_BD, ZERO_BI, ONE_BI } from "./utils";
 import { fetchProtocolFee } from "./utils/fetchProtocolFee";
 import {
   updateCollectionDailyData,
@@ -11,10 +10,18 @@ import {
   updateUserDailyData,
 } from "./utils/updateDailyData";
 
-// BigNumber helpers
-let ZERO_BI = BigInt.zero();
-let ONE_BI = BigInt.fromI32(1);
-let ZERO_BD = BigDecimal.zero();
+// Initialize a new user entity
+function initializeUser(userID: string): User {
+  const user = new User(userID);
+  user.totalTransactions = ZERO_BI;
+  user.totalAskVolume = ZERO_BD;
+  user.totalBidVolume = ZERO_BD;
+  user.totalMakerVolume = ZERO_BD;
+  user.totalTakerVolume = ZERO_BD;
+  user.totalVolume = ZERO_BD;
+  user.totalRoyaltyCollected = ZERO_BD;
+  return user;
+}
 
 export function handleTakerAsk(event: TakerAsk): void {
   // 1. Collection
@@ -44,30 +51,22 @@ export function handleTakerAsk(event: TakerAsk): void {
   // 3. Maker bid user
   let makerBidUser = User.load(event.params.maker.toHex());
   if (makerBidUser == null) {
-    makerBidUser = new User(event.params.maker.toHex());
-    makerBidUser.totalRoyaltyCollected = ZERO_BD;
-    makerBidUser.totalTransactions = ZERO_BI;
-    makerBidUser.totalBidVolume = ZERO_BD;
-    makerBidUser.totalAskVolume = ZERO_BD;
-    makerBidUser.totalVolume = ZERO_BD;
+    makerBidUser = initializeUser(event.params.maker.toHex());
   }
   makerBidUser.totalTransactions = makerBidUser.totalTransactions.plus(ONE_BI);
   makerBidUser.totalBidVolume = makerBidUser.totalBidVolume.plus(toBigDecimal(event.params.price));
+  makerBidUser.totalMakerVolume = makerBidUser.totalMakerVolume.plus(toBigDecimal(event.params.price));
   makerBidUser.totalVolume = makerBidUser.totalVolume.plus(toBigDecimal(event.params.price));
   makerBidUser.save();
 
   // 4. Taker ask user
   let takerAskUser = User.load(event.params.taker.toHex());
   if (takerAskUser == null) {
-    takerAskUser = new User(event.params.taker.toHex());
-    takerAskUser.totalRoyaltyCollected = ZERO_BD;
-    takerAskUser.totalTransactions = ZERO_BI;
-    takerAskUser.totalBidVolume = ZERO_BD;
-    takerAskUser.totalAskVolume = ZERO_BD;
-    takerAskUser.totalVolume = ZERO_BD;
+    takerAskUser = initializeUser(event.params.taker.toHex());
   }
   takerAskUser.totalTransactions = takerAskUser.totalTransactions.plus(ONE_BI);
   takerAskUser.totalAskVolume = takerAskUser.totalAskVolume.plus(toBigDecimal(event.params.price));
+  takerAskUser.totalTakerVolume = takerAskUser.totalTakerVolume.plus(toBigDecimal(event.params.price));
   takerAskUser.totalVolume = takerAskUser.totalVolume.plus(toBigDecimal(event.params.price));
   takerAskUser.save();
 
@@ -134,30 +133,22 @@ export function handleTakerBid(event: TakerBid): void {
   // 3. Maker ask user
   let makerAskUser = User.load(event.params.maker.toHex());
   if (makerAskUser == null) {
-    makerAskUser = new User(event.params.maker.toHex());
-    makerAskUser.totalRoyaltyCollected = ZERO_BD;
-    makerAskUser.totalTransactions = ZERO_BI;
-    makerAskUser.totalBidVolume = ZERO_BD;
-    makerAskUser.totalAskVolume = ZERO_BD;
-    makerAskUser.totalVolume = ZERO_BD;
+    makerAskUser = initializeUser(event.params.maker.toHex());
   }
   makerAskUser.totalTransactions = makerAskUser.totalTransactions.plus(ONE_BI);
   makerAskUser.totalBidVolume = makerAskUser.totalAskVolume.plus(toBigDecimal(event.params.price));
+  makerAskUser.totalMakerVolume = makerAskUser.totalMakerVolume.plus(toBigDecimal(event.params.price));
   makerAskUser.totalVolume = makerAskUser.totalVolume.plus(toBigDecimal(event.params.price));
   makerAskUser.save();
 
   // 4. Taker bid user
   let takerBidUser = User.load(event.params.taker.toHex());
   if (takerBidUser == null) {
-    takerBidUser = new User(event.params.taker.toHex());
-    takerBidUser.totalRoyaltyCollected = ZERO_BD;
-    takerBidUser.totalTransactions = ZERO_BI;
-    takerBidUser.totalBidVolume = ZERO_BD;
-    takerBidUser.totalAskVolume = ZERO_BD;
-    takerBidUser.totalVolume = ZERO_BD;
+    takerBidUser = initializeUser(event.params.taker.toHex());
   }
   takerBidUser.totalTransactions = takerBidUser.totalTransactions.plus(ONE_BI);
   takerBidUser.totalBidVolume = takerBidUser.totalBidVolume.plus(toBigDecimal(event.params.price));
+  takerBidUser.totalTakerVolume = takerBidUser.totalTakerVolume.plus(toBigDecimal(event.params.price));
   takerBidUser.totalVolume = takerBidUser.totalVolume.plus(toBigDecimal(event.params.price));
   takerBidUser.save();
 
@@ -211,13 +202,7 @@ export function handleRoyaltyPayment(event: RoyaltyPayment): void {
   // 2. User
   let user = User.load(event.params.royaltyRecipient.toHex());
   if (user === null) {
-    user = new User(event.params.royaltyRecipient.toHex());
-    user.totalRoyaltyCollected = ZERO_BD;
-    user.totalTransactions = ZERO_BI;
-    user.totalBidVolume = ZERO_BD;
-    user.totalAskVolume = ZERO_BD;
-    user.totalVolume = ZERO_BD;
-    user.totalTransactions = ZERO_BI;
+    user = initializeUser(event.params.royaltyRecipient.toHex());
   }
   user.totalRoyaltyCollected = user.totalRoyaltyCollected.plus(toBigDecimal(event.params.amount));
   user.save();
