@@ -1,5 +1,5 @@
 /* eslint-disable prefer-const */
-import { Collection, ExecutionStrategy, RoyaltyTransfer, Trade, User } from "../generated/schema";
+import { Collection, ExecutionStrategy, RoyaltyTransfer, Transaction, User } from "../generated/schema";
 import { RoyaltyPayment, TakerAsk, TakerBid } from "../generated/LooksRareExchange/LooksRareExchange";
 import { toBigDecimal, ZERO_BD, ZERO_BI, ONE_BI } from "./utils";
 import { fetchProtocolFee } from "./utils/fetchProtocolFee";
@@ -70,17 +70,19 @@ export function handleTakerAsk(event: TakerAsk): void {
   takerAskUser.totalVolume = takerAskUser.totalVolume.plus(toBigDecimal(event.params.price));
   takerAskUser.save();
 
-  // 5. Trade
+  // 5. Transaction
   let name = event.params.orderHash.toHex() + "-" + event.transaction.hash.toHex();
-  let trade = new Trade(name);
-  trade.isTakerAsk = true;
-  trade.collection = collection.id;
-  trade.strategy = strategy.id;
-  trade.tokenId = event.params.tokenId;
-  trade.price = toBigDecimal(event.params.price);
-  trade.maker = makerBidUser.id;
-  trade.taker = takerAskUser.id;
-  trade.save();
+  let transaction = new Transaction(name);
+  transaction.date = event.block.timestamp;
+  transaction.block = event.block.number;
+  transaction.collection = collection.id;
+  transaction.isTakerAsk = false;
+  transaction.strategy = strategy.id;
+  transaction.tokenId = event.params.tokenId;
+  transaction.price = toBigDecimal(event.params.price);
+  transaction.maker = makerBidUser.id;
+  transaction.taker = takerAskUser.id;
+  transaction.save();
 
   // 6. Update daily data entities
   updateCollectionDailyData(
@@ -152,17 +154,19 @@ export function handleTakerBid(event: TakerBid): void {
   takerBidUser.totalVolume = takerBidUser.totalVolume.plus(toBigDecimal(event.params.price));
   takerBidUser.save();
 
-  // 5. Trade
+  // 5. Transaction
   let name = event.params.orderHash.toHex() + "-" + event.transaction.hash.toHex();
-  let trade = new Trade(name);
-  trade.isTakerAsk = false;
-  trade.collection = collection.id;
-  trade.strategy = strategy.id;
-  trade.tokenId = event.params.tokenId;
-  trade.price = toBigDecimal(event.params.price);
-  trade.maker = makerAskUser.id;
-  trade.taker = takerBidUser.id;
-  trade.save();
+  let transaction = new Transaction(name);
+  transaction.date = event.block.timestamp;
+  transaction.block = event.block.number;
+  transaction.collection = collection.id;
+  transaction.isTakerAsk = false;
+  transaction.strategy = strategy.id;
+  transaction.tokenId = event.params.tokenId;
+  transaction.price = toBigDecimal(event.params.price);
+  transaction.maker = makerAskUser.id;
+  transaction.taker = takerBidUser.id;
+  transaction.save();
 
   // 6. Update daily data entities
   updateCollectionDailyData(
@@ -211,6 +215,8 @@ export function handleRoyaltyPayment(event: RoyaltyPayment): void {
   let name =
     event.params.collection.toHex() + "-" + event.params.tokenId.toHex() + "-" + event.transaction.hash.toHex();
   let royaltyTransfer = new RoyaltyTransfer(name);
+  royaltyTransfer.date = event.block.timestamp;
+  royaltyTransfer.block = event.block.number;
   royaltyTransfer.collection = collection.id;
   royaltyTransfer.tokenId = event.params.tokenId;
   royaltyTransfer.user = user.id;

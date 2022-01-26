@@ -8,14 +8,20 @@ type Collection @entity {
   "Total number of transactions"
   totalTransactions: BigInt!
 
-  "Total traded volume of collection (in ETH)"
+  "Total volume of collection (in ETH)"
   totalVolume: BigDecimal!
 
-  "Total royalty paid (in ETH) from trading"
+  "Total royalty paid (in ETH)"
   totalRoyaltyPaid: BigDecimal!
 
   "Daily history"
   dayData: [CollectionDailyData!]! @derivedFrom(field: "collection")
+
+  "Royalty transfers"
+  royaltyTransfers: [RoyaltyTransfer!]! @derivedFrom(field: "collection")
+
+  "Transactions"
+  transactions: [Transaction!]! @derivedFrom(field: "collection")
 }
 
 """
@@ -66,13 +72,13 @@ type User @entity {
   "Daily history"
   dayData: [UserDailyData!]! @derivedFrom(field: "user")
 
-  "Maker trades"
-  makerTrades: [Trade!]! @derivedFrom(field: "maker")
+  "Transactions where user is the maker side"
+  makerTransactions: [Transaction!]! @derivedFrom(field: "maker")
 
-  "Taker trades"
-  takerTrades: [Trade!]! @derivedFrom(field: "taker")
+  "Transactions where user is the taker side"
+  takerTransactions: [Transaction!]! @derivedFrom(field: "taker")
 
-  "Royalty payments"
+  "Royalty payments collected by the user (as recipient)"
   royaltyPayments: [RoyaltyTransfer!]! @derivedFrom(field: "user")
 }
 
@@ -98,7 +104,7 @@ type CollectionDailyData @entity {
   "Daily volume (in ETH) excluding zero-fee strategy"
   dailyVolumeExcludingZeroFee: BigDecimal!
 
-  "Royalty payment"
+  "Royalty payment (in ETH)"
   dailyRoyalty: BigDecimal!
 }
 
@@ -172,6 +178,12 @@ type RoyaltyTransfer @entity {
   "ID"
   id: ID!
 
+  "Date (timestamp)"
+  date: BigInt!
+
+  "Block number"
+  block: BigInt!
+
   "Collection"
   collection: Collection!
 
@@ -186,17 +198,23 @@ type RoyaltyTransfer @entity {
 }
 
 """
-Trade
+Transaction
 """
-type Trade @entity {
+type Transaction @entity {
   "ID"
   id: ID!
 
-  "Whether the trade is a takerAsk"
-  isTakerAsk: Boolean!
+  "Date (timestamp)"
+  date: BigInt!
+
+  "Block number"
+  block: BigInt!
 
   "Collection"
   collection: Collection!
+
+  "Whether the transaction is a takerAsk"
+  isTakerAsk: Boolean!
 
   "Execution strategy"
   strategy: ExecutionStrategy!
