@@ -44,7 +44,7 @@ type User @entity {
   "Trading Rewards - Total LOOKS collected"
   tradingRewardsAmount: BigDecimal!
 
-  "Airdrop - Claim date"
+  "Trading Rewards - Last claim date"
   tradingRewardsLastClaimDate: BigInt!
 }
 
