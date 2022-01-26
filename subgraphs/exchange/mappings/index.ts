@@ -74,6 +74,7 @@ export function handleTakerAsk(event: TakerAsk): void {
   let name = event.params.orderHash.toHex() + "-" + event.transaction.hash.toHex();
   let transaction = new Transaction(name);
   transaction.date = event.block.timestamp;
+  transaction.block = event.block.number;
   transaction.collection = collection.id;
   transaction.isTakerAsk = false;
   transaction.strategy = strategy.id;
@@ -157,6 +158,7 @@ export function handleTakerBid(event: TakerBid): void {
   let name = event.params.orderHash.toHex() + "-" + event.transaction.hash.toHex();
   let transaction = new Transaction(name);
   transaction.date = event.block.timestamp;
+  transaction.block = event.block.number;
   transaction.collection = collection.id;
   transaction.isTakerAsk = false;
   transaction.strategy = strategy.id;
@@ -213,6 +215,8 @@ export function handleRoyaltyPayment(event: RoyaltyPayment): void {
   let name =
     event.params.collection.toHex() + "-" + event.params.tokenId.toHex() + "-" + event.transaction.hash.toHex();
   let royaltyTransfer = new RoyaltyTransfer(name);
+  royaltyTransfer.date = event.block.timestamp;
+  royaltyTransfer.block = event.block.number;
   royaltyTransfer.collection = collection.id;
   royaltyTransfer.tokenId = event.params.tokenId;
   royaltyTransfer.user = user.id;

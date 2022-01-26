@@ -11,16 +11,16 @@ type Collection @entity {
   "Total volume of collection (in ETH)"
   totalVolume: BigDecimal!
 
-  "Total royalty paid (in ETH) from trading"
+  "Total royalty paid (in ETH)"
   totalRoyaltyPaid: BigDecimal!
 
   "Daily history"
   dayData: [CollectionDailyData!]! @derivedFrom(field: "collection")
 
-  "Royalty payments"
-  royalties: [RoyaltyTransfer!]! @derivedFrom(field: "collection")
+  "Royalty transfers"
+  royaltyTransfers: [RoyaltyTransfer!]! @derivedFrom(field: "collection")
 
-  "Transaction"
+  "Transactions"
   transactions: [Transaction!]! @derivedFrom(field: "collection")
 }
 
@@ -178,11 +178,14 @@ type RoyaltyTransfer @entity {
   "ID"
   id: ID!
 
-  "Collection"
-  collection: Collection!
-
   "Date (timestamp)"
   date: BigInt!
+
+  "Block number"
+  block: BigInt!
+
+  "Collection"
+  collection: Collection!
 
   "TokenId"
   tokenId: BigInt!
@@ -203,6 +206,9 @@ type Transaction @entity {
 
   "Date (timestamp)"
   date: BigInt!
+
+  "Block number"
+  block: BigInt!
 
   "Collection"
   collection: Collection!
