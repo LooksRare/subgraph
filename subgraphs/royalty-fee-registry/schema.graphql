@@ -29,6 +29,6 @@ type Collection @entity {
   "Last update date"
   lastUpdateDate: BigInt!
 
-  "Number of updates in royalty fee"
+  "Number of updates for royalty info"
   numberChanges: BigInt!
 }

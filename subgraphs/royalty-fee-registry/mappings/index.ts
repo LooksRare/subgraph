@@ -22,11 +22,11 @@ export function handleRoyaltyFeeUpdate(event: RoyaltyFeeUpdate): void {
   collection.setter = event.params.setter.toHex();
   collection.receiver = event.params.receiver.toHex();
 
-  if (toBigDecimal(event.params.fee, 5).gt(collection.royaltyFee)) {
+  if (toBigDecimal(event.params.fee, 2).gt(collection.royaltyFee)) {
     collection.maxRoyaltyFee = collection.royaltyFee;
   }
 
-  collection.royaltyFee = toBigDecimal(event.params.fee, 5);
+  collection.royaltyFee = toBigDecimal(event.params.fee, 2);
   collection.lastUpdateBlock = event.block.number;
   collection.lastUpdateDate = event.block.timestamp;
   collection.numberChanges = collection.numberChanges.plus(ONE_BI);
