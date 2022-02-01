@@ -1,0 +1,34 @@
+"""
+Collection
+"""
+type Collection @entity {
+  "ID (address)"
+  id: ID!
+
+  "Setter address"
+  setter: String!
+
+  "Receiver address"
+  receiver: String!
+
+  "Current royalty fee"
+  royaltyFee: BigDecimal!
+
+  "Max royalty fee"
+  maxRoyaltyFee: BigDecimal!
+
+  "First update block"
+  firstUpdateBlock: BigInt!
+
+  "First update date"
+  firstUpdateDate: BigInt!
+
+  "Last update block"
+  lastUpdateBlock: BigInt!
+
+  "Last update date"
+  lastUpdateDate: BigInt!
+
+  "Number of updates for royalty info"
+  numberChanges: BigInt!
+}
