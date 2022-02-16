@@ -1,5 +1,5 @@
 specVersion: 0.0.4
-description: Ethereum EIP-721 indexer
+description: Gas rebate program v1
 repository: https://github.com/looksrare
 schema:
   file: ./schema.graphql
@@ -23,4 +23,3 @@ dataSources:
       eventHandlers:
         - event: ApprovalForAll(indexed address,indexed address,bool)
           handler: handleApprovalForAll
-  

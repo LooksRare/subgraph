@@ -6,23 +6,22 @@ import { ApprovalForAll } from "../generated/EIP721/EIP721";
 const TRANSFER_MANAGER_ERC721 = "0xf42aa99F011A1fA7CDA90E5E98b277E306BcA83e";
 const TRANSFER_MANAGER_ERC1155 = "0xFED24eC7E22f573c2e08AEF55aA6797Ca2b3A051";
 
+const TRANSFER_MANAGERS = [TRANSFER_MANAGER_ERC721, TRANSFER_MANAGER_ERC1155];
+
 const MAX_APPROVALS_PER_ADDRESS = BigInt.fromI32(10);
-const NUMBER_APPROVALS = BigInt.fromI32(100000);
+const NUMBER_APPROVALS = BigInt.fromI32(200000);
 const ONE_BI = BigInt.fromI32(1);
 
 export function handleApprovalForAll(event: ApprovalForAll): void {
   // Verify that approvalAll is for TransferManager
-  if (
-    event.params.operator.toHex() == TRANSFER_MANAGER_ERC721 ||
-    event.params.operator.toHex() == TRANSFER_MANAGER_ERC1155
-  ) {
+  if (!TRANSFER_MANAGERS.includes(event.params.operator.toHex())) {
     return;
   }
 
-  let stats = Stats.load("0x");
+  let stats = Stats.load("");
 
   if (stats === null) {
-    stats = new Stats("0x");
+    stats = new Stats("");
     stats.countApprovalsTotal = BigInt.zero();
     stats.countApprovalsERC721 = BigInt.zero();
     stats.countApprovalsERC1155 = BigInt.zero();
@@ -37,13 +36,26 @@ export function handleApprovalForAll(event: ApprovalForAll): void {
   if (collection === null) {
     collection = new Collection(event.address.toHex());
     collection.countApprovals = BigInt.zero();
+    stats.numberCollections = stats.numberCollections.plus(ONE_BI);
+    if (event.params.operator.toHex() === TRANSFER_MANAGER_ERC721) {
+      stats.numberCollectionsERC721 = stats.numberCollectionsERC721.plus(ONE_BI);
+    } else {
+      stats.numberCollectionsERC1155 = stats.numberCollectionsERC1155.plus(ONE_BI);
+    }
   }
   collection.countApprovals = collection.countApprovals.plus(ONE_BI);
+
+  if (event.params.operator.toHex() === TRANSFER_MANAGER_ERC721) {
+    stats.countApprovalsERC721 = stats.countApprovalsERC721.plus(ONE_BI);
+  } else {
+    stats.countApprovalsERC1155 = stats.countApprovalsERC1155.plus(ONE_BI);
+  }
 
   let user = User.load(event.params.owner.toHex());
   if (user === null) {
     user = new User(event.params.owner.toHex());
     user.countApprovals = BigInt.zero();
+    stats.numberUsers = stats.numberUsers.plus(ONE_BI);
   }
 
   // Verify the user has not done more approvals than authorized
