@@ -15,7 +15,6 @@ type Stats @entity {
   countApprovalsTotal: BigInt!
 }
 
-
 """
 User
 """
@@ -36,7 +35,4 @@ type Collection @entity {
 
   "Number of approvals"
   countApprovals: BigInt!
-
-  "Users"
-  users: [User!]!
 }
