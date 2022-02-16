@@ -18,13 +18,17 @@ export function handleApprovalForAll(event: ApprovalForAll): void {
     return;
   }
 
-  let stats = Stats.load("0");
+  let stats = Stats.load("1");
 
   if (stats === null) {
-    stats = new Stats("0");
+    stats = new Stats("1");
     stats.countApprovalsTotal = BigInt.zero();
     stats.countApprovalsERC721 = BigInt.zero();
     stats.countApprovalsERC1155 = BigInt.zero();
+    stats.numberCollections = BigInt.zero();
+    stats.numberCollectionsERC721 = BigInt.zero();
+    stats.numberCollectionsERC1155 = BigInt.zero();
+    stats.numberUsers = BigInt.zero();
   }
 
   // Verify the total number of approvals is less than the limit

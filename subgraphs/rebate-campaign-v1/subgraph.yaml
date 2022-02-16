@@ -9,7 +9,7 @@ dataSources:
     network: mainnet
     source:
       abi: EIP721
-      startBlock: 14217010
+      startBlock: 14216001
     mapping:
       kind: ethereum/events
       apiVersion: 0.0.6
