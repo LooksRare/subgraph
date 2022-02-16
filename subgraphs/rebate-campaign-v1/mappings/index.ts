@@ -3,8 +3,8 @@ import { BigInt } from "@graphprotocol/graph-ts";
 import { Collection, Stats, User } from "../generated/schema";
 import { ApprovalForAll } from "../generated/EIP721/EIP721";
 
-const TRANSFER_MANAGER_ERC721 = "0xf42aa99F011A1fA7CDA90E5E98b277E306BcA83e";
-const TRANSFER_MANAGER_ERC1155 = "0xFED24eC7E22f573c2e08AEF55aA6797Ca2b3A051";
+const TRANSFER_MANAGER_ERC721 = "0xf42aa99f011a1fa7cda90e5e98b277e306bca83e";
+const TRANSFER_MANAGER_ERC1155 = "0xfed24ec7e22f573c2e08aef55aa6797ca2b3a051";
 
 const TRANSFER_MANAGERS = [TRANSFER_MANAGER_ERC721, TRANSFER_MANAGER_ERC1155];
 
