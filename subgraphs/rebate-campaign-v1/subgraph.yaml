@@ -16,6 +16,8 @@ dataSources:
       language: wasm/assemblyscript
       file: ./mappings/index.ts
       entities:
+        - Stats
+        - Collection
         - User
       abis:
         - name: EIP721

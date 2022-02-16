@@ -18,10 +18,10 @@ export function handleApprovalForAll(event: ApprovalForAll): void {
     return;
   }
 
-  let stats = Stats.load("");
+  let stats = Stats.load("0");
 
   if (stats === null) {
-    stats = new Stats("");
+    stats = new Stats("0");
     stats.countApprovalsTotal = BigInt.zero();
     stats.countApprovalsERC721 = BigInt.zero();
     stats.countApprovalsERC1155 = BigInt.zero();
