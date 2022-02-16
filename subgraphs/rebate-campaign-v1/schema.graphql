@@ -1,0 +1,42 @@
+"""
+Stats
+"""
+type Stats @entity {
+  "ID"
+  id: ID!
+
+  "Total number of approvals ERC721"
+  countApprovalsERC721: BigInt!
+
+  "Total number of approvals ERC1155"
+  countApprovalsERC1155: BigInt!
+
+  "Current number of approvals"
+  countApprovalsTotal: BigInt!
+}
+
+
+"""
+User
+"""
+type User @entity {
+  "ID (address)"
+  id: ID!
+
+  "Total number of approvals"
+  countApprovals: BigInt!
+}
+
+"""
+Collection
+"""
+type Collection @entity {
+  "ID (address)"
+  id: ID!
+
+  "Number of approvals"
+  countApprovals: BigInt!
+
+  "Users"
+  users: [User!]!
+}
