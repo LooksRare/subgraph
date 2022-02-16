@@ -13,7 +13,7 @@ const NUMBER_APPROVALS = BigInt.fromI32(200000);
 const ONE_BI = BigInt.fromI32(1);
 
 export function handleApprovalForAll(event: ApprovalForAll): void {
-  // Verify that approvalAll is for TransferManager
+  // Verify that approvalAll is for one of the two transfer managers
   if (!TRANSFER_MANAGERS.includes(event.params.operator.toHex())) {
     return;
   }
