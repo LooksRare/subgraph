@@ -1,33 +1,4 @@
 """
-Stats
-"""
-type Stats @entity {
-  "ID"
-  id: ID!
-
-  "Total number of approvals ERC721"
-  countApprovalsERC721: BigInt!
-
-  "Total number of approvals ERC1155"
-  countApprovalsERC1155: BigInt!
-
-  "Current number of approvals"
-  countApprovalsTotal: BigInt!
-
-  "Number of unique collections"
-  numberCollections: BigInt!
-
-  "Number of unique ERC721 collections"
-  numberCollectionsERC721: BigInt!
-
-  "Number of unique ERC1155 collections"
-  numberCollectionsERC1155: BigInt!
-
-  "Number of unique users"
-  numberUsers: BigInt!
-}
-
-"""
 User
 """
 type User @entity {
@@ -47,4 +18,33 @@ type Collection @entity {
 
   "Number of approvals"
   countApprovals: BigInt!
+}
+
+"""
+Overview
+"""
+type Overview @entity {
+  "ID"
+  id: ID!
+
+  "Current number of approvals"
+  countApprovalsTotal: BigInt!
+
+  "Total number of approvals ERC721"
+  countApprovalsERC721: BigInt!
+
+  "Total number of approvals ERC1155"
+  countApprovalsERC1155: BigInt!
+
+  "Number of unique collections"
+  numberCollections: BigInt!
+
+  "Number of unique ERC721 collections"
+  numberCollectionsERC721: BigInt!
+
+  "Number of unique ERC1155 collections"
+  numberCollectionsERC1155: BigInt!
+
+  "Number of unique users"
+  numberUsers: BigInt!
 }
