@@ -18,7 +18,7 @@ dataSources:
       entities:
         - Collection
         - User
-        - Stats
+        - Overview
       abis:
         - name: EIP721
           file: ./abis/EIP721.json
