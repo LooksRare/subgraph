@@ -1,6 +1,6 @@
 /* eslint-disable prefer-const */
 import { BigInt } from "@graphprotocol/graph-ts";
-import { Collection, Stats, User } from "../generated/schema";
+import { Collection, Overview, User } from "../generated/schema";
 import { ApprovalForAll } from "../generated/EIP721/EIP721";
 
 const TRANSFER_MANAGER_ERC721 = "0xf42aa99f011a1fa7cda90e5e98b277e306bca83e";
@@ -18,48 +18,49 @@ export function handleApprovalForAll(event: ApprovalForAll): void {
     return;
   }
 
-  let stats = Stats.load("1");
+  let overview = Overview.load(BigInt.fromI32(1).toHex());
 
-  if (stats === null) {
-    stats = new Stats("1");
-    stats.countApprovalsTotal = BigInt.zero();
-    stats.countApprovalsERC721 = BigInt.zero();
-    stats.countApprovalsERC1155 = BigInt.zero();
-    stats.numberCollections = BigInt.zero();
-    stats.numberCollectionsERC721 = BigInt.zero();
-    stats.numberCollectionsERC1155 = BigInt.zero();
-    stats.numberUsers = BigInt.zero();
-  }
-
-  // Verify the total number of approvals is less than the limit
-  if (stats.countApprovalsTotal.ge(NUMBER_APPROVALS)) {
-    return;
+  if (overview === null) {
+    overview = new Overview(BigInt.fromI32(1).toHex());
+    overview.countApprovalsTotal = BigInt.zero();
+    overview.countApprovalsERC721 = BigInt.zero();
+    overview.countApprovalsERC1155 = BigInt.zero();
+    overview.numberCollections = BigInt.zero();
+    overview.numberCollectionsERC721 = BigInt.zero();
+    overview.numberCollectionsERC1155 = BigInt.zero();
+    overview.numberUsers = BigInt.zero();
+  } else {
+    // Verify the total number of approvals is less than the limit
+    if (overview.countApprovalsTotal.ge(NUMBER_APPROVALS)) {
+      return;
+    }
   }
 
   let collection = Collection.load(event.address.toHex());
   if (collection === null) {
     collection = new Collection(event.address.toHex());
     collection.countApprovals = BigInt.zero();
-    stats.numberCollections = stats.numberCollections.plus(ONE_BI);
+    overview.numberCollections = overview.numberCollections.plus(ONE_BI);
     if (event.params.operator.toHex() === TRANSFER_MANAGER_ERC721) {
-      stats.numberCollectionsERC721 = stats.numberCollectionsERC721.plus(ONE_BI);
+      overview.numberCollectionsERC721 = overview.numberCollectionsERC721.plus(ONE_BI);
     } else {
-      stats.numberCollectionsERC1155 = stats.numberCollectionsERC1155.plus(ONE_BI);
+      overview.numberCollectionsERC1155 = overview.numberCollectionsERC1155.plus(ONE_BI);
     }
   }
   collection.countApprovals = collection.countApprovals.plus(ONE_BI);
+  overview.countApprovalsTotal = overview.countApprovalsTotal.plus(ONE_BI);
 
   if (event.params.operator.toHex() === TRANSFER_MANAGER_ERC721) {
-    stats.countApprovalsERC721 = stats.countApprovalsERC721.plus(ONE_BI);
+    overview.countApprovalsERC721 = overview.countApprovalsERC721.plus(ONE_BI);
   } else {
-    stats.countApprovalsERC1155 = stats.countApprovalsERC1155.plus(ONE_BI);
+    overview.countApprovalsERC1155 = overview.countApprovalsERC1155.plus(ONE_BI);
   }
 
   let user = User.load(event.params.owner.toHex());
   if (user === null) {
     user = new User(event.params.owner.toHex());
     user.countApprovals = BigInt.zero();
-    stats.numberUsers = stats.numberUsers.plus(ONE_BI);
+    overview.numberUsers = overview.numberUsers.plus(ONE_BI);
   }
 
   // Verify the user has not done more approvals than authorized
@@ -68,7 +69,7 @@ export function handleApprovalForAll(event: ApprovalForAll): void {
   }
   user.countApprovals = user.countApprovals.plus(ONE_BI);
 
-  stats.save();
+  overview.save();
   collection.save();
   user.save();
 }

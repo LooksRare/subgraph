@@ -1,7 +1,29 @@
 """
-Stats
+User
 """
-type Stats @entity {
+type User @entity {
+  "ID (address)"
+  id: ID!
+
+  "Total number of approvals"
+  countApprovals: BigInt!
+}
+
+"""
+Collection
+"""
+type Collection @entity {
+  "ID (address)"
+  id: ID!
+
+  "Number of approvals"
+  countApprovals: BigInt!
+}
+
+"""
+Overview
+"""
+type Overview @entity {
   "ID"
   id: ID!
 
@@ -25,26 +47,4 @@ type Stats @entity {
 
   "Number of unique users"
   numberUsers: BigInt!
-}
-
-"""
-User
-"""
-type User @entity {
-  "ID (address)"
-  id: ID!
-
-  "Total number of approvals"
-  countApprovals: BigInt!
-}
-
-"""
-Collection
-"""
-type Collection @entity {
-  "ID (address)"
-  id: ID!
-
-  "Number of approvals"
-  countApprovals: BigInt!
 }
