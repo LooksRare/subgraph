@@ -41,7 +41,7 @@ export function handleApprovalForAll(event: ApprovalForAll): void {
     collection = new Collection(event.address.toHex());
     collection.countApprovals = BigInt.zero();
     overview.numberCollections = overview.numberCollections.plus(ONE_BI);
-    if (event.params.operator.toHex() === TRANSFER_MANAGER_ERC721) {
+    if (event.params.operator.toHex() == TRANSFER_MANAGER_ERC721) {
       overview.numberCollectionsERC721 = overview.numberCollectionsERC721.plus(ONE_BI);
     } else {
       overview.numberCollectionsERC1155 = overview.numberCollectionsERC1155.plus(ONE_BI);
@@ -50,7 +50,7 @@ export function handleApprovalForAll(event: ApprovalForAll): void {
   collection.countApprovals = collection.countApprovals.plus(ONE_BI);
   overview.countApprovalsTotal = overview.countApprovalsTotal.plus(ONE_BI);
 
-  if (event.params.operator.toHex() === TRANSFER_MANAGER_ERC721) {
+  if (event.params.operator.toHex() == TRANSFER_MANAGER_ERC721) {
     overview.countApprovalsERC721 = overview.countApprovalsERC721.plus(ONE_BI);
   } else {
     overview.countApprovalsERC1155 = overview.countApprovalsERC1155.plus(ONE_BI);
