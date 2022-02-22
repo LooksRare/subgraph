@@ -3,6 +3,8 @@ import { BigInt } from "@graphprotocol/graph-ts";
 import { Collection, Overview, User } from "../generated/schema";
 import { ApprovalForAll } from "../generated/EIP721/EIP721";
 
+const END_BLOCK = BigInt.fromI32(14262840);
+
 const TRANSFER_MANAGER_ERC721 = "0xf42aa99f011a1fa7cda90e5e98b277e306bca83e";
 const TRANSFER_MANAGER_ERC1155 = "0xfed24ec7e22f573c2e08aef55aa6797ca2b3a051";
 
@@ -13,6 +15,11 @@ const NUMBER_APPROVALS = BigInt.fromI32(200000);
 const ONE_BI = BigInt.fromI32(1);
 
 export function handleApprovalForAll(event: ApprovalForAll): void {
+  // If block number is too high, exit
+  if (event.block.number.gt(END_BLOCK)) {
+    return;
+  }
+
   // Verify that approvalAll is for one of the two transfer managers
   if (!TRANSFER_MANAGERS.includes(event.params.operator.toHex())) {
     return;
