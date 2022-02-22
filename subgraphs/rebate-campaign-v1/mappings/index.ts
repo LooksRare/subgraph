@@ -67,6 +67,7 @@ export function handleApprovalForAll(event: ApprovalForAll): void {
   if (user === null) {
     user = new User(event.params.owner.toHex());
     user.countApprovals = BigInt.zero();
+    user.countUser = overview.numberUsers;
     overview.numberUsers = overview.numberUsers.plus(ONE_BI);
   }
 
