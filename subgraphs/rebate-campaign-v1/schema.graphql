@@ -5,6 +5,9 @@ type User @entity {
   "ID (address)"
   id: ID!
 
+  "Count user"
+  countUser: BigInt!
+
   "Total number of approvals"
   countApprovals: BigInt!
 }
