@@ -76,7 +76,7 @@ export function handleTakerAsk(event: TakerAsk): void {
   transaction.date = event.block.timestamp;
   transaction.block = event.block.number;
   transaction.collection = collection.id;
-  transaction.isTakerAsk = false;
+  transaction.isTakerAsk = true;
   transaction.strategy = strategy.id;
   transaction.tokenId = event.params.tokenId;
   transaction.price = toBigDecimal(event.params.price);
