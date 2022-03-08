@@ -1,5 +1,5 @@
 /* eslint-disable prefer-const */
-import { User, RewardPeriod } from "../generated/schema";
+import { User, RewardPeriod, PurchaseLOOKSTokens } from "../generated/schema";
 import {
   Deposit as DepositFeeSharing,
   Withdraw as WithdrawFeeSharing,
@@ -13,7 +13,11 @@ import {
 } from "../generated/StakingPoolForUniswapV2Tokens/StakingPoolForUniswapV2Tokens";
 import { AirdropRewardsClaim } from "../generated/LooksRareAirdrop/LooksRareAirdrop";
 import { RewardsClaim } from "../generated/TradingRewardsDistributor/TradingRewardsDistributor";
-
+import {
+  Deposit as DepositAggregatorUniswapV3,
+  Withdraw as WithdrawAggregatorUniswapV3,
+  ConversionToLOOKS as ConversionToLOOKSAggregatorUniswapV3,
+} from "../generated/AggregatorFeeSharingWithUniswapV3/AggregatorFeeSharingWithUniswapV3";
 import { toBigDecimal, ZERO_BI, ZERO_BD } from "./utils";
 import { initializeUser } from "./utils/initializeUser";
 
@@ -136,6 +140,50 @@ export function handleWithdrawStakingV2(event: WithdrawStakingV2): void {
   }
 
   user.save();
+}
+
+export function handleDepositAggregatorUniswapV3(event: DepositAggregatorUniswapV3): void {
+  let user = User.load(event.params.user.toHex());
+  if (user === null) {
+    user = initializeUser(event.params.user.toHex());
+  }
+
+  user.feeSharingAdjustedDepositAmount = user.feeSharingAdjustedDepositAmount.plus(toBigDecimal(event.params.amount));
+  user.feeSharingLastDepositDate = event.block.timestamp;
+  user.save();
+}
+
+export function handleWithdrawAggregatorUniswapV3(event: WithdrawAggregatorUniswapV3): void {
+  let user = User.load(event.params.user.toHex());
+  if (user === null) {
+    user = initializeUser(event.params.user.toHex());
+  }
+
+  if (user.feeSharingAdjustedDepositAmount.ge(toBigDecimal(event.params.amount))) {
+    user.feeSharingAdjustedDepositAmount = user.feeSharingAdjustedDepositAmount.minus(
+      toBigDecimal(event.params.amount)
+    );
+  } else {
+    user.feeSharingTotalCollectedLOOKS = user.feeSharingTotalCollectedLOOKS.plus(
+      toBigDecimal(event.params.amount).minus(user.feeSharingAdjustedDepositAmount)
+    );
+    user.feeSharingAdjustedDepositAmount = ZERO_BD;
+  }
+
+  user.feeSharingLastWithdrawDate = event.block.timestamp;
+
+  user.save();
+}
+
+export function handleConversionToLOOKSAggregatorUniswapV3(event: ConversionToLOOKSAggregatorUniswapV3): void {
+  let purchase = PurchaseLOOKSTokens.load(event.block.timestamp.toHex());
+  if (purchase === null) {
+    purchase = new PurchaseLOOKSTokens(event.block.timestamp.toHex());
+    purchase.block = event.block.number;
+    purchase.amountReceived = toBigDecimal(event.params.amountReceived);
+    purchase.amountSold = toBigDecimal(event.params.amountSold);
+  }
+  purchase.save();
 }
 
 export function handleAirdropClaim(event: AirdropRewardsClaim): void {

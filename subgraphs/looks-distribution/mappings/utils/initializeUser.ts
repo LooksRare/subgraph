@@ -5,6 +5,10 @@ export function initializeUser(userID: string): User {
   const user = new User(userID);
   user.airdropAmount = ZERO_BD;
   user.airdropClaimDate = ZERO_BI;
+  user.aggregatorAdjustedDepositAmount = ZERO_BD;
+  user.aggregatorTotalCollectedLOOKS = ZERO_BD;
+  user.aggregatorLastDepositDate = ZERO_BI;
+  user.aggregatorLastWithdrawDate = ZERO_BI;
   user.feeSharingAdjustedDepositAmount = ZERO_BD;
   user.feeSharingTotalCollectedLOOKS = ZERO_BD;
   user.feeSharingTotalCollectedWETH = ZERO_BD;
