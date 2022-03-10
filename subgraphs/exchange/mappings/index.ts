@@ -117,6 +117,12 @@ export function handleTakerAsk(event: TakerAsk): void {
     event.params.strategy,
     event.block.timestamp
   );
+  updateUserDailyData(
+    event.params.taker,
+    toBigDecimal(event.params.price),
+    event.params.strategy,
+    event.block.timestamp
+  );
 }
 
 export function handleTakerBid(event: TakerBid): void {
@@ -206,6 +212,12 @@ export function handleTakerBid(event: TakerBid): void {
     toBigDecimal(event.params.price),
     event.block.timestamp,
     false
+  );
+  updateUserDailyData(
+    event.params.maker,
+    toBigDecimal(event.params.price),
+    event.params.strategy,
+    event.block.timestamp
   );
   updateUserDailyData(
     event.params.taker,
