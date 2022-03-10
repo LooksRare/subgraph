@@ -63,6 +63,9 @@ type ExecutionStrategy @entity {
 
   "Total taker ask volume (in ETH)"
   totalTakerAskVolume: BigDecimal!
+
+  "Daily history"
+  dayData: [ExecutionStrategyDailyData!]! @derivedFrom(field: "executionStrategy")
 }
 
 """
