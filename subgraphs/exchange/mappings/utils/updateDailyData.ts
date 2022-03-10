@@ -146,6 +146,7 @@ export function updateUserDailyData(user: Address, volume: BigDecimal, strategy:
   if (userDailyData === null) {
     userDailyData = new UserDailyData(ID);
     userDailyData.date = dayStartTimestamp;
+    userDailyData.user = user.toHex();
     userDailyData.dailyTransactions = ZERO_BI;
     userDailyData.dailyVolume = ZERO_BD;
     userDailyData.dailyVolumeExcludingZeroFee = ZERO_BD;
