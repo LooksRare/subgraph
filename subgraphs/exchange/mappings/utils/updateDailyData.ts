@@ -38,10 +38,10 @@ export function updateCollectionDailyData(
   collectionDailyData.dailyTransactions = collectionDailyData.dailyTransactions.plus(ONE_BI);
 
   if (isTakerAsk === true) {
-    collectionDailyData.dailyTakerAskTransactions = collectionDailyData.dailyTakerAskTransactions.plus(ZERO_BI);
+    collectionDailyData.dailyTakerAskTransactions = collectionDailyData.dailyTakerAskTransactions.plus(ONE_BI);
     collectionDailyData.dailyTakerAskVolume = collectionDailyData.dailyTakerAskVolume.plus(volume);
   } else {
-    collectionDailyData.dailyTakerBidTransactions = collectionDailyData.dailyTakerBidTransactions.plus(ZERO_BI);
+    collectionDailyData.dailyTakerBidTransactions = collectionDailyData.dailyTakerBidTransactions.plus(ONE_BI);
     collectionDailyData.dailyTakerBidVolume = collectionDailyData.dailyTakerBidVolume.plus(volume);
   }
 
@@ -82,10 +82,10 @@ export function updateExchangeDailyData(
   exchangeDailyData.dailyVolume = exchangeDailyData.dailyVolume.plus(volume);
 
   if (isTakerAsk === true) {
-    exchangeDailyData.dailyTakerAskTransactions = exchangeDailyData.dailyTakerAskTransactions.plus(ZERO_BI);
+    exchangeDailyData.dailyTakerAskTransactions = exchangeDailyData.dailyTakerAskTransactions.plus(ONE_BI);
     exchangeDailyData.dailyTakerAskVolume = exchangeDailyData.dailyTakerAskVolume.plus(volume);
   } else {
-    exchangeDailyData.dailyTakerBidTransactions = exchangeDailyData.dailyTakerBidTransactions.plus(ZERO_BI);
+    exchangeDailyData.dailyTakerBidTransactions = exchangeDailyData.dailyTakerBidTransactions.plus(ONE_BI);
     exchangeDailyData.dailyTakerBidVolume = exchangeDailyData.dailyTakerBidVolume.plus(volume);
   }
 
@@ -126,10 +126,10 @@ export function updateExecutionStrategyDailyData(
   strategyDailyData.dailyVolume = strategyDailyData.dailyVolume.plus(volume);
 
   if (isTakerAsk === true) {
-    strategyDailyData.dailyTakerAskTransactions = strategyDailyData.dailyTakerAskTransactions.plus(ZERO_BI);
+    strategyDailyData.dailyTakerAskTransactions = strategyDailyData.dailyTakerAskTransactions.plus(ONE_BI);
     strategyDailyData.dailyTakerAskVolume = strategyDailyData.dailyTakerAskVolume.plus(volume);
   } else {
-    strategyDailyData.dailyTakerBidTransactions = strategyDailyData.dailyTakerBidTransactions.plus(ZERO_BI);
+    strategyDailyData.dailyTakerBidTransactions = strategyDailyData.dailyTakerBidTransactions.plus(ONE_BI);
     strategyDailyData.dailyTakerBidVolume = strategyDailyData.dailyTakerBidVolume.plus(volume);
   }
 
