@@ -29,11 +29,17 @@ export function handleTakerAsk(event: TakerAsk): void {
   if (collection === null) {
     collection = new Collection(event.params.collection.toHex());
     collection.totalTransactions = ZERO_BI;
+    collection.totalTakerBidTransactions = ZERO_BI;
+    collection.totalTakerAskTransactions = ZERO_BI;
     collection.totalVolume = ZERO_BD;
+    collection.totalTakerBidVolume = ZERO_BD;
+    collection.totalTakerAskVolume = ZERO_BD;
     collection.totalRoyaltyPaid = ZERO_BD;
   }
   collection.totalTransactions = collection.totalTransactions.plus(ONE_BI);
+  collection.totalTakerAskTransactions = collection.totalTakerAskTransactions.plus(ONE_BI);
   collection.totalVolume = collection.totalVolume.plus(toBigDecimal(event.params.price));
+  collection.totalTakerAskVolume = collection.totalTakerAskVolume.plus(toBigDecimal(event.params.price));
   collection.save();
 
   // 2. Execution strategy
@@ -42,10 +48,16 @@ export function handleTakerAsk(event: TakerAsk): void {
     strategy = new ExecutionStrategy(event.params.strategy.toHex());
     strategy.protocolFee = fetchProtocolFee(event.params.strategy);
     strategy.totalTransactions = ZERO_BI;
+    strategy.totalTakerBidTransactions = ZERO_BI;
+    strategy.totalTakerAskTransactions = ZERO_BI;
     strategy.totalVolume = ZERO_BD;
+    strategy.totalTakerBidVolume = ZERO_BD;
+    strategy.totalTakerAskVolume = ZERO_BD;
   }
   strategy.totalTransactions = strategy.totalTransactions.plus(ONE_BI);
+  strategy.totalTakerAskTransactions = strategy.totalTakerAskTransactions.plus(ONE_BI);
   strategy.totalVolume = strategy.totalVolume.plus(toBigDecimal(event.params.price));
+  strategy.totalTakerAskVolume = strategy.totalTakerAskVolume.plus(toBigDecimal(event.params.price));
   strategy.save();
 
   // 3. Maker bid user
@@ -89,18 +101,18 @@ export function handleTakerAsk(event: TakerAsk): void {
     event.params.collection,
     toBigDecimal(event.params.price),
     event.params.strategy,
-    event.block.timestamp
+    event.block.timestamp,
+    true
   );
-  updateExchangeDailyData(toBigDecimal(event.params.price), event.params.strategy, event.block.timestamp);
-  updateExecutionStrategyDailyData(event.params.strategy, toBigDecimal(event.params.price), event.block.timestamp);
+  updateExchangeDailyData(toBigDecimal(event.params.price), event.params.strategy, event.block.timestamp, true);
+  updateExecutionStrategyDailyData(
+    event.params.strategy,
+    toBigDecimal(event.params.price),
+    event.block.timestamp,
+    true
+  );
   updateUserDailyData(
     event.params.maker,
-    toBigDecimal(event.params.price),
-    event.params.strategy,
-    event.block.timestamp
-  );
-  updateUserDailyData(
-    event.params.taker,
     toBigDecimal(event.params.price),
     event.params.strategy,
     event.block.timestamp
@@ -113,11 +125,17 @@ export function handleTakerBid(event: TakerBid): void {
   if (collection === null) {
     collection = new Collection(event.params.collection.toHex());
     collection.totalTransactions = ZERO_BI;
+    collection.totalTakerBidTransactions = ZERO_BI;
+    collection.totalTakerAskTransactions = ZERO_BI;
     collection.totalVolume = ZERO_BD;
+    collection.totalTakerBidVolume = ZERO_BD;
+    collection.totalTakerAskVolume = ZERO_BD;
     collection.totalRoyaltyPaid = ZERO_BD;
   }
   collection.totalTransactions = collection.totalTransactions.plus(ONE_BI);
+  collection.totalTakerBidTransactions = collection.totalTakerBidTransactions.plus(ONE_BI);
   collection.totalVolume = collection.totalVolume.plus(toBigDecimal(event.params.price));
+  collection.totalTakerBidVolume = collection.totalTakerBidVolume.plus(toBigDecimal(event.params.price));
   collection.save();
 
   // 2. Execution strategy
@@ -126,10 +144,16 @@ export function handleTakerBid(event: TakerBid): void {
     strategy = new ExecutionStrategy(event.params.strategy.toHex());
     strategy.protocolFee = fetchProtocolFee(event.params.strategy);
     strategy.totalTransactions = ZERO_BI;
+    strategy.totalTakerBidTransactions = ZERO_BI;
+    strategy.totalTakerAskTransactions = ZERO_BI;
     strategy.totalVolume = ZERO_BD;
+    strategy.totalTakerBidVolume = ZERO_BD;
+    strategy.totalTakerAskVolume = ZERO_BD;
   }
   strategy.totalTransactions = strategy.totalTransactions.plus(ONE_BI);
+  strategy.totalTakerBidTransactions = strategy.totalTakerBidTransactions.plus(ONE_BI);
   strategy.totalVolume = strategy.totalVolume.plus(toBigDecimal(event.params.price));
+  strategy.totalTakerBidVolume = strategy.totalTakerBidVolume.plus(toBigDecimal(event.params.price));
   strategy.save();
 
   // 3. Maker ask user
@@ -173,15 +197,15 @@ export function handleTakerBid(event: TakerBid): void {
     event.params.collection,
     toBigDecimal(event.params.price),
     event.params.strategy,
-    event.block.timestamp
+    event.block.timestamp,
+    false
   );
-  updateExchangeDailyData(toBigDecimal(event.params.price), event.params.strategy, event.block.timestamp);
-  updateExecutionStrategyDailyData(event.params.strategy, toBigDecimal(event.params.price), event.block.timestamp);
-  updateUserDailyData(
-    event.params.maker,
-    toBigDecimal(event.params.price),
+  updateExchangeDailyData(toBigDecimal(event.params.price), event.params.strategy, event.block.timestamp, false);
+  updateExecutionStrategyDailyData(
     event.params.strategy,
-    event.block.timestamp
+    toBigDecimal(event.params.price),
+    event.block.timestamp,
+    false
   );
   updateUserDailyData(
     event.params.taker,
@@ -197,7 +221,11 @@ export function handleRoyaltyPayment(event: RoyaltyPayment): void {
   if (collection === null) {
     collection = new Collection(event.params.collection.toHex());
     collection.totalTransactions = ZERO_BI;
+    collection.totalTakerBidTransactions = ZERO_BI;
+    collection.totalTakerAskTransactions = ZERO_BI;
     collection.totalVolume = ZERO_BD;
+    collection.totalTakerBidVolume = ZERO_BD;
+    collection.totalTakerAskVolume = ZERO_BD;
     collection.totalRoyaltyPaid = ZERO_BD;
   }
   collection.totalRoyaltyPaid = collection.totalRoyaltyPaid.plus(toBigDecimal(event.params.amount));

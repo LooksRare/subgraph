@@ -13,7 +13,8 @@ export function updateCollectionDailyData(
   collection: Address,
   volume: BigDecimal,
   strategy: Address,
-  timestamp: BigInt
+  timestamp: BigInt,
+  isTakerAsk: boolean
 ): void {
   let dailyTimestampBigInt = BigInt.fromI32(86400);
   let dayID = timestamp.div(dailyTimestampBigInt);
@@ -25,12 +26,24 @@ export function updateCollectionDailyData(
     collectionDailyData = new CollectionDailyData(ID);
     collectionDailyData.date = dayStartTimestamp;
     collectionDailyData.collection = collection.toHex();
-    collectionDailyData.dailyVolume = ZERO_BD;
     collectionDailyData.dailyTransactions = ZERO_BI;
+    collectionDailyData.dailyTakerBidTransactions = ZERO_BI;
+    collectionDailyData.dailyTakerAskTransactions = ZERO_BI;
+    collectionDailyData.dailyVolume = ZERO_BD;
+    collectionDailyData.dailyTakerBidVolume = ZERO_BD;
+    collectionDailyData.dailyTakerAskVolume = ZERO_BD;
     collectionDailyData.dailyVolumeExcludingZeroFee = ZERO_BD;
   }
   collectionDailyData.dailyVolume = collectionDailyData.dailyVolume.plus(volume);
   collectionDailyData.dailyTransactions = collectionDailyData.dailyTransactions.plus(ONE_BI);
+
+  if (isTakerAsk === true) {
+    collectionDailyData.dailyTakerAskTransactions = collectionDailyData.dailyTakerAskTransactions.plus(ZERO_BI);
+    collectionDailyData.dailyTakerAskVolume = collectionDailyData.dailyTakerAskVolume.plus(volume);
+  } else {
+    collectionDailyData.dailyTakerBidTransactions = collectionDailyData.dailyTakerBidTransactions.plus(ZERO_BI);
+    collectionDailyData.dailyTakerBidVolume = collectionDailyData.dailyTakerBidVolume.plus(volume);
+  }
 
   let executionStrategy = ExecutionStrategy.load(strategy.toHex());
   if (executionStrategy !== null) {
@@ -42,7 +55,12 @@ export function updateCollectionDailyData(
   collectionDailyData.save();
 }
 
-export function updateExchangeDailyData(volume: BigDecimal, strategy: Address, timestamp: BigInt): void {
+export function updateExchangeDailyData(
+  volume: BigDecimal,
+  strategy: Address,
+  timestamp: BigInt,
+  isTakerAsk: boolean
+): void {
   let dailyTimestampBigInt = BigInt.fromI32(86400);
   let dayID = timestamp.div(dailyTimestampBigInt);
   let dayStartTimestamp = dayID.times(dailyTimestampBigInt);
@@ -53,11 +71,23 @@ export function updateExchangeDailyData(volume: BigDecimal, strategy: Address, t
     exchangeDailyData = new ExchangeDailyData(ID);
     exchangeDailyData.date = dayStartTimestamp;
     exchangeDailyData.dailyTransactions = ZERO_BI;
+    exchangeDailyData.dailyTakerBidTransactions = ZERO_BI;
+    exchangeDailyData.dailyTakerAskTransactions = ZERO_BI;
     exchangeDailyData.dailyVolume = ZERO_BD;
+    exchangeDailyData.dailyTakerBidVolume = ZERO_BD;
+    exchangeDailyData.dailyTakerAskVolume = ZERO_BD;
     exchangeDailyData.dailyVolumeExcludingZeroFee = ZERO_BD;
   }
   exchangeDailyData.dailyTransactions = exchangeDailyData.dailyTransactions.plus(ONE_BI);
   exchangeDailyData.dailyVolume = exchangeDailyData.dailyVolume.plus(volume);
+
+  if (isTakerAsk === true) {
+    exchangeDailyData.dailyTakerAskTransactions = exchangeDailyData.dailyTakerAskTransactions.plus(ZERO_BI);
+    exchangeDailyData.dailyTakerAskVolume = exchangeDailyData.dailyTakerAskVolume.plus(volume);
+  } else {
+    exchangeDailyData.dailyTakerBidTransactions = exchangeDailyData.dailyTakerBidTransactions.plus(ZERO_BI);
+    exchangeDailyData.dailyTakerBidVolume = exchangeDailyData.dailyTakerBidVolume.plus(volume);
+  }
 
   let executionStrategy = ExecutionStrategy.load(strategy.toHex());
   if (executionStrategy !== null) {
@@ -69,7 +99,12 @@ export function updateExchangeDailyData(volume: BigDecimal, strategy: Address, t
   exchangeDailyData.save();
 }
 
-export function updateExecutionStrategyDailyData(strategy: Address, volume: BigDecimal, timestamp: BigInt): void {
+export function updateExecutionStrategyDailyData(
+  strategy: Address,
+  volume: BigDecimal,
+  timestamp: BigInt,
+  isTakerAsk: boolean
+): void {
   let dailyTimestampBigInt = BigInt.fromI32(86400);
   let dayID = timestamp.div(dailyTimestampBigInt);
   let dayStartTimestamp = dayID.times(dailyTimestampBigInt);
@@ -80,10 +115,23 @@ export function updateExecutionStrategyDailyData(strategy: Address, volume: BigD
     strategyDailyData = new ExecutionStrategyDailyData(ID);
     strategyDailyData.date = dayStartTimestamp;
     strategyDailyData.dailyTransactions = ZERO_BI;
+    strategyDailyData.dailyTakerBidTransactions = ZERO_BI;
+    strategyDailyData.dailyTakerAskTransactions = ZERO_BI;
     strategyDailyData.dailyVolume = ZERO_BD;
+    strategyDailyData.dailyTakerBidVolume = ZERO_BD;
+    strategyDailyData.dailyTakerAskVolume = ZERO_BD;
   }
   strategyDailyData.dailyTransactions = strategyDailyData.dailyTransactions.plus(ONE_BI);
   strategyDailyData.dailyVolume = strategyDailyData.dailyVolume.plus(volume);
+
+  if (isTakerAsk === true) {
+    strategyDailyData.dailyTakerAskTransactions = strategyDailyData.dailyTakerAskTransactions.plus(ZERO_BI);
+    strategyDailyData.dailyTakerAskVolume = strategyDailyData.dailyTakerAskVolume.plus(volume);
+  } else {
+    strategyDailyData.dailyTakerBidTransactions = strategyDailyData.dailyTakerBidTransactions.plus(ZERO_BI);
+    strategyDailyData.dailyTakerBidVolume = strategyDailyData.dailyTakerBidVolume.plus(volume);
+  }
+
   strategyDailyData.save();
 }
 
