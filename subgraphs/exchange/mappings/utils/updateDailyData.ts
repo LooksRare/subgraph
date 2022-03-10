@@ -114,6 +114,7 @@ export function updateExecutionStrategyDailyData(
   if (strategyDailyData === null) {
     strategyDailyData = new ExecutionStrategyDailyData(ID);
     strategyDailyData.date = dayStartTimestamp;
+    strategyDailyData.strategy = strategy.toHex();
     strategyDailyData.dailyTransactions = ZERO_BI;
     strategyDailyData.dailyTakerBidTransactions = ZERO_BI;
     strategyDailyData.dailyTakerAskTransactions = ZERO_BI;

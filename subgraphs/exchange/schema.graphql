@@ -65,7 +65,10 @@ type ExecutionStrategy @entity {
   totalTakerAskVolume: BigDecimal!
 
   "Daily history"
-  dayData: [ExecutionStrategyDailyData!]! @derivedFrom(field: "executionStrategy")
+  dayData: [ExecutionStrategyDailyData!]! @derivedFrom(field: "strategy")
+
+  "Transactions"
+  transactions: [Transaction!]! @derivedFrom(field: "strategy")
 }
 
 """
@@ -187,7 +190,7 @@ type ExecutionStrategyDailyData @entity {
   id: ID!
 
   "Execution strategy"
-  executionStrategy: ExecutionStrategy!
+  strategy: ExecutionStrategy!
 
   "Start date (timestamp)"
   date: BigInt!
