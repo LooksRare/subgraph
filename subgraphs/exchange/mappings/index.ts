@@ -97,6 +97,7 @@ export function handleTakerAsk(event: TakerAsk): void {
   transaction.save();
 
   // 6. Update daily data entities
+  updateExchangeDailyData(toBigDecimal(event.params.price), event.params.strategy, event.block.timestamp, true);
   updateCollectionDailyData(
     event.params.collection,
     toBigDecimal(event.params.price),
@@ -104,7 +105,6 @@ export function handleTakerAsk(event: TakerAsk): void {
     event.block.timestamp,
     true
   );
-  updateExchangeDailyData(toBigDecimal(event.params.price), event.params.strategy, event.block.timestamp, true);
   updateExecutionStrategyDailyData(
     event.params.strategy,
     toBigDecimal(event.params.price),
@@ -199,6 +199,7 @@ export function handleTakerBid(event: TakerBid): void {
   transaction.save();
 
   // 6. Update daily data entities
+  updateExchangeDailyData(toBigDecimal(event.params.price), event.params.strategy, event.block.timestamp, false);
   updateCollectionDailyData(
     event.params.collection,
     toBigDecimal(event.params.price),
@@ -206,7 +207,6 @@ export function handleTakerBid(event: TakerBid): void {
     event.block.timestamp,
     false
   );
-  updateExchangeDailyData(toBigDecimal(event.params.price), event.params.strategy, event.block.timestamp, false);
   updateExecutionStrategyDailyData(
     event.params.strategy,
     toBigDecimal(event.params.price),

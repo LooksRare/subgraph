@@ -160,6 +160,12 @@ type ExchangeDailyData @entity {
   "Start date (timestamp)"
   date: BigInt!
 
+  "Daily unique users"
+  dailyUsers: BigInt!
+
+  "Daily unique collections traded"
+  dailyCollections: BigInt!
+
   "Daily unique transactions"
   dailyTransactions: BigInt!
 

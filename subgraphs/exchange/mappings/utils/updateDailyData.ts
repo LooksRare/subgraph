@@ -33,6 +33,14 @@ export function updateCollectionDailyData(
     collectionDailyData.dailyTakerBidVolume = ZERO_BD;
     collectionDailyData.dailyTakerAskVolume = ZERO_BD;
     collectionDailyData.dailyVolumeExcludingZeroFee = ZERO_BD;
+
+    // Increment number of unique daily users if user didn't exist
+    let exchangeDailyData = ExchangeDailyData.load(ID);
+
+    if (exchangeDailyData !== null) {
+      exchangeDailyData.dailyCollections = exchangeDailyData.dailyCollections.plus(ONE_BI);
+      exchangeDailyData.save();
+    }
   }
   collectionDailyData.dailyVolume = collectionDailyData.dailyVolume.plus(volume);
   collectionDailyData.dailyTransactions = collectionDailyData.dailyTransactions.plus(ONE_BI);
@@ -70,6 +78,8 @@ export function updateExchangeDailyData(
   if (exchangeDailyData === null) {
     exchangeDailyData = new ExchangeDailyData(ID);
     exchangeDailyData.date = dayStartTimestamp;
+    exchangeDailyData.dailyUsers = ZERO_BI;
+    exchangeDailyData.dailyCollections = ZERO_BI;
     exchangeDailyData.dailyTransactions = ZERO_BI;
     exchangeDailyData.dailyTakerBidTransactions = ZERO_BI;
     exchangeDailyData.dailyTakerAskTransactions = ZERO_BI;
@@ -143,6 +153,7 @@ export function updateUserDailyData(user: Address, volume: BigDecimal, strategy:
   let ID = dayID.toString() + "-" + user.toHex();
 
   let userDailyData = UserDailyData.load(ID);
+
   if (userDailyData === null) {
     userDailyData = new UserDailyData(ID);
     userDailyData.date = dayStartTimestamp;
@@ -150,7 +161,16 @@ export function updateUserDailyData(user: Address, volume: BigDecimal, strategy:
     userDailyData.dailyTransactions = ZERO_BI;
     userDailyData.dailyVolume = ZERO_BD;
     userDailyData.dailyVolumeExcludingZeroFee = ZERO_BD;
+
+    // Increment number of unique daily users if user didn't exist
+    let exchangeDailyData = ExchangeDailyData.load(ID);
+
+    if (exchangeDailyData !== null) {
+      exchangeDailyData.dailyUsers = exchangeDailyData.dailyUsers.plus(ONE_BI);
+      exchangeDailyData.save();
+    }
   }
+
   userDailyData.dailyTransactions = userDailyData.dailyTransactions.plus(ONE_BI);
   userDailyData.dailyVolume = userDailyData.dailyVolume.plus(volume);
 
