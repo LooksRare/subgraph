@@ -11,8 +11,8 @@ import {
 
 export function updateCollectionDailyData(
   collection: Address,
-  volume: BigDecimal,
   strategy: Address,
+  volume: BigDecimal,
   timestamp: BigInt,
   isTakerAsk: boolean
 ): void {
@@ -64,8 +64,8 @@ export function updateCollectionDailyData(
 }
 
 export function updateExchangeDailyData(
-  volume: BigDecimal,
   strategy: Address,
+  volume: BigDecimal,
   timestamp: BigInt,
   isTakerAsk: boolean
 ): void {
@@ -146,7 +146,7 @@ export function updateExecutionStrategyDailyData(
   strategyDailyData.save();
 }
 
-export function updateUserDailyData(user: Address, volume: BigDecimal, strategy: Address, timestamp: BigInt): void {
+export function updateUserDailyData(user: Address, strategy: Address, volume: BigDecimal, timestamp: BigInt): void {
   let dailyTimestampBigInt = BigInt.fromI32(86400);
   let dayID = timestamp.div(dailyTimestampBigInt);
   let dayStartTimestamp = dayID.times(dailyTimestampBigInt);

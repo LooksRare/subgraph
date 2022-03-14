@@ -97,11 +97,11 @@ export function handleTakerAsk(event: TakerAsk): void {
   transaction.save();
 
   // 6. Update daily data entities
-  updateExchangeDailyData(toBigDecimal(event.params.price), event.params.strategy, event.block.timestamp, true);
+  updateExchangeDailyData(event.params.strategy, toBigDecimal(event.params.price), event.block.timestamp, true);
   updateCollectionDailyData(
     event.params.collection,
-    toBigDecimal(event.params.price),
     event.params.strategy,
+    toBigDecimal(event.params.price),
     event.block.timestamp,
     true
   );
@@ -113,14 +113,14 @@ export function handleTakerAsk(event: TakerAsk): void {
   );
   updateUserDailyData(
     event.params.maker,
-    toBigDecimal(event.params.price),
     event.params.strategy,
+    toBigDecimal(event.params.price),
     event.block.timestamp
   );
   updateUserDailyData(
     event.params.taker,
-    toBigDecimal(event.params.price),
     event.params.strategy,
+    toBigDecimal(event.params.price),
     event.block.timestamp
   );
 }
@@ -199,11 +199,11 @@ export function handleTakerBid(event: TakerBid): void {
   transaction.save();
 
   // 6. Update daily data entities
-  updateExchangeDailyData(toBigDecimal(event.params.price), event.params.strategy, event.block.timestamp, false);
+  updateExchangeDailyData(event.params.strategy, toBigDecimal(event.params.price), event.block.timestamp, false);
   updateCollectionDailyData(
     event.params.collection,
-    toBigDecimal(event.params.price),
     event.params.strategy,
+    toBigDecimal(event.params.price),
     event.block.timestamp,
     false
   );
@@ -215,14 +215,14 @@ export function handleTakerBid(event: TakerBid): void {
   );
   updateUserDailyData(
     event.params.maker,
-    toBigDecimal(event.params.price),
     event.params.strategy,
+    toBigDecimal(event.params.price),
     event.block.timestamp
   );
   updateUserDailyData(
     event.params.taker,
-    toBigDecimal(event.params.price),
     event.params.strategy,
+    toBigDecimal(event.params.price),
     event.block.timestamp
   );
 }
