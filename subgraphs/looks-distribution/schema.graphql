@@ -11,6 +11,18 @@ type User @entity {
   "Airdrop - Claim date"
   airdropClaimDate: BigInt!
 
+  "Aggregator - Adjusted deposit amount (LOOKS)"
+  aggregatorAdjustedDepositAmount: BigDecimal!
+
+  "Aggregator - Total LOOKS collected"
+  aggregatorTotalCollectedLOOKS: BigDecimal!
+
+  "Aggregator - Last deposit date"
+  aggregatorLastDepositDate: BigInt!
+
+  "Aggregator - Last withdraw date"
+  aggregatorLastWithdrawDate: BigInt!
+
   "Fee Sharing - Adjusted deposit amount (LOOKS)"
   feeSharingAdjustedDepositAmount: BigDecimal!
 
@@ -66,4 +78,21 @@ type RewardPeriod @entity {
 
   "Reward per block for the period (in WETH)"
   rewardPerBlock: BigDecimal!
+}
+
+"""
+PurchaseLOOKSTokens
+"""
+type PurchaseLOOKSTokens @entity {
+  "ID (timestamp)"
+  id: ID!
+
+  "Block number"
+  block: BigInt!
+
+  "Reward sold (in WETH)"
+  amountSold: BigDecimal!
+
+  "Reward received (in LOOKS)"
+  amountReceived: BigDecimal!
 }
