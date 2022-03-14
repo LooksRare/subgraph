@@ -8,8 +8,20 @@ type Collection @entity {
   "Total number of transactions"
   totalTransactions: BigInt!
 
+  "Total number of taker bid transactions"
+  totalTakerBidTransactions: BigInt!
+
+  "Total number of taker ask transactions"
+  totalTakerAskTransactions: BigInt!
+
   "Total volume of collection (in ETH)"
   totalVolume: BigDecimal!
+
+  "Total taker bid volume (in ETH)"
+  totalTakerBidVolume: BigDecimal!
+
+  "Total taker ask volume (in ETH)"
+  totalTakerAskVolume: BigDecimal!
 
   "Total royalty paid (in ETH)"
   totalRoyaltyPaid: BigDecimal!
@@ -37,8 +49,26 @@ type ExecutionStrategy @entity {
   "Total number of transactions"
   totalTransactions: BigInt!
 
+  "Total number of taker bid transactions"
+  totalTakerBidTransactions: BigInt!
+
+  "Total number of taker ask transactions"
+  totalTakerAskTransactions: BigInt!
+
   "Total volume (in ETH)"
   totalVolume: BigDecimal!
+
+  "Total taker bid volume (in ETH)"
+  totalTakerBidVolume: BigDecimal!
+
+  "Total taker ask volume (in ETH)"
+  totalTakerAskVolume: BigDecimal!
+
+  "Daily history"
+  dayData: [ExecutionStrategyDailyData!]! @derivedFrom(field: "strategy")
+
+  "Transactions"
+  transactions: [Transaction!]! @derivedFrom(field: "strategy")
 }
 
 """
@@ -98,8 +128,20 @@ type CollectionDailyData @entity {
   "Daily unique transactions"
   dailyTransactions: BigInt!
 
+  "Daily unique taker bid transactions"
+  dailyTakerBidTransactions: BigInt!
+
+  "Daily unique taker ask transactions"
+  dailyTakerAskTransactions: BigInt!
+
   "Daily volume (in ETH)"
   dailyVolume: BigDecimal!
+
+  "Daily taker bid volume (in ETH)"
+  dailyTakerBidVolume: BigDecimal!
+
+  "Daily taker ask volume (in ETH)"
+  dailyTakerAskVolume: BigDecimal!
 
   "Daily volume (in ETH) excluding zero-fee strategy"
   dailyVolumeExcludingZeroFee: BigDecimal!
@@ -118,11 +160,29 @@ type ExchangeDailyData @entity {
   "Start date (timestamp)"
   date: BigInt!
 
+  "Daily unique users"
+  dailyUsers: BigInt!
+
+  "Daily unique collections traded"
+  dailyCollections: BigInt!
+
   "Daily unique transactions"
   dailyTransactions: BigInt!
 
+  "Daily taker ask transactions"
+  dailyTakerBidTransactions: BigInt!
+
+  "Daily taker ask transactions"
+  dailyTakerAskTransactions: BigInt!
+
   "Daily volume (in ETH)"
   dailyVolume: BigDecimal!
+
+  "Daily taker bid volume (in ETH)"
+  dailyTakerBidVolume: BigDecimal!
+
+  "Daily taker ask volume (in ETH)"
+  dailyTakerAskVolume: BigDecimal!
 
   "Daily volume (in ETH) excluding zero-fee strategy"
   dailyVolumeExcludingZeroFee: BigDecimal!
@@ -136,7 +196,7 @@ type ExecutionStrategyDailyData @entity {
   id: ID!
 
   "Execution strategy"
-  executionStrategy: ExecutionStrategy!
+  strategy: ExecutionStrategy!
 
   "Start date (timestamp)"
   date: BigInt!
@@ -144,8 +204,20 @@ type ExecutionStrategyDailyData @entity {
   "Daily unique transactions"
   dailyTransactions: BigInt!
 
+  "Daily unique taker bid transactions"
+  dailyTakerBidTransactions: BigInt!
+
+  "Daily unique taker bid transactions"
+  dailyTakerAskTransactions: BigInt!
+
   "Daily volume (in ETH)"
   dailyVolume: BigDecimal!
+
+  "Daily taker bid volume (in ETH)"
+  dailyTakerBidVolume: BigDecimal!
+
+  "Daily taker ask volume (in ETH)"
+  dailyTakerAskVolume: BigDecimal!
 }
 
 """
