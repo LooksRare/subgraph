@@ -21,19 +21,18 @@ import {
 import { toBigDecimal, ZERO_BI, ZERO_BD } from "./utils";
 import { initializeUser } from "./utils/initializeUser";
 import { fetchSharesAggregator, fetchSharesFeeSharingSystem } from "./utils/fetchShares";
-import { updateDailySnapshotFeeSharing } from "./utils/updateDailyData";
+import { updateDailySnapshotAggregator, updateDailySnapshotFeeSharing } from "./utils/updateDailyData";
 
 export function handleDepositFeeSharing(event: DepositFeeSharing): void {
-  let isUserNew = false;
-
   let user = User.load(event.params.user.toHex());
   if (user === null) {
     user = initializeUser(event.params.user.toHex());
-    isUserNew = true;
   }
 
+  let isUserNew = false;
   if (!user.feeSharingIsActive) {
     user.feeSharingIsActive = true;
+    isUserNew = true;
   }
 
   user.feeSharingAdjustedDepositAmount = user.feeSharingAdjustedDepositAmount.plus(toBigDecimal(event.params.amount));
@@ -47,7 +46,6 @@ export function handleDepositFeeSharing(event: DepositFeeSharing): void {
   }
 
   updateDailySnapshotFeeSharing(event.block.timestamp, toBigDecimal(event.params.amount), true, false, isUserNew);
-
   user.save();
 }
 
@@ -172,11 +170,15 @@ export function handleDepositAggregatorUniswapV3(event: DepositAggregatorUniswap
     user = initializeUser(event.params.user.toHex());
   }
 
+  let isUserNew = false;
   if (!user.aggregatorIsActive) {
     user.aggregatorIsActive = true;
+    isUserNew = true;
   }
+
   user.feeSharingAdjustedDepositAmount = user.feeSharingAdjustedDepositAmount.plus(toBigDecimal(event.params.amount));
   user.feeSharingLastDepositDate = event.block.timestamp;
+  updateDailySnapshotAggregator(event.block.timestamp, toBigDecimal(event.params.amount), true, false, isUserNew);
   user.save();
 }
 
@@ -203,6 +205,14 @@ export function handleWithdrawAggregatorUniswapV3(event: WithdrawAggregatorUnisw
   }
 
   user.feeSharingLastWithdrawDate = event.block.timestamp;
+
+  updateDailySnapshotAggregator(
+    event.block.timestamp,
+    toBigDecimal(event.params.amount),
+    false,
+    !user.aggregatorIsActive,
+    false
+  );
 
   user.save();
 }

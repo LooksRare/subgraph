@@ -18,7 +18,6 @@ export function initializeDailySnapshot(ID: string, dayStartTimestamp: BigInt): 
   dailySnapshot.feeSharingDailyInflowLOOKS = ZERO_BD;
   dailySnapshot.feeSharingDailyOutflowLOOKS = ZERO_BD;
   dailySnapshot.feeSharingTotalStakedLOOKS = ZERO_BD;
-  dailySnapshot.totalActiveUsers = ZERO_BI;
   return dailySnapshot;
 }
 

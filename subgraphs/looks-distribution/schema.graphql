@@ -111,9 +111,6 @@ type DailySnapshot @entity {
 
   "Fee Sharing - Total LOOKS staked"
   feeSharingTotalStakedLOOKS: BigDecimal!
-
-  "Total active users"
-  totalActiveUsers: BigInt!
 }
 
 """
