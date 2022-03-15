@@ -21,15 +21,21 @@ import {
 import { toBigDecimal, ZERO_BI, ZERO_BD } from "./utils";
 import { initializeUser } from "./utils/initializeUser";
 import { fetchSharesAggregator, fetchSharesFeeSharingSystem } from "./utils/fetchShares";
+import { updateDailySnapshotFeeSharing } from "./utils/updateDailyData";
 
 export function handleDepositFeeSharing(event: DepositFeeSharing): void {
+  let isUserNew = false;
+
   let user = User.load(event.params.user.toHex());
   if (user === null) {
     user = initializeUser(event.params.user.toHex());
+    isUserNew = true;
   }
+
   if (!user.feeSharingIsActive) {
     user.feeSharingIsActive = true;
   }
+
   user.feeSharingAdjustedDepositAmount = user.feeSharingAdjustedDepositAmount.plus(toBigDecimal(event.params.amount));
   user.feeSharingLastDepositDate = event.block.timestamp;
 
@@ -39,6 +45,8 @@ export function handleDepositFeeSharing(event: DepositFeeSharing): void {
     );
     user.feeSharingLastHarvestDate = event.block.timestamp;
   }
+
+  updateDailySnapshotFeeSharing(event.block.timestamp, toBigDecimal(event.params.amount), true, false, isUserNew);
 
   user.save();
 }
@@ -87,6 +95,14 @@ export function handleWithdrawFeeSharing(event: WithdrawFeeSharing): void {
     );
     user.feeSharingLastHarvestDate = event.block.timestamp;
   }
+
+  updateDailySnapshotFeeSharing(
+    event.block.timestamp,
+    toBigDecimal(event.params.amount),
+    false,
+    !user.feeSharingIsActive,
+    false
+  );
 
   user.save();
 }

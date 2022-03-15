@@ -70,8 +70,11 @@ type User @entity {
 DailySnapshot
 """
 type DailySnapshot @entity {
-  "ID (timestamp)"
+  "ID"
   id: ID!
+
+  "Date"
+  date: BigInt!
 
   "Aggregator - Number active users"
   aggregatorActiveUsers: BigInt!
