@@ -23,6 +23,9 @@ type User @entity {
   "Aggregator - Last withdraw date"
   aggregatorLastWithdrawDate: BigInt!
 
+  "Aggregator - Is active"
+  aggregatorIsActive: Boolean!
+
   "Fee Sharing - Adjusted deposit amount (LOOKS)"
   feeSharingAdjustedDepositAmount: BigDecimal!
 
@@ -40,6 +43,9 @@ type User @entity {
 
   "Fee Sharing - Last withdraw date"
   feeSharingLastWithdrawDate: BigInt!
+
+  "Fee Sharing - Is active"
+  feeSharingIsActive: Boolean!
 
   "UniswapV2 Staking - Total LOOKS collected"
   stakingPoolUniswapV2TotalCollectedLOOKS: BigDecimal!

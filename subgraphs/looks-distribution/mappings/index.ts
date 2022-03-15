@@ -20,13 +20,16 @@ import {
 } from "../generated/AggregatorFeeSharingWithUniswapV3/AggregatorFeeSharingWithUniswapV3";
 import { toBigDecimal, ZERO_BI, ZERO_BD } from "./utils";
 import { initializeUser } from "./utils/initializeUser";
+import { fetchSharesAggregator, fetchSharesFeeSharingSystem } from "./utils/fetchShares";
 
 export function handleDepositFeeSharing(event: DepositFeeSharing): void {
   let user = User.load(event.params.user.toHex());
   if (user === null) {
     user = initializeUser(event.params.user.toHex());
   }
-
+  if (!user.feeSharingIsActive) {
+    user.feeSharingIsActive = true;
+  }
   user.feeSharingAdjustedDepositAmount = user.feeSharingAdjustedDepositAmount.plus(toBigDecimal(event.params.amount));
   user.feeSharingLastDepositDate = event.block.timestamp;
 
@@ -69,6 +72,11 @@ export function handleWithdrawFeeSharing(event: WithdrawFeeSharing): void {
       toBigDecimal(event.params.amount).minus(user.feeSharingAdjustedDepositAmount)
     );
     user.feeSharingAdjustedDepositAmount = ZERO_BD;
+
+    let userShares = fetchSharesFeeSharingSystem(event.address, event.params.user);
+    if (userShares === ZERO_BI) {
+      user.feeSharingIsActive = false;
+    }
   }
 
   user.feeSharingLastWithdrawDate = event.block.timestamp;
@@ -148,6 +156,9 @@ export function handleDepositAggregatorUniswapV3(event: DepositAggregatorUniswap
     user = initializeUser(event.params.user.toHex());
   }
 
+  if (!user.aggregatorIsActive) {
+    user.aggregatorIsActive = true;
+  }
   user.feeSharingAdjustedDepositAmount = user.feeSharingAdjustedDepositAmount.plus(toBigDecimal(event.params.amount));
   user.feeSharingLastDepositDate = event.block.timestamp;
   user.save();
@@ -168,6 +179,11 @@ export function handleWithdrawAggregatorUniswapV3(event: WithdrawAggregatorUnisw
       toBigDecimal(event.params.amount).minus(user.feeSharingAdjustedDepositAmount)
     );
     user.feeSharingAdjustedDepositAmount = ZERO_BD;
+
+    let userShares = fetchSharesAggregator(event.address, event.params.user);
+    if (userShares === ZERO_BI) {
+      user.aggregatorIsActive = false;
+    }
   }
 
   user.feeSharingLastWithdrawDate = event.block.timestamp;
