@@ -35,8 +35,7 @@ export function updateCollectionDailyData(
     collectionDailyData.dailyVolumeExcludingZeroFee = ZERO_BD;
 
     // Increment number of unique daily collections if it didn't exist
-    let exchangeDailyData = ExchangeDailyData.load(ID);
-
+    let exchangeDailyData = ExchangeDailyData.load(dayID.toString());
     if (exchangeDailyData !== null) {
       exchangeDailyData.dailyCollections = exchangeDailyData.dailyCollections.plus(ONE_BI);
       exchangeDailyData.save();
@@ -163,8 +162,7 @@ export function updateUserDailyData(user: Address, strategy: Address, volume: Bi
     userDailyData.dailyVolumeExcludingZeroFee = ZERO_BD;
 
     // Increment number of unique daily users if it didn't exist
-    let exchangeDailyData = ExchangeDailyData.load(ID);
-
+    let exchangeDailyData = ExchangeDailyData.load(dayID.toString());
     if (exchangeDailyData !== null) {
       exchangeDailyData.dailyUsers = exchangeDailyData.dailyUsers.plus(ONE_BI);
       exchangeDailyData.save();
