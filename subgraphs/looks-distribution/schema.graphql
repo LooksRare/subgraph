@@ -61,6 +61,53 @@ type User @entity {
 }
 
 """
+DailySnapshot
+"""
+type DailySnapshot @entity {
+  "ID (timestamp)"
+  id: ID!
+
+  "Aggregator - Number active users"
+  aggregatorActiveUsers: BigInt!
+
+  "Aggregator - Daily new users"
+  aggregatorNewUsers: BigInt!
+
+  "Aggregator - Daily removed users"
+  aggregatorRemovedUsers: BigInt!
+
+  "Aggregator - Daily inflow (LOOKS)"
+  aggregatorDailyInflowLOOKS: BigDecimal!
+
+  "Aggregator - Daily outflow (LOOKS)"
+  aggregatorDailyOutflowLOOKS: BigDecimal!
+
+  "Aggregator - Total LOOKS staked"
+  aggregatorTotalStakedLOOKS: BigDecimal!
+
+  "Fee Sharing - Number active users"
+  feeSharingActiveUsers: BigInt!
+
+  "Fee Sharing - Daily new users"
+  feeSharingNewUsers: BigInt!
+
+  "Fee Sharing - Daily removed users"
+  feeSharingRemovedUsers: BigInt!
+
+  "Fee Sharing - Daily inflow (LOOKS)"
+  feeSharingDailyInflowLOOKS: BigDecimal!
+
+  "Fee Sharing - Daily outflow (LOOKS)"
+  feeSharingDailyOutflowLOOKS: BigDecimal!
+
+  "Fee Sharing - Total LOOKS staked"
+  feeSharingTotalStakedLOOKS: BigDecimal!
+
+  "Total active users"
+  totalActiveUsers: BigInt!
+}
+
+"""
 RewardPeriod
 """
 type RewardPeriod @entity {
