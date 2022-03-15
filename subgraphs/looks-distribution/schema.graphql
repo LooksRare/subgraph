@@ -114,6 +114,23 @@ type DailySnapshot @entity {
 }
 
 """
+Overview
+"""
+type Overview @entity {
+  "ID"
+  id: ID!
+
+  "Number of unique users"
+  numberUsers: BigInt!
+
+  "Aggregator - Number active users"
+  aggregatorActiveUsers: BigInt!
+
+  "Fee Sharing - Number active users"
+  feeSharingActiveUsers: BigInt!
+}
+
+"""
 RewardPeriod
 """
 type RewardPeriod @entity {

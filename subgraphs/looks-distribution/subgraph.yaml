@@ -18,6 +18,7 @@ dataSources:
       file: ./mappings/index.ts
       entities:
         - DailySnapshot
+        - Overview
         - RewardPeriod
         - User
       abis:
@@ -110,6 +111,7 @@ dataSources:
       file: ./mappings/index.ts
       entities:
         - DailySnapshot
+        - Overview
         - PurchaseLOOKSTokens
         - User
       abis:

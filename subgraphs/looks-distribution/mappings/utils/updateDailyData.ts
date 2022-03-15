@@ -1,7 +1,7 @@
 /* eslint-disable prefer-const */
 import { BigInt, BigDecimal } from "@graphprotocol/graph-ts";
 import { ZERO_BD, ZERO_BI, ONE_BI } from ".";
-import { DailySnapshot } from "../../generated/schema";
+import { DailySnapshot, Overview } from "../../generated/schema";
 
 export function initializeDailySnapshot(ID: string, dayStartTimestamp: BigInt): DailySnapshot {
   const dailySnapshot = new DailySnapshot(ID);
@@ -21,6 +21,14 @@ export function initializeDailySnapshot(ID: string, dayStartTimestamp: BigInt): 
   return dailySnapshot;
 }
 
+export function initializeOverview(): Overview {
+  const overview = new Overview(BigInt.fromI32(1).toHex());
+  overview.numberUsers = ZERO_BI;
+  overview.aggregatorActiveUsers = ZERO_BI;
+  overview.feeSharingActiveUsers = ZERO_BI;
+  return overview;
+}
+
 export function updateDailySnapshotFeeSharing(
   timestamp: BigInt,
   amount: BigDecimal,
@@ -33,9 +41,17 @@ export function updateDailySnapshotFeeSharing(
   let dayStartTimestamp = dayID.times(dailyTimestampBigInt);
   let ID = dayID.toString();
 
+  let overview = Overview.load(BigInt.fromI32(1).toHex());
+  if (overview === null) {
+    overview = initializeOverview();
+  }
+
   let dailySnapshot = DailySnapshot.load(ID);
   if (dailySnapshot === null) {
     dailySnapshot = initializeDailySnapshot(ID, dayStartTimestamp);
+    // Set the initial number of active users as the cached numbers in the overview entity
+    dailySnapshot.aggregatorActiveUsers = overview.aggregatorActiveUsers;
+    dailySnapshot.feeSharingActiveUsers = overview.feeSharingActiveUsers;
   }
 
   if (isDeposit) {
@@ -44,6 +60,7 @@ export function updateDailySnapshotFeeSharing(
     if (isNewUser) {
       dailySnapshot.feeSharingNewUsers = dailySnapshot.feeSharingNewUsers.plus(ONE_BI);
       dailySnapshot.feeSharingActiveUsers = dailySnapshot.feeSharingActiveUsers.plus(ONE_BI);
+      overview.feeSharingActiveUsers = overview.feeSharingActiveUsers.plus(ONE_BI);
     }
   } else {
     dailySnapshot.feeSharingDailyOutflowLOOKS = dailySnapshot.feeSharingDailyOutflowLOOKS.plus(amount);
@@ -51,9 +68,11 @@ export function updateDailySnapshotFeeSharing(
     if (isFinalWithdraw) {
       dailySnapshot.feeSharingRemovedUsers = dailySnapshot.feeSharingRemovedUsers.plus(ONE_BI);
       dailySnapshot.feeSharingActiveUsers = dailySnapshot.feeSharingActiveUsers.minus(ONE_BI);
+      overview.feeSharingActiveUsers = overview.feeSharingActiveUsers.minus(ONE_BI);
     }
   }
 
+  overview.save();
   dailySnapshot.save();
 }
 
@@ -69,9 +88,17 @@ export function updateDailySnapshotAggregator(
   let dayStartTimestamp = dayID.times(dailyTimestampBigInt);
   let ID = dayID.toString();
 
+  let overview = Overview.load(BigInt.fromI32(1).toHex());
+  if (overview === null) {
+    overview = initializeOverview();
+  }
+
   let dailySnapshot = DailySnapshot.load(ID);
   if (dailySnapshot === null) {
     dailySnapshot = initializeDailySnapshot(ID, dayStartTimestamp);
+    // Set the initial number of active users as the cached numbers in the overview entity
+    dailySnapshot.aggregatorActiveUsers = overview.aggregatorActiveUsers;
+    dailySnapshot.feeSharingActiveUsers = overview.aggregatorActiveUsers;
   }
 
   if (isDeposit) {
@@ -80,6 +107,7 @@ export function updateDailySnapshotAggregator(
     if (isNewUser) {
       dailySnapshot.aggregatorNewUsers = dailySnapshot.aggregatorNewUsers.plus(ONE_BI);
       dailySnapshot.aggregatorActiveUsers = dailySnapshot.aggregatorActiveUsers.plus(ONE_BI);
+      overview.feeSharingActiveUsers = overview.feeSharingActiveUsers.plus(ONE_BI);
     }
   } else {
     dailySnapshot.aggregatorDailyOutflowLOOKS = dailySnapshot.aggregatorDailyOutflowLOOKS.plus(amount);
@@ -87,8 +115,10 @@ export function updateDailySnapshotAggregator(
     if (isFinalWithdraw) {
       dailySnapshot.aggregatorRemovedUsers = dailySnapshot.aggregatorRemovedUsers.plus(ONE_BI);
       dailySnapshot.aggregatorActiveUsers = dailySnapshot.aggregatorActiveUsers.minus(ONE_BI);
+      overview.aggregatorActiveUsers = overview.aggregatorActiveUsers.minus(ONE_BI);
     }
   }
 
+  overview.save();
   dailySnapshot.save();
 }
