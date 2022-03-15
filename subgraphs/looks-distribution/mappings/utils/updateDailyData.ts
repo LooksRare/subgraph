@@ -23,7 +23,6 @@ export function initializeDailySnapshot(ID: string, dayStartTimestamp: BigInt): 
 
 export function initializeOverview(): Overview {
   const overview = new Overview(BigInt.fromI32(1).toHex());
-  overview.numberUsers = ZERO_BI;
   overview.aggregatorActiveUsers = ZERO_BI;
   overview.feeSharingActiveUsers = ZERO_BI;
   return overview;

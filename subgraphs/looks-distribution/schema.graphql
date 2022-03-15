@@ -120,9 +120,6 @@ type Overview @entity {
   "ID"
   id: ID!
 
-  "Number of unique users"
-  numberUsers: BigInt!
-
   "Aggregator - Number active users"
   aggregatorActiveUsers: BigInt!
 
