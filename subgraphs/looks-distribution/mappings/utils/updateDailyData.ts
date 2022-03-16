@@ -97,7 +97,7 @@ export function updateDailySnapshotAggregator(
     dailySnapshot = initializeDailySnapshot(ID, dayStartTimestamp);
     // Set the initial number of active users as the cached numbers in the overview entity
     dailySnapshot.aggregatorActiveUsers = overview.aggregatorActiveUsers;
-    dailySnapshot.feeSharingActiveUsers = overview.aggregatorActiveUsers;
+    dailySnapshot.feeSharingActiveUsers = overview.feeSharingActiveUsers;
   }
 
   if (isDeposit) {
