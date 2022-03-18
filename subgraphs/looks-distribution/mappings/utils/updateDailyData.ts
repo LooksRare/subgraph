@@ -12,19 +12,13 @@ export function initializeDailySnapshot(ID: string, dayStartTimestamp: BigInt): 
   dailySnapshot.aggregatorRemovedUsers = ZERO_BI;
   dailySnapshot.aggregatorDailyInflowLOOKS = ZERO_BD;
   dailySnapshot.aggregatorDailyOutflowLOOKS = ZERO_BD;
-  dailySnapshot.aggregatorTotalStakedLOOKS = fetchTotalAmountStakedAggregator();
+  dailySnapshot.aggregatorTotalStakedLOOKS = ZERO_BD;
   dailySnapshot.feeSharingActiveUsers = ZERO_BI;
   dailySnapshot.feeSharingNewUsers = ZERO_BI;
   dailySnapshot.feeSharingRemovedUsers = ZERO_BI;
   dailySnapshot.feeSharingDailyInflowLOOKS = ZERO_BD;
   dailySnapshot.feeSharingDailyOutflowLOOKS = ZERO_BD;
-  dailySnapshot.feeSharingTotalStakedLOOKS = fetchTotalAmountStakedFeeSharing();
-
-  // Adjust for double counting
-  dailySnapshot.feeSharingTotalStakedLOOKS = dailySnapshot.feeSharingTotalStakedLOOKS.minus(
-    dailySnapshot.aggregatorTotalStakedLOOKS
-  );
-
+  dailySnapshot.feeSharingTotalStakedLOOKS = ZERO_BD;
   return dailySnapshot;
 }
 
@@ -51,6 +45,17 @@ export function updateDailySnapshotDepositFeeSharing(timestamp: BigInt, amount: 
     dailySnapshot = initializeDailySnapshot(ID, dayStartTimestamp);
     dailySnapshot.aggregatorActiveUsers = overview.aggregatorActiveUsers;
     dailySnapshot.feeSharingActiveUsers = overview.feeSharingActiveUsers;
+
+    if (overview.aggregatorActiveUsers !== ZERO_BI) {
+      dailySnapshot.aggregatorTotalStakedLOOKS = fetchTotalAmountStakedAggregator();
+    }
+
+    if (overview.feeSharingActiveUsers !== ZERO_BI) {
+      dailySnapshot.feeSharingTotalStakedLOOKS = fetchTotalAmountStakedFeeSharing();
+      dailySnapshot.feeSharingTotalStakedLOOKS = dailySnapshot.feeSharingTotalStakedLOOKS.minus(
+        dailySnapshot.aggregatorTotalStakedLOOKS
+      );
+    }
   }
 
   dailySnapshot.feeSharingDailyInflowLOOKS = dailySnapshot.feeSharingDailyInflowLOOKS.plus(amount);
@@ -85,6 +90,17 @@ export function updateDailySnapshotWithdrawFeeSharing(
     dailySnapshot = initializeDailySnapshot(ID, dayStartTimestamp);
     dailySnapshot.aggregatorActiveUsers = overview.aggregatorActiveUsers;
     dailySnapshot.feeSharingActiveUsers = overview.feeSharingActiveUsers;
+
+    if (overview.aggregatorActiveUsers !== ZERO_BI) {
+      dailySnapshot.aggregatorTotalStakedLOOKS = fetchTotalAmountStakedAggregator();
+    }
+
+    if (overview.feeSharingActiveUsers !== ZERO_BI) {
+      dailySnapshot.feeSharingTotalStakedLOOKS = fetchTotalAmountStakedFeeSharing();
+      dailySnapshot.feeSharingTotalStakedLOOKS = dailySnapshot.feeSharingTotalStakedLOOKS.minus(
+        dailySnapshot.aggregatorTotalStakedLOOKS
+      );
+    }
   }
 
   dailySnapshot.feeSharingDailyOutflowLOOKS = dailySnapshot.feeSharingDailyOutflowLOOKS.plus(amount);
@@ -115,6 +131,17 @@ export function updateDailySnapshotDepositAggregator(timestamp: BigInt, amount: 
     dailySnapshot = initializeDailySnapshot(ID, dayStartTimestamp);
     dailySnapshot.aggregatorActiveUsers = overview.aggregatorActiveUsers;
     dailySnapshot.feeSharingActiveUsers = overview.feeSharingActiveUsers;
+
+    if (overview.aggregatorActiveUsers !== ZERO_BI) {
+      dailySnapshot.aggregatorTotalStakedLOOKS = fetchTotalAmountStakedAggregator();
+    }
+
+    if (overview.feeSharingActiveUsers !== ZERO_BI) {
+      dailySnapshot.feeSharingTotalStakedLOOKS = fetchTotalAmountStakedFeeSharing();
+      dailySnapshot.feeSharingTotalStakedLOOKS = dailySnapshot.feeSharingTotalStakedLOOKS.minus(
+        dailySnapshot.aggregatorTotalStakedLOOKS
+      );
+    }
   }
 
   dailySnapshot.aggregatorDailyInflowLOOKS = dailySnapshot.aggregatorDailyInflowLOOKS.plus(amount);
@@ -149,6 +176,17 @@ export function updateDailySnapshotWithdrawAggregator(
     dailySnapshot = initializeDailySnapshot(ID, dayStartTimestamp);
     dailySnapshot.aggregatorActiveUsers = overview.aggregatorActiveUsers;
     dailySnapshot.feeSharingActiveUsers = overview.feeSharingActiveUsers;
+
+    if (overview.aggregatorActiveUsers !== ZERO_BI) {
+      dailySnapshot.aggregatorTotalStakedLOOKS = fetchTotalAmountStakedAggregator();
+    }
+
+    if (overview.feeSharingActiveUsers !== ZERO_BI) {
+      dailySnapshot.feeSharingTotalStakedLOOKS = fetchTotalAmountStakedFeeSharing();
+      dailySnapshot.feeSharingTotalStakedLOOKS = dailySnapshot.feeSharingTotalStakedLOOKS.minus(
+        dailySnapshot.aggregatorTotalStakedLOOKS
+      );
+    }
   }
 
   dailySnapshot.aggregatorDailyOutflowLOOKS = dailySnapshot.aggregatorDailyOutflowLOOKS.plus(amount);
