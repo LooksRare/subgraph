@@ -123,8 +123,14 @@ type Overview @entity {
   "Aggregator - Number active users"
   aggregatorActiveUsers: BigInt!
 
+  "Aggregator - Total LOOKS staked"
+  aggregatorTotalStakedLOOKS: BigDecimal!
+
   "Fee Sharing - Number active users"
   feeSharingActiveUsers: BigInt!
+
+  "Fee Sharing - Total LOOKS staked"
+  feeSharingTotalStakedLOOKS: BigDecimal!
 }
 
 """
