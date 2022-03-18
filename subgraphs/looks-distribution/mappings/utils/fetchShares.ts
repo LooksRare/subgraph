@@ -2,9 +2,10 @@
 import { Address, BigInt } from "@graphprotocol/graph-ts";
 import { AggregatorFeeSharingWithUniswapV3 } from "../../generated/AggregatorFeeSharingWithUniswapV3/AggregatorFeeSharingWithUniswapV3";
 import { FeeSharingSystem } from "../../generated/FeeSharingSystem/FeeSharingSystem";
+import { AGGREGATOR_ADDRESS, FEE_SHARING_ADDRESS } from "./addresses";
 
-export function fetchSharesAggregator(aggregatorAddress: Address, user: Address): BigInt {
-  let aggregator = AggregatorFeeSharingWithUniswapV3.bind(aggregatorAddress);
+export function fetchSharesAggregator(user: Address): BigInt {
+  let aggregator = AggregatorFeeSharingWithUniswapV3.bind(Address.fromString(AGGREGATOR_ADDRESS));
 
   let userInfo = aggregator.try_userInfo(user);
   if (!userInfo.reverted) {
@@ -13,8 +14,8 @@ export function fetchSharesAggregator(aggregatorAddress: Address, user: Address)
 
   return BigInt.zero();
 }
-export function fetchSharesFeeSharingSystem(feeSharingSystemAddress: Address, user: Address): BigInt {
-  let feeSharingSystem = FeeSharingSystem.bind(feeSharingSystemAddress);
+export function fetchSharesFeeSharingSystem(user: Address): BigInt {
+  let feeSharingSystem = FeeSharingSystem.bind(Address.fromString(FEE_SHARING_ADDRESS));
 
   let userInfo = feeSharingSystem.try_userInfo(user);
   if (!userInfo.reverted) {
