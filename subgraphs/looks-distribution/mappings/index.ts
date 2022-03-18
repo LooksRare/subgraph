@@ -21,7 +21,12 @@ import {
 import { toBigDecimal, ZERO_BI, ZERO_BD } from "./utils";
 import { initializeUser } from "./utils/initializeUser";
 import { fetchSharesAggregator, fetchSharesFeeSharingSystem } from "./utils/fetchShares";
-import { updateDailySnapshotAggregator, updateDailySnapshotFeeSharing } from "./utils/updateDailyData";
+import {
+  updateDailySnapshotDepositFeeSharing,
+  updateDailySnapshotWithdrawFeeSharing,
+  updateDailySnapshotDepositAggregator,
+  updateDailySnapshotWithdrawAggregator,
+} from "./utils/updateDailyData";
 
 export function handleDepositFeeSharing(event: DepositFeeSharing): void {
   let user = User.load(event.params.user.toHex());
@@ -45,7 +50,7 @@ export function handleDepositFeeSharing(event: DepositFeeSharing): void {
     user.feeSharingLastHarvestDate = event.block.timestamp;
   }
 
-  updateDailySnapshotFeeSharing(event.block.timestamp, toBigDecimal(event.params.amount), true, false, isUserNew);
+  updateDailySnapshotDepositFeeSharing(event.block.timestamp, toBigDecimal(event.params.amount), isUserNew);
   user.save();
 }
 
@@ -79,7 +84,7 @@ export function handleWithdrawFeeSharing(event: WithdrawFeeSharing): void {
     );
     user.feeSharingAdjustedDepositAmount = ZERO_BD;
 
-    let userShares = fetchSharesFeeSharingSystem(event.address, event.params.user);
+    let userShares = fetchSharesFeeSharingSystem(event.params.user);
     if (userShares === ZERO_BI) {
       user.feeSharingIsActive = false;
     }
@@ -94,12 +99,10 @@ export function handleWithdrawFeeSharing(event: WithdrawFeeSharing): void {
     user.feeSharingLastHarvestDate = event.block.timestamp;
   }
 
-  updateDailySnapshotFeeSharing(
+  updateDailySnapshotWithdrawFeeSharing(
     event.block.timestamp,
     toBigDecimal(event.params.amount),
-    false,
-    !user.feeSharingIsActive,
-    false
+    !user.feeSharingIsActive
   );
 
   user.save();
@@ -178,7 +181,7 @@ export function handleDepositAggregatorUniswapV3(event: DepositAggregatorUniswap
 
   user.feeSharingAdjustedDepositAmount = user.feeSharingAdjustedDepositAmount.plus(toBigDecimal(event.params.amount));
   user.feeSharingLastDepositDate = event.block.timestamp;
-  updateDailySnapshotAggregator(event.block.timestamp, toBigDecimal(event.params.amount), true, false, isUserNew);
+  updateDailySnapshotDepositAggregator(event.block.timestamp, toBigDecimal(event.params.amount), isUserNew);
   user.save();
 }
 
@@ -198,7 +201,7 @@ export function handleWithdrawAggregatorUniswapV3(event: WithdrawAggregatorUnisw
     );
     user.feeSharingAdjustedDepositAmount = ZERO_BD;
 
-    let userShares = fetchSharesAggregator(event.address, event.params.user);
+    let userShares = fetchSharesAggregator(event.params.user);
     if (userShares === ZERO_BI) {
       user.aggregatorIsActive = false;
     }
@@ -206,12 +209,10 @@ export function handleWithdrawAggregatorUniswapV3(event: WithdrawAggregatorUnisw
 
   user.feeSharingLastWithdrawDate = event.block.timestamp;
 
-  updateDailySnapshotAggregator(
+  updateDailySnapshotWithdrawAggregator(
     event.block.timestamp,
     toBigDecimal(event.params.amount),
-    false,
-    !user.aggregatorIsActive,
-    false
+    !user.aggregatorIsActive
   );
 
   user.save();
