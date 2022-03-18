@@ -19,6 +19,12 @@ export function initializeDailySnapshot(ID: string, dayStartTimestamp: BigInt): 
   dailySnapshot.feeSharingDailyInflowLOOKS = ZERO_BD;
   dailySnapshot.feeSharingDailyOutflowLOOKS = ZERO_BD;
   dailySnapshot.feeSharingTotalStakedLOOKS = fetchTotalAmountStakedFeeSharing();
+
+  // Adjust for double counting
+  dailySnapshot.feeSharingTotalStakedLOOKS = dailySnapshot.feeSharingTotalStakedLOOKS.minus(
+    dailySnapshot.aggregatorTotalStakedLOOKS
+  );
+
   return dailySnapshot;
 }
 

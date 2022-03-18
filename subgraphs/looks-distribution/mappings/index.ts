@@ -27,8 +27,14 @@ import {
   updateDailySnapshotDepositAggregator,
   updateDailySnapshotWithdrawAggregator,
 } from "./utils/updateDailyData";
+import { AGGREGATOR_ADDRESS } from "./utils/addresses";
 
 export function handleDepositFeeSharing(event: DepositFeeSharing): void {
+  // Exclude if aggregator is the user
+  if (event.params.user.toHex() === AGGREGATOR_ADDRESS) {
+    return;
+  }
+
   let user = User.load(event.params.user.toHex());
   if (user === null) {
     user = initializeUser(event.params.user.toHex());
@@ -55,6 +61,11 @@ export function handleDepositFeeSharing(event: DepositFeeSharing): void {
 }
 
 export function handleHarvestFeeSharing(event: HarvestFeeSharing): void {
+  // Exclude if aggregator is the user
+  if (event.params.user.toHex() === AGGREGATOR_ADDRESS) {
+    return;
+  }
+
   let user = User.load(event.params.user.toHex());
   if (user === null) {
     user = initializeUser(event.params.user.toHex());
@@ -69,6 +80,11 @@ export function handleHarvestFeeSharing(event: HarvestFeeSharing): void {
 }
 
 export function handleWithdrawFeeSharing(event: WithdrawFeeSharing): void {
+  // Exclude if aggregator is the user
+  if (event.params.user.toHex() === AGGREGATOR_ADDRESS) {
+    return;
+  }
+
   let user = User.load(event.params.user.toHex());
   if (user === null) {
     user = initializeUser(event.params.user.toHex());
