@@ -11,7 +11,7 @@ export function fetchTotalAmountStakedAggregator(): BigDecimal {
   let totalShares = aggregator.try_totalShares();
   let pricePerShareInLOOKS = aggregator.try_calculateSharePriceInLOOKS();
   if (!totalShares.reverted && !pricePerShareInLOOKS.reverted) {
-    return toBigDecimal(totalShares.value, 18).times(toBigDecimal(pricePerShareInLOOKS.value, 18));
+    return toBigDecimal(totalShares.value.times(pricePerShareInLOOKS.value), 36);
   }
 
   return ZERO_BD;
@@ -23,7 +23,7 @@ export function fetchTotalAmountStakedFeeSharing(): BigDecimal {
   let totalShares = feeSharingSystem.try_totalShares();
   let pricePerShareInLOOKS = feeSharingSystem.try_calculateSharePriceInLOOKS();
   if (!totalShares.reverted && !pricePerShareInLOOKS.reverted) {
-    return toBigDecimal(totalShares.value, 18).times(toBigDecimal(pricePerShareInLOOKS.value, 18));
+    return toBigDecimal(totalShares.value.times(pricePerShareInLOOKS.value), 36);
   }
 
   return ZERO_BD;
