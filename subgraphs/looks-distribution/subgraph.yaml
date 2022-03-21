@@ -22,6 +22,8 @@ dataSources:
         - RewardPeriod
         - User
       abis:
+        - name: AggregatorFeeSharingWithUniswapV3
+          file: ./abis/AggregatorFeeSharingWithUniswapV3.json
         - name: FeeSharingSystem
           file: ./abis/FeeSharingSystem.json
       eventHandlers:
