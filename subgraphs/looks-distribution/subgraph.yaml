@@ -117,6 +117,8 @@ dataSources:
       abis:
         - name: AggregatorFeeSharingWithUniswapV3
           file: ./abis/AggregatorFeeSharingWithUniswapV3.json
+        - name: FeeSharingSystem
+          file: ./abis/FeeSharingSystem.json
       eventHandlers:
         - event: Deposit(indexed address,uint256)
           handler: handleDepositAggregatorUniswapV3

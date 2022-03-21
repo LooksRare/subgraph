@@ -55,8 +55,7 @@ export function updateDailySnapshotDepositFeeSharing(timestamp: BigInt, amount: 
     }
 
     if (overview.feeSharingActiveUsers > ZERO_BI) {
-      overview.feeSharingTotalStakedLOOKS = fetchTotalAmountStakedFeeSharing();
-      overview.feeSharingTotalStakedLOOKS = overview.feeSharingTotalStakedLOOKS.minus(
+      overview.feeSharingTotalStakedLOOKS = fetchTotalAmountStakedFeeSharing().minus(
         overview.aggregatorTotalStakedLOOKS
       );
     }
@@ -102,8 +101,7 @@ export function updateDailySnapshotWithdrawFeeSharing(
     }
 
     if (overview.feeSharingActiveUsers > ZERO_BI) {
-      overview.feeSharingTotalStakedLOOKS = fetchTotalAmountStakedFeeSharing();
-      overview.feeSharingTotalStakedLOOKS = overview.feeSharingTotalStakedLOOKS.minus(
+      overview.feeSharingTotalStakedLOOKS = fetchTotalAmountStakedFeeSharing().minus(
         overview.aggregatorTotalStakedLOOKS
       );
     }
@@ -145,8 +143,7 @@ export function updateDailySnapshotDepositAggregator(timestamp: BigInt, amount: 
     }
 
     if (overview.feeSharingActiveUsers > ZERO_BI) {
-      overview.feeSharingTotalStakedLOOKS = fetchTotalAmountStakedFeeSharing();
-      overview.feeSharingTotalStakedLOOKS = overview.feeSharingTotalStakedLOOKS.minus(
+      overview.feeSharingTotalStakedLOOKS = fetchTotalAmountStakedFeeSharing().minus(
         overview.aggregatorTotalStakedLOOKS
       );
     }
@@ -192,8 +189,7 @@ export function updateDailySnapshotWithdrawAggregator(
     }
 
     if (overview.feeSharingActiveUsers > ZERO_BI) {
-      overview.feeSharingTotalStakedLOOKS = fetchTotalAmountStakedFeeSharing();
-      overview.feeSharingTotalStakedLOOKS = overview.feeSharingTotalStakedLOOKS.minus(
+      overview.feeSharingTotalStakedLOOKS = fetchTotalAmountStakedFeeSharing().minus(
         overview.aggregatorTotalStakedLOOKS
       );
     }
