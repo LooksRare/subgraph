@@ -6,8 +6,11 @@
   "author": "LooksRare",
   "license": "GPL-3.0-or-later",
   "scripts": {
-    "codegen": "graph codegen subgraph.yaml",
-    "build": "graph build subgraph.yaml",
-    "deploy": "graph deploy --product hosted-service --node https://api.thegraph.com/deploy/ --ipfs https://api.thegraph.com/ipfs/ looksrare/looks-distribution subgraph.yaml"
+    "codegen:rinkeby": "graph codegen subgraph-rinkeby.yaml",
+    "codegen:mainnet": "graph codegen subgraph-mainnet.yaml",
+    "build:rinkeby": "graph build subgraph-rinkeby.yaml",
+    "build:mainnet": "graph build subgraph-mainnet.yaml",
+    "deploy:rinkeby": "graph deploy --product hosted-service --node https://api.thegraph.com/deploy/ --ipfs https://api.thegraph.com/ipfs/ 0xjurassicpunk/looks-distribution subgraph-rinkeby.yaml",
+    "deploy:mainnet": "graph deploy --product hosted-service --node https://api.thegraph.com/deploy/ --ipfs https://api.thegraph.com/ipfs/ looksrare/looks-distribution subgraph-mainnet.yaml"
   }
 }

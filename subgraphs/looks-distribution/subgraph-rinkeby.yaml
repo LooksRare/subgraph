@@ -1,0 +1,131 @@
+specVersion: 0.0.4
+description: LooksRare LOOKS distribution contracts
+repository: https://github.com/looksrare
+schema:
+  file: ./schema.graphql
+dataSources:
+  - kind: ethereum/contract
+    name: FeeSharingSystem
+    network: rinkeby
+    source:
+      address: "0xf32e6141d54512814fb94584fc17baaf0c1203de"
+      abi: FeeSharingSystem
+      startBlock: 9942435
+    mapping:
+      kind: ethereum/events
+      apiVersion: 0.0.6
+      language: wasm/assemblyscript
+      file: ./mappings/index.ts
+      entities:
+        - DailySnapshot
+        - Overview
+        - RewardPeriod
+        - User
+      abis:
+        - name: AggregatorFeeSharingWithUniswapV3
+          file: ./abis/AggregatorFeeSharingWithUniswapV3.json
+        - name: FeeSharingSystem
+          file: ./abis/FeeSharingSystem.json
+      eventHandlers:
+        - event: Deposit(indexed address,uint256,uint256)
+          handler: handleDepositFeeSharing
+        - event: Harvest(indexed address,uint256)
+          handler: handleHarvestFeeSharing
+        - event: Withdraw(indexed address,uint256,uint256)
+          handler: handleWithdrawFeeSharing
+        - event: NewRewardPeriod(uint256,uint256,uint256)
+          handler: handleNewRewardPeriod
+  - kind: ethereum/contract
+    name: StakingPoolForUniswapV2Tokens
+    network: rinkeby
+    source:
+      address: "0x81e06b62b9d21f3b249162ab3811e172ab32af19"
+      abi: StakingPoolForUniswapV2Tokens
+      startBlock: 9942447
+    mapping:
+      kind: ethereum/events
+      apiVersion: 0.0.6
+      language: wasm/assemblyscript
+      file: ./mappings/index.ts
+      entities:
+        - User
+      abis:
+        - name: StakingPoolForUniswapV2Tokens
+          file: ./abis/StakingPoolForUniswapV2Tokens.json
+      eventHandlers:
+        - event: Deposit(indexed address,uint256,uint256)
+          handler: handleDepositStakingV2
+        - event: Harvest(indexed address,uint256)
+          handler: handleHarvestStakingV2
+        - event: Withdraw(indexed address,uint256,uint256)
+          handler: handleWithdrawStakingV2
+  - kind: ethereum/contract
+    name: LooksRareAirdrop
+    network: rinkeby
+    source:
+      address: "0x2a378ea1097678a11e262cad11a339cd4624a5c6"
+      abi: LooksRareAirdrop
+      startBlock: 9942347
+    mapping:
+      kind: ethereum/events
+      apiVersion: 0.0.6
+      language: wasm/assemblyscript
+      file: ./mappings/index.ts
+      entities:
+        - User
+      abis:
+        - name: LooksRareAirdrop
+          file: ./abis/LooksRareAirdrop.json
+      eventHandlers:
+        - event: AirdropRewardsClaim(indexed address,uint256)
+          handler: handleAirdropClaim
+  - kind: ethereum/contract
+    name: TradingRewardsDistributor
+    network: rinkeby
+    source:
+      address: "0x8f1ab228e892ad2a7e10605531c9ec23d5cba4fd"
+      abi: TradingRewardsDistributor
+      startBlock: 9942412
+    mapping:
+      kind: ethereum/events
+      apiVersion: 0.0.6
+      language: wasm/assemblyscript
+      file: ./mappings/index.ts
+      entities:
+        - User
+      abis:
+        - name: TradingRewardsDistributor
+          file: ./abis/TradingRewardsDistributor.json
+      eventHandlers:
+        - event: RewardsClaim(indexed address,indexed uint256,uint256)
+          handler: handleTradingRewardsClaim
+  - kind: ethereum/contract
+    name: AggregatorFeeSharingWithUniswapV3
+    network: rinkeby
+    source:
+      address: "0xb6d18017d4fac74b855f163be36f2210b26a8a48"
+      abi: AggregatorFeeSharingWithUniswapV3
+      startBlock: 10342772
+    mapping:
+      kind: ethereum/events
+      apiVersion: 0.0.6
+      language: wasm/assemblyscript
+      file: ./mappings/index.ts
+      entities:
+        - DailySnapshot
+        - Overview
+        - PurchaseLOOKSTokens
+        - User
+      abis:
+        - name: AggregatorFeeSharingWithUniswapV3
+          file: ./abis/AggregatorFeeSharingWithUniswapV3.json
+        - name: FeeSharingSystem
+          file: ./abis/FeeSharingSystem.json
+      eventHandlers:
+        - event: Deposit(indexed address,uint256)
+          handler: handleDepositAggregatorUniswapV3
+        - event: ConversionToLOOKS(uint256,uint256)
+          handler: handleConversionToLOOKSAggregatorUniswapV3
+        - event: Withdraw(indexed address,uint256)
+          handler: handleWithdrawAggregatorUniswapV3
+
