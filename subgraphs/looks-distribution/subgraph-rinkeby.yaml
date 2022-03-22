@@ -128,4 +128,3 @@ dataSources:
           handler: handleConversionToLOOKSAggregatorUniswapV3
         - event: Withdraw(indexed address,uint256)
           handler: handleWithdrawAggregatorUniswapV3
-
