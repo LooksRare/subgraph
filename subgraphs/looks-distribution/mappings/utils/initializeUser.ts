@@ -9,12 +9,14 @@ export function initializeUser(userID: string): User {
   user.aggregatorTotalCollectedLOOKS = ZERO_BD;
   user.aggregatorLastDepositDate = ZERO_BI;
   user.aggregatorLastWithdrawDate = ZERO_BI;
+  user.aggregatorIsActive = false;
   user.feeSharingAdjustedDepositAmount = ZERO_BD;
   user.feeSharingTotalCollectedLOOKS = ZERO_BD;
   user.feeSharingTotalCollectedWETH = ZERO_BD;
   user.feeSharingLastDepositDate = ZERO_BI;
   user.feeSharingLastWithdrawDate = ZERO_BI;
   user.feeSharingLastHarvestDate = ZERO_BI;
+  user.feeSharingIsActive = false;
   user.stakingPoolUniswapV2TotalCollectedLOOKS = ZERO_BD;
   user.stakingPoolUniswapV2LastDepositDate = ZERO_BI;
   user.stakingPoolUniswapV2LastHarvestDate = ZERO_BI;

@@ -17,9 +17,13 @@ dataSources:
       language: wasm/assemblyscript
       file: ./mappings/index.ts
       entities:
+        - DailySnapshot
+        - Overview
         - RewardPeriod
         - User
       abis:
+        - name: AggregatorFeeSharingWithUniswapV3
+          file: ./abis/AggregatorFeeSharingWithUniswapV3.json
         - name: FeeSharingSystem
           file: ./abis/FeeSharingSystem.json
       eventHandlers:
@@ -108,11 +112,15 @@ dataSources:
       language: wasm/assemblyscript
       file: ./mappings/index.ts
       entities:
+        - DailySnapshot
+        - Overview
         - PurchaseLOOKSTokens
         - User
       abis:
         - name: AggregatorFeeSharingWithUniswapV3
           file: ./abis/AggregatorFeeSharingWithUniswapV3.json
+        - name: FeeSharingSystem
+          file: ./abis/FeeSharingSystem.json
       eventHandlers:
         - event: Deposit(indexed address,uint256)
           handler: handleDepositAggregatorUniswapV3

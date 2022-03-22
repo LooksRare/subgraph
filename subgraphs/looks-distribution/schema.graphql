@@ -23,6 +23,9 @@ type User @entity {
   "Aggregator - Last withdraw date"
   aggregatorLastWithdrawDate: BigInt!
 
+  "Aggregator - Is active"
+  aggregatorIsActive: Boolean!
+
   "Fee Sharing - Adjusted deposit amount (LOOKS)"
   feeSharingAdjustedDepositAmount: BigDecimal!
 
@@ -41,6 +44,9 @@ type User @entity {
   "Fee Sharing - Last withdraw date"
   feeSharingLastWithdrawDate: BigInt!
 
+  "Fee Sharing - Is active"
+  feeSharingIsActive: Boolean!
+
   "UniswapV2 Staking - Total LOOKS collected"
   stakingPoolUniswapV2TotalCollectedLOOKS: BigDecimal!
 
@@ -58,6 +64,73 @@ type User @entity {
 
   "Trading Rewards - Last claim date"
   tradingRewardsLastClaimDate: BigInt!
+}
+
+"""
+DailySnapshot
+"""
+type DailySnapshot @entity {
+  "ID"
+  id: ID!
+
+  "Date"
+  date: BigInt!
+
+  "Aggregator - Number active users"
+  aggregatorActiveUsers: BigInt!
+
+  "Aggregator - Daily new users"
+  aggregatorNewUsers: BigInt!
+
+  "Aggregator - Daily removed users"
+  aggregatorRemovedUsers: BigInt!
+
+  "Aggregator - Daily inflow (LOOKS)"
+  aggregatorDailyInflowLOOKS: BigDecimal!
+
+  "Aggregator - Daily outflow (LOOKS)"
+  aggregatorDailyOutflowLOOKS: BigDecimal!
+
+  "Aggregator - Total LOOKS staked"
+  aggregatorTotalStakedLOOKS: BigDecimal!
+
+  "Fee Sharing - Number active users"
+  feeSharingActiveUsers: BigInt!
+
+  "Fee Sharing - Daily new users"
+  feeSharingNewUsers: BigInt!
+
+  "Fee Sharing - Daily removed users"
+  feeSharingRemovedUsers: BigInt!
+
+  "Fee Sharing - Daily inflow (LOOKS)"
+  feeSharingDailyInflowLOOKS: BigDecimal!
+
+  "Fee Sharing - Daily outflow (LOOKS)"
+  feeSharingDailyOutflowLOOKS: BigDecimal!
+
+  "Fee Sharing - Total LOOKS staked"
+  feeSharingTotalStakedLOOKS: BigDecimal!
+}
+
+"""
+Overview
+"""
+type Overview @entity {
+  "ID"
+  id: ID!
+
+  "Aggregator - Number active users"
+  aggregatorActiveUsers: BigInt!
+
+  "Aggregator - Total LOOKS staked"
+  aggregatorTotalStakedLOOKS: BigDecimal!
+
+  "Fee Sharing - Number active users"
+  feeSharingActiveUsers: BigInt!
+
+  "Fee Sharing - Total LOOKS staked"
+  feeSharingTotalStakedLOOKS: BigDecimal!
 }
 
 """
