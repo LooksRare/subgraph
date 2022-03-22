@@ -6,7 +6,7 @@ import { FeeSharingSystem } from "../../generated/FeeSharingSystem/FeeSharingSys
 import { AGGREGATOR_ADDRESS, FEE_SHARING_ADDRESS } from "./addresses";
 
 export function fetchTotalAmountStakedAggregator(): BigDecimal {
-  let aggregator = AggregatorFeeSharingWithUniswapV3.bind(Address.fromString(AGGREGATOR_ADDRESS));
+  let aggregator = AggregatorFeeSharingWithUniswapV3.bind(AGGREGATOR_ADDRESS);
 
   let totalShares = aggregator.try_totalShares();
   let pricePerShareInLOOKS = aggregator.try_calculateSharePriceInLOOKS();
@@ -18,7 +18,7 @@ export function fetchTotalAmountStakedAggregator(): BigDecimal {
 }
 
 export function fetchTotalAmountStakedFeeSharing(): BigDecimal {
-  let feeSharingSystem = FeeSharingSystem.bind(Address.fromString(FEE_SHARING_ADDRESS));
+  let feeSharingSystem = FeeSharingSystem.bind(FEE_SHARING_ADDRESS);
 
   let totalShares = feeSharingSystem.try_totalShares();
   let pricePerShareInLOOKS = feeSharingSystem.try_calculateSharePriceInLOOKS();

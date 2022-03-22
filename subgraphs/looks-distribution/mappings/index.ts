@@ -31,7 +31,7 @@ import { AGGREGATOR_ADDRESS } from "./utils/addresses";
 
 export function handleDepositFeeSharing(event: DepositFeeSharing): void {
   // Exclude if aggregator is the user
-  if (event.params.user.toHex() === AGGREGATOR_ADDRESS) {
+  if (event.params.user === AGGREGATOR_ADDRESS) {
     return;
   }
 
@@ -62,7 +62,7 @@ export function handleDepositFeeSharing(event: DepositFeeSharing): void {
 
 export function handleHarvestFeeSharing(event: HarvestFeeSharing): void {
   // Exclude if aggregator is the user
-  if (event.params.user.toHex() === AGGREGATOR_ADDRESS) {
+  if (event.params.user === AGGREGATOR_ADDRESS) {
     return;
   }
 
@@ -81,7 +81,7 @@ export function handleHarvestFeeSharing(event: HarvestFeeSharing): void {
 
 export function handleWithdrawFeeSharing(event: WithdrawFeeSharing): void {
   // Exclude if aggregator is the user
-  if (event.params.user.toHex() === AGGREGATOR_ADDRESS) {
+  if (event.params.user === AGGREGATOR_ADDRESS) {
     return;
   }
 

@@ -5,7 +5,7 @@ import { FeeSharingSystem } from "../../generated/FeeSharingSystem/FeeSharingSys
 import { AGGREGATOR_ADDRESS, FEE_SHARING_ADDRESS } from "./addresses";
 
 export function fetchSharesAggregator(user: Address): BigInt {
-  let aggregator = AggregatorFeeSharingWithUniswapV3.bind(Address.fromString(AGGREGATOR_ADDRESS));
+  let aggregator = AggregatorFeeSharingWithUniswapV3.bind(AGGREGATOR_ADDRESS);
 
   let userInfo = aggregator.try_userInfo(user);
   if (!userInfo.reverted) {
@@ -15,7 +15,7 @@ export function fetchSharesAggregator(user: Address): BigInt {
   return BigInt.zero();
 }
 export function fetchSharesFeeSharingSystem(user: Address): BigInt {
-  let feeSharingSystem = FeeSharingSystem.bind(Address.fromString(FEE_SHARING_ADDRESS));
+  let feeSharingSystem = FeeSharingSystem.bind(FEE_SHARING_ADDRESS);
 
   let userInfo = feeSharingSystem.try_userInfo(user);
   if (!userInfo.reverted) {
