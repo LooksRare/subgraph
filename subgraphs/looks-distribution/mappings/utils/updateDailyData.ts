@@ -50,11 +50,11 @@ export function updateDailySnapshotDepositFeeSharing(timestamp: BigInt, amount: 
     dailySnapshot.aggregatorTotalStakedLOOKS = overview.aggregatorTotalStakedLOOKS;
     dailySnapshot.feeSharingTotalStakedLOOKS = overview.feeSharingTotalStakedLOOKS;
 
-    if (overview.aggregatorActiveUsers > ZERO_BI) {
+    if (overview.aggregatorActiveUsers.gt(ZERO_BI)) {
       overview.aggregatorTotalStakedLOOKS = fetchTotalAmountStakedAggregator();
     }
 
-    if (overview.feeSharingActiveUsers > ZERO_BI) {
+    if (overview.feeSharingActiveUsers.gt(ZERO_BI)) {
       overview.feeSharingTotalStakedLOOKS = fetchTotalAmountStakedFeeSharing().minus(
         overview.aggregatorTotalStakedLOOKS
       );
@@ -96,11 +96,11 @@ export function updateDailySnapshotWithdrawFeeSharing(
     dailySnapshot.aggregatorTotalStakedLOOKS = overview.aggregatorTotalStakedLOOKS;
     dailySnapshot.feeSharingTotalStakedLOOKS = overview.feeSharingTotalStakedLOOKS;
 
-    if (overview.aggregatorActiveUsers > ZERO_BI) {
+    if (overview.aggregatorActiveUsers.gt(ZERO_BI)) {
       overview.aggregatorTotalStakedLOOKS = fetchTotalAmountStakedAggregator();
     }
 
-    if (overview.feeSharingActiveUsers > ZERO_BI) {
+    if (overview.feeSharingActiveUsers.gt(ZERO_BI)) {
       overview.feeSharingTotalStakedLOOKS = fetchTotalAmountStakedFeeSharing().minus(
         overview.aggregatorTotalStakedLOOKS
       );
@@ -138,11 +138,11 @@ export function updateDailySnapshotDepositAggregator(timestamp: BigInt, amount: 
     dailySnapshot.aggregatorTotalStakedLOOKS = overview.aggregatorTotalStakedLOOKS;
     dailySnapshot.feeSharingTotalStakedLOOKS = overview.feeSharingTotalStakedLOOKS;
 
-    if (overview.aggregatorActiveUsers > ZERO_BI) {
+    if (overview.aggregatorActiveUsers.gt(ZERO_BI)) {
       overview.aggregatorTotalStakedLOOKS = fetchTotalAmountStakedAggregator();
     }
 
-    if (overview.feeSharingActiveUsers > ZERO_BI) {
+    if (overview.feeSharingActiveUsers.gt(ZERO_BI)) {
       overview.feeSharingTotalStakedLOOKS = fetchTotalAmountStakedFeeSharing().minus(
         overview.aggregatorTotalStakedLOOKS
       );
@@ -184,11 +184,11 @@ export function updateDailySnapshotWithdrawAggregator(
     dailySnapshot.aggregatorTotalStakedLOOKS = overview.aggregatorTotalStakedLOOKS;
     dailySnapshot.feeSharingTotalStakedLOOKS = overview.feeSharingTotalStakedLOOKS;
 
-    if (overview.aggregatorActiveUsers > ZERO_BI) {
+    if (overview.aggregatorActiveUsers.gt(ZERO_BI)) {
       overview.aggregatorTotalStakedLOOKS = fetchTotalAmountStakedAggregator();
     }
 
-    if (overview.feeSharingActiveUsers > ZERO_BI) {
+    if (overview.feeSharingActiveUsers.gt(ZERO_BI)) {
       overview.feeSharingTotalStakedLOOKS = fetchTotalAmountStakedFeeSharing().minus(
         overview.aggregatorTotalStakedLOOKS
       );

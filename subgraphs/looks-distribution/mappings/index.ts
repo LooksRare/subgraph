@@ -101,7 +101,7 @@ export function handleWithdrawFeeSharing(event: WithdrawFeeSharing): void {
     user.feeSharingAdjustedDepositAmount = ZERO_BD;
 
     let userShares = fetchSharesFeeSharingSystem(event.params.user);
-    if (userShares > ZERO_BI) {
+    if (userShares.gt(ZERO_BI)) {
       user.feeSharingIsActive = false;
     }
   }
@@ -218,7 +218,7 @@ export function handleWithdrawAggregatorUniswapV3(event: WithdrawAggregatorUnisw
     user.aggregatorAdjustedDepositAmount = ZERO_BD;
 
     let userShares = fetchSharesAggregator(event.params.user);
-    if (userShares > ZERO_BI) {
+    if (userShares.gt(ZERO_BI)) {
       user.aggregatorIsActive = false;
     }
   }
