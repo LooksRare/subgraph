@@ -195,8 +195,8 @@ export function handleDepositAggregatorUniswapV3(event: DepositAggregatorUniswap
     isUserNew = true;
   }
 
-  user.feeSharingAdjustedDepositAmount = user.feeSharingAdjustedDepositAmount.plus(toBigDecimal(event.params.amount));
-  user.feeSharingLastDepositDate = event.block.timestamp;
+  user.aggregatorAdjustedDepositAmount = user.aggregatorAdjustedDepositAmount.plus(toBigDecimal(event.params.amount));
+  user.aggregatorLastDepositDate = event.block.timestamp;
   updateDailySnapshotDepositAggregator(event.block.timestamp, toBigDecimal(event.params.amount), isUserNew);
   user.save();
 }
@@ -207,15 +207,15 @@ export function handleWithdrawAggregatorUniswapV3(event: WithdrawAggregatorUnisw
     user = initializeUser(event.params.user.toHex());
   }
 
-  if (user.feeSharingAdjustedDepositAmount.ge(toBigDecimal(event.params.amount))) {
-    user.feeSharingAdjustedDepositAmount = user.feeSharingAdjustedDepositAmount.minus(
+  if (user.aggregatorAdjustedDepositAmount.ge(toBigDecimal(event.params.amount))) {
+    user.aggregatorAdjustedDepositAmount = user.aggregatorAdjustedDepositAmount.minus(
       toBigDecimal(event.params.amount)
     );
   } else {
-    user.feeSharingTotalCollectedLOOKS = user.feeSharingTotalCollectedLOOKS.plus(
-      toBigDecimal(event.params.amount).minus(user.feeSharingAdjustedDepositAmount)
+    user.aggregatorTotalCollectedLOOKS = user.aggregatorTotalCollectedLOOKS.plus(
+      toBigDecimal(event.params.amount).minus(user.aggregatorAdjustedDepositAmount)
     );
-    user.feeSharingAdjustedDepositAmount = ZERO_BD;
+    user.aggregatorAdjustedDepositAmount = ZERO_BD;
 
     let userShares = fetchSharesAggregator(event.params.user);
     if (userShares > ZERO_BI) {
@@ -223,7 +223,7 @@ export function handleWithdrawAggregatorUniswapV3(event: WithdrawAggregatorUnisw
     }
   }
 
-  user.feeSharingLastWithdrawDate = event.block.timestamp;
+  user.aggregatorLastWithdrawDate = event.block.timestamp;
 
   updateDailySnapshotWithdrawAggregator(
     event.block.timestamp,
