@@ -3,7 +3,7 @@
   "description": "LooksRare Subgraph",
   "version": "1.0.0",
   "private": true,
-  "repository": "git@github.com:looksrare/rare-subgraph.git",
+  "repository": "git@github.com:looksrare/subgraph.git",
   "author": "LooksRare",
   "license": "GPL-3.0-or-later",
   "workspaces": [
