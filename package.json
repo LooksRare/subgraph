@@ -18,17 +18,17 @@
     "prepare": "husky install"
   },
   "devDependencies": {
-    "@commitlint/cli": "^15.0.0",
-    "@commitlint/config-conventional": "^15.0.0",
-    "@graphprotocol/graph-cli": "^0.25.0",
-    "@graphprotocol/graph-ts": "^0.24.0",
-    "@typescript-eslint/eslint-plugin": "^5.7.0",
-    "@typescript-eslint/parser": "^5.7.0",
-    "eslint": "^8.5.0",
-    "eslint-config-prettier": "^8.3.0",
+    "@commitlint/cli": "^16.0.0",
+    "@commitlint/config-conventional": "^16.0.0",
+    "@graphprotocol/graph-cli": "^0.28.0",
+    "@graphprotocol/graph-ts": "^0.26.0",
+    "@typescript-eslint/eslint-plugin": "^5.16.0",
+    "@typescript-eslint/parser": "^5.16.0",
+    "eslint": "^8.11.0",
+    "eslint-config-prettier": "^8.5.0",
     "husky": "^7.0.0",
     "lerna": "^4.0.0",
-    "prettier": "^2.5.0",
+    "prettier": "^2.6.0",
     "typescript": "^4.4.0"
   }
 }
