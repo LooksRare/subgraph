@@ -919,6 +919,13 @@
     npmlog "^4.1.2"
     write-file-atomic "^3.0.3"
 
+"@looksrare/sdk@^0.3.0":
+  version "0.3.0"
+  resolved "https://registry.yarnpkg.com/@looksrare/sdk/-/sdk-0.3.0.tgz#fdb0b46a18b6c753cd90f845520f92f3661ba6f9"
+  integrity sha512-gxdBwuNrn47iQ/pE1gqzRR8H4/bkoyufAgx0FdSOsbbPCe35JxRdR5rsJX36SHoYDoiHxxIdrBMubZ9BfHm46Q==
+  dependencies:
+    dotenv "^16.0.0"
+
 "@nodelib/fs.scandir@2.1.5":
   version "2.1.5"
   resolved "https://registry.yarnpkg.com/@nodelib/fs.scandir/-/fs.scandir-2.1.5.tgz#7619c2eb21b25483f6d167548b4cfd5a7488c3d5"
@@ -2412,6 +2419,11 @@ dot-prop@^6.0.1:
   integrity sha512-tE7ztYzXHIeyvc7N+hR3oi7FIbf/NIjVP9hmAt3yMXzrQ072/fpjGLx2GxNxGxUl5V73MEqYzioOMoVhGMJ5cA==
   dependencies:
     is-obj "^2.0.0"
+
+dotenv@^16.0.0:
+  version "16.0.0"
+  resolved "https://registry.yarnpkg.com/dotenv/-/dotenv-16.0.0.tgz#c619001253be89ebb638d027b609c75c26e47411"
+  integrity sha512-qD9WU0MPM4SWLPJy/r2Be+2WgQj8plChsyrCNQzW/0WjvcJQiKQJ9mH3ZgB3fxbUUxgc/11ZJ0Fi5KiimWGz2Q==
 
 drbg.js@^1.0.1:
   version "1.0.1"
