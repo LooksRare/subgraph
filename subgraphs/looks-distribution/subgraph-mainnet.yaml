@@ -103,9 +103,9 @@ dataSources:
     name: AggregatorFeeSharingWithUniswapV3
     network: mainnet
     source:
-      address: "0x0000000000000000000000000000000000000000"
+      address: "0x3ab16af1315dc6c95f83cbf522fecf98d00fd9ba"
       abi: AggregatorFeeSharingWithUniswapV3
-      startBlock: 9999999999
+      startBlock: 14477871
     mapping:
       kind: ethereum/events
       apiVersion: 0.0.6
