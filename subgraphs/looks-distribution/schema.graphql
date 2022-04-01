@@ -154,9 +154,9 @@ type RewardPeriod @entity {
 }
 
 """
-PurchaseLOOKSTokens
+AggregatorConversion
 """
-type PurchaseLOOKSTokens @entity {
+type AggregatorConversion @entity {
   "ID (timestamp)"
   id: ID!
 
