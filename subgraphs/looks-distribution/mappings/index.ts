@@ -235,11 +235,11 @@ export function handleWithdrawAggregatorUniswapV3(event: WithdrawAggregatorUnisw
 }
 
 export function handleConversionToLOOKSAggregatorUniswapV3(event: ConversionToLOOKSAggregatorUniswapV3): void {
-  let purchase = new AggregatorConversion(event.block.timestamp.toHex());
-  purchase.block = event.block.number;
-  purchase.amountReceived = toBigDecimal(event.params.amountReceived);
-  purchase.amountSold = toBigDecimal(event.params.amountSold);
-  purchase.save();
+  let conversion = new AggregatorConversion(event.block.timestamp.toHex());
+  conversion.block = event.block.number;
+  conversion.amountReceived = toBigDecimal(event.params.amountReceived);
+  conversion.amountSold = toBigDecimal(event.params.amountSold);
+  conversion.save();
 }
 
 export function handleAirdropClaim(event: AirdropRewardsClaim): void {
