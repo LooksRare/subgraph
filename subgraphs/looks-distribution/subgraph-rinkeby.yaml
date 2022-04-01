@@ -114,7 +114,7 @@ dataSources:
       entities:
         - DailySnapshot
         - Overview
-        - PurchaseLOOKSTokens
+        - AggregatorConversion
         - User
       abis:
         - name: AggregatorFeeSharingWithUniswapV3

@@ -1,5 +1,5 @@
 /* eslint-disable prefer-const */
-import { User, RewardPeriod, PurchaseLOOKSTokens } from "../generated/schema";
+import { User, RewardPeriod, AggregatorConversion } from "../generated/schema";
 import {
   Deposit as DepositFeeSharing,
   Withdraw as WithdrawFeeSharing,
@@ -26,6 +26,7 @@ import {
   updateDailySnapshotWithdrawFeeSharing,
   updateDailySnapshotDepositAggregator,
   updateDailySnapshotWithdrawAggregator,
+  updateDailySnapshotConversion,
 } from "./utils/updateDailyData";
 import { AGGREGATOR_ADDRESS } from "./utils/addresses";
 
@@ -235,14 +236,15 @@ export function handleWithdrawAggregatorUniswapV3(event: WithdrawAggregatorUnisw
 }
 
 export function handleConversionToLOOKSAggregatorUniswapV3(event: ConversionToLOOKSAggregatorUniswapV3): void {
-  let purchase = PurchaseLOOKSTokens.load(event.block.timestamp.toHex());
-  if (purchase === null) {
-    purchase = new PurchaseLOOKSTokens(event.block.timestamp.toHex());
-    purchase.block = event.block.number;
-    purchase.amountReceived = toBigDecimal(event.params.amountReceived);
-    purchase.amountSold = toBigDecimal(event.params.amountSold);
-  }
-  purchase.save();
+  let conversion = new AggregatorConversion(event.block.timestamp.toHex());
+  conversion.block = event.block.number;
+  conversion.amountReceived = toBigDecimal(event.params.amountReceived);
+  conversion.amountSold = toBigDecimal(event.params.amountSold);
+  conversion.priceOfETHInLOOKS = conversion.amountReceived.div(conversion.amountSold);
+
+  updateDailySnapshotConversion(event.block.timestamp, conversion.amountReceived, conversion.amountSold);
+
+  conversion.save();
 }
 
 export function handleAirdropClaim(event: AirdropRewardsClaim): void {
