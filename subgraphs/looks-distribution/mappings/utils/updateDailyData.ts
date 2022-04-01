@@ -13,6 +13,9 @@ export function initializeDailySnapshot(ID: string, dayStartTimestamp: BigInt): 
   dailySnapshot.aggregatorDailyInflowLOOKS = ZERO_BD;
   dailySnapshot.aggregatorDailyOutflowLOOKS = ZERO_BD;
   dailySnapshot.aggregatorTotalStakedLOOKS = ZERO_BD;
+  dailySnapshot.aggregatorTotalWETHSold = ZERO_BD;
+  dailySnapshot.aggregatorTotalLOOKSReceived = ZERO_BD;
+  dailySnapshot.aggregatorConversionCount = ZERO_BI;
   dailySnapshot.feeSharingActiveUsers = ZERO_BI;
   dailySnapshot.feeSharingNewUsers = ZERO_BI;
   dailySnapshot.feeSharingRemovedUsers = ZERO_BI;
@@ -204,5 +207,25 @@ export function updateDailySnapshotWithdrawAggregator(
   }
 
   overview.save();
+  dailySnapshot.save();
+}
+
+export function updateDailySnapshotConversion(
+  timestamp: BigInt,
+  amountSold: BigDecimal,
+  amountReceived: BigDecimal
+): void {
+  let dailyTimestampBigInt = BigInt.fromI32(86400);
+  let dayID = timestamp.div(dailyTimestampBigInt);
+  let dayStartTimestamp = dayID.times(dailyTimestampBigInt);
+  let ID = dayID.toString();
+
+  let dailySnapshot = DailySnapshot.load(ID);
+  if (dailySnapshot === null) {
+    dailySnapshot = initializeDailySnapshot(ID, dayStartTimestamp);
+  }
+  dailySnapshot.aggregatorTotalStakedLOOKS = dailySnapshot.aggregatorTotalStakedLOOKS.plus(amountSold);
+  dailySnapshot.aggregatorTotalLOOKSReceived = dailySnapshot.aggregatorTotalLOOKSReceived.plus(amountReceived);
+  dailySnapshot.aggregatorConversionCount = dailySnapshot.aggregatorConversionCount.plus(ONE_BI);
   dailySnapshot.save();
 }

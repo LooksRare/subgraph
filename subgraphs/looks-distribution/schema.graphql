@@ -94,6 +94,15 @@ type DailySnapshot @entity {
   "Aggregator - Total LOOKS staked"
   aggregatorTotalStakedLOOKS: BigDecimal!
 
+  "Aggregator - Total WETH sold"
+  aggregatorTotalWETHSold: BigDecimal!
+
+  "Aggregator - Total LOOKS received from sales"
+  aggregatorTotalLOOKSReceived: BigDecimal!
+
+  "Aggregator - Number of conversions"
+  aggregatorConversionCount: BigInt!
+
   "Fee Sharing - Number active users"
   feeSharingActiveUsers: BigInt!
 
@@ -168,4 +177,7 @@ type AggregatorConversion @entity {
 
   "Reward received (in LOOKS)"
   amountReceived: BigDecimal!
+
+  "Price of 1 WETH in LOOKS"
+  priceOfETHInLOOKS: BigDecimal!
 }

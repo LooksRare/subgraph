@@ -26,6 +26,7 @@ import {
   updateDailySnapshotWithdrawFeeSharing,
   updateDailySnapshotDepositAggregator,
   updateDailySnapshotWithdrawAggregator,
+  updateDailySnapshotConversion,
 } from "./utils/updateDailyData";
 import { AGGREGATOR_ADDRESS } from "./utils/addresses";
 
@@ -239,6 +240,10 @@ export function handleConversionToLOOKSAggregatorUniswapV3(event: ConversionToLO
   conversion.block = event.block.number;
   conversion.amountReceived = toBigDecimal(event.params.amountReceived);
   conversion.amountSold = toBigDecimal(event.params.amountSold);
+  conversion.priceOfETHInLOOKS = conversion.amountReceived.div(conversion.amountSold);
+
+  updateDailySnapshotConversion(event.block.timestamp, conversion.amountReceived, conversion.amountSold);
+
   conversion.save();
 }
 
