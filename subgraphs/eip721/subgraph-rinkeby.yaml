@@ -1,0 +1,29 @@
+specVersion: 0.0.4
+description: Ethereum EIP-721 indexer
+repository: https://github.com/looksrare
+schema:
+  file: ./schema.graphql
+dataSources:
+  - kind: ethereum/contract
+    name: EIP721
+    network: rinkeby
+    source:
+      abi: EIP721
+      startBlock: 935104
+    mapping:
+      kind: ethereum/events
+      apiVersion: 0.0.6
+      language: wasm/assemblyscript
+      file: ./mappings/index.ts
+      entities:
+        - Blockchain
+        - Collection
+        - Owner
+        - Token
+        - Transaction
+      abis:
+        - name: EIP721
+          file: ./abis/EIP721.json
+      eventHandlers:
+        - event: Transfer(indexed address,indexed address,indexed uint256)
+          handler: handleTransfer

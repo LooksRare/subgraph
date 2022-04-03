@@ -1,0 +1,33 @@
+specVersion: 0.0.4
+description: Ethereum EIP-1155 indexer
+repository: https://github.com/looksrare
+schema:
+  file: ./schema.graphql
+dataSources:
+  - kind: ethereum/contract
+    name: EIP1155
+    network: rinkeby
+    source:
+      abi: EIP1155
+      startBlock: 2474901
+    mapping:
+      kind: ethereum/events
+      apiVersion: 0.0.6
+      language: wasm/assemblyscript
+      file: ./mappings/index.ts
+      entities:
+        - Blockchain
+        - Collection
+        - Owner
+        - Token
+        - Transaction
+      abis:
+        - name: EIP1155
+          file: ./abis/EIP1155.json
+      eventHandlers:
+        - event: TransferBatch(indexed address,indexed address,indexed address,uint256[],uint256[])
+          handler: handleTransferBatch
+        - event: TransferSingle(indexed address,indexed address,indexed address,uint256,uint256)
+          handler: handleTransferSingle
+        - event: URI(string,indexed uint256)
+          handler: handleURI
