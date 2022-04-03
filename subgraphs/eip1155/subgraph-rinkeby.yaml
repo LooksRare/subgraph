@@ -6,7 +6,7 @@ schema:
 dataSources:
   - kind: ethereum/contract
     name: EIP1155
-    network: mainnet
+    network: rinkeby
     source:
       abi: EIP1155
       startBlock: 2474901
