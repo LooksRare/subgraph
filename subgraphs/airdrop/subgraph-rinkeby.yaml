@@ -1,0 +1,30 @@
+specVersion: 0.0.4
+description: OpenSea indexer for LooksRare airdrop
+repository: https://github.com/looksrare
+schema:
+  file: ./schema.graphql
+dataSources:
+  - kind: ethereum/contract
+    name: WyvernExchange
+    network: rinkeby
+    source:
+      address: "0xdD54D660178B28f6033a953b0E55073cFA7e3744"
+      abi: WyvernExchange
+      startBlock: 8771019
+    mapping:
+      kind: ethereum/events
+      apiVersion: 0.0.6
+      language: wasm/assemblyscript
+      file: ./mappings/index.ts
+      entities:
+        - User
+      abis:
+        - name: WyvernExchange
+          file: ./abis/WyvernExchange.json
+        - name: ERC20
+          file: ./abis/ERC20.json
+        - name: IUniswapV2Pair
+          file: ./abis/IUniswapV2Pair.json
+      callHandlers:
+        - function: atomicMatch_(address[14],uint256[18],uint8[8],bytes,bytes,bytes,bytes,bytes,bytes,uint8[2],bytes32[5])
+          handler: handleAtomicMatch
