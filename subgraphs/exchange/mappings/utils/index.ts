@@ -13,3 +13,7 @@ export function toBigDecimal(quantity: BigInt, decimals: i32 = 18): BigDecimal {
       .toBigDecimal()
   );
 }
+
+export function parseEther(quantity: i32, decimals: u8 = 18): BigInt {
+  return BigInt.fromI32(quantity).pow(decimals);
+}
