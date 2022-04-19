@@ -14,7 +14,7 @@
     "codegen:mainnet": "lerna run codegen:mainnet",
     "build:rinkeby": "lerna run build:rinkeby",
     "build:mainnet": "lerna run build:mainnet",
-    "format:check": "prettier --check '*/**/*.{js,ts}'",
+    "format:check": "prettier --check '*/**/*.{js,ts,yaml,json}'",
     "format:write": "prettier --write '*/**/*.{js,ts}'",
     "lint": "eslint '*/**/*.{js,ts}'",
     "prepare": "husky install"
