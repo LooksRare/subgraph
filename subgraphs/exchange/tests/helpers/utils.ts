@@ -4,7 +4,6 @@ import { newMockEvent } from "matchstick-as";
 import { TakerBid } from "../../generated/LooksRareExchange/LooksRareExchange";
 
 /**
- * @param id
  * @param orderHash
  * @param orderNonce
  * @param taker
