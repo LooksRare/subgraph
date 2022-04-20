@@ -1,7 +1,70 @@
 /* eslint-disable prefer-const */
 import { Address, BigInt, Bytes, ethereum } from "@graphprotocol/graph-ts";
 import { newMockEvent } from "matchstick-as";
-import { TakerBid } from "../../generated/LooksRareExchange/LooksRareExchange";
+import { TakerAsk, TakerBid } from "../../generated/LooksRareExchange/LooksRareExchange";
+
+/**
+ * @param orderHash
+ * @param orderNonce
+ * @param taker
+ * @param maker
+ * @param strategy
+ * @param currency
+ * @param collection
+ * @param tokenId
+ * @param amount
+ * @param price
+ * @returns TakerAsk Event
+ */
+export function createTakerAskEvent(
+  orderHash: Bytes,
+  orderNonce: BigInt,
+  taker: Address,
+  maker: Address,
+  strategy: Address,
+  currency: Address,
+  collection: Address,
+  tokenId: BigInt,
+  amount: BigInt,
+  price: BigInt
+): TakerAsk {
+  let mockEvent = newMockEvent();
+  let newTakerAskEvent = new TakerAsk(
+    mockEvent.address,
+    mockEvent.logIndex,
+    mockEvent.transactionLogIndex,
+    mockEvent.logType,
+    mockEvent.block,
+    mockEvent.transaction,
+    mockEvent.parameters
+  );
+
+  newTakerAskEvent.parameters = [];
+
+  let orderHashParam = new ethereum.EventParam("orderHash", ethereum.Value.fromBytes(orderHash));
+  let orderNonceParam = new ethereum.EventParam("orderNonce", ethereum.Value.fromSignedBigInt(orderNonce));
+  let takerParam = new ethereum.EventParam("taker", ethereum.Value.fromAddress(taker));
+  let makerParam = new ethereum.EventParam("maker", ethereum.Value.fromAddress(maker));
+  let strategyParam = new ethereum.EventParam("strategy", ethereum.Value.fromAddress(strategy));
+  let currencyParam = new ethereum.EventParam("currency", ethereum.Value.fromAddress(currency));
+  let collectionParam = new ethereum.EventParam("collection", ethereum.Value.fromAddress(collection));
+  let tokenIdParam = new ethereum.EventParam("tokenId", ethereum.Value.fromSignedBigInt(tokenId));
+  let amountParam = new ethereum.EventParam("amount", ethereum.Value.fromSignedBigInt(amount));
+  let priceParam = new ethereum.EventParam("price", ethereum.Value.fromSignedBigInt(price));
+
+  newTakerAskEvent.parameters.push(orderHashParam);
+  newTakerAskEvent.parameters.push(orderNonceParam);
+  newTakerAskEvent.parameters.push(takerParam);
+  newTakerAskEvent.parameters.push(makerParam);
+  newTakerAskEvent.parameters.push(strategyParam);
+  newTakerAskEvent.parameters.push(currencyParam);
+  newTakerAskEvent.parameters.push(collectionParam);
+  newTakerAskEvent.parameters.push(tokenIdParam);
+  newTakerAskEvent.parameters.push(amountParam);
+  newTakerAskEvent.parameters.push(priceParam);
+
+  return newTakerAskEvent;
+}
 
 /**
  * @param orderHash
@@ -38,7 +101,9 @@ export function createTakerBidEvent(
     mockEvent.transaction,
     mockEvent.parameters
   );
+
   newTakerBidEvent.parameters = [];
+
   let orderHashParam = new ethereum.EventParam("orderHash", ethereum.Value.fromBytes(orderHash));
   let orderNonceParam = new ethereum.EventParam("orderNonce", ethereum.Value.fromSignedBigInt(orderNonce));
   let takerParam = new ethereum.EventParam("taker", ethereum.Value.fromAddress(taker));
