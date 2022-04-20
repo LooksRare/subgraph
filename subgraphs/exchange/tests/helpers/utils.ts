@@ -1,7 +1,7 @@
 /* eslint-disable prefer-const */
 import { Address, BigInt, Bytes, ethereum } from "@graphprotocol/graph-ts";
 import { newMockEvent } from "matchstick-as";
-import { TakerAsk, TakerBid } from "../../generated/LooksRareExchange/LooksRareExchange";
+import { RoyaltyPayment, TakerAsk, TakerBid } from "../../generated/LooksRareExchange/LooksRareExchange";
 
 /**
  * @param orderHash
@@ -127,4 +127,47 @@ export function createTakerBidEvent(
   newTakerBidEvent.parameters.push(priceParam);
 
   return newTakerBidEvent;
+}
+
+/**
+ * @param collection
+ * @param tokenId
+ * @param royaltyRecipient
+ * @param currency
+ * @param amount
+ * @returns RoyaltyPayment Event
+ */
+export function createRoyaltyPaymentEvent(
+  collection: Address,
+  tokenId: BigInt,
+  royaltyRecipient: Address,
+  currency: Address,
+  amount: BigInt
+): RoyaltyPayment {
+  let mockEvent = newMockEvent();
+  let newRoyaltyPaymentEvent = new RoyaltyPayment(
+    mockEvent.address,
+    mockEvent.logIndex,
+    mockEvent.transactionLogIndex,
+    mockEvent.logType,
+    mockEvent.block,
+    mockEvent.transaction,
+    mockEvent.parameters
+  );
+
+  newRoyaltyPaymentEvent.parameters = [];
+
+  let collectionParam = new ethereum.EventParam("collection", ethereum.Value.fromAddress(collection));
+  let tokenIdParam = new ethereum.EventParam("tokenId", ethereum.Value.fromSignedBigInt(tokenId));
+  let royaltyRecipientParam = new ethereum.EventParam("royaltyRecipient", ethereum.Value.fromAddress(royaltyRecipient));
+  let currencyParam = new ethereum.EventParam("currency", ethereum.Value.fromAddress(currency));
+  let amountParam = new ethereum.EventParam("amount", ethereum.Value.fromSignedBigInt(amount));
+
+  newRoyaltyPaymentEvent.parameters.push(collectionParam);
+  newRoyaltyPaymentEvent.parameters.push(tokenIdParam);
+  newRoyaltyPaymentEvent.parameters.push(royaltyRecipientParam);
+  newRoyaltyPaymentEvent.parameters.push(currencyParam);
+  newRoyaltyPaymentEvent.parameters.push(amountParam);
+
+  return newRoyaltyPaymentEvent;
 }

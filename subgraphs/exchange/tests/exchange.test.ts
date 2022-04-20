@@ -2,11 +2,11 @@
 import { Address, BigInt, Bytes, ethereum } from "@graphprotocol/graph-ts";
 import { assert, clearStore, createMockedFunction, log, test } from "matchstick-as/assembly/index";
 
-import { createTakerAskEvent, createTakerBidEvent } from "./helpers/utils";
+import { createRoyaltyPaymentEvent, createTakerAskEvent, createTakerBidEvent } from "./helpers/utils";
 import { COLLECTION, STRATEGY, WETH } from "./helpers/config";
 
-import { handleTakerAsk, handleTakerBid } from "../mappings";
-import { ONE_BI, parseEther, ZERO_BI } from "../mappings/utils";
+import { handleRoyaltyPayment, handleTakerAsk, handleTakerBid } from "../mappings";
+import { ONE_BI, parseEther, ZERO_BD, ZERO_BI } from "../mappings/utils";
 import { ExecutionStrategy, User } from "../generated/schema";
 
 test("TakerBid", () => {
@@ -141,5 +141,31 @@ test("TakerAsk", () => {
 });
 
 test("RoyaltyPayment", () => {
-  //
+  let royaltyRecipientAddress = Address.fromString("0x0000000000000000000000000000000000000005");
+  let tokenId = BigInt.fromI32(3);
+  let royaltyAmountInETH = 1; // 1 ETH
+  let royaltyAmount = parseEther(royaltyAmountInETH);
+
+  let newRoyaltyPaymentEvent = createRoyaltyPaymentEvent(
+    COLLECTION,
+    tokenId,
+    royaltyRecipientAddress,
+    WETH,
+    royaltyAmount
+  );
+
+  handleRoyaltyPayment(newRoyaltyPaymentEvent);
+
+  let royaltyRecipient = User.load(royaltyRecipientAddress.toHex());
+  if (royaltyRecipient !== null) {
+    assert.bigIntEquals(royaltyRecipient.totalTransactions, ZERO_BI);
+    assert.stringEquals(royaltyRecipient.totalRoyaltyCollected.toString(), royaltyAmountInETH.toString());
+    assert.stringEquals(royaltyRecipient.totalVolume.toString(), "0");
+    assert.stringEquals(royaltyRecipient.totalTakerVolume.toString(), "0");
+    assert.stringEquals(royaltyRecipient.totalMakerVolume.toString(), "0");
+  } else {
+    log.warning("Taker user doesn't exist", []);
+  }
+
+  clearStore();
 });
