@@ -41,8 +41,8 @@ export function createTakerBidEvent(
   newTakerBidEvent.parameters = [];
   let orderHashParam = new ethereum.EventParam("orderHash", ethereum.Value.fromBytes(orderHash));
   let orderNonceParam = new ethereum.EventParam("orderNonce", ethereum.Value.fromSignedBigInt(orderNonce));
-  let makerParam = new ethereum.EventParam("taker", ethereum.Value.fromAddress(maker));
-  let takerParam = new ethereum.EventParam("maker", ethereum.Value.fromAddress(taker));
+  let takerParam = new ethereum.EventParam("taker", ethereum.Value.fromAddress(taker));
+  let makerParam = new ethereum.EventParam("maker", ethereum.Value.fromAddress(maker));
   let strategyParam = new ethereum.EventParam("strategy", ethereum.Value.fromAddress(strategy));
   let currencyParam = new ethereum.EventParam("currency", ethereum.Value.fromAddress(currency));
   let collectionParam = new ethereum.EventParam("collection", ethereum.Value.fromAddress(collection));
@@ -52,8 +52,8 @@ export function createTakerBidEvent(
 
   newTakerBidEvent.parameters.push(orderHashParam);
   newTakerBidEvent.parameters.push(orderNonceParam);
-  newTakerBidEvent.parameters.push(makerParam);
   newTakerBidEvent.parameters.push(takerParam);
+  newTakerBidEvent.parameters.push(makerParam);
   newTakerBidEvent.parameters.push(strategyParam);
   newTakerBidEvent.parameters.push(currencyParam);
   newTakerBidEvent.parameters.push(collectionParam);

@@ -14,6 +14,7 @@ export function toBigDecimal(quantity: BigInt, decimals: i32 = 18): BigDecimal {
   );
 }
 
-export function parseEther(quantity: i32, decimals: u8 = 18): BigInt {
-  return BigInt.fromI32(quantity).pow(decimals);
+export function parseEther(quantity: i32): BigInt {
+  const adjuster = BigInt.fromI32(10).pow(18);
+  return BigInt.fromI32(quantity).times(adjuster);
 }
