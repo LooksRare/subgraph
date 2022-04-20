@@ -7,7 +7,7 @@ import { COLLECTION, STRATEGY, WETH } from "./helpers/config";
 
 import { handleRoyaltyPayment, handleTakerAsk, handleTakerBid } from "../mappings";
 import { ONE_BI, parseEther, ZERO_BI } from "../mappings/utils";
-import { ExecutionStrategy, User } from "../generated/schema";
+import { Collection, ExecutionStrategy, User } from "../generated/schema";
 
 test("TakerBid", () => {
   createMockedFunction(STRATEGY, "viewProtocolFee", "viewProtocolFee():(uint256)").returns([
@@ -69,6 +69,19 @@ test("TakerBid", () => {
     assert.stringEquals(strategy.totalTakerAskVolume.toString(), "0");
   } else {
     log.warning("Strategy doesn't exist", []);
+  }
+
+  let collection = Collection.load(COLLECTION.toHex());
+  if (collection !== null) {
+    assert.bigIntEquals(collection.totalTransactions, ONE_BI);
+    assert.bigIntEquals(collection.totalTakerBidTransactions, ONE_BI);
+    assert.bigIntEquals(collection.totalTakerAskTransactions, ZERO_BI);
+    assert.stringEquals(collection.totalVolume.toString(), priceInETH.toString());
+    assert.stringEquals(collection.totalTakerBidVolume.toString(), priceInETH.toString());
+    assert.stringEquals(collection.totalTakerAskVolume.toString(), "0");
+    assert.stringEquals(collection.totalRoyaltyPaid.toString(), "0");
+  } else {
+    log.warning("Collection doesn't exist", []);
   }
 
   // Clear the store in order to start the next test off on a clean slate
@@ -137,6 +150,19 @@ test("TakerAsk", () => {
     log.warning("Strategy doesn't exist", []);
   }
 
+  let collection = Collection.load(COLLECTION.toHex());
+  if (collection !== null) {
+    assert.bigIntEquals(collection.totalTransactions, ONE_BI);
+    assert.bigIntEquals(collection.totalTakerBidTransactions, ZERO_BI);
+    assert.bigIntEquals(collection.totalTakerAskTransactions, ONE_BI);
+    assert.stringEquals(collection.totalVolume.toString(), priceInETH.toString());
+    assert.stringEquals(collection.totalTakerBidVolume.toString(), "0");
+    assert.stringEquals(collection.totalTakerAskVolume.toString(), priceInETH.toString());
+    assert.stringEquals(collection.totalRoyaltyPaid.toString(), "0");
+  } else {
+    log.warning("Collection doesn't exist", []);
+  }
+
   clearStore();
 });
 
@@ -164,7 +190,14 @@ test("RoyaltyPayment", () => {
     assert.stringEquals(royaltyRecipient.totalTakerVolume.toString(), "0");
     assert.stringEquals(royaltyRecipient.totalMakerVolume.toString(), "0");
   } else {
-    log.warning("Taker user doesn't exist", []);
+    log.warning("Royalty user doesn't exist", []);
+  }
+
+  let collection = Collection.load(COLLECTION.toHex());
+  if (collection !== null) {
+    assert.stringEquals(collection.totalRoyaltyPaid.toString(), royaltyAmountInETH.toString());
+  } else {
+    log.warning("Collection doesn't exist", []);
   }
 
   clearStore();
