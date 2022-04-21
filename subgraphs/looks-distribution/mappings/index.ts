@@ -262,7 +262,7 @@ export function handleTradingRewardsClaim(event: RewardsClaim): void {
   if (user === null) {
     user = initializeUser(event.params.user.toHex());
   }
-  user.tradingRewardsAmount = toBigDecimal(event.params.amount);
+  user.tradingRewardsAmount = user.tradingRewardsAmount.plus(toBigDecimal(event.params.amount));
   user.tradingRewardsLastClaimDate = event.block.timestamp;
   user.save();
 }
