@@ -20,7 +20,7 @@ dataSources:
         - Collection
       abis:
         - name: RoyaltyFeeRegistry
-          file: ./abis/RoyaltyFeeRegistry.json
+          file: ../../node_modules/@looksrare/sdk/dist/abis/RoyaltyFeeRegistry.json
       eventHandlers:
         - event: RoyaltyFeeUpdate(indexed address,indexed address,indexed address,uint256)
           handler: handleRoyaltyFeeUpdate
