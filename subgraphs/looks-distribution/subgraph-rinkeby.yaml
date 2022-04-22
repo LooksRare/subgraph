@@ -23,9 +23,9 @@ dataSources:
         - User
       abis:
         - name: AggregatorFeeSharingWithUniswapV3
-          file: ./abis/AggregatorFeeSharingWithUniswapV3.json
+          file: ../../node_modules/@looksrare/sdk/dist/abis/AggregatorFeeSharingWithUniswapV3.json
         - name: FeeSharingSystem
-          file: ./abis/FeeSharingSystem.json
+          file: ../../node_modules/@looksrare/sdk/dist/abis/FeeSharingSystem.json
       eventHandlers:
         - event: Deposit(indexed address,uint256,uint256)
           handler: handleDepositFeeSharing
@@ -51,7 +51,7 @@ dataSources:
         - User
       abis:
         - name: StakingPoolForUniswapV2Tokens
-          file: ./abis/StakingPoolForUniswapV2Tokens.json
+          file: ../../node_modules/@looksrare/sdk/dist/abis/StakingPoolForUniswapV2Tokens.json
       eventHandlers:
         - event: Deposit(indexed address,uint256,uint256)
           handler: handleDepositStakingV2
@@ -75,7 +75,7 @@ dataSources:
         - User
       abis:
         - name: LooksRareAirdrop
-          file: ./abis/LooksRareAirdrop.json
+          file: ../../node_modules/@looksrare/sdk/dist/abis/LooksRareAirdrop.json
       eventHandlers:
         - event: AirdropRewardsClaim(indexed address,uint256)
           handler: handleAirdropClaim
@@ -95,7 +95,7 @@ dataSources:
         - User
       abis:
         - name: TradingRewardsDistributor
-          file: ./abis/TradingRewardsDistributor.json
+          file: ../../node_modules/@looksrare/sdk/dist/abis/TradingRewardsDistributor.json
       eventHandlers:
         - event: RewardsClaim(indexed address,indexed uint256,uint256)
           handler: handleTradingRewardsClaim
@@ -118,9 +118,9 @@ dataSources:
         - User
       abis:
         - name: AggregatorFeeSharingWithUniswapV3
-          file: ./abis/AggregatorFeeSharingWithUniswapV3.json
+          file: ../../node_modules/@looksrare/sdk/dist/abis/AggregatorFeeSharingWithUniswapV3.json
         - name: FeeSharingSystem
-          file: ./abis/FeeSharingSystem.json
+          file: ../../node_modules/@looksrare/sdk/dist/abis/FeeSharingSystem.json
       eventHandlers:
         - event: Deposit(indexed address,uint256)
           handler: handleDepositAggregatorUniswapV3

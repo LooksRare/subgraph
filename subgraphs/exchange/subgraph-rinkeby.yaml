@@ -28,9 +28,9 @@ dataSources:
         - Trade
       abis:
         - name: LooksRareExchange
-          file: ./abis/LooksRareExchange.json
+          file: ../../node_modules/@looksrare/sdk/dist/abis/LooksRareExchange.json
         - name: IExecutionStrategy
-          file: ./abis/IExecutionStrategy.json
+          file: ../../node_modules/@looksrare/sdk/dist/abis/IExecutionStrategy.json
       eventHandlers:
         - event: RoyaltyPayment(indexed address,indexed uint256,indexed address,address,uint256)
           handler: handleRoyaltyPayment
