@@ -13,8 +13,8 @@ test("RoyaltyFeeUpdate", () => {
   let receiverAddress = Address.fromString("0x0000000000000000000000000000000000000002");
   let fee = BigInt.fromI32(200); // 2%
 
-  let newTakerBidEvent = createRoyaltyFeeUpdateEvent(collectionAddress, setterAddress, receiverAddress, fee);
-  handleRoyaltyFeeUpdate(newTakerBidEvent);
+  let newRoyaltyEvent = createRoyaltyFeeUpdateEvent(collectionAddress, setterAddress, receiverAddress, fee);
+  handleRoyaltyFeeUpdate(newRoyaltyEvent);
 
   let collection = Collection.load(collectionAddress.toHex());
   if (collection !== null) {
@@ -31,8 +31,8 @@ test("RoyaltyFeeUpdate", () => {
   }
 
   fee = BigInt.fromI32(400); // 4%
-  newTakerBidEvent = createRoyaltyFeeUpdateEvent(collectionAddress, setterAddress, receiverAddress, fee);
-  handleRoyaltyFeeUpdate(newTakerBidEvent);
+  newRoyaltyEvent = createRoyaltyFeeUpdateEvent(collectionAddress, setterAddress, receiverAddress, fee);
+  handleRoyaltyFeeUpdate(newRoyaltyEvent);
 
   collection = Collection.load(collectionAddress.toHex());
   if (collection !== null) {
@@ -44,8 +44,8 @@ test("RoyaltyFeeUpdate", () => {
   }
 
   fee = BigInt.fromI32(150); // 1.5%
-  newTakerBidEvent = createRoyaltyFeeUpdateEvent(collectionAddress, setterAddress, receiverAddress, fee);
-  handleRoyaltyFeeUpdate(newTakerBidEvent);
+  newRoyaltyEvent = createRoyaltyFeeUpdateEvent(collectionAddress, setterAddress, receiverAddress, fee);
+  handleRoyaltyFeeUpdate(newRoyaltyEvent);
 
   collection = Collection.load(collectionAddress.toHex());
   if (collection !== null) {
