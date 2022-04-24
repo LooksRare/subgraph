@@ -18,7 +18,9 @@ import {
   Withdraw as WithdrawAggregatorUniswapV3,
   ConversionToLOOKS as ConversionToLOOKSAggregatorUniswapV3,
 } from "../generated/AggregatorFeeSharingWithUniswapV3/AggregatorFeeSharingWithUniswapV3";
-import { toBigDecimal, ZERO_BI, ZERO_BD } from "./utils";
+
+import { toBigDecimal, ZERO_BI, ZERO_BD } from "../../../helpers/utils";
+
 import { initializeUser } from "./utils/initializeUser";
 import { fetchSharesAggregator, fetchSharesFeeSharingSystem } from "./utils/fetchShares";
 import {

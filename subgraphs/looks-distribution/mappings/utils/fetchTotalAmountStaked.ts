@@ -1,6 +1,6 @@
 /* eslint-disable prefer-const */
 import { BigDecimal } from "@graphprotocol/graph-ts";
-import { toBigDecimal, ZERO_BD } from ".";
+import { toBigDecimal, ZERO_BD } from "../../../../helpers/utils";
 import { AggregatorFeeSharingWithUniswapV3 } from "../../generated/AggregatorFeeSharingWithUniswapV3/AggregatorFeeSharingWithUniswapV3";
 import { FeeSharingSystem } from "../../generated/FeeSharingSystem/FeeSharingSystem";
 import { AGGREGATOR_ADDRESS, FEE_SHARING_ADDRESS } from "./addresses";

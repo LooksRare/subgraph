@@ -1,6 +1,6 @@
 /* eslint-disable prefer-const */
 import { BigInt, BigDecimal } from "@graphprotocol/graph-ts";
-import { ZERO_BD, ZERO_BI, ONE_BI } from ".";
+import { ZERO_BD, ZERO_BI, ONE_BI } from "../../../../helpers/utils";
 import { DailySnapshot, Overview } from "../../generated/schema";
 import { fetchTotalAmountStakedAggregator, fetchTotalAmountStakedFeeSharing } from "./fetchTotalAmountStaked";
 

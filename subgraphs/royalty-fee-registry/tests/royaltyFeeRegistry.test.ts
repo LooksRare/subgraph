@@ -5,7 +5,7 @@ import { assert, clearStore, log, test } from "matchstick-as/assembly/index";
 import { Collection } from "../generated/schema";
 import { createRoyaltyFeeUpdateEvent } from "./helpers/utils";
 import { handleRoyaltyFeeUpdate } from "../mappings";
-import { ONE_BI } from "../mappings/utils";
+import { ONE_BI } from "../../../helpers/utils";
 
 test("RoyaltyFeeUpdate", () => {
   let collectionAddress = Address.fromString("0xF7c68B84A8ad29A61AF42FC31cEF1964dd80f8Ea");

@@ -2,14 +2,14 @@
 import { Collection } from "../generated/schema";
 
 import { RoyaltyFeeUpdate } from "../generated/RoyaltyFeeRegistry/RoyaltyFeeRegistry";
-import { ONE_BI, toBigDecimal, ZERO_ADDRESS, ZERO_BD, ZERO_BI } from "./utils";
+import { toBigDecimal, ZERO_ADDRESS, ZERO_BD, ZERO_BI, ONE_BI } from "../../../helpers/utils";
 
 export function handleRoyaltyFeeUpdate(event: RoyaltyFeeUpdate): void {
   let collection = Collection.load(event.params.collection.toHex());
   if (collection === null) {
     collection = new Collection(event.params.collection.toHex());
-    collection.setter = ZERO_ADDRESS;
-    collection.receiver = ZERO_ADDRESS;
+    collection.setter = ZERO_ADDRESS.toHex();
+    collection.receiver = ZERO_ADDRESS.toHex();
     collection.royaltyFee = ZERO_BD;
     collection.maxRoyaltyFee = ZERO_BD;
     collection.firstUpdateBlock = event.block.number;

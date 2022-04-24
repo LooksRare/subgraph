@@ -2,7 +2,7 @@
 import { Address, BigInt } from "@graphprotocol/graph-ts";
 import { Blockchain, Collection, Owner, Token, Transaction } from "../generated/schema";
 import { Transfer } from "../generated/EIP721/EIP721";
-import { toBigDecimal } from "./utils";
+import { toBigDecimal } from "../../../helpers/utils";
 import { fetchName, fetchSymbol, fetchTokenURI } from "./utils/eip721";
 
 export function handleTransfer(event: Transfer): void {

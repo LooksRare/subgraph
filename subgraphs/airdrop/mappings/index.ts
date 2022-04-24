@@ -2,8 +2,9 @@
 import { BigDecimal, BigInt } from "@graphprotocol/graph-ts";
 import { Balance, Currency, User } from "../generated/schema";
 import { AtomicMatch_Call } from "../generated/WyvernExchange/WyvernExchange";
+import { toBigDecimal, ZERO_BD, ZERO_BI, ONE_BI, ONE_BD } from "../../../helpers/utils";
 
-import { currencies, etherAddresses, ONE_BD, ONE_BI, toBigDecimal, ZERO_BD, ZERO_BI } from "./utils";
+import { currencies, etherAddresses } from "./utils";
 import { fetchDecimals, fetchName, fetchSymbol } from "./utils/erc20";
 import { getPrice } from "./utils/getPrice";
 

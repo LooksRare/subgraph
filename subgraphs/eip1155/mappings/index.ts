@@ -2,7 +2,7 @@
 import { Address, BigInt, log } from "@graphprotocol/graph-ts";
 import { Blockchain, Collection, Owner, Token, Transaction } from "../generated/schema";
 import { TransferBatch, TransferSingle, URI } from "../generated/EIP1155/EIP1155";
-import { toBigDecimal } from "./utils";
+import { toBigDecimal } from "../../../helpers/utils";
 import { fetchName, fetchSymbol, fetchURI } from "./utils/eip1155";
 
 export function handleTransferBatch(event: TransferBatch): void {
