@@ -23,7 +23,7 @@ export function handleRoyaltyFeeUpdate(event: RoyaltyFeeUpdate): void {
   collection.receiver = event.params.receiver.toHex();
 
   if (toBigDecimal(event.params.fee, 2).gt(collection.royaltyFee)) {
-    collection.maxRoyaltyFee = collection.royaltyFee;
+    collection.maxRoyaltyFee = toBigDecimal(event.params.fee, 2);
   }
 
   collection.royaltyFee = toBigDecimal(event.params.fee, 2);
