@@ -17,6 +17,7 @@
     "format:check": "prettier --check '*/**/*.{js,ts,yaml,yml,json}'",
     "format:write": "prettier --write '*/**/*.{js,ts,yaml,yml,json}'",
     "lint": "eslint '*/**/*.{js,ts}'",
+    "test": "lerna run test",
     "prepare": "husky install"
   },
   "devDependencies": {
