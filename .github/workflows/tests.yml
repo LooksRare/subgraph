@@ -11,11 +11,11 @@ jobs:
   format:
     name: Matchstick
     runs-on: ubuntu-latest
-
+    container: node:latest
+    services:
+      postgres:
+        image: postgres:latest
     steps:
-      - name: Install PostgreSQL
-        run: apt install postgresql
-
       - name: Checkout code
         uses: actions/checkout@v3
 
