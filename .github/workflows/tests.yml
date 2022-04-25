@@ -1,4 +1,4 @@
-name: Build
+name: Tests
 
 on:
   workflow_dispatch:
@@ -8,11 +8,13 @@ on:
       - master
 
 jobs:
-  build:
-
-    name: Build
+  format:
+    name: Matchstick
     runs-on: ubuntu-latest
-
+    container: node:latest
+    services:
+      postgres:
+        image: postgres:latest
     steps:
       - name: Checkout code
         uses: actions/checkout@v3
@@ -42,3 +44,6 @@ jobs:
 
       - name: Run build
         run: yarn build:mainnet
+
+      - name: Run tests
+        run: yarn test
