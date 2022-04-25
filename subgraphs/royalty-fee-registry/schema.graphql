@@ -6,10 +6,10 @@ type Collection @entity {
   id: ID!
 
   "Setter address"
-  setter: String!
+  setter: Bytes!
 
   "Receiver address"
-  receiver: String!
+  receiver: Bytes!
 
   "Current royalty fee"
   royaltyFee: BigDecimal!
