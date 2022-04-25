@@ -18,8 +18,8 @@ test("RoyaltyFeeUpdate", () => {
 
   let collection = Collection.load(collectionAddress.toHex());
   if (collection !== null) {
-    assert.stringEquals(collection.setter, setterAddress.toHexString());
-    assert.stringEquals(collection.receiver, receiverAddress.toHexString());
+    assert.bytesEquals(collection.setter, setterAddress);
+    assert.bytesEquals(collection.receiver, receiverAddress);
     assert.stringEquals(collection.royaltyFee.toString(), fee.div(BigInt.fromI32(100)).toString());
     assert.stringEquals(collection.maxRoyaltyFee.toString(), collection.royaltyFee.toString());
     assert.bigIntEquals(collection.firstUpdateBlock, ONE_BI);

@@ -8,8 +8,8 @@ export function handleRoyaltyFeeUpdate(event: RoyaltyFeeUpdate): void {
   let collection = Collection.load(event.params.collection.toHex());
   if (collection === null) {
     collection = new Collection(event.params.collection.toHex());
-    collection.setter = ZERO_ADDRESS.toHex();
-    collection.receiver = ZERO_ADDRESS.toHex();
+    collection.setter = ZERO_ADDRESS;
+    collection.receiver = ZERO_ADDRESS;
     collection.royaltyFee = ZERO_BD;
     collection.maxRoyaltyFee = ZERO_BD;
     collection.firstUpdateBlock = event.block.number;
@@ -19,8 +19,8 @@ export function handleRoyaltyFeeUpdate(event: RoyaltyFeeUpdate): void {
     collection.numberChanges = ZERO_BI;
   }
 
-  collection.setter = event.params.setter.toHex();
-  collection.receiver = event.params.receiver.toHex();
+  collection.setter = event.params.setter;
+  collection.receiver = event.params.receiver;
 
   if (toBigDecimal(event.params.fee, 2).gt(collection.royaltyFee)) {
     collection.maxRoyaltyFee = toBigDecimal(event.params.fee, 2);
