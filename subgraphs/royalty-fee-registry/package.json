@@ -6,8 +6,9 @@
   "author": "LooksRare",
   "license": "GPL-3.0-or-later",
   "scripts": {
-    "codegen:mainnet": "graph codegen subgraph-mainnet.yaml",
-    "build:mainnet": "graph build subgraph-mainnet.yaml",
-    "deploy:mainnet": "graph deploy --product hosted-service --node https://api.thegraph.com/deploy/ --ipfs https://api.thegraph.com/ipfs/ looksrare/royalty-fee-registry subgraph-mainnet.yaml"
+    "codegen:mainnet": "graph codegen subgraph.yaml",
+    "build:mainnet": "graph build subgraph.yaml",
+    "deploy:mainnet": "graph deploy --product hosted-service --node https://api.thegraph.com/deploy/ --ipfs https://api.thegraph.com/ipfs/ looksrare/royalty-fee-registry subgraph.yaml",
+    "test": "graph test"
   }
 }

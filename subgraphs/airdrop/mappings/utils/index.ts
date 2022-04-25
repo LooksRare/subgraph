@@ -1,13 +1,4 @@
-/* eslint-disable prefer-const */
-import { BigDecimal, BigInt } from "@graphprotocol/graph-ts";
-
-// BigNumber helpers
-export const ZERO_BI = BigInt.zero();
-export const ONE_BI = BigInt.fromI32(1);
-export const ZERO_BD = BigDecimal.zero();
-export const ONE_BD = BigDecimal.fromString("1");
-
-export let currencies: string[] = [
+export const currencies: string[] = [
   "0x0000000000000000000000000000000000000000", // ETH
   "0xc02aaa39b223fe8d0a0e5c4f27ead9083c756cc2", // WETH
   "0xa0b86991c6218b36c1d19d4a2e9eb0ce3606eb48", // USDC
@@ -17,15 +8,7 @@ export let currencies: string[] = [
   "0x15d4c048f83bd7e37d49ea4c83a07267ec4203da", // GALA
 ];
 
-export let etherAddresses: string[] = [
+export const etherAddresses: string[] = [
   "0x0000000000000000000000000000000000000000", // ETH
   "0xc02aaa39b223fe8d0a0e5c4f27ead9083c756cc2", // WETH
 ];
-
-export function toBigDecimal(quantity: BigInt, decimals: i32 = 18): BigDecimal {
-  return quantity.divDecimal(
-    BigInt.fromI32(10)
-      .pow(decimals as u8)
-      .toBigDecimal()
-  );
-}

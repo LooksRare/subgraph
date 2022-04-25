@@ -116,3 +116,6 @@ dist
 # GraphQL directories
 build/
 generated/
+
+# Matchstick binaries
+.bin

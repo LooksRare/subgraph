@@ -1,6 +1,6 @@
 /* eslint-disable prefer-const */
 import { Address, BigDecimal } from "@graphprotocol/graph-ts";
-import { toBigDecimal, ZERO_BD } from ".";
+import { toBigDecimal, ZERO_BD } from "../../../../helpers/utils";
 import { IUniswapV2Pair } from "../../generated/WyvernExchange/IUniswapV2Pair";
 
 // Switch/case is not supported for strings
