@@ -9,7 +9,7 @@ on:
 
 jobs:
   format:
-    name: Prettier
+    name: Matchstick
     runs-on: ubuntu-latest
 
     steps:
