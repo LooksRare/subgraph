@@ -34,7 +34,7 @@ For any of the subgraph (referred to as `[subgraph]`):
 
 Unit tests are written using the [Matchstick framework from LimeChain](https://github.com/LimeChain/matchstick).
 
-The Matchstck framework requires Postgres installed, [read more here.](https://github.com/LimeChain/matchstick#os-specific-release-binaries-%EF%B8%8F)
+The [Matchstick framework](https://thegraph.com/docs/en/developer/matchstick/) requires Postgres installed, [read more here.](https://github.com/LimeChain/matchstick#os-specific-release-binaries-%EF%B8%8F)
 
 For any of the subgraph supporting tests (referred to as `[subgraph]`):
 
