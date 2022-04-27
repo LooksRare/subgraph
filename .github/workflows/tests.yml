@@ -9,7 +9,7 @@ on:
 
 jobs:
   format:
-    name: Matchstick
+    name: Graph
     runs-on: ubuntu-latest
     container: node:latest
     services:
