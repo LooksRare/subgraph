@@ -6,7 +6,8 @@ import { createRoyaltyPaymentEvent, createTakerAskEvent, createTakerBidEvent } f
 import { COLLECTION, STRATEGY, WETH } from "./helpers/config";
 
 import { handleRoyaltyPayment, handleTakerAsk, handleTakerBid } from "../mappings";
-import { parseEther, ONE_BI, ZERO_BI } from "../../../helpers/utils";
+import { parseEther } from "../../../helpers/utils";
+import { ONE_BI, ZERO_BI } from "../../../helpers/constants";
 import { Collection, ExecutionStrategy, User } from "../generated/schema";
 
 test("TakerBid", () => {

@@ -1,6 +1,6 @@
 /* eslint-disable prefer-const */
 import { Address, BigInt, BigDecimal } from "@graphprotocol/graph-ts";
-import { ONE_BI, ZERO_BD, ZERO_BI } from "../../../../helpers/utils";
+import { ONE_BI, ZERO_BD, ZERO_BI } from "../../../../helpers/constants";
 import {
   CollectionDailyData,
   ExchangeDailyData,
