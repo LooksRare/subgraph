@@ -1,42 +1,48 @@
 /* eslint-disable prefer-const */
-import { Address } from "@graphprotocol/graph-ts";
+import { Address, BigInt } from "@graphprotocol/graph-ts";
 import { assert, clearStore, log, test } from "matchstick-as/assembly/index";
 
-import { createRewardsClaimEvent } from "./helpers/utils";
-import { handleTradingRewardsClaim } from "../mappings";
 import { User } from "../generated/schema";
+import { handleTradingRewardsClaim } from "../mappings";
+import { createRewardsClaimEvent } from "./helpers/tradingRewardsDistributor/utils";
 import { parseEther, ONE_BI, TWO_BI } from "../../../helpers/utils";
 
-test("RewardsClaim", () => {
-  let userAddress = Address.fromString("0x0000000000000000000000000000000000000001");
-  let amountInLOOKS = 20; // 20 LOOKS
-  let amountClaimed = parseEther(amountInLOOKS);
-  let totalAmountClaimed = amountInLOOKS;
+test("Trading rewards claimed", () => {
+  const userAddress = Address.fromString("0x0000000000000000000000000000000000000001");
+  /**
+   * 1. User claims 20 LOOKS
+   */
+  let amountClaimedInLOOKS = 20; // 20 LOOKS
+  let amountClaimedInLOOKSWei = parseEther(amountClaimedInLOOKS);
+  let totalAmountClaimedInLOOKS = amountClaimedInLOOKS;
 
-  let newRewardsClaimEvent = createRewardsClaimEvent(userAddress, ONE_BI, amountClaimed);
+  let newRewardsClaimEvent = createRewardsClaimEvent(userAddress, ONE_BI, amountClaimedInLOOKSWei);
   handleTradingRewardsClaim(newRewardsClaimEvent);
 
   let user = User.load(userAddress.toHex());
   if (user !== null) {
     assert.bigIntEquals(user.tradingRewardsLastClaimDate, newRewardsClaimEvent.block.timestamp);
-    assert.stringEquals(user.tradingRewardsAmount.toString(), amountInLOOKS.toString());
+    assert.stringEquals(user.tradingRewardsAmount.toString(), amountClaimedInLOOKS.toString());
   } else {
     log.warning("User doesn't exist", []);
   }
 
-  amountInLOOKS = 50; // 50 LOOKS
-  amountClaimed = parseEther(amountInLOOKS);
-  totalAmountClaimed += amountInLOOKS;
+  /**
+   * 2. User has claimed 50 more LOOKS
+   */
+  amountClaimedInLOOKS = 50; // 50 LOOKS
+  amountClaimedInLOOKSWei = parseEther(amountClaimedInLOOKS);
+  totalAmountClaimedInLOOKS += amountClaimedInLOOKS;
+  let blockTimestamp = BigInt.fromU32(1651086000);
 
-  newRewardsClaimEvent = createRewardsClaimEvent(userAddress, TWO_BI, amountClaimed);
-  // Adjust block timestamp to make it different
-  newRewardsClaimEvent.block.timestamp = TWO_BI;
+  newRewardsClaimEvent = createRewardsClaimEvent(userAddress, TWO_BI, amountClaimedInLOOKSWei, blockTimestamp);
   handleTradingRewardsClaim(newRewardsClaimEvent);
 
   user = User.load(userAddress.toHex());
+
   if (user !== null) {
-    assert.bigIntEquals(user.tradingRewardsLastClaimDate, newRewardsClaimEvent.block.timestamp);
-    assert.stringEquals(user.tradingRewardsAmount.toString(), totalAmountClaimed.toString());
+    assert.bigIntEquals(user.tradingRewardsLastClaimDate, blockTimestamp);
+    assert.stringEquals(user.tradingRewardsAmount.toString(), totalAmountClaimedInLOOKS.toString());
   } else {
     log.warning("User doesn't exist", []);
   }

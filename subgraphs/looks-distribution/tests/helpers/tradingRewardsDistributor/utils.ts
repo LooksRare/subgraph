@@ -1,7 +1,8 @@
 /* eslint-disable prefer-const */
 import { Address, BigInt, ethereum } from "@graphprotocol/graph-ts";
 import { newMockEvent } from "matchstick-as";
-import { RewardsClaim } from "../../generated/TradingRewardsDistributor/TradingRewardsDistributor";
+import { ZERO_BI } from "../../../../../helpers/utils";
+import { RewardsClaim } from "../../../generated/TradingRewardsDistributor/TradingRewardsDistributor";
 
 /**
  * @param user
@@ -9,7 +10,12 @@ import { RewardsClaim } from "../../generated/TradingRewardsDistributor/TradingR
  * @param amount
  * @returns RewardsClaim Event
  */
-export function createRewardsClaimEvent(user: Address, rewardRound: BigInt, amount: BigInt): RewardsClaim {
+export function createRewardsClaimEvent(
+  user: Address,
+  rewardRound: BigInt,
+  amount: BigInt,
+  blockTimestamp: BigInt = ZERO_BI
+): RewardsClaim {
   let mockEvent = newMockEvent();
   let newRewardsClaimEvent = new RewardsClaim(
     mockEvent.address,
@@ -20,6 +26,8 @@ export function createRewardsClaimEvent(user: Address, rewardRound: BigInt, amou
     mockEvent.transaction,
     mockEvent.parameters
   );
+
+  newRewardsClaimEvent.block.timestamp = blockTimestamp;
 
   newRewardsClaimEvent.parameters = [];
   let userParam = new ethereum.EventParam("user", ethereum.Value.fromAddress(user));
