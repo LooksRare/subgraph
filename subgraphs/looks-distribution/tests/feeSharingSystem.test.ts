@@ -6,6 +6,7 @@ import { handleDepositFeeSharing, handleWithdrawFeeSharing } from "../mappings";
 import { createDepositFeeSharingEvent, createWithdrawFeeSharingEvent } from "./helpers/feeSharingSystem/utils";
 import { parseEther } from "../../../helpers/utils";
 import { FEE_SHARING_ADDRESS } from "../mappings/utils/addresses-mainnet";
+import { ONE_ETHER_IN_WEI } from "../../../helpers/constants";
 
 test("Deposit and withdraw event (inferior to deposited amount)", () => {
   const userAddress = Address.fromString("0x0000000000000000000000000000000000000001");
@@ -17,7 +18,14 @@ test("Deposit and withdraw event (inferior to deposited amount)", () => {
   let harvestedAmountInWETH = 0; // 0 WETH
   let amountDepositedInLOOKSWei = parseEther(amountDepositedInLOOKS);
   let harvestedAmountInWETHWei = parseEther(harvestedAmountInWETH);
-  let blockTimestamp = BigInt.fromU32(1651006000);
+  let blockTimestamp = BigInt.fromU32(1651086000);
+
+  let newDepositEvent = createDepositFeeSharingEvent(
+    userAddress,
+    amountDepositedInLOOKSWei,
+    harvestedAmountInWETHWei,
+    blockTimestamp
+  );
 
   createMockedFunction(FEE_SHARING_ADDRESS, "totalShares", "totalShares():(uint256)").returns([
     ethereum.Value.fromSignedBigInt(amountDepositedInLOOKSWei),
@@ -27,25 +35,21 @@ test("Deposit and withdraw event (inferior to deposited amount)", () => {
     FEE_SHARING_ADDRESS,
     "calculateSharePriceInLOOKS",
     "calculateSharePriceInLOOKS():(uint256)"
-  ).returns([ethereum.Value.fromSignedBigInt(parseEther(1))]);
+  ).returns([ethereum.Value.fromSignedBigInt(ONE_ETHER_IN_WEI)]);
 
-  let newDepositEvent = createDepositFeeSharingEvent(
-    userAddress,
-    amountDepositedInLOOKSWei,
-    harvestedAmountInWETHWei,
-    blockTimestamp
-  );
   handleDepositFeeSharing(newDepositEvent);
 
   let user = User.load(userAddress.toHex());
   if (user !== null) {
     assert.assertTrue(user.feeSharingIsActive);
+    assert.stringEquals(user.feeSharingAdjustedDepositAmount.toString(), amountDepositedInLOOKS.toString());
+    assert.bigIntEquals(user.feeSharingLastDepositDate, blockTimestamp);
   } else {
     log.warning("User doesn't exist", []);
   }
 
   /**
-   * 1. User deposits 20 LOOKS
+   * 2. User withdraws 15 LOOKS
    */
   let amountWithdrawnInLOOKS = 15; // 20 LOOKS
   harvestedAmountInWETH = 1; // 0 WETH

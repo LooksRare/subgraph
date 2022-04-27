@@ -5,7 +5,7 @@ import {
   Deposit as DepositFeeSharing,
   Withdraw as WithdrawFeeSharing,
 } from "../../../generated/FeeSharingSystem/FeeSharingSystem";
-import { ZERO_BI } from "../../../../../helpers/utils";
+import { ZERO_BI } from "../../../../../helpers/constants";
 
 /**
  * @param user

@@ -1,7 +1,7 @@
 /* eslint-disable prefer-const */
 import { Address, BigInt, ethereum } from "@graphprotocol/graph-ts";
 import { newMockEvent } from "matchstick-as";
-import { ZERO_BI } from "../../../../../helpers/utils";
+import { ZERO_BI } from "../../../../../helpers/constants";
 import { RewardsClaim } from "../../../generated/TradingRewardsDistributor/TradingRewardsDistributor";
 
 /**

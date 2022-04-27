@@ -5,7 +5,8 @@ import { assert, clearStore, log, test } from "matchstick-as/assembly/index";
 import { User } from "../generated/schema";
 import { handleTradingRewardsClaim } from "../mappings";
 import { createRewardsClaimEvent } from "./helpers/tradingRewardsDistributor/utils";
-import { parseEther, ONE_BI, TWO_BI } from "../../../helpers/utils";
+import { parseEther } from "../../../helpers/utils";
+import { ONE_BI, TWO_BI } from "../../../helpers/constants";
 
 test("Trading rewards claimed", () => {
   const userAddress = Address.fromString("0x0000000000000000000000000000000000000001");

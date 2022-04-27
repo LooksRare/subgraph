@@ -19,7 +19,8 @@ import {
   ConversionToLOOKS as ConversionToLOOKSAggregatorUniswapV3,
 } from "../generated/AggregatorFeeSharingWithUniswapV3/AggregatorFeeSharingWithUniswapV3";
 
-import { toBigDecimal, ZERO_BI, ZERO_BD } from "../../../helpers/utils";
+import { toBigDecimal } from "../../../helpers/utils";
+import { ZERO_BD, ZERO_BI } from "../../../helpers/constants";
 
 import { initializeUser } from "./utils/initializeUser";
 import { fetchSharesAggregator, fetchSharesFeeSharingSystem } from "./utils/fetchShares";
