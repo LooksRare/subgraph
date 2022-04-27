@@ -1,4 +1,4 @@
-name: Tests
+name: Build
 
 on:
   workflow_dispatch:
@@ -11,10 +11,6 @@ jobs:
   format:
     name: Matchstick
     runs-on: ubuntu-latest
-    container: node:latest
-    services:
-      postgres:
-        image: postgres:latest
     steps:
       - name: Checkout code
         uses: actions/checkout@v3
@@ -39,5 +35,8 @@ jobs:
       - name: Install dependencies
         run: yarn install --frozen-lockfile
 
-      - name: Run tests
-        run: yarn test
+      - name: Run codegen
+        run: yarn codegen:mainnet
+
+      - name: Run build
+        run: yarn build:mainnet
