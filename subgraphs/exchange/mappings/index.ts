@@ -1,7 +1,9 @@
 /* eslint-disable prefer-const */
 import { Collection, ExecutionStrategy, RoyaltyTransfer, Transaction, User } from "../generated/schema";
 import { RoyaltyPayment, TakerAsk, TakerBid } from "../generated/LooksRareExchange/LooksRareExchange";
-import { toBigDecimal, ZERO_BD, ZERO_BI, ONE_BI } from "../../../helpers/utils";
+import { toBigDecimal } from "../../../helpers/utils";
+import { ZERO_BD, ZERO_BI, ONE_BI } from "../../../helpers/constants";
+
 import { fetchProtocolFee } from "./utils/fetchProtocolFee";
 import {
   updateCollectionDailyData,
