@@ -39,5 +39,11 @@ jobs:
       - name: Install dependencies
         run: yarn install --frozen-lockfile
 
+      - name: Run codegen
+        run: yarn codegen:mainnet
+
+      - name: Run build
+        run: yarn build:mainnet
+
       - name: Run tests
         run: yarn test
