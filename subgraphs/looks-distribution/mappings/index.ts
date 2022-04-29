@@ -1,4 +1,3 @@
-/* eslint-disable prefer-const */
 import { User, RewardPeriod, AggregatorConversion } from "../generated/schema";
 import {
   Deposit as DepositFeeSharing,
@@ -19,7 +18,8 @@ import {
   ConversionToLOOKS as ConversionToLOOKSAggregatorUniswapV3,
 } from "../generated/AggregatorFeeSharingWithUniswapV3/AggregatorFeeSharingWithUniswapV3";
 
-import { toBigDecimal, ZERO_BI, ZERO_BD } from "../../../helpers/utils";
+import { toBigDecimal } from "../../../helpers/utils";
+import { ZERO_BD, ZERO_BI } from "../../../helpers/constants";
 
 import { initializeUser } from "./utils/initializeUser";
 import { fetchSharesAggregator, fetchSharesFeeSharingSystem } from "./utils/fetchShares";
@@ -103,7 +103,7 @@ export function handleWithdrawFeeSharing(event: WithdrawFeeSharing): void {
     );
     user.feeSharingAdjustedDepositAmount = ZERO_BD;
 
-    let userShares = fetchSharesFeeSharingSystem(event.params.user);
+    const userShares = fetchSharesFeeSharingSystem(event.params.user);
     if (userShares.gt(ZERO_BI)) {
       user.feeSharingIsActive = false;
     }
@@ -128,7 +128,7 @@ export function handleWithdrawFeeSharing(event: WithdrawFeeSharing): void {
 }
 
 export function handleNewRewardPeriod(event: NewRewardPeriod): void {
-  let rewardPeriod = new RewardPeriod(event.block.timestamp.toHex());
+  const rewardPeriod = new RewardPeriod(event.block.timestamp.toHex());
   rewardPeriod.block = event.block.number;
   rewardPeriod.numberBlocks = event.params.numberBlocks;
   rewardPeriod.rewardPerBlock = toBigDecimal(event.params.rewardPerBlock);
@@ -220,7 +220,7 @@ export function handleWithdrawAggregatorUniswapV3(event: WithdrawAggregatorUnisw
     );
     user.aggregatorAdjustedDepositAmount = ZERO_BD;
 
-    let userShares = fetchSharesAggregator(event.params.user);
+    const userShares = fetchSharesAggregator(event.params.user);
     if (userShares.gt(ZERO_BI)) {
       user.aggregatorIsActive = false;
     }
@@ -238,7 +238,7 @@ export function handleWithdrawAggregatorUniswapV3(event: WithdrawAggregatorUnisw
 }
 
 export function handleConversionToLOOKSAggregatorUniswapV3(event: ConversionToLOOKSAggregatorUniswapV3): void {
-  let conversion = new AggregatorConversion(event.block.timestamp.toHex());
+  const conversion = new AggregatorConversion(event.block.timestamp.toHex());
   conversion.block = event.block.number;
   conversion.amountReceived = toBigDecimal(event.params.amountReceived);
   conversion.amountSold = toBigDecimal(event.params.amountSold);

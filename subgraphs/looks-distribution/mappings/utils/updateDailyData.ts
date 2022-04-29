@@ -1,6 +1,5 @@
-/* eslint-disable prefer-const */
 import { BigInt, BigDecimal } from "@graphprotocol/graph-ts";
-import { ZERO_BD, ZERO_BI, ONE_BI } from "../../../../helpers/utils";
+import { ZERO_BD, ZERO_BI, ONE_BI } from "../../../../helpers/constants";
 import { DailySnapshot, Overview } from "../../generated/schema";
 import { fetchTotalAmountStakedAggregator, fetchTotalAmountStakedFeeSharing } from "./fetchTotalAmountStaked";
 
@@ -35,10 +34,10 @@ export function initializeOverview(): Overview {
 }
 
 export function updateDailySnapshotDepositFeeSharing(timestamp: BigInt, amount: BigDecimal, isNewUser: boolean): void {
-  let dailyTimestampBigInt = BigInt.fromI32(86400);
-  let dayID = timestamp.div(dailyTimestampBigInt);
-  let dayStartTimestamp = dayID.times(dailyTimestampBigInt);
-  let ID = dayID.toString();
+  const dailyTimestampBigInt = BigInt.fromI32(86400);
+  const dayID = timestamp.div(dailyTimestampBigInt);
+  const dayStartTimestamp = dayID.times(dailyTimestampBigInt);
+  const ID = dayID.toString();
 
   let overview = Overview.load(BigInt.fromI32(1).toHex());
   if (overview === null) {
@@ -81,10 +80,10 @@ export function updateDailySnapshotWithdrawFeeSharing(
   amount: BigDecimal,
   isFinalWithdraw: boolean
 ): void {
-  let dailyTimestampBigInt = BigInt.fromI32(86400);
-  let dayID = timestamp.div(dailyTimestampBigInt);
-  let dayStartTimestamp = dayID.times(dailyTimestampBigInt);
-  let ID = dayID.toString();
+  const dailyTimestampBigInt = BigInt.fromI32(86400);
+  const dayID = timestamp.div(dailyTimestampBigInt);
+  const dayStartTimestamp = dayID.times(dailyTimestampBigInt);
+  const ID = dayID.toString();
 
   let overview = Overview.load(BigInt.fromI32(1).toHex());
   if (overview === null) {
@@ -123,10 +122,10 @@ export function updateDailySnapshotWithdrawFeeSharing(
 }
 
 export function updateDailySnapshotDepositAggregator(timestamp: BigInt, amount: BigDecimal, isNewUser: boolean): void {
-  let dailyTimestampBigInt = BigInt.fromI32(86400);
-  let dayID = timestamp.div(dailyTimestampBigInt);
-  let dayStartTimestamp = dayID.times(dailyTimestampBigInt);
-  let ID = dayID.toString();
+  const dailyTimestampBigInt = BigInt.fromI32(86400);
+  const dayID = timestamp.div(dailyTimestampBigInt);
+  const dayStartTimestamp = dayID.times(dailyTimestampBigInt);
+  const ID = dayID.toString();
 
   let overview = Overview.load(BigInt.fromI32(1).toHex());
   if (overview === null) {
@@ -169,10 +168,10 @@ export function updateDailySnapshotWithdrawAggregator(
   amount: BigDecimal,
   isFinalWithdraw: boolean
 ): void {
-  let dailyTimestampBigInt = BigInt.fromI32(86400);
-  let dayID = timestamp.div(dailyTimestampBigInt);
-  let dayStartTimestamp = dayID.times(dailyTimestampBigInt);
-  let ID = dayID.toString();
+  const dailyTimestampBigInt = BigInt.fromI32(86400);
+  const dayID = timestamp.div(dailyTimestampBigInt);
+  const dayStartTimestamp = dayID.times(dailyTimestampBigInt);
+  const ID = dayID.toString();
 
   let overview = Overview.load(BigInt.fromI32(1).toHex());
   if (overview === null) {
@@ -215,10 +214,10 @@ export function updateDailySnapshotConversion(
   amountSold: BigDecimal,
   amountReceived: BigDecimal
 ): void {
-  let dailyTimestampBigInt = BigInt.fromI32(86400);
-  let dayID = timestamp.div(dailyTimestampBigInt);
-  let dayStartTimestamp = dayID.times(dailyTimestampBigInt);
-  let ID = dayID.toString();
+  const dailyTimestampBigInt = BigInt.fromI32(86400);
+  const dayID = timestamp.div(dailyTimestampBigInt);
+  const dayStartTimestamp = dayID.times(dailyTimestampBigInt);
+  const ID = dayID.toString();
 
   let dailySnapshot = DailySnapshot.load(ID);
   if (dailySnapshot === null) {

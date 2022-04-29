@@ -1,8 +1,7 @@
-/* eslint-disable prefer-const */
 import { Collection } from "../generated/schema";
-
 import { RoyaltyFeeUpdate } from "../generated/RoyaltyFeeRegistry/RoyaltyFeeRegistry";
-import { toBigDecimal, ZERO_ADDRESS, ZERO_BD, ZERO_BI, ONE_BI } from "../../../helpers/utils";
+import { toBigDecimal } from "../../../helpers/utils";
+import { ZERO_ADDRESS, ZERO_BD, ZERO_BI, ONE_BI } from "../../../helpers/constants";
 
 export function handleRoyaltyFeeUpdate(event: RoyaltyFeeUpdate): void {
   let collection = Collection.load(event.params.collection.toHex());

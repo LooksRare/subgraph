@@ -1,6 +1,6 @@
-/* eslint-disable prefer-const */
 import { Address, BigDecimal } from "@graphprotocol/graph-ts";
-import { toBigDecimal, ZERO_BD } from "../../../../helpers/utils";
+import { toBigDecimal } from "../../../../helpers/utils";
+import { ZERO_BD } from "../../../../helpers/constants";
 import { IUniswapV2Pair } from "../../generated/WyvernExchange/IUniswapV2Pair";
 
 // Switch/case is not supported for strings
@@ -27,18 +27,18 @@ function getLpAddress(currency: string): string {
 }
 
 export function getPrice(currency: string, decimals: i32): BigDecimal {
-  let lpAddress = getLpAddress(currency);
+  const lpAddress = getLpAddress(currency);
 
   if (lpAddress == "0x0000000000000000000000000000000000000000") {
     return ZERO_BD;
   }
 
-  let uniswapPair = IUniswapV2Pair.bind(Address.fromString(lpAddress));
+  const uniswapPair = IUniswapV2Pair.bind(Address.fromString(lpAddress));
 
-  let reserves = uniswapPair.try_getReserves();
+  const reserves = uniswapPair.try_getReserves();
   if (!reserves.reverted) {
-    let reserve0 = toBigDecimal(reserves.value.value0, decimals);
-    let reserve1 = toBigDecimal(reserves.value.value1);
+    const reserve0 = toBigDecimal(reserves.value.value0, decimals);
+    const reserve1 = toBigDecimal(reserves.value.value1);
     return reserve0.div(reserve1);
   } else {
     return ZERO_BD;

@@ -7,10 +7,12 @@
   "license": "GPL-3.0-or-later",
   "scripts": {
     "codegen:rinkeby": "graph codegen subgraph-rinkeby.yaml",
-    "codegen:mainnet": "graph codegen subgraph-mainnet.yaml",
+    "codegen:mainnet": "graph codegen subgraph.yaml",
     "build:rinkeby": "graph build subgraph-rinkeby.yaml",
-    "build:mainnet": "graph build subgraph-mainnet.yaml",
+    "build:mainnet": "graph build subgraph.yaml",
     "deploy:rinkeby": "cp ./mappings/utils/addresses-rinkeby.ts ./mappings/utils/addresses.ts && graph deploy --product hosted-service --node https://api.thegraph.com/deploy/ --ipfs https://api.thegraph.com/ipfs/ 0xjurassicpunk/looks-distribution subgraph-rinkeby.yaml",
-    "deploy:mainnet": "cp ./mappings/utils/addresses-mainnet.ts ./mappings/utils/addresses.ts && graph deploy --product hosted-service --node https://api.thegraph.com/deploy/ --ipfs https://api.thegraph.com/ipfs/ looksrare/looks-distribution subgraph-mainnet.yaml"
+    "deploy:mainnet": "cp ./mappings/utils/addresses-mainnet.ts ./mappings/utils/addresses.ts && graph deploy --product hosted-service --node https://api.thegraph.com/deploy/ --ipfs https://api.thegraph.com/ipfs/ looksrare/looks-distribution subgraph.yaml",
+    "test": "graph test -r",
+    "test:lerna": "graph codegen subgraph.yaml && graph build subgraph.yaml && graph test -r"
   }
 }

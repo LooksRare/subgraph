@@ -1,4 +1,3 @@
-/* eslint-disable prefer-const */
 import { Address, BigInt, ethereum } from "@graphprotocol/graph-ts";
 import { newMockEvent } from "matchstick-as";
 import { RoyaltyFeeUpdate } from "../../generated/RoyaltyFeeRegistry/RoyaltyFeeRegistry";
@@ -16,8 +15,8 @@ export function createRoyaltyFeeUpdateEvent(
   receiver: Address,
   fee: BigInt
 ): RoyaltyFeeUpdate {
-  let mockEvent = newMockEvent();
-  let newRoyaltyFeeUpdateEvent = new RoyaltyFeeUpdate(
+  const mockEvent = newMockEvent();
+  const newRoyaltyFeeUpdateEvent = new RoyaltyFeeUpdate(
     mockEvent.address,
     mockEvent.logIndex,
     mockEvent.transactionLogIndex,
@@ -29,10 +28,10 @@ export function createRoyaltyFeeUpdateEvent(
 
   newRoyaltyFeeUpdateEvent.parameters = [];
 
-  let collectionParam = new ethereum.EventParam("collection", ethereum.Value.fromAddress(collection));
-  let setterParam = new ethereum.EventParam("setter", ethereum.Value.fromAddress(setter));
-  let receiverParam = new ethereum.EventParam("receiver", ethereum.Value.fromAddress(receiver));
-  let feeParam = new ethereum.EventParam("fee", ethereum.Value.fromSignedBigInt(fee));
+  const collectionParam = new ethereum.EventParam("collection", ethereum.Value.fromAddress(collection));
+  const setterParam = new ethereum.EventParam("setter", ethereum.Value.fromAddress(setter));
+  const receiverParam = new ethereum.EventParam("receiver", ethereum.Value.fromAddress(receiver));
+  const feeParam = new ethereum.EventParam("fee", ethereum.Value.fromSignedBigInt(fee));
 
   newRoyaltyFeeUpdateEvent.parameters.push(collectionParam);
   newRoyaltyFeeUpdateEvent.parameters.push(setterParam);

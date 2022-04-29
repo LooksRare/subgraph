@@ -1,4 +1,3 @@
-/* eslint-disable prefer-const */
 import { Address, BigInt, Bytes, ethereum } from "@graphprotocol/graph-ts";
 import { newMockEvent } from "matchstick-as";
 import { RoyaltyPayment, TakerAsk, TakerBid } from "../../generated/LooksRareExchange/LooksRareExchange";
@@ -28,8 +27,8 @@ export function createTakerAskEvent(
   amount: BigInt,
   price: BigInt
 ): TakerAsk {
-  let mockEvent = newMockEvent();
-  let newTakerAskEvent = new TakerAsk(
+  const mockEvent = newMockEvent();
+  const newTakerAskEvent = new TakerAsk(
     mockEvent.address,
     mockEvent.logIndex,
     mockEvent.transactionLogIndex,
@@ -41,16 +40,16 @@ export function createTakerAskEvent(
 
   newTakerAskEvent.parameters = [];
 
-  let orderHashParam = new ethereum.EventParam("orderHash", ethereum.Value.fromBytes(orderHash));
-  let orderNonceParam = new ethereum.EventParam("orderNonce", ethereum.Value.fromSignedBigInt(orderNonce));
-  let takerParam = new ethereum.EventParam("taker", ethereum.Value.fromAddress(taker));
-  let makerParam = new ethereum.EventParam("maker", ethereum.Value.fromAddress(maker));
-  let strategyParam = new ethereum.EventParam("strategy", ethereum.Value.fromAddress(strategy));
-  let currencyParam = new ethereum.EventParam("currency", ethereum.Value.fromAddress(currency));
-  let collectionParam = new ethereum.EventParam("collection", ethereum.Value.fromAddress(collection));
-  let tokenIdParam = new ethereum.EventParam("tokenId", ethereum.Value.fromSignedBigInt(tokenId));
-  let amountParam = new ethereum.EventParam("amount", ethereum.Value.fromSignedBigInt(amount));
-  let priceParam = new ethereum.EventParam("price", ethereum.Value.fromSignedBigInt(price));
+  const orderHashParam = new ethereum.EventParam("orderHash", ethereum.Value.fromBytes(orderHash));
+  const orderNonceParam = new ethereum.EventParam("orderNonce", ethereum.Value.fromSignedBigInt(orderNonce));
+  const takerParam = new ethereum.EventParam("taker", ethereum.Value.fromAddress(taker));
+  const makerParam = new ethereum.EventParam("maker", ethereum.Value.fromAddress(maker));
+  const strategyParam = new ethereum.EventParam("strategy", ethereum.Value.fromAddress(strategy));
+  const currencyParam = new ethereum.EventParam("currency", ethereum.Value.fromAddress(currency));
+  const collectionParam = new ethereum.EventParam("collection", ethereum.Value.fromAddress(collection));
+  const tokenIdParam = new ethereum.EventParam("tokenId", ethereum.Value.fromSignedBigInt(tokenId));
+  const amountParam = new ethereum.EventParam("amount", ethereum.Value.fromSignedBigInt(amount));
+  const priceParam = new ethereum.EventParam("price", ethereum.Value.fromSignedBigInt(price));
 
   newTakerAskEvent.parameters.push(orderHashParam);
   newTakerAskEvent.parameters.push(orderNonceParam);
@@ -91,8 +90,8 @@ export function createTakerBidEvent(
   amount: BigInt,
   price: BigInt
 ): TakerBid {
-  let mockEvent = newMockEvent();
-  let newTakerBidEvent = new TakerBid(
+  const mockEvent = newMockEvent();
+  const newTakerBidEvent = new TakerBid(
     mockEvent.address,
     mockEvent.logIndex,
     mockEvent.transactionLogIndex,
@@ -104,16 +103,16 @@ export function createTakerBidEvent(
 
   newTakerBidEvent.parameters = [];
 
-  let orderHashParam = new ethereum.EventParam("orderHash", ethereum.Value.fromBytes(orderHash));
-  let orderNonceParam = new ethereum.EventParam("orderNonce", ethereum.Value.fromSignedBigInt(orderNonce));
-  let takerParam = new ethereum.EventParam("taker", ethereum.Value.fromAddress(taker));
-  let makerParam = new ethereum.EventParam("maker", ethereum.Value.fromAddress(maker));
-  let strategyParam = new ethereum.EventParam("strategy", ethereum.Value.fromAddress(strategy));
-  let currencyParam = new ethereum.EventParam("currency", ethereum.Value.fromAddress(currency));
-  let collectionParam = new ethereum.EventParam("collection", ethereum.Value.fromAddress(collection));
-  let tokenIdParam = new ethereum.EventParam("tokenId", ethereum.Value.fromSignedBigInt(tokenId));
-  let amountParam = new ethereum.EventParam("amount", ethereum.Value.fromSignedBigInt(amount));
-  let priceParam = new ethereum.EventParam("price", ethereum.Value.fromSignedBigInt(price));
+  const orderHashParam = new ethereum.EventParam("orderHash", ethereum.Value.fromBytes(orderHash));
+  const orderNonceParam = new ethereum.EventParam("orderNonce", ethereum.Value.fromSignedBigInt(orderNonce));
+  const takerParam = new ethereum.EventParam("taker", ethereum.Value.fromAddress(taker));
+  const makerParam = new ethereum.EventParam("maker", ethereum.Value.fromAddress(maker));
+  const strategyParam = new ethereum.EventParam("strategy", ethereum.Value.fromAddress(strategy));
+  const currencyParam = new ethereum.EventParam("currency", ethereum.Value.fromAddress(currency));
+  const collectionParam = new ethereum.EventParam("collection", ethereum.Value.fromAddress(collection));
+  const tokenIdParam = new ethereum.EventParam("tokenId", ethereum.Value.fromSignedBigInt(tokenId));
+  const amountParam = new ethereum.EventParam("amount", ethereum.Value.fromSignedBigInt(amount));
+  const priceParam = new ethereum.EventParam("price", ethereum.Value.fromSignedBigInt(price));
 
   newTakerBidEvent.parameters.push(orderHashParam);
   newTakerBidEvent.parameters.push(orderNonceParam);
@@ -144,8 +143,8 @@ export function createRoyaltyPaymentEvent(
   currency: Address,
   amount: BigInt
 ): RoyaltyPayment {
-  let mockEvent = newMockEvent();
-  let newRoyaltyPaymentEvent = new RoyaltyPayment(
+  const mockEvent = newMockEvent();
+  const newRoyaltyPaymentEvent = new RoyaltyPayment(
     mockEvent.address,
     mockEvent.logIndex,
     mockEvent.transactionLogIndex,
@@ -157,11 +156,14 @@ export function createRoyaltyPaymentEvent(
 
   newRoyaltyPaymentEvent.parameters = [];
 
-  let collectionParam = new ethereum.EventParam("collection", ethereum.Value.fromAddress(collection));
-  let tokenIdParam = new ethereum.EventParam("tokenId", ethereum.Value.fromSignedBigInt(tokenId));
-  let royaltyRecipientParam = new ethereum.EventParam("royaltyRecipient", ethereum.Value.fromAddress(royaltyRecipient));
-  let currencyParam = new ethereum.EventParam("currency", ethereum.Value.fromAddress(currency));
-  let amountParam = new ethereum.EventParam("amount", ethereum.Value.fromSignedBigInt(amount));
+  const collectionParam = new ethereum.EventParam("collection", ethereum.Value.fromAddress(collection));
+  const tokenIdParam = new ethereum.EventParam("tokenId", ethereum.Value.fromSignedBigInt(tokenId));
+  const royaltyRecipientParam = new ethereum.EventParam(
+    "royaltyRecipient",
+    ethereum.Value.fromAddress(royaltyRecipient)
+  );
+  const currencyParam = new ethereum.EventParam("currency", ethereum.Value.fromAddress(currency));
+  const amountParam = new ethereum.EventParam("amount", ethereum.Value.fromSignedBigInt(amount));
 
   newRoyaltyPaymentEvent.parameters.push(collectionParam);
   newRoyaltyPaymentEvent.parameters.push(tokenIdParam);

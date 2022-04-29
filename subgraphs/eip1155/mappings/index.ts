@@ -1,4 +1,3 @@
-/* eslint-disable prefer-const */
 import { Address, BigInt, log } from "@graphprotocol/graph-ts";
 import { Blockchain, Collection, Owner, Token, Transaction } from "../generated/schema";
 import { TransferBatch, TransferSingle, URI } from "../generated/EIP1155/EIP1155";
@@ -75,7 +74,7 @@ export function handleTransferBatch(event: TransferBatch): void {
   to.updatedAt = event.block.timestamp;
   to.save();
 
-  let ids = event.params._ids;
+  const ids = event.params._ids;
   for (let i = 0; i < ids.length; i++) {
     let token = Token.load(event.address.toHex() + "-" + ids[i].toString());
     if (token === null) {
@@ -112,7 +111,7 @@ export function handleTransferBatch(event: TransferBatch): void {
     token.save();
 
     // Transaction
-    let transaction = new Transaction(event.transaction.hash.toHex() + "-" + ids[i].toString());
+    const transaction = new Transaction(event.transaction.hash.toHex() + "-" + ids[i].toString());
     transaction.hash = event.transaction.hash;
     transaction.from = from.id;
     transaction.to = to.id;
@@ -232,7 +231,7 @@ export function handleTransferSingle(event: TransferSingle): void {
   token.save();
 
   // Transaction
-  let transaction = new Transaction(event.transaction.hash.toHex());
+  const transaction = new Transaction(event.transaction.hash.toHex());
   transaction.hash = event.transaction.hash;
   transaction.from = from.id;
   transaction.to = to.id;
@@ -247,7 +246,7 @@ export function handleTransferSingle(event: TransferSingle): void {
 }
 
 export function handleURI(event: URI): void {
-  let token = Token.load(event.address.toHex() + "-" + event.params._id.toString());
+  const token = Token.load(event.address.toHex() + "-" + event.params._id.toString());
   if (token !== null) {
     token.tokenURI = event.params._value;
     token.save();

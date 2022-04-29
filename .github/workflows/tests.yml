@@ -1,4 +1,4 @@
-name: Tests
+name: Matchstick
 
 on:
   workflow_dispatch:
@@ -9,7 +9,7 @@ on:
 
 jobs:
   format:
-    name: Matchstick
+    name: Graph
     runs-on: ubuntu-latest
     container: node:latest
     services:

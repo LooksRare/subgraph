@@ -1,16 +1,14 @@
-/* eslint-disable prefer-const */
 import { Address, BigInt } from "@graphprotocol/graph-ts";
 import { assert, clearStore, log, test } from "matchstick-as/assembly/index";
-
-import { Collection } from "../generated/schema";
 import { createRoyaltyFeeUpdateEvent } from "./helpers/utils";
+import { Collection } from "../generated/schema";
 import { handleRoyaltyFeeUpdate } from "../mappings";
-import { ONE_BI } from "../../../helpers/utils";
+import { ONE_BI } from "../../../helpers/constants";
 
 test("RoyaltyFeeUpdate", () => {
-  let collectionAddress = Address.fromString("0xF7c68B84A8ad29A61AF42FC31cEF1964dd80f8Ea");
-  let setterAddress = Address.fromString("0x0000000000000000000000000000000000000001");
-  let receiverAddress = Address.fromString("0x0000000000000000000000000000000000000002");
+  const collectionAddress = Address.fromString("0xF7c68B84A8ad29A61AF42FC31cEF1964dd80f8Ea");
+  const setterAddress = Address.fromString("0x0000000000000000000000000000000000000001");
+  const receiverAddress = Address.fromString("0x0000000000000000000000000000000000000002");
   let fee = BigInt.fromI32(200); // 2%
 
   let newRoyaltyEvent = createRoyaltyFeeUpdateEvent(collectionAddress, setterAddress, receiverAddress, fee);

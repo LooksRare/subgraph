@@ -1,29 +1,27 @@
-/* eslint-disable prefer-const */
 import { Address, BigInt, Bytes, ethereum } from "@graphprotocol/graph-ts";
 import { assert, clearStore, createMockedFunction, log, test } from "matchstick-as/assembly/index";
-
 import { createRoyaltyPaymentEvent, createTakerAskEvent, createTakerBidEvent } from "./helpers/utils";
 import { COLLECTION, STRATEGY, WETH } from "./helpers/config";
-
 import { handleRoyaltyPayment, handleTakerAsk, handleTakerBid } from "../mappings";
-import { parseEther, ONE_BI, ZERO_BI } from "../../../helpers/utils";
 import { Collection, ExecutionStrategy, User } from "../generated/schema";
+import { parseEther } from "../../../helpers/utils";
+import { ZERO_BI, ONE_BI, THREE_BI } from "../../../helpers/constants";
 
-test("TakerBid", () => {
+test("TakerBid event updates all entities", () => {
   createMockedFunction(STRATEGY, "viewProtocolFee", "viewProtocolFee():(uint256)").returns([
     ethereum.Value.fromI32(200),
   ]);
 
-  let orderHash = Bytes.fromHexString("C83125C74D8C2F7CFCEE119124D29641582EDE7A70537BE375068158573E63C3");
-  let orderNonce = BigInt.fromI32(1);
-  let takerAddress = Address.fromString("0x0000000000000000000000000000000000000001");
-  let makerAddress = Address.fromString("0x0000000000000000000000000000000000000002");
-  let tokenId = BigInt.fromI32(3);
-  let amount = BigInt.fromI32(1);
-  let priceInETH = 2; // 2 ETH
-  let price = parseEther(priceInETH);
+  const orderHash = Bytes.fromHexString("C83125C74D8C2F7CFCEE119124D29641582EDE7A70537BE375068158573E63C3");
+  const orderNonce = ONE_BI;
+  const takerAddress = Address.fromString("0x0000000000000000000000000000000000000001");
+  const makerAddress = Address.fromString("0x0000000000000000000000000000000000000002");
+  const tokenId = THREE_BI;
+  const amount = ONE_BI;
+  const priceInETH = 2; // 2 ETH
+  const price = parseEther(priceInETH);
 
-  let newTakerBidEvent = createTakerBidEvent(
+  const newTakerBidEvent = createTakerBidEvent(
     orderHash,
     orderNonce,
     takerAddress,
@@ -35,10 +33,9 @@ test("TakerBid", () => {
     amount,
     price
   );
-
   handleTakerBid(newTakerBidEvent);
 
-  let makerUser = User.load(makerAddress.toHex());
+  const makerUser = User.load(makerAddress.toHex());
   if (makerUser !== null) {
     assert.bigIntEquals(makerUser.totalTransactions, ONE_BI);
     assert.stringEquals(makerUser.totalVolume.toString(), priceInETH.toString());
@@ -48,7 +45,7 @@ test("TakerBid", () => {
     log.warning("Maker user doesn't exist", []);
   }
 
-  let takerUser = User.load(takerAddress.toHex());
+  const takerUser = User.load(takerAddress.toHex());
   if (takerUser !== null) {
     assert.bigIntEquals(takerUser.totalTransactions, ONE_BI);
     assert.stringEquals(takerUser.totalVolume.toString(), priceInETH.toString());
@@ -58,7 +55,7 @@ test("TakerBid", () => {
     log.warning("Taker user doesn't exist", []);
   }
 
-  let strategy = ExecutionStrategy.load(STRATEGY.toHex());
+  const strategy = ExecutionStrategy.load(STRATEGY.toHex());
   if (strategy !== null) {
     assert.bigIntEquals(strategy.protocolFee, BigInt.fromI32(200));
     assert.bigIntEquals(strategy.totalTransactions, ONE_BI);
@@ -71,7 +68,7 @@ test("TakerBid", () => {
     log.warning("Strategy doesn't exist", []);
   }
 
-  let collection = Collection.load(COLLECTION.toHex());
+  const collection = Collection.load(COLLECTION.toHex());
   if (collection !== null) {
     assert.bigIntEquals(collection.totalTransactions, ONE_BI);
     assert.bigIntEquals(collection.totalTakerBidTransactions, ONE_BI);
@@ -88,21 +85,21 @@ test("TakerBid", () => {
   clearStore();
 });
 
-test("TakerAsk", () => {
+test("TakerAsk event updates all entities as expected", () => {
   createMockedFunction(STRATEGY, "viewProtocolFee", "viewProtocolFee():(uint256)").returns([
     ethereum.Value.fromI32(200),
   ]);
 
-  let orderHash = Bytes.fromHexString("C83125C74D8C2F7CFCEE119124D29641582EDE7A70537BE375068158573E63C5");
-  let orderNonce = BigInt.fromI32(1);
-  let takerAddress = Address.fromString("0x0000000000000000000000000000000000000001");
-  let makerAddress = Address.fromString("0x0000000000000000000000000000000000000002");
-  let tokenId = BigInt.fromI32(3);
-  let amount = BigInt.fromI32(1);
-  let priceInETH = 5; // 5 ETH
-  let price = parseEther(priceInETH);
+  const orderHash = Bytes.fromHexString("C83125C74D8C2F7CFCEE119124D29641582EDE7A70537BE375068158573E63C5");
+  const orderNonce = ONE_BI;
+  const takerAddress = Address.fromString("0x0000000000000000000000000000000000000001");
+  const makerAddress = Address.fromString("0x0000000000000000000000000000000000000002");
+  const tokenId = THREE_BI;
+  const amount = ONE_BI;
+  const priceInETH = 5; // 5 ETH
+  const price = parseEther(priceInETH);
 
-  let newTakerAskEvent = createTakerAskEvent(
+  const newTakerAskEvent = createTakerAskEvent(
     orderHash,
     orderNonce,
     takerAddress,
@@ -114,10 +111,9 @@ test("TakerAsk", () => {
     amount,
     price
   );
-
   handleTakerAsk(newTakerAskEvent);
 
-  let makerUser = User.load(makerAddress.toHex());
+  const makerUser = User.load(makerAddress.toHex());
   if (makerUser !== null) {
     assert.bigIntEquals(makerUser.totalTransactions, ONE_BI);
     assert.stringEquals(makerUser.totalVolume.toString(), priceInETH.toString());
@@ -127,7 +123,7 @@ test("TakerAsk", () => {
     log.warning("Maker user doesn't exist", []);
   }
 
-  let takerUser = User.load(takerAddress.toHex());
+  const takerUser = User.load(takerAddress.toHex());
   if (takerUser !== null) {
     assert.bigIntEquals(takerUser.totalTransactions, ONE_BI);
     assert.stringEquals(takerUser.totalVolume.toString(), priceInETH.toString());
@@ -137,7 +133,7 @@ test("TakerAsk", () => {
     log.warning("Taker user doesn't exist", []);
   }
 
-  let strategy = ExecutionStrategy.load(STRATEGY.toHex());
+  const strategy = ExecutionStrategy.load(STRATEGY.toHex());
   if (strategy !== null) {
     assert.bigIntEquals(strategy.protocolFee, BigInt.fromI32(200));
     assert.bigIntEquals(strategy.totalTransactions, ONE_BI);
@@ -150,7 +146,7 @@ test("TakerAsk", () => {
     log.warning("Strategy doesn't exist", []);
   }
 
-  let collection = Collection.load(COLLECTION.toHex());
+  const collection = Collection.load(COLLECTION.toHex());
   if (collection !== null) {
     assert.bigIntEquals(collection.totalTransactions, ONE_BI);
     assert.bigIntEquals(collection.totalTakerBidTransactions, ZERO_BI);
@@ -167,22 +163,21 @@ test("TakerAsk", () => {
 });
 
 test("RoyaltyPayment", () => {
-  let royaltyRecipientAddress = Address.fromString("0x0000000000000000000000000000000000000005");
-  let tokenId = BigInt.fromI32(3);
-  let royaltyAmountInETH = 1; // 1 ETH
-  let royaltyAmount = parseEther(royaltyAmountInETH);
+  const royaltyRecipientAddress = Address.fromString("0x0000000000000000000000000000000000000005");
+  const tokenId = THREE_BI;
+  const royaltyAmountInETH = 1; // 1 ETH
+  const royaltyAmount = parseEther(royaltyAmountInETH);
 
-  let newRoyaltyPaymentEvent = createRoyaltyPaymentEvent(
+  const newRoyaltyPaymentEvent = createRoyaltyPaymentEvent(
     COLLECTION,
     tokenId,
     royaltyRecipientAddress,
     WETH,
     royaltyAmount
   );
-
   handleRoyaltyPayment(newRoyaltyPaymentEvent);
 
-  let royaltyRecipient = User.load(royaltyRecipientAddress.toHex());
+  const royaltyRecipient = User.load(royaltyRecipientAddress.toHex());
   if (royaltyRecipient !== null) {
     assert.bigIntEquals(royaltyRecipient.totalTransactions, ZERO_BI);
     assert.stringEquals(royaltyRecipient.totalRoyaltyCollected.toString(), royaltyAmountInETH.toString());
@@ -193,7 +188,7 @@ test("RoyaltyPayment", () => {
     log.warning("Royalty user doesn't exist", []);
   }
 
-  let collection = Collection.load(COLLECTION.toHex());
+  const collection = Collection.load(COLLECTION.toHex());
   if (collection !== null) {
     assert.stringEquals(collection.totalRoyaltyPaid.toString(), royaltyAmountInETH.toString());
   } else {
