@@ -3,7 +3,9 @@ import { Address, BigInt, ethereum } from "@graphprotocol/graph-ts";
 import { newMockEvent } from "matchstick-as";
 import {
   Deposit as DepositFeeSharing,
+  Harvest as HarvestFeeSharing,
   Withdraw as WithdrawFeeSharing,
+  NewRewardPeriod,
 } from "../../../generated/FeeSharingSystem/FeeSharingSystem";
 import { ZERO_BI } from "../../../../../helpers/constants";
 
@@ -49,6 +51,42 @@ export function createDepositFeeSharingEvent(
 
 /**
  * @param user
+ * @param harvestedAmount
+ * @returns Harvest Event
+ */
+export function createHarvestFeeSharingEvent(
+  user: Address,
+  harvestedAmount: BigInt,
+  blockTimestamp: BigInt = ZERO_BI
+): HarvestFeeSharing {
+  let mockEvent = newMockEvent();
+  let newHarvestEvent = new HarvestFeeSharing(
+    mockEvent.address,
+    mockEvent.logIndex,
+    mockEvent.transactionLogIndex,
+    mockEvent.logType,
+    mockEvent.block,
+    mockEvent.transaction,
+    mockEvent.parameters
+  );
+
+  newHarvestEvent.block.timestamp = blockTimestamp;
+  newHarvestEvent.parameters = [];
+
+  let userParam = new ethereum.EventParam("user", ethereum.Value.fromAddress(user));
+  let harvestedAmountParam = new ethereum.EventParam(
+    "harvestedAmount",
+    ethereum.Value.fromSignedBigInt(harvestedAmount)
+  );
+
+  newHarvestEvent.parameters.push(userParam);
+  newHarvestEvent.parameters.push(harvestedAmountParam);
+
+  return newHarvestEvent;
+}
+
+/**
+ * @param user
  * @param amount
  * @param harvestedAmount
  * @returns Withdraw Event
@@ -85,4 +123,41 @@ export function createWithdrawFeeSharingEvent(
   newWithdrawEvent.parameters.push(harvestedAmountParam);
 
   return newWithdrawEvent;
+}
+
+/**
+ * @param numberBlocks
+ * @param rewardPerBlock
+ * @param reward
+ * @returns NewRewardPeriod Event
+ */
+export function createNewRewardPeriodEvent(
+  numberBlocks: BigInt,
+  rewardPerBlock: BigInt,
+  reward: BigInt,
+  blockTimestamp: BigInt = ZERO_BI
+): NewRewardPeriod {
+  let mockEvent = newMockEvent();
+  let newRewardPeriodEvent = new NewRewardPeriod(
+    mockEvent.address,
+    mockEvent.logIndex,
+    mockEvent.transactionLogIndex,
+    mockEvent.logType,
+    mockEvent.block,
+    mockEvent.transaction,
+    mockEvent.parameters
+  );
+
+  newRewardPeriodEvent.block.timestamp = blockTimestamp;
+  newRewardPeriodEvent.parameters = [];
+
+  let numberBlocksParam = new ethereum.EventParam("numberBlocks", ethereum.Value.fromSignedBigInt(numberBlocks));
+  let rewardPerBlockPAram = new ethereum.EventParam("rewardPerBlock", ethereum.Value.fromSignedBigInt(rewardPerBlock));
+  let rewardParam = new ethereum.EventParam("reward", ethereum.Value.fromSignedBigInt(reward));
+
+  newRewardPeriodEvent.parameters.push(numberBlocksParam);
+  newRewardPeriodEvent.parameters.push(rewardPerBlockPAram);
+  newRewardPeriodEvent.parameters.push(rewardParam);
+
+  return newRewardPeriodEvent;
 }
