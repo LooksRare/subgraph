@@ -1,14 +1,18 @@
 /* eslint-disable prefer-const */
 import { Address, BigInt, ethereum } from "@graphprotocol/graph-ts";
 import { assert, clearStore, createMockedFunction, log, test } from "matchstick-as/assembly/index";
-import { User } from "../generated/schema";
-import { handleDepositFeeSharing, handleWithdrawFeeSharing } from "../mappings";
-import { createDepositFeeSharingEvent, createWithdrawFeeSharingEvent } from "./helpers/feeSharingSystem/utils";
+import { RewardPeriod, User } from "../generated/schema";
+import { handleDepositFeeSharing, handleNewRewardPeriod, handleWithdrawFeeSharing } from "../mappings";
+import {
+  createDepositFeeSharingEvent,
+  createNewRewardPeriodEvent,
+  createWithdrawFeeSharingEvent,
+} from "./helpers/feeSharingSystem/utils";
 import { parseEther } from "../../../helpers/utils";
 import { FEE_SHARING_ADDRESS } from "../mappings/utils/addresses-mainnet";
-import { ONE_ETHER_IN_WEI } from "../../../helpers/constants";
+import { ONE_ETHER_IN_WEI, TWO_BI } from "../../../helpers/constants";
 
-test("Deposit and withdraw event (inferior to deposited amount)", () => {
+test("Deposit + Withdraw (inferior to deposited amount) events", () => {
   const userAddress = Address.fromString("0x0000000000000000000000000000000000000001");
 
   /**
@@ -80,6 +84,39 @@ test("Deposit and withdraw event (inferior to deposited amount)", () => {
     assert.bigIntEquals(user.feeSharingLastWithdrawDate, blockTimestamp);
   } else {
     log.warning("User doesn't exist", []);
+  }
+  clearStore();
+});
+
+test("NewRewardEvent creates RewardPeriod entity", () => {
+  /**
+   * NewRewardPeriod event with 975 WETH distributed across 6500 blocks
+   */
+  let numberBlocks = BigInt.fromI32(6500); // 6500 blocks
+  let rewardPerBlockInWETH = 0.15; // 0.15 ETH
+  let rewardInWETH = 975; // 975 ETH
+  let rewardPerBlockInWeiWETH = parseEther((rewardPerBlockInWETH * 10 ** 2) as i32, 18 - 2);
+  let rewardInWeiWETH = parseEther(rewardInWETH);
+  let blockNumber = TWO_BI;
+  let blockTimestamp = BigInt.fromU32(1651086000);
+
+  let newRewardPeriodEvent = createNewRewardPeriodEvent(
+    numberBlocks,
+    rewardPerBlockInWeiWETH,
+    rewardInWeiWETH,
+    blockNumber,
+    blockTimestamp
+  );
+  handleNewRewardPeriod(newRewardPeriodEvent);
+
+  let rewardPeriod = RewardPeriod.load(blockTimestamp.toHex());
+  if (rewardPeriod !== null) {
+    assert.bigIntEquals(rewardPeriod.block, blockNumber);
+    assert.bigIntEquals(rewardPeriod.numberBlocks, numberBlocks);
+    assert.stringEquals(rewardPeriod.reward.toString(), rewardInWETH.toString());
+    assert.stringEquals(rewardPeriod.rewardPerBlock.toString(), rewardPerBlockInWETH.toString());
+  } else {
+    log.warning("RewardPeriod doesn't exist", []);
   }
   clearStore();
 });
