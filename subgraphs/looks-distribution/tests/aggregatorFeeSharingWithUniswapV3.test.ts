@@ -48,7 +48,6 @@ test("Deposit and withdraw event (inferior to deposited amount)", () => {
    * 2. User withdraws 15 LOOKS
    */
   let amountWithdrawnInLOOKS = 15; // 20 LOOKS
-  harvestedAmountInWETH = 1; // 0 WETH
   let amountWithdrawnInLOOKSWei = parseEther(amountWithdrawnInLOOKS);
   blockTimestamp = BigInt.fromU32(1651086000);
 
