@@ -1,4 +1,3 @@
-/* eslint-disable prefer-const */
 import { BigInt } from "@graphprotocol/graph-ts";
 import { Collection, Overview, User } from "../generated/schema";
 import { ApprovalForAll } from "../generated/EIP721/EIP721";

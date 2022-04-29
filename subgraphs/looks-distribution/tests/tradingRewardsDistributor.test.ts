@@ -1,10 +1,8 @@
-/* eslint-disable prefer-const */
 import { Address, BigInt } from "@graphprotocol/graph-ts";
 import { assert, clearStore, log, test } from "matchstick-as/assembly/index";
-
+import { createRewardsClaimEvent } from "./helpers/tradingRewardsDistributor/utils";
 import { User } from "../generated/schema";
 import { handleTradingRewardsClaim } from "../mappings";
-import { createRewardsClaimEvent } from "./helpers/tradingRewardsDistributor/utils";
 import { parseEther } from "../../../helpers/utils";
 import { ONE_BI, TWO_BI } from "../../../helpers/constants";
 
@@ -34,7 +32,7 @@ test("Trading rewards claimed", () => {
   amountClaimedInLOOKS = 50; // 50 LOOKS
   amountClaimedInLOOKSWei = parseEther(amountClaimedInLOOKS);
   totalAmountClaimedInLOOKS += amountClaimedInLOOKS;
-  let blockTimestamp = BigInt.fromU32(1651086000);
+  const blockTimestamp = BigInt.fromU32(1651086000);
 
   newRewardsClaimEvent = createRewardsClaimEvent(userAddress, TWO_BI, amountClaimedInLOOKSWei, blockTimestamp);
   handleTradingRewardsClaim(newRewardsClaimEvent);

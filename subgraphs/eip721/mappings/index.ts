@@ -1,4 +1,3 @@
-/* eslint-disable prefer-const */
 import { Address, BigInt } from "@graphprotocol/graph-ts";
 import { Blockchain, Collection, Owner, Token, Transaction } from "../generated/schema";
 import { Transfer } from "../generated/EIP721/EIP721";
@@ -110,7 +109,7 @@ export function handleTransfer(event: Transfer): void {
   token.save();
 
   // Transaction
-  let transaction = new Transaction(event.transaction.hash.toHex());
+  const transaction = new Transaction(event.transaction.hash.toHex());
   transaction.hash = event.transaction.hash;
   transaction.from = from.id;
   transaction.to = to.id;

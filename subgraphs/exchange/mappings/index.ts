@@ -1,4 +1,3 @@
-/* eslint-disable prefer-const */
 import { Collection, ExecutionStrategy, RoyaltyTransfer, Transaction, User } from "../generated/schema";
 import { RoyaltyPayment, TakerAsk, TakerBid } from "../generated/LooksRareExchange/LooksRareExchange";
 import { toBigDecimal } from "../../../helpers/utils";
@@ -85,8 +84,8 @@ export function handleTakerAsk(event: TakerAsk): void {
   takerAskUser.save();
 
   // 5. Transaction
-  let name = event.params.orderHash.toHex() + "-" + event.transaction.hash.toHex();
-  let transaction = new Transaction(name);
+  const name = event.params.orderHash.toHex() + "-" + event.transaction.hash.toHex();
+  const transaction = new Transaction(name);
   transaction.date = event.block.timestamp;
   transaction.block = event.block.number;
   transaction.collection = collection.id;
@@ -187,8 +186,8 @@ export function handleTakerBid(event: TakerBid): void {
   takerBidUser.save();
 
   // 5. Transaction
-  let name = event.params.orderHash.toHex() + "-" + event.transaction.hash.toHex();
-  let transaction = new Transaction(name);
+  const name = event.params.orderHash.toHex() + "-" + event.transaction.hash.toHex();
+  const transaction = new Transaction(name);
   transaction.date = event.block.timestamp;
   transaction.block = event.block.number;
   transaction.collection = collection.id;
@@ -254,9 +253,9 @@ export function handleRoyaltyPayment(event: RoyaltyPayment): void {
   user.save();
 
   // 3. RoyaltyTransfer
-  let name =
+  const name =
     event.params.collection.toHex() + "-" + event.params.tokenId.toHex() + "-" + event.transaction.hash.toHex();
-  let royaltyTransfer = new RoyaltyTransfer(name);
+  const royaltyTransfer = new RoyaltyTransfer(name);
   royaltyTransfer.date = event.block.timestamp;
   royaltyTransfer.block = event.block.number;
   royaltyTransfer.collection = collection.id;

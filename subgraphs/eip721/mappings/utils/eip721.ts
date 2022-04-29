@@ -1,11 +1,10 @@
-/* eslint-disable prefer-const */
 import { Address, BigInt } from "@graphprotocol/graph-ts";
 import { EIP721 } from "../../generated/EIP721/EIP721";
 
 export function fetchName(address: Address): string {
-  let contract = EIP721.bind(address);
+  const contract = EIP721.bind(address);
 
-  let nameResult = contract.try_name();
+  const nameResult = contract.try_name();
   if (!nameResult.reverted) {
     return nameResult.value;
   }
@@ -14,9 +13,9 @@ export function fetchName(address: Address): string {
 }
 
 export function fetchSymbol(address: Address): string {
-  let contract = EIP721.bind(address);
+  const contract = EIP721.bind(address);
 
-  let symbolResult = contract.try_symbol();
+  const symbolResult = contract.try_symbol();
   if (!symbolResult.reverted) {
     return symbolResult.value;
   }
@@ -25,9 +24,9 @@ export function fetchSymbol(address: Address): string {
 }
 
 export function fetchTokenURI(address: Address, tokenID: BigInt): string | null {
-  let contract = EIP721.bind(address);
+  const contract = EIP721.bind(address);
 
-  let uriResult = contract.try_tokenURI(tokenID);
+  const uriResult = contract.try_tokenURI(tokenID);
   if (!uriResult.reverted) {
     return uriResult.value;
   }

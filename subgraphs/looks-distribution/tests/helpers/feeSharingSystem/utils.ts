@@ -1,4 +1,3 @@
-/* eslint-disable prefer-const */
 import { Address, BigInt, ethereum } from "@graphprotocol/graph-ts";
 import { newMockEvent } from "matchstick-as";
 import {
@@ -21,8 +20,8 @@ export function createDepositFeeSharingEvent(
   harvestedAmount: BigInt,
   blockTimestamp: BigInt = ZERO_BI
 ): DepositFeeSharing {
-  let mockEvent = newMockEvent();
-  let newDepositEvent = new DepositFeeSharing(
+  const mockEvent = newMockEvent();
+  const newDepositEvent = new DepositFeeSharing(
     mockEvent.address,
     mockEvent.logIndex,
     mockEvent.transactionLogIndex,
@@ -35,9 +34,9 @@ export function createDepositFeeSharingEvent(
   newDepositEvent.block.timestamp = blockTimestamp;
   newDepositEvent.parameters = [];
 
-  let userParam = new ethereum.EventParam("user", ethereum.Value.fromAddress(user));
-  let amountParam = new ethereum.EventParam("amount", ethereum.Value.fromSignedBigInt(amount));
-  let harvestedAmountParam = new ethereum.EventParam(
+  const userParam = new ethereum.EventParam("user", ethereum.Value.fromAddress(user));
+  const amountParam = new ethereum.EventParam("amount", ethereum.Value.fromSignedBigInt(amount));
+  const harvestedAmountParam = new ethereum.EventParam(
     "harvestedAmount",
     ethereum.Value.fromSignedBigInt(harvestedAmount)
   );
@@ -59,8 +58,8 @@ export function createHarvestFeeSharingEvent(
   harvestedAmount: BigInt,
   blockTimestamp: BigInt = ZERO_BI
 ): HarvestFeeSharing {
-  let mockEvent = newMockEvent();
-  let newHarvestEvent = new HarvestFeeSharing(
+  const mockEvent = newMockEvent();
+  const newHarvestEvent = new HarvestFeeSharing(
     mockEvent.address,
     mockEvent.logIndex,
     mockEvent.transactionLogIndex,
@@ -73,8 +72,8 @@ export function createHarvestFeeSharingEvent(
   newHarvestEvent.block.timestamp = blockTimestamp;
   newHarvestEvent.parameters = [];
 
-  let userParam = new ethereum.EventParam("user", ethereum.Value.fromAddress(user));
-  let harvestedAmountParam = new ethereum.EventParam(
+  const userParam = new ethereum.EventParam("user", ethereum.Value.fromAddress(user));
+  const harvestedAmountParam = new ethereum.EventParam(
     "harvestedAmount",
     ethereum.Value.fromSignedBigInt(harvestedAmount)
   );
@@ -97,8 +96,8 @@ export function createWithdrawFeeSharingEvent(
   harvestedAmount: BigInt,
   blockTimestamp: BigInt = ZERO_BI
 ): WithdrawFeeSharing {
-  let mockEvent = newMockEvent();
-  let newWithdrawEvent = new WithdrawFeeSharing(
+  const mockEvent = newMockEvent();
+  const newWithdrawEvent = new WithdrawFeeSharing(
     mockEvent.address,
     mockEvent.logIndex,
     mockEvent.transactionLogIndex,
@@ -111,9 +110,9 @@ export function createWithdrawFeeSharingEvent(
   newWithdrawEvent.block.timestamp = blockTimestamp;
   newWithdrawEvent.parameters = [];
 
-  let userParam = new ethereum.EventParam("user", ethereum.Value.fromAddress(user));
-  let amountParam = new ethereum.EventParam("amount", ethereum.Value.fromSignedBigInt(amount));
-  let harvestedAmountParam = new ethereum.EventParam(
+  const userParam = new ethereum.EventParam("user", ethereum.Value.fromAddress(user));
+  const amountParam = new ethereum.EventParam("amount", ethereum.Value.fromSignedBigInt(amount));
+  const harvestedAmountParam = new ethereum.EventParam(
     "harvestedAmount",
     ethereum.Value.fromSignedBigInt(harvestedAmount)
   );
@@ -138,8 +137,8 @@ export function createNewRewardPeriodEvent(
   blockNumber: BigInt = ZERO_BI,
   blockTimestamp: BigInt = ZERO_BI
 ): NewRewardPeriod {
-  let mockEvent = newMockEvent();
-  let newRewardPeriodEvent = new NewRewardPeriod(
+  const mockEvent = newMockEvent();
+  const newRewardPeriodEvent = new NewRewardPeriod(
     mockEvent.address,
     mockEvent.logIndex,
     mockEvent.transactionLogIndex,
@@ -153,9 +152,12 @@ export function createNewRewardPeriodEvent(
   newRewardPeriodEvent.block.timestamp = blockTimestamp;
   newRewardPeriodEvent.parameters = [];
 
-  let numberBlocksParam = new ethereum.EventParam("numberBlocks", ethereum.Value.fromSignedBigInt(numberBlocks));
-  let rewardPerBlockPAram = new ethereum.EventParam("rewardPerBlock", ethereum.Value.fromSignedBigInt(rewardPerBlock));
-  let rewardParam = new ethereum.EventParam("reward", ethereum.Value.fromSignedBigInt(reward));
+  const numberBlocksParam = new ethereum.EventParam("numberBlocks", ethereum.Value.fromSignedBigInt(numberBlocks));
+  const rewardPerBlockPAram = new ethereum.EventParam(
+    "rewardPerBlock",
+    ethereum.Value.fromSignedBigInt(rewardPerBlock)
+  );
+  const rewardParam = new ethereum.EventParam("reward", ethereum.Value.fromSignedBigInt(reward));
 
   newRewardPeriodEvent.parameters.push(numberBlocksParam);
   newRewardPeriodEvent.parameters.push(rewardPerBlockPAram);

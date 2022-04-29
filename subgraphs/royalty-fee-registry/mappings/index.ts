@@ -1,6 +1,4 @@
-/* eslint-disable prefer-const */
 import { Collection } from "../generated/schema";
-
 import { RoyaltyFeeUpdate } from "../generated/RoyaltyFeeRegistry/RoyaltyFeeRegistry";
 import { toBigDecimal } from "../../../helpers/utils";
 import { ZERO_ADDRESS, ZERO_BD, ZERO_BI, ONE_BI } from "../../../helpers/constants";

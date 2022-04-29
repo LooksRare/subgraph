@@ -1,4 +1,3 @@
-/* eslint-disable prefer-const */
 import { BigDecimal, BigInt } from "@graphprotocol/graph-ts";
 import { Balance, Currency, User } from "../generated/schema";
 import { AtomicMatch_Call } from "../generated/WyvernExchange/WyvernExchange";

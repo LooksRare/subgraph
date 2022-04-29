@@ -1,16 +1,15 @@
-/* eslint-disable prefer-const */
 import { Address, BigInt, ethereum } from "@graphprotocol/graph-ts";
 import { assert, clearStore, createMockedFunction, log, test } from "matchstick-as/assembly/index";
 import { RewardPeriod, User } from "../generated/schema";
-import { handleDepositFeeSharing, handleNewRewardPeriod, handleWithdrawFeeSharing } from "../mappings";
 import {
   createDepositFeeSharingEvent,
   createNewRewardPeriodEvent,
   createWithdrawFeeSharingEvent,
 } from "./helpers/feeSharingSystem/utils";
-import { parseEther } from "../../../helpers/utils";
+import { handleDepositFeeSharing, handleNewRewardPeriod, handleWithdrawFeeSharing } from "../mappings";
 import { FEE_SHARING_ADDRESS } from "../mappings/utils/addresses-mainnet";
 import { ONE_ETHER_IN_WEI, TWO_BI } from "../../../helpers/constants";
+import { parseEther } from "../../../helpers/utils";
 
 test("Deposit + Withdraw (inferior to deposited amount) events", () => {
   const userAddress = Address.fromString("0x0000000000000000000000000000000000000001");
@@ -18,13 +17,13 @@ test("Deposit + Withdraw (inferior to deposited amount) events", () => {
   /**
    * 1. User deposits 20 LOOKS
    */
-  let amountDepositedInLOOKS = 20; // 20 LOOKS
+  const amountDepositedInLOOKS = 20; // 20 LOOKS
   let harvestedAmountInWETH = 0; // 0 WETH
-  let amountDepositedInLOOKSWei = parseEther(amountDepositedInLOOKS);
+  const amountDepositedInLOOKSWei = parseEther(amountDepositedInLOOKS);
   let harvestedAmountInWETHWei = parseEther(harvestedAmountInWETH);
   let blockTimestamp = BigInt.fromU32(1651086000);
 
-  let newDepositEvent = createDepositFeeSharingEvent(
+  const newDepositEvent = createDepositFeeSharingEvent(
     userAddress,
     amountDepositedInLOOKSWei,
     harvestedAmountInWETHWei,
@@ -55,13 +54,13 @@ test("Deposit + Withdraw (inferior to deposited amount) events", () => {
   /**
    * 2. User withdraws 15 LOOKS
    */
-  let amountWithdrawnInLOOKS = 15; // 20 LOOKS
+  const amountWithdrawnInLOOKS = 15; // 20 LOOKS
   harvestedAmountInWETH = 1; // 0 WETH
-  let amountWithdrawnInLOOKSWei = parseEther(amountWithdrawnInLOOKS);
+  const amountWithdrawnInLOOKSWei = parseEther(amountWithdrawnInLOOKS);
   harvestedAmountInWETHWei = parseEther(harvestedAmountInWETH);
   blockTimestamp = BigInt.fromU32(1651086000);
 
-  let newWithdrawEvent = createWithdrawFeeSharingEvent(
+  const newWithdrawEvent = createWithdrawFeeSharingEvent(
     userAddress,
     amountWithdrawnInLOOKSWei,
     harvestedAmountInWETHWei,
@@ -92,15 +91,15 @@ test("NewRewardEvent creates RewardPeriod entity", () => {
   /**
    * NewRewardPeriod event with 975 WETH distributed across 6500 blocks
    */
-  let numberBlocks = BigInt.fromI32(6500); // 6500 blocks
-  let rewardPerBlockInWETH = 0.15; // 0.15 ETH
-  let rewardInWETH = 975; // 975 ETH
-  let rewardPerBlockInWeiWETH = parseEther((rewardPerBlockInWETH * 10 ** 2) as i32, 18 - 2);
-  let rewardInWeiWETH = parseEther(rewardInWETH);
-  let blockNumber = TWO_BI;
-  let blockTimestamp = BigInt.fromU32(1651086000);
+  const numberBlocks = BigInt.fromI32(6500); // 6500 blocks
+  const rewardPerBlockInWETH = 0.15; // 0.15 ETH
+  const rewardInWETH = 975; // 975 ETH
+  const rewardPerBlockInWeiWETH = parseEther((rewardPerBlockInWETH * 10 ** 2) as i32, 18 - 2);
+  const rewardInWeiWETH = parseEther(rewardInWETH);
+  const blockNumber = TWO_BI;
+  const blockTimestamp = BigInt.fromU32(1651086000);
 
-  let newRewardPeriodEvent = createNewRewardPeriodEvent(
+  const newRewardPeriodEvent = createNewRewardPeriodEvent(
     numberBlocks,
     rewardPerBlockInWeiWETH,
     rewardInWeiWETH,
@@ -109,7 +108,7 @@ test("NewRewardEvent creates RewardPeriod entity", () => {
   );
   handleNewRewardPeriod(newRewardPeriodEvent);
 
-  let rewardPeriod = RewardPeriod.load(blockTimestamp.toHex());
+  const rewardPeriod = RewardPeriod.load(blockTimestamp.toHex());
   if (rewardPeriod !== null) {
     assert.bigIntEquals(rewardPeriod.block, blockNumber);
     assert.bigIntEquals(rewardPeriod.numberBlocks, numberBlocks);

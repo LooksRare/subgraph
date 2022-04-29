@@ -1,13 +1,11 @@
-/* eslint-disable prefer-const */
 import { Address, BigInt, ethereum } from "@graphprotocol/graph-ts";
 import { newMockEvent } from "matchstick-as";
-
-import { ZERO_BI } from "../../../../../helpers/constants";
 import {
   ConversionToLOOKS,
   Deposit as DepositAggregatorUniswapV3,
   Withdraw as WithdrawAggregatorUniswapV3,
 } from "../../../generated/AggregatorFeeSharingWithUniswapV3/AggregatorFeeSharingWithUniswapV3";
+import { ZERO_BI } from "../../../../../helpers/constants";
 
 /**
  * @param user
@@ -19,8 +17,8 @@ export function createDepositAggregatorEvent(
   amount: BigInt,
   blockTimestamp: BigInt = ZERO_BI
 ): DepositAggregatorUniswapV3 {
-  let mockEvent = newMockEvent();
-  let newDepositEvent = new DepositAggregatorUniswapV3(
+  const mockEvent = newMockEvent();
+  const newDepositEvent = new DepositAggregatorUniswapV3(
     mockEvent.address,
     mockEvent.logIndex,
     mockEvent.transactionLogIndex,
@@ -33,8 +31,8 @@ export function createDepositAggregatorEvent(
   newDepositEvent.block.timestamp = blockTimestamp;
   newDepositEvent.parameters = [];
 
-  let userParam = new ethereum.EventParam("user", ethereum.Value.fromAddress(user));
-  let amountParam = new ethereum.EventParam("amount", ethereum.Value.fromSignedBigInt(amount));
+  const userParam = new ethereum.EventParam("user", ethereum.Value.fromAddress(user));
+  const amountParam = new ethereum.EventParam("amount", ethereum.Value.fromSignedBigInt(amount));
 
   newDepositEvent.parameters.push(userParam);
   newDepositEvent.parameters.push(amountParam);
@@ -52,8 +50,8 @@ export function createWithdrawAggregatorEvent(
   amount: BigInt,
   blockTimestamp: BigInt = ZERO_BI
 ): WithdrawAggregatorUniswapV3 {
-  let mockEvent = newMockEvent();
-  let newWithdrawEvent = new WithdrawAggregatorUniswapV3(
+  const mockEvent = newMockEvent();
+  const newWithdrawEvent = new WithdrawAggregatorUniswapV3(
     mockEvent.address,
     mockEvent.logIndex,
     mockEvent.transactionLogIndex,
@@ -66,8 +64,8 @@ export function createWithdrawAggregatorEvent(
   newWithdrawEvent.block.timestamp = blockTimestamp;
   newWithdrawEvent.parameters = [];
 
-  let userParam = new ethereum.EventParam("user", ethereum.Value.fromAddress(user));
-  let amountParam = new ethereum.EventParam("amount", ethereum.Value.fromSignedBigInt(amount));
+  const userParam = new ethereum.EventParam("user", ethereum.Value.fromAddress(user));
+  const amountParam = new ethereum.EventParam("amount", ethereum.Value.fromSignedBigInt(amount));
 
   newWithdrawEvent.parameters.push(userParam);
   newWithdrawEvent.parameters.push(amountParam);
@@ -86,8 +84,8 @@ export function createConversionToLOOKSEvent(
   blockNumber: BigInt = ZERO_BI,
   blockTimestamp: BigInt = ZERO_BI
 ): ConversionToLOOKS {
-  let mockEvent = newMockEvent();
-  let newConversionEvent = new ConversionToLOOKS(
+  const mockEvent = newMockEvent();
+  const newConversionEvent = new ConversionToLOOKS(
     mockEvent.address,
     mockEvent.logIndex,
     mockEvent.transactionLogIndex,
@@ -101,8 +99,11 @@ export function createConversionToLOOKSEvent(
   newConversionEvent.block.timestamp = blockTimestamp;
   newConversionEvent.parameters = [];
 
-  let amountSoldParam = new ethereum.EventParam("amountSold", ethereum.Value.fromSignedBigInt(amountSold));
-  let amountReceivedParam = new ethereum.EventParam("amountReceived", ethereum.Value.fromSignedBigInt(amountReceived));
+  const amountSoldParam = new ethereum.EventParam("amountSold", ethereum.Value.fromSignedBigInt(amountSold));
+  const amountReceivedParam = new ethereum.EventParam(
+    "amountReceived",
+    ethereum.Value.fromSignedBigInt(amountReceived)
+  );
 
   newConversionEvent.parameters.push(amountSoldParam);
   newConversionEvent.parameters.push(amountReceivedParam);

@@ -1,8 +1,7 @@
-/* eslint-disable prefer-const */
 import { Address, BigInt, ethereum } from "@graphprotocol/graph-ts";
 import { newMockEvent } from "matchstick-as";
-import { ZERO_BI } from "../../../../../helpers/constants";
 import { RewardsClaim } from "../../../generated/TradingRewardsDistributor/TradingRewardsDistributor";
+import { ZERO_BI } from "../../../../../helpers/constants";
 
 /**
  * @param user
@@ -16,8 +15,8 @@ export function createRewardsClaimEvent(
   amount: BigInt,
   blockTimestamp: BigInt = ZERO_BI
 ): RewardsClaim {
-  let mockEvent = newMockEvent();
-  let newRewardsClaimEvent = new RewardsClaim(
+  const mockEvent = newMockEvent();
+  const newRewardsClaimEvent = new RewardsClaim(
     mockEvent.address,
     mockEvent.logIndex,
     mockEvent.transactionLogIndex,
@@ -28,11 +27,11 @@ export function createRewardsClaimEvent(
   );
 
   newRewardsClaimEvent.block.timestamp = blockTimestamp;
-
   newRewardsClaimEvent.parameters = [];
-  let userParam = new ethereum.EventParam("user", ethereum.Value.fromAddress(user));
-  let rewardRoundParam = new ethereum.EventParam("rewardRound", ethereum.Value.fromSignedBigInt(rewardRound));
-  let amountParam = new ethereum.EventParam("amount", ethereum.Value.fromSignedBigInt(amount));
+
+  const userParam = new ethereum.EventParam("user", ethereum.Value.fromAddress(user));
+  const rewardRoundParam = new ethereum.EventParam("rewardRound", ethereum.Value.fromSignedBigInt(rewardRound));
+  const amountParam = new ethereum.EventParam("amount", ethereum.Value.fromSignedBigInt(amount));
 
   newRewardsClaimEvent.parameters.push(userParam);
   newRewardsClaimEvent.parameters.push(rewardRoundParam);

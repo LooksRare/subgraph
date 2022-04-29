@@ -1,4 +1,3 @@
-/* eslint-disable prefer-const */
 import { Address, BigInt, BigDecimal } from "@graphprotocol/graph-ts";
 import { ONE_BI, ZERO_BD, ZERO_BI } from "../../../../helpers/constants";
 import {
@@ -16,10 +15,10 @@ export function updateCollectionDailyData(
   timestamp: BigInt,
   isTakerAsk: boolean
 ): void {
-  let dailyTimestampBigInt = BigInt.fromI32(86400);
-  let dayID = timestamp.div(dailyTimestampBigInt);
-  let dayStartTimestamp = dayID.times(dailyTimestampBigInt);
-  let ID = dayID.toString() + "-" + collection.toHex();
+  const dailyTimestampBigInt = BigInt.fromI32(86400);
+  const dayID = timestamp.div(dailyTimestampBigInt);
+  const dayStartTimestamp = dayID.times(dailyTimestampBigInt);
+  const ID = dayID.toString() + "-" + collection.toHex();
 
   let collectionDailyData = CollectionDailyData.load(ID);
   if (collectionDailyData === null) {
@@ -35,7 +34,7 @@ export function updateCollectionDailyData(
     collectionDailyData.dailyVolumeExcludingZeroFee = ZERO_BD;
 
     // Increment number of unique daily collections if it didn't exist
-    let exchangeDailyData = ExchangeDailyData.load(dayID.toString());
+    const exchangeDailyData = ExchangeDailyData.load(dayID.toString());
     if (exchangeDailyData !== null) {
       exchangeDailyData.dailyCollections = exchangeDailyData.dailyCollections.plus(ONE_BI);
       exchangeDailyData.save();
@@ -52,7 +51,7 @@ export function updateCollectionDailyData(
     collectionDailyData.dailyTakerBidVolume = collectionDailyData.dailyTakerBidVolume.plus(volume);
   }
 
-  let executionStrategy = ExecutionStrategy.load(strategy.toHex());
+  const executionStrategy = ExecutionStrategy.load(strategy.toHex());
   if (executionStrategy !== null) {
     if (executionStrategy.protocolFee !== ZERO_BI) {
       collectionDailyData.dailyVolumeExcludingZeroFee = collectionDailyData.dailyVolumeExcludingZeroFee.plus(volume);
@@ -68,10 +67,10 @@ export function updateExchangeDailyData(
   timestamp: BigInt,
   isTakerAsk: boolean
 ): void {
-  let dailyTimestampBigInt = BigInt.fromI32(86400);
-  let dayID = timestamp.div(dailyTimestampBigInt);
-  let dayStartTimestamp = dayID.times(dailyTimestampBigInt);
-  let ID = dayID.toString();
+  const dailyTimestampBigInt = BigInt.fromI32(86400);
+  const dayID = timestamp.div(dailyTimestampBigInt);
+  const dayStartTimestamp = dayID.times(dailyTimestampBigInt);
+  const ID = dayID.toString();
 
   let exchangeDailyData = ExchangeDailyData.load(ID);
   if (exchangeDailyData === null) {
@@ -98,7 +97,7 @@ export function updateExchangeDailyData(
     exchangeDailyData.dailyTakerBidVolume = exchangeDailyData.dailyTakerBidVolume.plus(volume);
   }
 
-  let executionStrategy = ExecutionStrategy.load(strategy.toHex());
+  const executionStrategy = ExecutionStrategy.load(strategy.toHex());
   if (executionStrategy !== null) {
     if (executionStrategy.protocolFee !== ZERO_BI) {
       exchangeDailyData.dailyVolumeExcludingZeroFee = exchangeDailyData.dailyVolumeExcludingZeroFee.plus(volume);
@@ -114,10 +113,10 @@ export function updateExecutionStrategyDailyData(
   timestamp: BigInt,
   isTakerAsk: boolean
 ): void {
-  let dailyTimestampBigInt = BigInt.fromI32(86400);
-  let dayID = timestamp.div(dailyTimestampBigInt);
-  let dayStartTimestamp = dayID.times(dailyTimestampBigInt);
-  let ID = dayID.toString() + "-" + strategy.toHex();
+  const dailyTimestampBigInt = BigInt.fromI32(86400);
+  const dayID = timestamp.div(dailyTimestampBigInt);
+  const dayStartTimestamp = dayID.times(dailyTimestampBigInt);
+  const ID = dayID.toString() + "-" + strategy.toHex();
 
   let strategyDailyData = ExecutionStrategyDailyData.load(ID);
   if (strategyDailyData === null) {
@@ -146,10 +145,10 @@ export function updateExecutionStrategyDailyData(
 }
 
 export function updateUserDailyData(user: Address, strategy: Address, volume: BigDecimal, timestamp: BigInt): void {
-  let dailyTimestampBigInt = BigInt.fromI32(86400);
-  let dayID = timestamp.div(dailyTimestampBigInt);
-  let dayStartTimestamp = dayID.times(dailyTimestampBigInt);
-  let ID = dayID.toString() + "-" + user.toHex();
+  const dailyTimestampBigInt = BigInt.fromI32(86400);
+  const dayID = timestamp.div(dailyTimestampBigInt);
+  const dayStartTimestamp = dayID.times(dailyTimestampBigInt);
+  const ID = dayID.toString() + "-" + user.toHex();
 
   let userDailyData = UserDailyData.load(ID);
 
@@ -162,7 +161,7 @@ export function updateUserDailyData(user: Address, strategy: Address, volume: Bi
     userDailyData.dailyVolumeExcludingZeroFee = ZERO_BD;
 
     // Increment number of unique daily users if it didn't exist
-    let exchangeDailyData = ExchangeDailyData.load(dayID.toString());
+    const exchangeDailyData = ExchangeDailyData.load(dayID.toString());
     if (exchangeDailyData !== null) {
       exchangeDailyData.dailyUsers = exchangeDailyData.dailyUsers.plus(ONE_BI);
       exchangeDailyData.save();
@@ -172,7 +171,7 @@ export function updateUserDailyData(user: Address, strategy: Address, volume: Bi
   userDailyData.dailyTransactions = userDailyData.dailyTransactions.plus(ONE_BI);
   userDailyData.dailyVolume = userDailyData.dailyVolume.plus(volume);
 
-  let executionStrategy = ExecutionStrategy.load(strategy.toHex());
+  const executionStrategy = ExecutionStrategy.load(strategy.toHex());
   if (executionStrategy !== null) {
     if (executionStrategy.protocolFee !== ZERO_BI) {
       userDailyData.dailyVolumeExcludingZeroFee = userDailyData.dailyVolumeExcludingZeroFee.plus(volume);
