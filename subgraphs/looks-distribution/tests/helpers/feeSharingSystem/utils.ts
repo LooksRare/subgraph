@@ -135,6 +135,7 @@ export function createNewRewardPeriodEvent(
   numberBlocks: BigInt,
   rewardPerBlock: BigInt,
   reward: BigInt,
+  blockNumber: BigInt = ZERO_BI,
   blockTimestamp: BigInt = ZERO_BI
 ): NewRewardPeriod {
   let mockEvent = newMockEvent();
@@ -148,6 +149,7 @@ export function createNewRewardPeriodEvent(
     mockEvent.parameters
   );
 
+  newRewardPeriodEvent.block.number = blockNumber;
   newRewardPeriodEvent.block.timestamp = blockTimestamp;
   newRewardPeriodEvent.parameters = [];
 

@@ -83,6 +83,7 @@ export function createWithdrawAggregatorEvent(
 export function createConversionToLOOKSEvent(
   amountSold: BigInt,
   amountReceived: BigInt,
+  blockNumber: BigInt = ZERO_BI,
   blockTimestamp: BigInt = ZERO_BI
 ): ConversionToLOOKS {
   let mockEvent = newMockEvent();
@@ -96,6 +97,7 @@ export function createConversionToLOOKSEvent(
     mockEvent.parameters
   );
 
+  newConversionEvent.block.number = blockNumber;
   newConversionEvent.block.timestamp = blockTimestamp;
   newConversionEvent.parameters = [];
 
