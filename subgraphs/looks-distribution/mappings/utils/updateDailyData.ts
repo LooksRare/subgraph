@@ -1,212 +1,108 @@
 import { BigInt, BigDecimal } from "@graphprotocol/graph-ts";
-import { ZERO_BD, ZERO_BI, ONE_BI } from "../../../../helpers/constants";
+import { initializeDailySnapshot } from "./initializeDailySnapshot";
+import { initializeOverview } from "./initializeOverview";
+import { fetchTotalAmountStakedAggregator, fetchTotalAmountStakedFeeSharing } from "./rpc-calls/fetchTotalAmountStaked";
 import { DailySnapshot, Overview } from "../../generated/schema";
-import { fetchTotalAmountStakedAggregator, fetchTotalAmountStakedFeeSharing } from "./fetchTotalAmountStaked";
+import { ZERO_BI, ONE_BI } from "../../../../helpers/constants";
 
-export function initializeDailySnapshot(ID: string, dayStartTimestamp: BigInt): DailySnapshot {
-  const dailySnapshot = new DailySnapshot(ID);
-  dailySnapshot.date = dayStartTimestamp;
-  dailySnapshot.aggregatorActiveUsers = ZERO_BI;
-  dailySnapshot.aggregatorNewUsers = ZERO_BI;
-  dailySnapshot.aggregatorRemovedUsers = ZERO_BI;
-  dailySnapshot.aggregatorDailyInflowLOOKS = ZERO_BD;
-  dailySnapshot.aggregatorDailyOutflowLOOKS = ZERO_BD;
-  dailySnapshot.aggregatorTotalStakedLOOKS = ZERO_BD;
-  dailySnapshot.aggregatorTotalWETHSold = ZERO_BD;
-  dailySnapshot.aggregatorTotalLOOKSReceived = ZERO_BD;
-  dailySnapshot.aggregatorConversionCount = ZERO_BI;
-  dailySnapshot.feeSharingActiveUsers = ZERO_BI;
-  dailySnapshot.feeSharingNewUsers = ZERO_BI;
-  dailySnapshot.feeSharingRemovedUsers = ZERO_BI;
-  dailySnapshot.feeSharingDailyInflowLOOKS = ZERO_BD;
-  dailySnapshot.feeSharingDailyOutflowLOOKS = ZERO_BD;
-  dailySnapshot.feeSharingTotalStakedLOOKS = ZERO_BD;
+export function setupOverviewAndDailySnapshot(timestamp: BigInt): DailySnapshot {
+  const dailyTimestampBigInt = BigInt.fromI32(86400);
+  const dayID = timestamp.div(dailyTimestampBigInt);
+  const dayStartTimestamp = dayID.times(dailyTimestampBigInt);
+  const ID = dayID.toString();
+
+  let overview = Overview.load(ONE_BI.toHex());
+  if (overview === null) {
+    overview = initializeOverview();
+  }
+
+  let dailySnapshot = DailySnapshot.load(ID);
+  if (dailySnapshot === null) {
+    dailySnapshot = initializeDailySnapshot(ID, dayStartTimestamp);
+    dailySnapshot.aggregatorActiveUsers = overview.aggregatorActiveUsers;
+    dailySnapshot.feeSharingActiveUsers = overview.feeSharingActiveUsers;
+    dailySnapshot.aggregatorTotalStakedLOOKS = overview.aggregatorTotalStakedLOOKS;
+    dailySnapshot.feeSharingTotalStakedLOOKS = overview.feeSharingTotalStakedLOOKS;
+
+    if (overview.aggregatorActiveUsers.gt(ZERO_BI)) {
+      overview.aggregatorTotalStakedLOOKS = fetchTotalAmountStakedAggregator();
+    }
+
+    if (overview.feeSharingActiveUsers.gt(ZERO_BI)) {
+      overview.feeSharingTotalStakedLOOKS = fetchTotalAmountStakedFeeSharing().minus(
+        overview.aggregatorTotalStakedLOOKS
+      );
+    }
+    overview.save();
+  }
   return dailySnapshot;
 }
 
-export function initializeOverview(): Overview {
-  const overview = new Overview(BigInt.fromI32(1).toHex());
-  overview.aggregatorActiveUsers = ZERO_BI;
-  overview.aggregatorTotalStakedLOOKS = ZERO_BD;
-  overview.feeSharingActiveUsers = ZERO_BI;
-  overview.feeSharingTotalStakedLOOKS = ZERO_BD;
-  return overview;
-}
-
-export function updateDailySnapshotDepositFeeSharing(timestamp: BigInt, amount: BigDecimal, isNewUser: boolean): void {
-  const dailyTimestampBigInt = BigInt.fromI32(86400);
-  const dayID = timestamp.div(dailyTimestampBigInt);
-  const dayStartTimestamp = dayID.times(dailyTimestampBigInt);
-  const ID = dayID.toString();
-
-  let overview = Overview.load(BigInt.fromI32(1).toHex());
-  if (overview === null) {
-    overview = initializeOverview();
-  }
-
-  let dailySnapshot = DailySnapshot.load(ID);
-  if (dailySnapshot === null) {
-    dailySnapshot = initializeDailySnapshot(ID, dayStartTimestamp);
-    dailySnapshot.aggregatorActiveUsers = overview.aggregatorActiveUsers;
-    dailySnapshot.feeSharingActiveUsers = overview.feeSharingActiveUsers;
-    dailySnapshot.aggregatorTotalStakedLOOKS = overview.aggregatorTotalStakedLOOKS;
-    dailySnapshot.feeSharingTotalStakedLOOKS = overview.feeSharingTotalStakedLOOKS;
-
-    if (overview.aggregatorActiveUsers.gt(ZERO_BI)) {
-      overview.aggregatorTotalStakedLOOKS = fetchTotalAmountStakedAggregator();
-    }
-
-    if (overview.feeSharingActiveUsers.gt(ZERO_BI)) {
-      overview.feeSharingTotalStakedLOOKS = fetchTotalAmountStakedFeeSharing().minus(
-        overview.aggregatorTotalStakedLOOKS
-      );
-    }
-  }
-
+export function updateDailySnapshotDepositFeeSharing(timestamp: BigInt, amount: BigDecimal): void {
+  const dailySnapshot = setupOverviewAndDailySnapshot(timestamp);
   dailySnapshot.feeSharingDailyInflowLOOKS = dailySnapshot.feeSharingDailyInflowLOOKS.plus(amount);
-
-  if (isNewUser) {
-    dailySnapshot.feeSharingNewUsers = dailySnapshot.feeSharingNewUsers.plus(ONE_BI);
-    dailySnapshot.feeSharingActiveUsers = dailySnapshot.feeSharingActiveUsers.plus(ONE_BI);
-    overview.feeSharingActiveUsers = overview.feeSharingActiveUsers.plus(ONE_BI);
-  }
-
-  overview.save();
   dailySnapshot.save();
 }
 
-export function updateDailySnapshotWithdrawFeeSharing(
-  timestamp: BigInt,
-  amount: BigDecimal,
-  isFinalWithdraw: boolean
-): void {
-  const dailyTimestampBigInt = BigInt.fromI32(86400);
-  const dayID = timestamp.div(dailyTimestampBigInt);
-  const dayStartTimestamp = dayID.times(dailyTimestampBigInt);
-  const ID = dayID.toString();
-
-  let overview = Overview.load(BigInt.fromI32(1).toHex());
-  if (overview === null) {
-    overview = initializeOverview();
-  }
-
-  let dailySnapshot = DailySnapshot.load(ID);
-  if (dailySnapshot === null) {
-    dailySnapshot = initializeDailySnapshot(ID, dayStartTimestamp);
-    dailySnapshot.aggregatorActiveUsers = overview.aggregatorActiveUsers;
-    dailySnapshot.feeSharingActiveUsers = overview.feeSharingActiveUsers;
-    dailySnapshot.aggregatorTotalStakedLOOKS = overview.aggregatorTotalStakedLOOKS;
-    dailySnapshot.feeSharingTotalStakedLOOKS = overview.feeSharingTotalStakedLOOKS;
-
-    if (overview.aggregatorActiveUsers.gt(ZERO_BI)) {
-      overview.aggregatorTotalStakedLOOKS = fetchTotalAmountStakedAggregator();
-    }
-
-    if (overview.feeSharingActiveUsers.gt(ZERO_BI)) {
-      overview.feeSharingTotalStakedLOOKS = fetchTotalAmountStakedFeeSharing().minus(
-        overview.aggregatorTotalStakedLOOKS
-      );
-    }
-  }
-
+export function updateDailySnapshotWithdrawFeeSharing(timestamp: BigInt, amount: BigDecimal): void {
+  const dailySnapshot = setupOverviewAndDailySnapshot(timestamp);
   dailySnapshot.feeSharingDailyOutflowLOOKS = dailySnapshot.feeSharingDailyOutflowLOOKS.plus(amount);
+  dailySnapshot.save();
+}
 
-  if (isFinalWithdraw) {
+export function updateNumberUsersFeeSharing(timestamp: BigInt, isIncrease: boolean): void {
+  const dailySnapshot = setupOverviewAndDailySnapshot(timestamp);
+  const overview = Overview.load(ONE_BI.toHex());
+  if (overview === null) {
+    // This should be impossible since it is initialized before
+    return;
+  }
+
+  if (isIncrease) {
+    dailySnapshot.feeSharingNewUsers = dailySnapshot.feeSharingNewUsers.plus(ONE_BI);
+    dailySnapshot.feeSharingActiveUsers = dailySnapshot.feeSharingActiveUsers.plus(ONE_BI);
+    overview.feeSharingActiveUsers = overview.feeSharingActiveUsers.plus(ONE_BI);
+  } else {
     dailySnapshot.feeSharingRemovedUsers = dailySnapshot.feeSharingRemovedUsers.plus(ONE_BI);
     dailySnapshot.feeSharingActiveUsers = dailySnapshot.feeSharingActiveUsers.minus(ONE_BI);
     overview.feeSharingActiveUsers = overview.feeSharingActiveUsers.minus(ONE_BI);
   }
 
+  dailySnapshot.save();
   overview.save();
+}
+
+export function updateDailySnapshotDepositAggregator(timestamp: BigInt, amount: BigDecimal): void {
+  const dailySnapshot = setupOverviewAndDailySnapshot(timestamp);
+  dailySnapshot.aggregatorDailyInflowLOOKS = dailySnapshot.aggregatorDailyInflowLOOKS.plus(amount);
   dailySnapshot.save();
 }
 
-export function updateDailySnapshotDepositAggregator(timestamp: BigInt, amount: BigDecimal, isNewUser: boolean): void {
-  const dailyTimestampBigInt = BigInt.fromI32(86400);
-  const dayID = timestamp.div(dailyTimestampBigInt);
-  const dayStartTimestamp = dayID.times(dailyTimestampBigInt);
-  const ID = dayID.toString();
+export function updateDailySnapshotWithdrawAggregator(timestamp: BigInt, amount: BigDecimal): void {
+  const dailySnapshot = setupOverviewAndDailySnapshot(timestamp);
+  dailySnapshot.aggregatorDailyOutflowLOOKS = dailySnapshot.aggregatorDailyOutflowLOOKS.plus(amount);
+  dailySnapshot.save();
+}
 
-  let overview = Overview.load(BigInt.fromI32(1).toHex());
+export function updateNumberUsersAggregator(timestamp: BigInt, isIncrease: boolean): void {
+  const dailySnapshot = setupOverviewAndDailySnapshot(timestamp);
+  const overview = Overview.load(ONE_BI.toHex());
   if (overview === null) {
-    overview = initializeOverview();
+    // This should be impossible since it is initialized before
+    return;
   }
-
-  let dailySnapshot = DailySnapshot.load(ID);
-  if (dailySnapshot === null) {
-    dailySnapshot = initializeDailySnapshot(ID, dayStartTimestamp);
-    dailySnapshot.aggregatorActiveUsers = overview.aggregatorActiveUsers;
-    dailySnapshot.feeSharingActiveUsers = overview.feeSharingActiveUsers;
-    dailySnapshot.aggregatorTotalStakedLOOKS = overview.aggregatorTotalStakedLOOKS;
-    dailySnapshot.feeSharingTotalStakedLOOKS = overview.feeSharingTotalStakedLOOKS;
-
-    if (overview.aggregatorActiveUsers.gt(ZERO_BI)) {
-      overview.aggregatorTotalStakedLOOKS = fetchTotalAmountStakedAggregator();
-    }
-
-    if (overview.feeSharingActiveUsers.gt(ZERO_BI)) {
-      overview.feeSharingTotalStakedLOOKS = fetchTotalAmountStakedFeeSharing().minus(
-        overview.aggregatorTotalStakedLOOKS
-      );
-    }
-  }
-
-  dailySnapshot.aggregatorDailyInflowLOOKS = dailySnapshot.aggregatorDailyInflowLOOKS.plus(amount);
-
-  if (isNewUser) {
+  if (isIncrease) {
     dailySnapshot.aggregatorNewUsers = dailySnapshot.aggregatorNewUsers.plus(ONE_BI);
     dailySnapshot.aggregatorActiveUsers = dailySnapshot.aggregatorActiveUsers.plus(ONE_BI);
     overview.aggregatorActiveUsers = overview.aggregatorActiveUsers.plus(ONE_BI);
-  }
-
-  overview.save();
-  dailySnapshot.save();
-}
-
-export function updateDailySnapshotWithdrawAggregator(
-  timestamp: BigInt,
-  amount: BigDecimal,
-  isFinalWithdraw: boolean
-): void {
-  const dailyTimestampBigInt = BigInt.fromI32(86400);
-  const dayID = timestamp.div(dailyTimestampBigInt);
-  const dayStartTimestamp = dayID.times(dailyTimestampBigInt);
-  const ID = dayID.toString();
-
-  let overview = Overview.load(BigInt.fromI32(1).toHex());
-  if (overview === null) {
-    overview = initializeOverview();
-  }
-
-  let dailySnapshot = DailySnapshot.load(ID);
-  if (dailySnapshot === null) {
-    dailySnapshot = initializeDailySnapshot(ID, dayStartTimestamp);
-    dailySnapshot.aggregatorActiveUsers = overview.aggregatorActiveUsers;
-    dailySnapshot.feeSharingActiveUsers = overview.feeSharingActiveUsers;
-    dailySnapshot.aggregatorTotalStakedLOOKS = overview.aggregatorTotalStakedLOOKS;
-    dailySnapshot.feeSharingTotalStakedLOOKS = overview.feeSharingTotalStakedLOOKS;
-
-    if (overview.aggregatorActiveUsers.gt(ZERO_BI)) {
-      overview.aggregatorTotalStakedLOOKS = fetchTotalAmountStakedAggregator();
-    }
-
-    if (overview.feeSharingActiveUsers.gt(ZERO_BI)) {
-      overview.feeSharingTotalStakedLOOKS = fetchTotalAmountStakedFeeSharing().minus(
-        overview.aggregatorTotalStakedLOOKS
-      );
-    }
-  }
-
-  dailySnapshot.aggregatorDailyOutflowLOOKS = dailySnapshot.aggregatorDailyOutflowLOOKS.plus(amount);
-
-  if (isFinalWithdraw) {
+  } else {
     dailySnapshot.aggregatorRemovedUsers = dailySnapshot.aggregatorRemovedUsers.plus(ONE_BI);
     dailySnapshot.aggregatorActiveUsers = dailySnapshot.aggregatorActiveUsers.minus(ONE_BI);
     overview.aggregatorActiveUsers = overview.aggregatorActiveUsers.minus(ONE_BI);
   }
 
-  overview.save();
   dailySnapshot.save();
+  overview.save();
 }
 
 export function updateDailySnapshotConversion(
