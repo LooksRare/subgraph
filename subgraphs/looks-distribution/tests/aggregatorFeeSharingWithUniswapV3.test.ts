@@ -11,7 +11,7 @@ import {
   handleDepositAggregatorUniswapV3,
   handleWithdrawAggregatorUniswapV3,
 } from "../mappings";
-import { AGGREGATOR_ADDRESS } from "../mappings/utils/addresses-mainnet";
+import { AGGREGATOR_ADDRESS } from "../mappings/utils/config/addresses-mainnet";
 import { ONE_ETHER_IN_WEI, TWO_BI } from "../../../helpers/constants";
 import { parseEther } from "../../../helpers/utils";
 

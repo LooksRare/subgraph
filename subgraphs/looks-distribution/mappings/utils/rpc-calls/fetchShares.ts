@@ -1,5 +1,5 @@
 import { Address, BigInt } from "@graphprotocol/graph-ts";
-import { AGGREGATOR_ADDRESS, FEE_SHARING_ADDRESS } from "../addresses";
+import { AGGREGATOR_ADDRESS, FEE_SHARING_ADDRESS } from "../config/addresses";
 import { AggregatorFeeSharingWithUniswapV3 } from "../../../generated/AggregatorFeeSharingWithUniswapV3/AggregatorFeeSharingWithUniswapV3";
 import { FeeSharingSystem } from "../../../generated/FeeSharingSystem/FeeSharingSystem";
 

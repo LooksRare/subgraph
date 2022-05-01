@@ -1,4 +1,4 @@
-import { AGGREGATOR_ADDRESS } from "./utils/addresses";
+import { AGGREGATOR_ADDRESS } from "./utils/config/addresses";
 import { initializeUser } from "./utils/initializeUser";
 import { fetchSharesAggregator, fetchSharesFeeSharingSystem } from "./utils/rpc-calls/fetchShares";
 import {
