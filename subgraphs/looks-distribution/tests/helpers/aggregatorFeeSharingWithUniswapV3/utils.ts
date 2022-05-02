@@ -133,7 +133,7 @@ export function createWithdrawAggregatorCall(to: Address, from: Address, blockTi
 export function createWithdrawAllAggregatorCall(to: Address, from: Address, blockTimestamp: BigInt): WithdrawAllCall {
   const mockCall = newMockCall();
 
-  const newWithdrawAllCall = new WithdrawCall(
+  const newWithdrawAllCall = new WithdrawAllCall(
     to,
     from,
     mockCall.block,
