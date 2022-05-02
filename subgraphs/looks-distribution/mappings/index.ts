@@ -294,10 +294,10 @@ export function handleWithdrawAggregatorUniswapV3(event: WithdrawAggregatorUnisw
  */
 export function handleCallWithdrawAggregatorUniswapV3(call: WithdrawCallAggregatorUniswapV3): void {
   const user = User.load(call.from.toHex());
-  if (user !== null && user.feeSharingAdjustedDepositAmount.equals(ZERO_BD)) {
+  if (user !== null && user.aggregatorAdjustedDepositAmount.equals(ZERO_BD)) {
     const userShares = fetchSharesAggregator(call.from);
-    if (userShares.equals(ZERO_BI) && user.feeSharingIsActive) {
-      user.feeSharingIsActive = false;
+    if (userShares.equals(ZERO_BI) && user.aggregatorIsActive) {
+      user.aggregatorIsActive = false;
       updateNumberUsersAggregator(call.block.timestamp, false);
     }
     user.save();
