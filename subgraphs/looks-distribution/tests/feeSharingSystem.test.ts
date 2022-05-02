@@ -7,7 +7,7 @@ import {
   createWithdrawFeeSharingEvent,
 } from "./helpers/feeSharingSystem/utils";
 import { handleDepositFeeSharing, handleNewRewardPeriod, handleWithdrawFeeSharing } from "../mappings";
-import { FEE_SHARING_ADDRESS } from "../mappings/utils/addresses-mainnet";
+import { FEE_SHARING_ADDRESS } from "../mappings/utils/config/addresses-mainnet";
 import { ONE_ETHER_IN_WEI, TWO_BI } from "../../../helpers/constants";
 import { parseEther } from "../../../helpers/utils";
 
