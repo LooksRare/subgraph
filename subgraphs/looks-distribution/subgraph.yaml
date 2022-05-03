@@ -138,3 +138,23 @@ dataSources:
           handler: handleConversionToLOOKSAggregatorUniswapV3
         - event: Withdraw(indexed address,uint256)
           handler: handleWithdrawAggregatorUniswapV3
+  - kind: ethereum/contract
+    name: MultiRewardsDistributor
+    network: mainnet
+    source:
+      address: "0x0554f068365ed43dcc98dcd7fd7a8208a5638c72"
+      abi: MultiRewardsDistributor
+      startBlock: 14619105
+    mapping:
+      kind: ethereum/events
+      apiVersion: 0.0.6
+      language: wasm/assemblyscript
+      file: ./mappings/index.ts
+      entities:
+        - User
+      abis:
+        - name: MultiRewardsDistributor
+          file: ./abis/LightMultiRewardsDistributor.json
+      eventHandlers:
+        - event: Claim(address,uint256,uint256,uint8[],uint256[])
+          handler: handleMultiRewardsClaim

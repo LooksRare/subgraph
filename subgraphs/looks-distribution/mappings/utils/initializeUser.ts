@@ -17,6 +17,8 @@ export function initializeUser(userID: string): User {
   user.feeSharingLastWithdrawDate = ZERO_BI;
   user.feeSharingLastHarvestDate = ZERO_BI;
   user.feeSharingIsActive = false;
+  user.listingRewardsAmount = ZERO_BD;
+  user.listingRewardsLastClaimDate = ZERO_BI;
   user.stakingPoolUniswapV2TotalCollectedLOOKS = ZERO_BD;
   user.stakingPoolUniswapV2LastDepositDate = ZERO_BI;
   user.stakingPoolUniswapV2LastHarvestDate = ZERO_BI;
