@@ -3,16 +3,18 @@ import { assert, clearStore, createMockedFunction, log, test } from "matchstick-
 import {
   createConversionToLOOKSEvent,
   createDepositAggregatorEvent,
+  createWithdrawAggregatorCall,
   createWithdrawAggregatorEvent,
 } from "./helpers/aggregatorFeeSharingWithUniswapV3/utils";
 import { AggregatorConversion, User } from "../generated/schema";
 import {
+  handleCallWithdrawAggregatorUniswapV3,
   handleConversionToLOOKSAggregatorUniswapV3,
   handleDepositAggregatorUniswapV3,
   handleWithdrawAggregatorUniswapV3,
 } from "../mappings";
-import { AGGREGATOR_ADDRESS } from "../mappings/utils/addresses-mainnet";
-import { ONE_ETHER_IN_WEI, TWO_BI } from "../../../helpers/constants";
+import { AGGREGATOR_ADDRESS } from "../mappings/utils/config/addresses";
+import { ONE_BI, ONE_ETHER_IN_WEI, TWO_BI, ZERO_BI } from "../../../helpers/constants";
 import { parseEther } from "../../../helpers/utils";
 
 test("Deposit + Withdraw (inferior to deposited amount) events", () => {
@@ -51,11 +53,11 @@ test("Deposit + Withdraw (inferior to deposited amount) events", () => {
   /**
    * 2. User withdraws 15 LOOKS
    */
-  const amountWithdrawnInLOOKS = 15; // 20 LOOKS
-  const amountWithdrawnInLOOKSWei = parseEther(amountWithdrawnInLOOKS);
+  let amountWithdrawnInLOOKS = 15; // 15 LOOKS
+  let amountWithdrawnInLOOKSWei = parseEther(amountWithdrawnInLOOKS);
   blockTimestamp = BigInt.fromU32(1651086000);
 
-  const newWithdrawEvent = createWithdrawAggregatorEvent(userAddress, amountWithdrawnInLOOKSWei, blockTimestamp);
+  let newWithdrawEvent = createWithdrawAggregatorEvent(userAddress, amountWithdrawnInLOOKSWei, blockTimestamp);
   handleWithdrawAggregatorUniswapV3(newWithdrawEvent);
 
   user = User.load(userAddress.toHex());
@@ -70,6 +72,53 @@ test("Deposit + Withdraw (inferior to deposited amount) events", () => {
     assert.bigIntEquals(user.aggregatorLastWithdrawDate, blockTimestamp);
   } else {
     log.warning("User doesn't exist", []);
+  }
+
+  let newWithdrawCall = createWithdrawAggregatorCall(AGGREGATOR_ADDRESS, userAddress, blockTimestamp);
+
+  createMockedFunction(AGGREGATOR_ADDRESS, "userInfo", "userInfo(address):(uint256)")
+    .withArgs([ethereum.Value.fromAddress(userAddress)])
+    .returns([ethereum.Value.fromSignedBigInt(ONE_BI)]);
+
+  handleCallWithdrawAggregatorUniswapV3(newWithdrawCall);
+
+  user = User.load(userAddress.toHex());
+  if (user !== null) {
+    assert.assertTrue(user.aggregatorIsActive);
+  }
+
+  /**
+   * 3. User withdraws final 10 LOOKS (User made 5 LOOKS from his original deposit compounding)
+   */
+  amountWithdrawnInLOOKS = 10; // 10 LOOKS
+  amountWithdrawnInLOOKSWei = parseEther(amountWithdrawnInLOOKS);
+  blockTimestamp = BigInt.fromU32(1651089000);
+
+  newWithdrawEvent = createWithdrawAggregatorEvent(userAddress, amountWithdrawnInLOOKSWei, blockTimestamp);
+  handleWithdrawAggregatorUniswapV3(newWithdrawEvent);
+
+  user = User.load(userAddress.toHex());
+  if (user !== null) {
+    assert.assertTrue(user.aggregatorIsActive);
+    assert.stringEquals(user.aggregatorAdjustedDepositAmount.toString(), "0");
+    // (15 + 10) - (20) = 5
+    assert.stringEquals(user.aggregatorTotalCollectedLOOKS.toString(), "5");
+    assert.bigIntEquals(user.aggregatorLastWithdrawDate, blockTimestamp);
+  } else {
+    log.warning("User doesn't exist", []);
+  }
+
+  newWithdrawCall = createWithdrawAggregatorCall(AGGREGATOR_ADDRESS, userAddress, blockTimestamp);
+
+  createMockedFunction(AGGREGATOR_ADDRESS, "userInfo", "userInfo(address):(uint256)")
+    .withArgs([ethereum.Value.fromAddress(userAddress)])
+    .returns([ethereum.Value.fromSignedBigInt(ZERO_BI)]);
+
+  handleCallWithdrawAggregatorUniswapV3(newWithdrawCall);
+
+  user = User.load(userAddress.toHex());
+  if (user !== null) {
+    assert.assertTrue(!user.aggregatorIsActive);
   }
   clearStore();
 });

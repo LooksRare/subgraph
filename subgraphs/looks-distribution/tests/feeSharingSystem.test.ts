@@ -4,11 +4,17 @@ import { RewardPeriod, User } from "../generated/schema";
 import {
   createDepositFeeSharingEvent,
   createNewRewardPeriodEvent,
+  createWithdrawFeeSharingCall,
   createWithdrawFeeSharingEvent,
 } from "./helpers/feeSharingSystem/utils";
-import { handleDepositFeeSharing, handleNewRewardPeriod, handleWithdrawFeeSharing } from "../mappings";
-import { FEE_SHARING_ADDRESS } from "../mappings/utils/addresses-mainnet";
-import { ONE_ETHER_IN_WEI, TWO_BI } from "../../../helpers/constants";
+import {
+  handleCallWithdrawFeeSharing,
+  handleDepositFeeSharing,
+  handleNewRewardPeriod,
+  handleWithdrawFeeSharing,
+} from "../mappings";
+import { FEE_SHARING_ADDRESS } from "../mappings/utils/config/addresses";
+import { ONE_BI, ONE_ETHER_IN_WEI, TWO_BI, ZERO_BI } from "../../../helpers/constants";
 import { parseEther } from "../../../helpers/utils";
 
 test("Deposit + Withdraw (inferior to deposited amount) events", () => {
@@ -54,13 +60,13 @@ test("Deposit + Withdraw (inferior to deposited amount) events", () => {
   /**
    * 2. User withdraws 15 LOOKS
    */
-  const amountWithdrawnInLOOKS = 15; // 20 LOOKS
-  harvestedAmountInWETH = 1; // 0 WETH
-  const amountWithdrawnInLOOKSWei = parseEther(amountWithdrawnInLOOKS);
+  let amountWithdrawnInLOOKS = 15; // 15 LOOKS
+  harvestedAmountInWETH = 0; // 0 WETH
+  let amountWithdrawnInLOOKSWei = parseEther(amountWithdrawnInLOOKS);
   harvestedAmountInWETHWei = parseEther(harvestedAmountInWETH);
   blockTimestamp = BigInt.fromU32(1651086000);
 
-  const newWithdrawEvent = createWithdrawFeeSharingEvent(
+  let newWithdrawEvent = createWithdrawFeeSharingEvent(
     userAddress,
     amountWithdrawnInLOOKSWei,
     harvestedAmountInWETHWei,
@@ -79,11 +85,80 @@ test("Deposit + Withdraw (inferior to deposited amount) events", () => {
     // LOOKS are not marked as collected until the adjusted deposit amount reaches 0
     assert.stringEquals(user.feeSharingTotalCollectedLOOKS.toString(), "0");
     assert.stringEquals(user.feeSharingTotalCollectedWETH.toString(), harvestedAmountInWETH.toString());
+    assert.bigIntEquals(user.feeSharingLastHarvestDate, ZERO_BI);
+    assert.bigIntEquals(user.feeSharingLastWithdrawDate, blockTimestamp);
+  } else {
+    log.warning("User doesn't exist", []);
+  }
+
+  let newWithdrawCall = createWithdrawFeeSharingCall(FEE_SHARING_ADDRESS, userAddress, blockTimestamp);
+
+  // userInfo(address user) --> (uint256 shares, uint256 userRewardPerTokenPaid, uint256 rewards)
+  createMockedFunction(FEE_SHARING_ADDRESS, "userInfo", "userInfo(address):(uint256,uint256,uint256)")
+    .withArgs([ethereum.Value.fromAddress(userAddress)])
+    .returns([
+      ethereum.Value.fromSignedBigInt(ONE_BI),
+      ethereum.Value.fromSignedBigInt(ONE_BI),
+      ethereum.Value.fromSignedBigInt(ONE_BI),
+    ]);
+
+  handleCallWithdrawFeeSharing(newWithdrawCall);
+
+  user = User.load(userAddress.toHex());
+  if (user !== null) {
+    assert.assertTrue(user.feeSharingIsActive);
+  }
+
+  /**
+   * 3. User withdraws final 8 LOOKS and harvest 1 WETH
+   * User made 3 LOOKS from his original deposit compounding.
+   */
+
+  amountWithdrawnInLOOKS = 8; // 8 LOOKS
+  harvestedAmountInWETH = 1; // 1 WETH
+  amountWithdrawnInLOOKSWei = parseEther(amountWithdrawnInLOOKS);
+  harvestedAmountInWETHWei = parseEther(harvestedAmountInWETH);
+  blockTimestamp = BigInt.fromU32(1651088000);
+
+  newWithdrawEvent = createWithdrawFeeSharingEvent(
+    userAddress,
+    amountWithdrawnInLOOKSWei,
+    harvestedAmountInWETHWei,
+    blockTimestamp
+  );
+
+  handleWithdrawFeeSharing(newWithdrawEvent);
+
+  user = User.load(userAddress.toHex());
+  if (user !== null) {
+    assert.assertTrue(user.feeSharingIsActive);
+    assert.stringEquals(user.feeSharingAdjustedDepositAmount.toString(), "0");
+    assert.stringEquals(user.feeSharingTotalCollectedLOOKS.toString(), "3");
+    assert.stringEquals(user.feeSharingTotalCollectedWETH.toString(), harvestedAmountInWETH.toString());
     assert.bigIntEquals(user.feeSharingLastHarvestDate, blockTimestamp);
     assert.bigIntEquals(user.feeSharingLastWithdrawDate, blockTimestamp);
   } else {
     log.warning("User doesn't exist", []);
   }
+
+  newWithdrawCall = createWithdrawFeeSharingCall(FEE_SHARING_ADDRESS, userAddress, blockTimestamp);
+
+  // userInfo(address user) --> (uint256 shares, uint256 userRewardPerTokenPaid, uint256 rewards)
+  createMockedFunction(FEE_SHARING_ADDRESS, "userInfo", "userInfo(address):(uint256,uint256,uint256)")
+    .withArgs([ethereum.Value.fromAddress(userAddress)])
+    .returns([
+      ethereum.Value.fromSignedBigInt(ZERO_BI),
+      ethereum.Value.fromSignedBigInt(ZERO_BI),
+      ethereum.Value.fromSignedBigInt(ZERO_BI),
+    ]);
+
+  handleCallWithdrawFeeSharing(newWithdrawCall);
+
+  user = User.load(userAddress.toHex());
+  if (user !== null) {
+    assert.assertTrue(!user.feeSharingIsActive);
+  }
+
   clearStore();
 });
 

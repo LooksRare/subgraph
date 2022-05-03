@@ -1,10 +1,12 @@
 import { Address, BigInt, ethereum } from "@graphprotocol/graph-ts";
-import { newMockEvent } from "matchstick-as";
+import { newMockCall, newMockEvent } from "matchstick-as";
 import {
   Deposit as DepositFeeSharing,
   Harvest as HarvestFeeSharing,
   Withdraw as WithdrawFeeSharing,
   NewRewardPeriod,
+  WithdrawCall,
+  WithdrawAllCall,
 } from "../../../generated/FeeSharingSystem/FeeSharingSystem";
 import { ZERO_BI } from "../../../../../helpers/constants";
 
@@ -164,4 +166,38 @@ export function createNewRewardPeriodEvent(
   newRewardPeriodEvent.parameters.push(rewardParam);
 
   return newRewardPeriodEvent;
+}
+
+export function createWithdrawFeeSharingCall(to: Address, from: Address, blockTimestamp: BigInt): WithdrawCall {
+  const mockCall = newMockCall();
+
+  const newWithdrawCall = new WithdrawCall(
+    to,
+    from,
+    mockCall.block,
+    mockCall.transaction,
+    mockCall.inputValues,
+    mockCall.outputValues
+  );
+
+  newWithdrawCall.block.timestamp = blockTimestamp;
+
+  return newWithdrawCall;
+}
+
+export function createWithdrawAllFeeSharingCall(to: Address, from: Address, blockTimestamp: BigInt): WithdrawAllCall {
+  const mockCall = newMockCall();
+
+  const newWithdrawAllCall = new WithdrawAllCall(
+    to,
+    from,
+    mockCall.block,
+    mockCall.transaction,
+    mockCall.inputValues,
+    mockCall.outputValues
+  );
+
+  newWithdrawAllCall.block.timestamp = blockTimestamp;
+
+  return newWithdrawAllCall;
 }

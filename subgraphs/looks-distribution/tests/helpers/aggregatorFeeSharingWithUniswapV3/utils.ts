@@ -1,9 +1,11 @@
 import { Address, BigInt, ethereum } from "@graphprotocol/graph-ts";
-import { newMockEvent } from "matchstick-as";
+import { newMockCall, newMockEvent } from "matchstick-as";
 import {
   ConversionToLOOKS,
   Deposit as DepositAggregatorUniswapV3,
   Withdraw as WithdrawAggregatorUniswapV3,
+  WithdrawCall,
+  WithdrawAllCall,
 } from "../../../generated/AggregatorFeeSharingWithUniswapV3/AggregatorFeeSharingWithUniswapV3";
 import { ZERO_BI } from "../../../../../helpers/constants";
 
@@ -109,4 +111,38 @@ export function createConversionToLOOKSEvent(
   newConversionEvent.parameters.push(amountReceivedParam);
 
   return newConversionEvent;
+}
+
+export function createWithdrawAggregatorCall(to: Address, from: Address, blockTimestamp: BigInt): WithdrawCall {
+  const mockCall = newMockCall();
+
+  const newWithdrawCall = new WithdrawCall(
+    to,
+    from,
+    mockCall.block,
+    mockCall.transaction,
+    mockCall.inputValues,
+    mockCall.outputValues
+  );
+
+  newWithdrawCall.block.timestamp = blockTimestamp;
+
+  return newWithdrawCall;
+}
+
+export function createWithdrawAllAggregatorCall(to: Address, from: Address, blockTimestamp: BigInt): WithdrawAllCall {
+  const mockCall = newMockCall();
+
+  const newWithdrawAllCall = new WithdrawAllCall(
+    to,
+    from,
+    mockCall.block,
+    mockCall.transaction,
+    mockCall.inputValues,
+    mockCall.outputValues
+  );
+
+  newWithdrawAllCall.block.timestamp = blockTimestamp;
+
+  return newWithdrawAllCall;
 }

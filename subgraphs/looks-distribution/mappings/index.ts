@@ -1,8 +1,30 @@
+import { AGGREGATOR_ADDRESS } from "./utils/config/addresses";
+import { initializeUser } from "./utils/initializeUser";
+import { fetchSharesAggregator, fetchSharesFeeSharingSystem } from "./utils/rpc-calls/fetchShares";
+import {
+  updateDailySnapshotDepositFeeSharing,
+  updateDailySnapshotWithdrawFeeSharing,
+  updateDailySnapshotDepositAggregator,
+  updateDailySnapshotWithdrawAggregator,
+  updateDailySnapshotConversion,
+  updateNumberUsersFeeSharing,
+  updateNumberUsersAggregator,
+} from "./utils/updateDailyData";
+
 import { User, RewardPeriod, AggregatorConversion } from "../generated/schema";
+import {
+  Deposit as DepositAggregatorUniswapV3,
+  Withdraw as WithdrawAggregatorUniswapV3,
+  WithdrawCall as WithdrawCallAggregatorUniswapV3,
+  WithdrawAllCall as WithdrawAllCallAggregatorUniswapV3,
+  ConversionToLOOKS as ConversionToLOOKSAggregatorUniswapV3,
+} from "../generated/AggregatorFeeSharingWithUniswapV3/AggregatorFeeSharingWithUniswapV3";
 import {
   Deposit as DepositFeeSharing,
   Withdraw as WithdrawFeeSharing,
   Harvest as HarvestFeeSharing,
+  WithdrawCall as WithdrawCallFeeSharing,
+  WithdrawAllCall as WithdrawAllCallFeeSharing,
   NewRewardPeriod,
 } from "../generated/FeeSharingSystem/FeeSharingSystem";
 import {
@@ -12,26 +34,13 @@ import {
 } from "../generated/StakingPoolForUniswapV2Tokens/StakingPoolForUniswapV2Tokens";
 import { AirdropRewardsClaim } from "../generated/LooksRareAirdrop/LooksRareAirdrop";
 import { RewardsClaim } from "../generated/TradingRewardsDistributor/TradingRewardsDistributor";
-import {
-  Deposit as DepositAggregatorUniswapV3,
-  Withdraw as WithdrawAggregatorUniswapV3,
-  ConversionToLOOKS as ConversionToLOOKSAggregatorUniswapV3,
-} from "../generated/AggregatorFeeSharingWithUniswapV3/AggregatorFeeSharingWithUniswapV3";
 
-import { toBigDecimal } from "../../../helpers/utils";
 import { ZERO_BD, ZERO_BI } from "../../../helpers/constants";
+import { toBigDecimal } from "../../../helpers/utils";
 
-import { initializeUser } from "./utils/initializeUser";
-import { fetchSharesAggregator, fetchSharesFeeSharingSystem } from "./utils/fetchShares";
-import {
-  updateDailySnapshotDepositFeeSharing,
-  updateDailySnapshotWithdrawFeeSharing,
-  updateDailySnapshotDepositAggregator,
-  updateDailySnapshotWithdrawAggregator,
-  updateDailySnapshotConversion,
-} from "./utils/updateDailyData";
-import { AGGREGATOR_ADDRESS } from "./utils/addresses";
-
+/**
+ * @param event DepositFeeSharing
+ */
 export function handleDepositFeeSharing(event: DepositFeeSharing): void {
   // Exclude if aggregator is the user
   if (event.params.user === AGGREGATOR_ADDRESS) {
@@ -43,10 +52,9 @@ export function handleDepositFeeSharing(event: DepositFeeSharing): void {
     user = initializeUser(event.params.user.toHex());
   }
 
-  let isUserNew = false;
   if (!user.feeSharingIsActive) {
     user.feeSharingIsActive = true;
-    isUserNew = true;
+    updateNumberUsersFeeSharing(event.block.timestamp, true);
   }
 
   user.feeSharingAdjustedDepositAmount = user.feeSharingAdjustedDepositAmount.plus(toBigDecimal(event.params.amount));
@@ -59,10 +67,14 @@ export function handleDepositFeeSharing(event: DepositFeeSharing): void {
     user.feeSharingLastHarvestDate = event.block.timestamp;
   }
 
-  updateDailySnapshotDepositFeeSharing(event.block.timestamp, toBigDecimal(event.params.amount), isUserNew);
+  updateDailySnapshotDepositFeeSharing(event.block.timestamp, toBigDecimal(event.params.amount));
+
   user.save();
 }
 
+/**
+ * @param event HarvestFeeSharing
+ */
 export function handleHarvestFeeSharing(event: HarvestFeeSharing): void {
   // Exclude if aggregator is the user
   if (event.params.user === AGGREGATOR_ADDRESS) {
@@ -82,6 +94,9 @@ export function handleHarvestFeeSharing(event: HarvestFeeSharing): void {
   user.save();
 }
 
+/**
+ * @param event WithdrawFeeSharing
+ */
 export function handleWithdrawFeeSharing(event: WithdrawFeeSharing): void {
   // Exclude if aggregator is the user
   if (event.params.user === AGGREGATOR_ADDRESS) {
@@ -102,11 +117,6 @@ export function handleWithdrawFeeSharing(event: WithdrawFeeSharing): void {
       toBigDecimal(event.params.amount).minus(user.feeSharingAdjustedDepositAmount)
     );
     user.feeSharingAdjustedDepositAmount = ZERO_BD;
-
-    const userShares = fetchSharesFeeSharingSystem(event.params.user);
-    if (userShares.gt(ZERO_BI)) {
-      user.feeSharingIsActive = false;
-    }
   }
 
   user.feeSharingLastWithdrawDate = event.block.timestamp;
@@ -118,15 +128,53 @@ export function handleWithdrawFeeSharing(event: WithdrawFeeSharing): void {
     user.feeSharingLastHarvestDate = event.block.timestamp;
   }
 
-  updateDailySnapshotWithdrawFeeSharing(
-    event.block.timestamp,
-    toBigDecimal(event.params.amount),
-    !user.feeSharingIsActive
-  );
+  updateDailySnapshotWithdrawFeeSharing(event.block.timestamp, toBigDecimal(event.params.amount));
 
   user.save();
 }
 
+/**
+ * @param call WithdrawCallFeeSharing
+ */
+export function handleCallWithdrawFeeSharing(call: WithdrawCallFeeSharing): void {
+  // Exclude if aggregator is the user
+  if (call.from === AGGREGATOR_ADDRESS) {
+    return;
+  }
+
+  const user = User.load(call.from.toHex());
+  if (user !== null && user.feeSharingAdjustedDepositAmount.equals(ZERO_BD)) {
+    const userShares = fetchSharesFeeSharingSystem(call.from);
+    if (userShares.equals(ZERO_BI) && user.feeSharingIsActive) {
+      user.feeSharingIsActive = false;
+      updateNumberUsersFeeSharing(call.block.timestamp, false);
+    }
+    user.save();
+  }
+}
+
+/**
+ * @param call WithdrawAllCallFeeSharing
+ */
+export function handleCallWithdrawAllFeeSharing(call: WithdrawAllCallFeeSharing): void {
+  // Exclude if aggregator is the user
+  if (call.from === AGGREGATOR_ADDRESS) {
+    return;
+  }
+
+  const user = User.load(call.from.toHex());
+  if (user !== null && user.feeSharingAdjustedDepositAmount.equals(ZERO_BD)) {
+    if (user.feeSharingIsActive) {
+      user.feeSharingIsActive = false;
+      updateNumberUsersFeeSharing(call.block.timestamp, false);
+    }
+    user.save();
+  }
+}
+
+/**
+ * @param event NewRewardPeriod
+ */
 export function handleNewRewardPeriod(event: NewRewardPeriod): void {
   const rewardPeriod = new RewardPeriod(event.block.timestamp.toHex());
   rewardPeriod.block = event.block.number;
@@ -136,6 +184,9 @@ export function handleNewRewardPeriod(event: NewRewardPeriod): void {
   rewardPeriod.save();
 }
 
+/**
+ * @param event DepositStakingV2
+ */
 export function handleDepositStakingV2(event: DepositStakingV2): void {
   let user = User.load(event.params.user.toHex());
   if (user === null) {
@@ -154,6 +205,9 @@ export function handleDepositStakingV2(event: DepositStakingV2): void {
   user.save();
 }
 
+/**
+ * @param event HarvestStakingV2
+ */
 export function handleHarvestStakingV2(event: HarvestStakingV2): void {
   let user = User.load(event.params.user.toHex());
   if (user === null) {
@@ -168,6 +222,9 @@ export function handleHarvestStakingV2(event: HarvestStakingV2): void {
   user.save();
 }
 
+/**
+ * @param event WithdrawStakingV2
+ */
 export function handleWithdrawStakingV2(event: WithdrawStakingV2): void {
   let user = User.load(event.params.user.toHex());
   if (user === null) {
@@ -186,24 +243,29 @@ export function handleWithdrawStakingV2(event: WithdrawStakingV2): void {
   user.save();
 }
 
+/**
+ * @param event DepositAggregatorUniswapV3
+ */
 export function handleDepositAggregatorUniswapV3(event: DepositAggregatorUniswapV3): void {
   let user = User.load(event.params.user.toHex());
   if (user === null) {
     user = initializeUser(event.params.user.toHex());
   }
 
-  let isUserNew = false;
   if (!user.aggregatorIsActive) {
     user.aggregatorIsActive = true;
-    isUserNew = true;
+    updateNumberUsersAggregator(event.block.timestamp, true);
   }
 
   user.aggregatorAdjustedDepositAmount = user.aggregatorAdjustedDepositAmount.plus(toBigDecimal(event.params.amount));
   user.aggregatorLastDepositDate = event.block.timestamp;
-  updateDailySnapshotDepositAggregator(event.block.timestamp, toBigDecimal(event.params.amount), isUserNew);
+  updateDailySnapshotDepositAggregator(event.block.timestamp, toBigDecimal(event.params.amount));
   user.save();
 }
 
+/**
+ * @param event WithdrawAggregatorUniswapV3
+ */
 export function handleWithdrawAggregatorUniswapV3(event: WithdrawAggregatorUniswapV3): void {
   let user = User.load(event.params.user.toHex());
   if (user === null) {
@@ -219,24 +281,46 @@ export function handleWithdrawAggregatorUniswapV3(event: WithdrawAggregatorUnisw
       toBigDecimal(event.params.amount).minus(user.aggregatorAdjustedDepositAmount)
     );
     user.aggregatorAdjustedDepositAmount = ZERO_BD;
-
-    const userShares = fetchSharesAggregator(event.params.user);
-    if (userShares.gt(ZERO_BI)) {
-      user.aggregatorIsActive = false;
-    }
   }
 
   user.aggregatorLastWithdrawDate = event.block.timestamp;
-
-  updateDailySnapshotWithdrawAggregator(
-    event.block.timestamp,
-    toBigDecimal(event.params.amount),
-    !user.aggregatorIsActive
-  );
+  updateDailySnapshotWithdrawAggregator(event.block.timestamp, toBigDecimal(event.params.amount));
 
   user.save();
 }
 
+/**
+ * @param call WithdrawCallAggregatorUniswapV3
+ */
+export function handleCallWithdrawAggregatorUniswapV3(call: WithdrawCallAggregatorUniswapV3): void {
+  const user = User.load(call.from.toHex());
+  if (user !== null && user.aggregatorAdjustedDepositAmount.equals(ZERO_BD)) {
+    const userShares = fetchSharesAggregator(call.from);
+    if (userShares.equals(ZERO_BI) && user.aggregatorIsActive) {
+      user.aggregatorIsActive = false;
+      updateNumberUsersAggregator(call.block.timestamp, false);
+    }
+    user.save();
+  }
+}
+
+/**
+ * @param call WithdrawAllCallAggregatorUniswapV3
+ */
+export function handleCallWithdrawAllAggregatorUniswapV3(call: WithdrawAllCallAggregatorUniswapV3): void {
+  const user = User.load(call.from.toHex());
+  if (user !== null && user.aggregatorAdjustedDepositAmount.equals(ZERO_BD)) {
+    if (user.aggregatorIsActive) {
+      user.aggregatorIsActive = false;
+      updateNumberUsersAggregator(call.block.timestamp, false);
+    }
+    user.save();
+  }
+}
+
+/**
+ * @param event ConversionToLOOKSAggregatorUniswapV3
+ */
 export function handleConversionToLOOKSAggregatorUniswapV3(event: ConversionToLOOKSAggregatorUniswapV3): void {
   const conversion = new AggregatorConversion(event.block.timestamp.toHex());
   conversion.block = event.block.number;
@@ -249,6 +333,9 @@ export function handleConversionToLOOKSAggregatorUniswapV3(event: ConversionToLO
   conversion.save();
 }
 
+/**
+ * @param event AirdropRewardsClaim
+ */
 export function handleAirdropClaim(event: AirdropRewardsClaim): void {
   let user = User.load(event.params.user.toHex());
   if (user === null) {
@@ -259,6 +346,9 @@ export function handleAirdropClaim(event: AirdropRewardsClaim): void {
   user.save();
 }
 
+/**
+ * @param event RewardsClaim
+ */
 export function handleTradingRewardsClaim(event: RewardsClaim): void {
   let user = User.load(event.params.user.toHex());
   if (user === null) {

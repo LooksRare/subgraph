@@ -26,6 +26,11 @@ dataSources:
           file: ../../node_modules/@looksrare/sdk/dist/abis/AggregatorFeeSharingWithUniswapV3.json
         - name: FeeSharingSystem
           file: ../../node_modules/@looksrare/sdk/dist/abis/FeeSharingSystem.json
+      callHandlers:
+        - function: withdraw(uint256,bool)
+          handler: handleCallWithdrawFeeSharing
+        - function: withdrawAll(bool)
+          handler: handleCallWithdrawAllFeeSharing
       eventHandlers:
         - event: Deposit(indexed address,uint256,uint256)
           handler: handleDepositFeeSharing
@@ -121,6 +126,11 @@ dataSources:
           file: ../../node_modules/@looksrare/sdk/dist/abis/AggregatorFeeSharingWithUniswapV3.json
         - name: FeeSharingSystem
           file: ../../node_modules/@looksrare/sdk/dist/abis/FeeSharingSystem.json
+      callHandlers:
+        - function: withdraw(uint256)
+          handler: handleCallWithdrawAggregatorUniswapV3
+        - function: withdrawAll()
+          handler: handleCallWithdrawAggregatorUniswapV3
       eventHandlers:
         - event: Deposit(indexed address,uint256)
           handler: handleDepositAggregatorUniswapV3
