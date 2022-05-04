@@ -33,7 +33,8 @@ import {
   Harvest as HarvestStakingV2,
 } from "../generated/StakingPoolForUniswapV2Tokens/StakingPoolForUniswapV2Tokens";
 import { AirdropRewardsClaim } from "../generated/LooksRareAirdrop/LooksRareAirdrop";
-import { RewardsClaim } from "../generated/TradingRewardsDistributor/TradingRewardsDistributor";
+import { RewardsClaim as TradingRewardsClaim } from "../generated/TradingRewardsDistributor/TradingRewardsDistributor";
+import { Claim as MultiRewardsClaim } from "../generated/MultiRewardsDistributor/MultiRewardsDistributor";
 
 import { ZERO_BD, ZERO_BI } from "../../../helpers/constants";
 import { toBigDecimal } from "../../../helpers/utils";
@@ -349,12 +350,42 @@ export function handleAirdropClaim(event: AirdropRewardsClaim): void {
 /**
  * @param event RewardsClaim
  */
-export function handleTradingRewardsClaim(event: RewardsClaim): void {
+export function handleTradingRewardsClaim(event: TradingRewardsClaim): void {
   let user = User.load(event.params.user.toHex());
   if (user === null) {
     user = initializeUser(event.params.user.toHex());
   }
   user.tradingRewardsAmount = user.tradingRewardsAmount.plus(toBigDecimal(event.params.amount));
   user.tradingRewardsLastClaimDate = event.block.timestamp;
+  user.save();
+}
+
+/**
+ * @param event Claim
+ */
+export function handleMultiRewardsClaim(event: MultiRewardsClaim): void {
+  let user = User.load(event.params.user.toHex());
+  if (user === null) {
+    user = initializeUser(event.params.user.toHex());
+  }
+
+  if (event.params.treeIds[0] == 0) {
+    user.tradingRewardsAmount = user.tradingRewardsAmount.plus(toBigDecimal(event.params.amounts[0]));
+    user.tradingRewardsLastClaimDate = event.block.timestamp;
+  } else if (event.params.treeIds[0] == 1) {
+    user.listingRewardsAmount = user.listingRewardsAmount.plus(toBigDecimal(event.params.amounts[0]));
+    user.listingRewardsLastClaimDate = event.block.timestamp;
+  }
+
+  if (event.params.treeIds.length == 2) {
+    if (event.params.treeIds[1] == 0) {
+      user.tradingRewardsAmount = user.tradingRewardsAmount.plus(toBigDecimal(event.params.amounts[1]));
+      user.tradingRewardsLastClaimDate = event.block.timestamp;
+    } else if (event.params.treeIds[1] == 1) {
+      user.listingRewardsAmount = user.listingRewardsAmount.plus(toBigDecimal(event.params.amounts[1]));
+      user.listingRewardsLastClaimDate = event.block.timestamp;
+    }
+  }
+
   user.save();
 }

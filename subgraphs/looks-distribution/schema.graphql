@@ -59,6 +59,12 @@ type User @entity {
   "UniswapV2 Staking - Last withdraw date"
   stakingPoolUniswapV2LastWithdrawDate: BigInt!
 
+  "Listing Rewards - Total LOOKS collected"
+  listingRewardsAmount: BigDecimal!
+
+  "Listing Rewards - Last claim date"
+  listingRewardsLastClaimDate: BigInt!
+
   "Trading Rewards - Total LOOKS collected"
   tradingRewardsAmount: BigDecimal!
 
