@@ -370,10 +370,10 @@ export function handleMultiRewardsClaim(event: MultiRewardsClaim): void {
   }
 
   if (event.params.treeIds[0] == 0) {
-    user.tradingRewardsAmount = user.tradingRewardsAmount.plus(toBigDecimal(event.params.amounts[1]));
+    user.tradingRewardsAmount = user.tradingRewardsAmount.plus(toBigDecimal(event.params.amounts[0]));
     user.tradingRewardsLastClaimDate = event.block.timestamp;
   } else if (event.params.treeIds[0] == 1) {
-    user.listingRewardsAmount = user.listingRewardsAmount.plus(toBigDecimal(event.params.amounts[i]));
+    user.listingRewardsAmount = user.listingRewardsAmount.plus(toBigDecimal(event.params.amounts[0]));
     user.listingRewardsLastClaimDate = event.block.timestamp;
   }
 
@@ -382,7 +382,7 @@ export function handleMultiRewardsClaim(event: MultiRewardsClaim): void {
       user.tradingRewardsAmount = user.tradingRewardsAmount.plus(toBigDecimal(event.params.amounts[1]));
       user.tradingRewardsLastClaimDate = event.block.timestamp;
     } else if (event.params.treeIds[1] == 1) {
-      user.listingRewardsAmount = user.listingRewardsAmount.plus(toBigDecimal(event.params.amounts[i]));
+      user.listingRewardsAmount = user.listingRewardsAmount.plus(toBigDecimal(event.params.amounts[1]));
       user.listingRewardsLastClaimDate = event.block.timestamp;
     }
   }
