@@ -1,6 +1,5 @@
 import { BigInt, BigDecimal } from "@graphprotocol/graph-ts";
-import { initializeDailySnapshot } from "./initializeDailySnapshot";
-import { DailySnapshot, Overview } from "../../generated/schema";
+import { Overview } from "../../generated/schema";
 import { ONE_BI } from "../../../../helpers/constants";
 import { setupOverviewAndDailySnapshot } from "./setupOverviewAndDailySnapshot";
 
@@ -76,15 +75,7 @@ export function updateDailySnapshotConversion(
   amountSold: BigDecimal,
   amountReceived: BigDecimal
 ): void {
-  const dailyTimestampBigInt = BigInt.fromI32(86400);
-  const dayID = timestamp.div(dailyTimestampBigInt);
-  const dayStartTimestamp = dayID.times(dailyTimestampBigInt);
-  const ID = dayID.toString();
-
-  let dailySnapshot = DailySnapshot.load(ID);
-  if (dailySnapshot === null) {
-    dailySnapshot = initializeDailySnapshot(ID, dayStartTimestamp);
-  }
+  const dailySnapshot = setupOverviewAndDailySnapshot(timestamp);
   dailySnapshot.aggregatorTotalStakedLOOKS = dailySnapshot.aggregatorTotalStakedLOOKS.plus(amountSold);
   dailySnapshot.aggregatorTotalLOOKSReceived = dailySnapshot.aggregatorTotalLOOKSReceived.plus(amountReceived);
   dailySnapshot.aggregatorConversionCount = dailySnapshot.aggregatorConversionCount.plus(ONE_BI);
