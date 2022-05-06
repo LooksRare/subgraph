@@ -47,18 +47,6 @@ type User @entity {
   "Fee Sharing - Is active"
   feeSharingIsActive: Boolean!
 
-  "UniswapV2 Staking - Total LOOKS collected"
-  stakingPoolUniswapV2TotalCollectedLOOKS: BigDecimal!
-
-  "UniswapV2 Staking - Last deposit date"
-  stakingPoolUniswapV2LastDepositDate: BigInt!
-
-  "UniswapV2 Staking - Last harvest date"
-  stakingPoolUniswapV2LastHarvestDate: BigInt!
-
-  "UniswapV2 Staking - Last withdraw date"
-  stakingPoolUniswapV2LastWithdrawDate: BigInt!
-
   "Listing Rewards - Total LOOKS collected"
   listingRewardsAmount: BigDecimal!
 
@@ -70,6 +58,18 @@ type User @entity {
 
   "Trading Rewards - Last claim date"
   tradingRewardsLastClaimDate: BigInt!
+
+  "UniswapV2 Staking - Total LOOKS collected"
+  stakingPoolUniswapV2TotalCollectedLOOKS: BigDecimal!
+
+  "UniswapV2 Staking - Last deposit date"
+  stakingPoolUniswapV2LastDepositDate: BigInt!
+
+  "UniswapV2 Staking - Last harvest date"
+  stakingPoolUniswapV2LastHarvestDate: BigInt!
+
+  "UniswapV2 Staking - Last withdraw date"
+  stakingPoolUniswapV2LastWithdrawDate: BigInt!
 }
 
 """

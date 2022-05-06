@@ -69,7 +69,6 @@ export function handleDepositFeeSharing(event: DepositFeeSharing): void {
   }
 
   updateDailySnapshotDepositFeeSharing(event.block.timestamp, toBigDecimal(event.params.amount));
-
   user.save();
 }
 
