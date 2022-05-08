@@ -142,9 +142,10 @@ test("ConversionToLOOKS event creates AggregatorConversion entity", () => {
   );
   handleConversionToLOOKSAggregatorUniswapV3(newConversionEvent);
 
-  const conversion = AggregatorConversion.load(blockTimestamp.toHex());
+  const conversion = AggregatorConversion.load(newConversionEvent.transaction.hash.toHexString());
   if (conversion !== null) {
     assert.bigIntEquals(conversion.block, blockNumber);
+    assert.bigIntEquals(conversion.date, blockTimestamp);
     assert.stringEquals(conversion.amountSold.toString(), amountSoldInWETH.toString());
     assert.stringEquals(conversion.amountReceived.toString(), amountReceivedInLOOKS.toString());
   } else {

@@ -183,9 +183,10 @@ test("NewRewardEvent creates RewardPeriod entity", () => {
   );
   handleNewRewardPeriod(newRewardPeriodEvent);
 
-  const rewardPeriod = RewardPeriod.load(blockTimestamp.toHex());
+  const rewardPeriod = RewardPeriod.load(newRewardPeriodEvent.transaction.hash.toHexString());
   if (rewardPeriod !== null) {
     assert.bigIntEquals(rewardPeriod.block, blockNumber);
+    assert.bigIntEquals(rewardPeriod.date, blockTimestamp);
     assert.bigIntEquals(rewardPeriod.numberBlocks, numberBlocks);
     assert.stringEquals(rewardPeriod.reward.toString(), rewardInWETH.toString());
     assert.stringEquals(rewardPeriod.rewardPerBlock.toString(), rewardPerBlockInWETH.toString());
