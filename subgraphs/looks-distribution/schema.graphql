@@ -152,11 +152,14 @@ type Overview @entity {
 RewardPeriod
 """
 type RewardPeriod @entity {
-  "ID (timestamp)"
+  "ID (transaction hash)"
   id: ID!
 
   "Block number"
   block: BigInt!
+
+  "Date (timestamp)"
+  date: BigInt!
 
   "Period length (in blocks)"
   numberBlocks: BigInt!
@@ -172,11 +175,14 @@ type RewardPeriod @entity {
 AggregatorConversion
 """
 type AggregatorConversion @entity {
-  "ID (timestamp)"
+  "ID (transaction hash)"
   id: ID!
 
   "Block number"
   block: BigInt!
+
+  "Date (timestamp)"
+  date: BigInt!
 
   "Reward sold (in WETH)"
   amountSold: BigDecimal!
