@@ -176,7 +176,7 @@ export function handleCallWithdrawAllFeeSharing(call: WithdrawAllCallFeeSharing)
  * @param event NewRewardPeriod
  */
 export function handleNewRewardPeriod(event: NewRewardPeriod): void {
-  const rewardPeriod = new RewardPeriod(event.transaction.hash.toHexString());
+  const rewardPeriod = new RewardPeriod(event.transaction.hash.toHex());
   rewardPeriod.block = event.block.number;
   rewardPeriod.date = event.block.timestamp;
   rewardPeriod.numberBlocks = event.params.numberBlocks;
@@ -323,7 +323,7 @@ export function handleCallWithdrawAllAggregatorUniswapV3(call: WithdrawAllCallAg
  * @param event ConversionToLOOKSAggregatorUniswapV3
  */
 export function handleConversionToLOOKSAggregatorUniswapV3(event: ConversionToLOOKSAggregatorUniswapV3): void {
-  const conversion = new AggregatorConversion(event.transaction.hash.toHexString());
+  const conversion = new AggregatorConversion(event.transaction.hash.toString());
   conversion.block = event.block.number;
   conversion.date = event.block.timestamp;
   conversion.block = event.block.number;
