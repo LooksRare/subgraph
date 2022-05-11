@@ -8,6 +8,7 @@ import {
   updateCollectionDailyData,
   updateExchangeDailyData,
   updateExecutionStrategyDailyData,
+  updateRoyaltyForCollectionDailyData,
   updateUserDailyData,
 } from "./utils/updateDailyData";
 
@@ -263,4 +264,7 @@ export function handleRoyaltyPayment(event: RoyaltyPayment): void {
   royaltyTransfer.user = user.id;
   royaltyTransfer.amount = toBigDecimal(event.params.amount);
   royaltyTransfer.save();
+
+  // 4. Update Collection Daily Data
+  updateRoyaltyForCollectionDailyData(event.params.collection, royaltyTransfer.amount, event.block.timestamp);
 }
