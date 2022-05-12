@@ -3,7 +3,13 @@ import { assert, clearStore, createMockedFunction, log, test } from "matchstick-
 import { createRoyaltyPaymentEvent, createTakerAskEvent, createTakerBidEvent } from "./helpers/utils";
 import { COLLECTION, STRATEGY, WETH } from "./helpers/config";
 import { handleRoyaltyPayment, handleTakerAsk, handleTakerBid } from "../mappings";
-import { Collection, CollectionDailyData, ExecutionStrategy, User } from "../generated/schema";
+import {
+  Collection,
+  CollectionDailyData,
+  ExecutionStrategy,
+  ExecutionStrategyDailyData,
+  User,
+} from "../generated/schema";
 import { parseEther } from "../../../helpers/utils";
 import { ZERO_BI, ONE_BI, THREE_BI } from "../../../helpers/constants";
 
@@ -64,6 +70,20 @@ test("TakerBid event updates all entities", () => {
     assert.stringEquals(strategy.totalVolume.toString(), priceInETH.toString());
     assert.stringEquals(strategy.totalTakerBidVolume.toString(), priceInETH.toString());
     assert.stringEquals(strategy.totalTakerAskVolume.toString(), "0");
+
+    const ID = newTakerBidEvent.block.timestamp.div(BigInt.fromI32(86400)).toString() + "-" + strategy.id;
+    const strategyDailyData = ExecutionStrategyDailyData.load(ID);
+    if (strategyDailyData !== null) {
+      assert.stringEquals(strategyDailyData.strategy, strategy.id);
+      assert.bigIntEquals(strategyDailyData.dailyTransactions, ONE_BI);
+      assert.bigIntEquals(strategyDailyData.dailyTakerBidTransactions, ONE_BI);
+      assert.bigIntEquals(strategyDailyData.dailyTakerAskTransactions, ZERO_BI);
+      assert.stringEquals(strategyDailyData.dailyTakerBidVolume.toString(), strategy.totalVolume.toString());
+      assert.stringEquals(strategyDailyData.dailyTakerAskVolume.toString(), "0");
+      assert.stringEquals(strategyDailyData.dailyVolume.toString(), strategy.totalVolume.toString());
+    } else {
+      log.warning("StrategyDailyData doesn't exist", []);
+    }
   } else {
     log.warning("Strategy doesn't exist", []);
   }
@@ -164,6 +184,20 @@ test("TakerAsk event updates all entities as expected", () => {
     assert.stringEquals(strategy.totalVolume.toString(), priceInETH.toString());
     assert.stringEquals(strategy.totalTakerAskVolume.toString(), priceInETH.toString());
     assert.stringEquals(strategy.totalTakerBidVolume.toString(), "0");
+
+    const ID = newTakerAskEvent.block.timestamp.div(BigInt.fromI32(86400)).toString() + "-" + strategy.id;
+    const strategyDailyData = ExecutionStrategyDailyData.load(ID);
+    if (strategyDailyData !== null) {
+      assert.stringEquals(strategyDailyData.strategy, strategy.id);
+      assert.bigIntEquals(strategyDailyData.dailyTransactions, ONE_BI);
+      assert.bigIntEquals(strategyDailyData.dailyTakerAskTransactions, ONE_BI);
+      assert.bigIntEquals(strategyDailyData.dailyTakerBidTransactions, ZERO_BI);
+      assert.stringEquals(strategyDailyData.dailyTakerAskVolume.toString(), strategy.totalVolume.toString());
+      assert.stringEquals(strategyDailyData.dailyTakerBidVolume.toString(), "0");
+      assert.stringEquals(strategyDailyData.dailyVolume.toString(), strategy.totalVolume.toString());
+    } else {
+      log.warning("StrategyDailyData doesn't exist", []);
+    }
   } else {
     log.warning("Strategy doesn't exist", []);
   }
