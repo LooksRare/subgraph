@@ -9,6 +9,7 @@ import {
   ExecutionStrategy,
   ExecutionStrategyDailyData,
   User,
+  UserDailyData,
 } from "../generated/schema";
 import { parseEther } from "../../../helpers/utils";
 import { ZERO_BI, ONE_BI, THREE_BI } from "../../../helpers/constants";
@@ -47,8 +48,21 @@ test("TakerBid event updates all entities", () => {
     assert.stringEquals(makerUser.totalVolume.toString(), priceInETH.toString());
     assert.stringEquals(makerUser.totalMakerVolume.toString(), priceInETH.toString());
     assert.stringEquals(makerUser.totalTakerVolume.toString(), "0");
+    const ID = newTakerBidEvent.block.timestamp.div(BigInt.fromI32(86400)).toString() + "-" + makerUser.id;
+    const makerUserDailyData = UserDailyData.load(ID);
+    if (makerUserDailyData !== null) {
+      assert.stringEquals(makerUserDailyData.user, makerUser.id);
+      assert.bigIntEquals(makerUserDailyData.dailyTransactions, ONE_BI);
+      assert.stringEquals(makerUserDailyData.dailyVolume.toString(), makerUser.totalVolume.toString());
+      assert.stringEquals(
+        makerUserDailyData.dailyVolumeExcludingZeroFee.toString(),
+        makerUserDailyData.dailyVolume.toString()
+      );
+    } else {
+      log.warning("UserDailyData (maker) doesn't exist", []);
+    }
   } else {
-    log.warning("Maker user doesn't exist", []);
+    log.warning("User (maker) doesn't exist", []);
   }
 
   const takerUser = User.load(takerAddress.toHex());
@@ -57,8 +71,22 @@ test("TakerBid event updates all entities", () => {
     assert.stringEquals(takerUser.totalVolume.toString(), priceInETH.toString());
     assert.stringEquals(takerUser.totalTakerVolume.toString(), priceInETH.toString());
     assert.stringEquals(takerUser.totalMakerVolume.toString(), "0");
+
+    const ID = newTakerBidEvent.block.timestamp.div(BigInt.fromI32(86400)).toString() + "-" + takerUser.id;
+    const takerUserDailyData = UserDailyData.load(ID);
+    if (takerUserDailyData !== null) {
+      assert.stringEquals(takerUserDailyData.user, takerUser.id);
+      assert.bigIntEquals(takerUserDailyData.dailyTransactions, ONE_BI);
+      assert.stringEquals(takerUserDailyData.dailyVolume.toString(), takerUser.totalVolume.toString());
+      assert.stringEquals(
+        takerUserDailyData.dailyVolumeExcludingZeroFee.toString(),
+        takerUserDailyData.dailyVolume.toString()
+      );
+    } else {
+      log.warning("UserDailyData (taker) doesn't exist", []);
+    }
   } else {
-    log.warning("Taker user doesn't exist", []);
+    log.warning("User (taker) doesn't exist", []);
   }
 
   const strategy = ExecutionStrategy.load(STRATEGY.toHex());
@@ -161,8 +189,21 @@ test("TakerAsk event updates all entities as expected", () => {
     assert.stringEquals(makerUser.totalVolume.toString(), priceInETH.toString());
     assert.stringEquals(makerUser.totalMakerVolume.toString(), priceInETH.toString());
     assert.stringEquals(makerUser.totalTakerVolume.toString(), "0");
+    const ID = newTakerAskEvent.block.timestamp.div(BigInt.fromI32(86400)).toString() + "-" + makerUser.id;
+    const makerUserDailyData = UserDailyData.load(ID);
+    if (makerUserDailyData !== null) {
+      assert.stringEquals(makerUserDailyData.user, makerUser.id);
+      assert.bigIntEquals(makerUserDailyData.dailyTransactions, ONE_BI);
+      assert.stringEquals(makerUserDailyData.dailyVolume.toString(), makerUser.totalVolume.toString());
+      assert.stringEquals(
+        makerUserDailyData.dailyVolumeExcludingZeroFee.toString(),
+        makerUserDailyData.dailyVolume.toString()
+      );
+    } else {
+      log.warning("UserDailyData (maker) doesn't exist", []);
+    }
   } else {
-    log.warning("Maker user doesn't exist", []);
+    log.warning("User (maker) doesn't exist", []);
   }
 
   const takerUser = User.load(takerAddress.toHex());
@@ -171,8 +212,21 @@ test("TakerAsk event updates all entities as expected", () => {
     assert.stringEquals(takerUser.totalVolume.toString(), priceInETH.toString());
     assert.stringEquals(takerUser.totalTakerVolume.toString(), priceInETH.toString());
     assert.stringEquals(takerUser.totalMakerVolume.toString(), "0");
+    const ID = newTakerAskEvent.block.timestamp.div(BigInt.fromI32(86400)).toString() + "-" + takerUser.id;
+    const takerUserDailyData = UserDailyData.load(ID);
+    if (takerUserDailyData !== null) {
+      assert.stringEquals(takerUserDailyData.user, takerUser.id);
+      assert.bigIntEquals(takerUserDailyData.dailyTransactions, ONE_BI);
+      assert.stringEquals(takerUserDailyData.dailyVolume.toString(), takerUser.totalVolume.toString());
+      assert.stringEquals(
+        takerUserDailyData.dailyVolumeExcludingZeroFee.toString(),
+        takerUserDailyData.dailyVolume.toString()
+      );
+    } else {
+      log.warning("UserDailyData (taker) doesn't exist", []);
+    }
   } else {
-    log.warning("Taker user doesn't exist", []);
+    log.warning("User (taker) doesn't exist", []);
   }
 
   const strategy = ExecutionStrategy.load(STRATEGY.toHex());
