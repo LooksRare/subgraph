@@ -3,7 +3,7 @@ import { assert, clearStore, createMockedFunction, log, test } from "matchstick-
 import { createRoyaltyPaymentEvent, createTakerAskEvent, createTakerBidEvent } from "./helpers/utils";
 import { COLLECTION, STRATEGY, WETH } from "./helpers/config";
 import { handleRoyaltyPayment, handleTakerAsk, handleTakerBid } from "../mappings";
-import { Collection, ExecutionStrategy, User } from "../generated/schema";
+import { Collection, CollectionDailyData, ExecutionStrategy, User } from "../generated/schema";
 import { parseEther } from "../../../helpers/utils";
 import { ZERO_BI, ONE_BI, THREE_BI } from "../../../helpers/constants";
 
@@ -77,6 +77,28 @@ test("TakerBid event updates all entities", () => {
     assert.stringEquals(collection.totalTakerBidVolume.toString(), priceInETH.toString());
     assert.stringEquals(collection.totalTakerAskVolume.toString(), "0");
     assert.stringEquals(collection.totalRoyaltyPaid.toString(), "0");
+
+    const ID = newTakerBidEvent.block.timestamp.div(BigInt.fromI32(86400)).toString() + "-" + collection.id;
+    const collectionDailyData = CollectionDailyData.load(ID);
+    if (collectionDailyData !== null) {
+      assert.stringEquals(collectionDailyData.collection, collection.id);
+      assert.bigIntEquals(collectionDailyData.dailyTransactions, ONE_BI);
+      assert.bigIntEquals(collectionDailyData.dailyTakerBidTransactions, ONE_BI);
+      assert.bigIntEquals(collectionDailyData.dailyTakerAskTransactions, ZERO_BI);
+      assert.stringEquals(collectionDailyData.dailyTakerBidVolume.toString(), collection.totalVolume.toString());
+      assert.stringEquals(collectionDailyData.dailyTakerAskVolume.toString(), "0");
+      assert.stringEquals(
+        collectionDailyData.dailyVolumeExcludingZeroFee.toString(),
+        collection.totalVolume.toString()
+      );
+      assert.stringEquals(
+        collectionDailyData.dailyVolumeExcludingZeroFee.toString(),
+        collectionDailyData.dailyVolume.toString()
+      );
+      assert.stringEquals(collectionDailyData.dailyRoyalty.toString(), collection.totalRoyaltyPaid.toString());
+    } else {
+      log.warning("CollectionDailyData doesn't exist", []);
+    }
   } else {
     log.warning("Collection doesn't exist", []);
   }
@@ -155,6 +177,28 @@ test("TakerAsk event updates all entities as expected", () => {
     assert.stringEquals(collection.totalTakerBidVolume.toString(), "0");
     assert.stringEquals(collection.totalTakerAskVolume.toString(), priceInETH.toString());
     assert.stringEquals(collection.totalRoyaltyPaid.toString(), "0");
+
+    const ID = newTakerAskEvent.block.timestamp.div(BigInt.fromI32(86400)).toString() + "-" + collection.id;
+    const collectionDailyData = CollectionDailyData.load(ID);
+    if (collectionDailyData !== null) {
+      assert.stringEquals(collectionDailyData.collection, collection.id);
+      assert.bigIntEquals(collectionDailyData.dailyTransactions, ONE_BI);
+      assert.bigIntEquals(collectionDailyData.dailyTakerAskTransactions, ONE_BI);
+      assert.bigIntEquals(collectionDailyData.dailyTakerBidTransactions, ZERO_BI);
+      assert.stringEquals(collectionDailyData.dailyTakerAskVolume.toString(), collection.totalVolume.toString());
+      assert.stringEquals(collectionDailyData.dailyTakerBidVolume.toString(), "0");
+      assert.stringEquals(
+        collectionDailyData.dailyVolumeExcludingZeroFee.toString(),
+        collection.totalVolume.toString()
+      );
+      assert.stringEquals(
+        collectionDailyData.dailyVolumeExcludingZeroFee.toString(),
+        collectionDailyData.dailyVolume.toString()
+      );
+      assert.stringEquals(collectionDailyData.dailyRoyalty.toString(), collection.totalRoyaltyPaid.toString());
+    } else {
+      log.warning("CollectionDailyData doesn't exist", []);
+    }
   } else {
     log.warning("Collection doesn't exist", []);
   }
@@ -191,6 +235,28 @@ test("RoyaltyPayment", () => {
   const collection = Collection.load(COLLECTION.toHex());
   if (collection !== null) {
     assert.stringEquals(collection.totalRoyaltyPaid.toString(), royaltyAmountInETH.toString());
+
+    const ID = newRoyaltyPaymentEvent.block.timestamp.div(BigInt.fromI32(86400)).toString() + "-" + collection.id;
+    const collectionDailyData = CollectionDailyData.load(ID);
+    if (collectionDailyData !== null) {
+      assert.stringEquals(collectionDailyData.collection, collection.id);
+      assert.bigIntEquals(collectionDailyData.dailyTransactions, ZERO_BI);
+      assert.bigIntEquals(collectionDailyData.dailyTakerAskTransactions, ZERO_BI);
+      assert.bigIntEquals(collectionDailyData.dailyTakerBidTransactions, ZERO_BI);
+      assert.stringEquals(collectionDailyData.dailyTakerAskVolume.toString(), "0");
+      assert.stringEquals(collectionDailyData.dailyTakerBidVolume.toString(), "0");
+      assert.stringEquals(
+        collectionDailyData.dailyVolumeExcludingZeroFee.toString(),
+        collection.totalVolume.toString()
+      );
+      assert.stringEquals(
+        collectionDailyData.dailyVolumeExcludingZeroFee.toString(),
+        collectionDailyData.dailyVolume.toString()
+      );
+      assert.stringEquals(collectionDailyData.dailyRoyalty.toString(), collection.totalRoyaltyPaid.toString());
+    } else {
+      log.warning("CollectionDailyData doesn't exist", []);
+    }
   } else {
     log.warning("Collection doesn't exist", []);
   }
