@@ -32,6 +32,7 @@ export function updateCollectionDailyData(
     collectionDailyData.dailyTakerBidVolume = ZERO_BD;
     collectionDailyData.dailyTakerAskVolume = ZERO_BD;
     collectionDailyData.dailyVolumeExcludingZeroFee = ZERO_BD;
+    collectionDailyData.dailyRoyalty = ZERO_BD;
 
     // Increment number of unique daily collections if it didn't exist
     const exchangeDailyData = ExchangeDailyData.load(dayID.toString());
@@ -58,6 +59,31 @@ export function updateCollectionDailyData(
     }
   }
 
+  collectionDailyData.save();
+}
+
+export function updateRoyaltyForCollectionDailyData(collection: Address, royalty: BigDecimal, timestamp: BigInt): void {
+  const dailyTimestampBigInt = BigInt.fromI32(86400);
+  const dayID = timestamp.div(dailyTimestampBigInt);
+  const dayStartTimestamp = dayID.times(dailyTimestampBigInt);
+  const ID = dayID.toString() + "-" + collection.toHex();
+
+  let collectionDailyData = CollectionDailyData.load(ID);
+  if (collectionDailyData === null) {
+    collectionDailyData = new CollectionDailyData(ID);
+    collectionDailyData.date = dayStartTimestamp;
+    collectionDailyData.collection = collection.toHex();
+    collectionDailyData.dailyTransactions = ZERO_BI;
+    collectionDailyData.dailyTakerBidTransactions = ZERO_BI;
+    collectionDailyData.dailyTakerAskTransactions = ZERO_BI;
+    collectionDailyData.dailyVolume = ZERO_BD;
+    collectionDailyData.dailyTakerBidVolume = ZERO_BD;
+    collectionDailyData.dailyTakerAskVolume = ZERO_BD;
+    collectionDailyData.dailyVolumeExcludingZeroFee = ZERO_BD;
+    collectionDailyData.dailyRoyalty = ZERO_BD;
+  }
+
+  collectionDailyData.dailyRoyalty = collectionDailyData.dailyRoyalty.plus(royalty);
   collectionDailyData.save();
 }
 

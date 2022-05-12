@@ -323,7 +323,7 @@ export function handleCallWithdrawAllAggregatorUniswapV3(call: WithdrawAllCallAg
  * @param event ConversionToLOOKSAggregatorUniswapV3
  */
 export function handleConversionToLOOKSAggregatorUniswapV3(event: ConversionToLOOKSAggregatorUniswapV3): void {
-  const conversion = new AggregatorConversion(event.transaction.hash.toString());
+  const conversion = new AggregatorConversion(event.transaction.hash.toHex());
   conversion.block = event.block.number;
   conversion.date = event.block.timestamp;
   conversion.block = event.block.number;
