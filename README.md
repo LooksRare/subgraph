@@ -13,7 +13,6 @@ This mono-repository contains all subgraphs ([using The Graph](https://docs.look
 | EIP1155              | Generic subgraph to track ERC-1155 tokens                                              | Informational               | ❌             |
 | Exchange             | Subgraph with trade events on the `LooksRareExchange`                                  | Deployed ("Hosted Network") | ✅             |
 | LOOKS Distribution   | Subgraph with events related to the LOOKS token distribution across multiple contracts | Deployed ("Hosted Network") | ✅             |
-| Rebate campaign v1   | Subgraph with ERC-721/ERC-1155 approval events to the LooksRare transfer managers      | Deprecated                  | ❌             |
 | Royalty fee registry | Subgraph tracking collection royalty events from the `RoyaltyFeeRegistry` contract     | Deployed ("Hosted Network") | ✅             |
 
 ## Documentation
