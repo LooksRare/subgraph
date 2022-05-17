@@ -1,11 +1,11 @@
 {
   "name": "subgraph",
-  "description": "LooksRare Subgraph",
+  "description": "LooksRare subgraphs (Graph Protocol)",
   "version": "1.0.0",
   "private": true,
   "repository": "git@github.com:looksrare/subgraph.git",
   "author": "LooksRare",
-  "license": "GPL-3.0-or-later",
+  "license": "MIT",
   "workspaces": [
     "subgraphs/**/*"
   ],
