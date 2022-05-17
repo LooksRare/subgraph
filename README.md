@@ -6,14 +6,14 @@ This mono-repository contains all subgraphs ([using The Graph](https://docs.look
 
 ## List of subgraphs
 
-| Name                 | Description                                                                            | Status                      | Can run tests? |
-| -------------------- | -------------------------------------------------------------------------------------- | --------------------------- | -------------- |
-| Airdrop              | Subgraph to calculate LOOKS airdrop based on `WyvernExchange` adjusted volumes         | Deprecated                  | ❌             |
-| EIP721               | Generic subgraph to track ERC-721 tokens                                               | Informational               | ❌             |
-| EIP1155              | Generic subgraph to track ERC-1155 tokens                                              | Informational               | ❌             |
-| Exchange             | Subgraph with trade events on the `LooksRareExchange`                                  | Deployed ("Hosted Network") | ✅             |
-| LOOKS Distribution   | Subgraph with events related to the LOOKS token distribution across multiple contracts | Deployed ("Hosted Network") | ✅             |
-| Royalty fee registry | Subgraph tracking collection royalty events from the `RoyaltyFeeRegistry` contract     | Deployed ("Hosted Network") | ✅             |
+| Name                 | Description                                                                            | Status                                        | Can run tests? |
+| -------------------- | -------------------------------------------------------------------------------------- | --------------------------------------------- | -------------- |
+| Exchange             | Subgraph with trade events on the `LooksRareExchange`                                  | Deployed (Hosted Network + The Graph network) | ✅             |
+| LOOKS Distribution   | Subgraph with events related to the LOOKS token distribution across multiple contracts | Deployed (Hosted Network)                     | ✅             |
+| Royalty fee registry | Subgraph tracking collection royalty events from the `RoyaltyFeeRegistry` contract     | Deployed (Hosted Network)                     | ✅             |
+| Airdrop              | Subgraph to calculate LOOKS airdrop based on `WyvernExchange` adjusted volumes         | Deprecated                                    | ❌             |
+| EIP721               | Generic subgraph to track ERC-721 tokens                                               | Informational                                 | ❌             |
+| EIP1155              | Generic subgraph to track ERC-1155 tokens                                              | Informational                                 | ❌             |
 
 ## Documentation
 
