@@ -55,7 +55,7 @@ export function handleDepositFeeSharing(event: DepositFeeSharing): void {
 
   if (!user.feeSharingIsActive) {
     user.feeSharingIsActive = true;
-    updateNumberUsersFeeSharing(event.block.timestamp, true);
+    updateNumberUsersFeeSharing(event.block.timestamp, true, user.aggregatorIsActive);
   }
 
   user.feeSharingAdjustedDepositAmount = user.feeSharingAdjustedDepositAmount.plus(toBigDecimal(event.params.amount));
@@ -147,7 +147,7 @@ export function handleCallWithdrawFeeSharing(call: WithdrawCallFeeSharing): void
     const userShares = fetchSharesFeeSharingSystem(call.from);
     if (userShares.equals(ZERO_BI) && user.feeSharingIsActive) {
       user.feeSharingIsActive = false;
-      updateNumberUsersFeeSharing(call.block.timestamp, false);
+      updateNumberUsersFeeSharing(call.block.timestamp, false, user.aggregatorIsActive);
     }
     user.save();
   }
@@ -166,7 +166,7 @@ export function handleCallWithdrawAllFeeSharing(call: WithdrawAllCallFeeSharing)
   if (user !== null && user.feeSharingAdjustedDepositAmount.equals(ZERO_BD)) {
     if (user.feeSharingIsActive) {
       user.feeSharingIsActive = false;
-      updateNumberUsersFeeSharing(call.block.timestamp, false);
+      updateNumberUsersFeeSharing(call.block.timestamp, false, user.aggregatorIsActive);
     }
     user.save();
   }
@@ -255,7 +255,7 @@ export function handleDepositAggregatorUniswapV3(event: DepositAggregatorUniswap
 
   if (!user.aggregatorIsActive) {
     user.aggregatorIsActive = true;
-    updateNumberUsersAggregator(event.block.timestamp, true);
+    updateNumberUsersAggregator(event.block.timestamp, true, user.feeSharingIsActive);
   }
 
   user.aggregatorAdjustedDepositAmount = user.aggregatorAdjustedDepositAmount.plus(toBigDecimal(event.params.amount));
@@ -299,7 +299,7 @@ export function handleCallWithdrawAggregatorUniswapV3(call: WithdrawCallAggregat
     const userShares = fetchSharesAggregator(call.from);
     if (userShares.equals(ZERO_BI) && user.aggregatorIsActive) {
       user.aggregatorIsActive = false;
-      updateNumberUsersAggregator(call.block.timestamp, false);
+      updateNumberUsersAggregator(call.block.timestamp, false, user.feeSharingIsActive);
     }
     user.save();
   }
@@ -313,7 +313,7 @@ export function handleCallWithdrawAllAggregatorUniswapV3(call: WithdrawAllCallAg
   if (user !== null && user.aggregatorAdjustedDepositAmount.equals(ZERO_BD)) {
     if (user.aggregatorIsActive) {
       user.aggregatorIsActive = false;
-      updateNumberUsersAggregator(call.block.timestamp, false);
+      updateNumberUsersAggregator(call.block.timestamp, false, user.feeSharingIsActive);
     }
     user.save();
   }

@@ -15,7 +15,7 @@ export function updateDailySnapshotWithdrawFeeSharing(timestamp: BigInt, amount:
   dailySnapshot.save();
 }
 
-export function updateNumberUsersFeeSharing(timestamp: BigInt, isIncrease: boolean): void {
+export function updateNumberUsersFeeSharing(timestamp: BigInt, isIncrease: boolean, isStakingElsewhere: boolean): void {
   const dailySnapshot = setupOverviewAndDailySnapshot(timestamp);
   const overview = Overview.load(ONE_BI.toHex());
   if (overview === null) {
@@ -27,10 +27,20 @@ export function updateNumberUsersFeeSharing(timestamp: BigInt, isIncrease: boole
     dailySnapshot.feeSharingNewUsers = dailySnapshot.feeSharingNewUsers.plus(ONE_BI);
     dailySnapshot.feeSharingActiveUsers = dailySnapshot.feeSharingActiveUsers.plus(ONE_BI);
     overview.feeSharingActiveUsers = overview.feeSharingActiveUsers.plus(ONE_BI);
+    if (!isStakingElsewhere) {
+      overview.activeStakers = overview.activeStakers.plus(ONE_BI);
+      dailySnapshot.activeStakers = dailySnapshot.activeStakers.plus(ONE_BI);
+      dailySnapshot.newStakers = dailySnapshot.newStakers.plus(ONE_BI);
+    }
   } else {
     dailySnapshot.feeSharingRemovedUsers = dailySnapshot.feeSharingRemovedUsers.plus(ONE_BI);
     dailySnapshot.feeSharingActiveUsers = dailySnapshot.feeSharingActiveUsers.minus(ONE_BI);
     overview.feeSharingActiveUsers = overview.feeSharingActiveUsers.minus(ONE_BI);
+    if (!isStakingElsewhere) {
+      overview.activeStakers = overview.activeStakers.minus(ONE_BI);
+      dailySnapshot.activeStakers = dailySnapshot.activeStakers.minus(ONE_BI);
+      dailySnapshot.removedStakers = dailySnapshot.removedStakers.plus(ONE_BI);
+    }
   }
 
   dailySnapshot.save();
@@ -49,7 +59,7 @@ export function updateDailySnapshotWithdrawAggregator(timestamp: BigInt, amount:
   dailySnapshot.save();
 }
 
-export function updateNumberUsersAggregator(timestamp: BigInt, isIncrease: boolean): void {
+export function updateNumberUsersAggregator(timestamp: BigInt, isIncrease: boolean, isStakingElsewhere: boolean): void {
   const dailySnapshot = setupOverviewAndDailySnapshot(timestamp);
   const overview = Overview.load(ONE_BI.toHex());
   if (overview === null) {
@@ -60,10 +70,20 @@ export function updateNumberUsersAggregator(timestamp: BigInt, isIncrease: boole
     dailySnapshot.aggregatorNewUsers = dailySnapshot.aggregatorNewUsers.plus(ONE_BI);
     dailySnapshot.aggregatorActiveUsers = dailySnapshot.aggregatorActiveUsers.plus(ONE_BI);
     overview.aggregatorActiveUsers = overview.aggregatorActiveUsers.plus(ONE_BI);
+    if (!isStakingElsewhere) {
+      overview.activeStakers = overview.activeStakers.plus(ONE_BI);
+      dailySnapshot.activeStakers = dailySnapshot.activeStakers.plus(ONE_BI);
+      dailySnapshot.newStakers = dailySnapshot.newStakers.plus(ONE_BI);
+    }
   } else {
     dailySnapshot.aggregatorRemovedUsers = dailySnapshot.aggregatorRemovedUsers.plus(ONE_BI);
     dailySnapshot.aggregatorActiveUsers = dailySnapshot.aggregatorActiveUsers.minus(ONE_BI);
     overview.aggregatorActiveUsers = overview.aggregatorActiveUsers.minus(ONE_BI);
+    if (!isStakingElsewhere) {
+      overview.activeStakers = overview.activeStakers.minus(ONE_BI);
+      dailySnapshot.activeStakers = dailySnapshot.activeStakers.minus(ONE_BI);
+      dailySnapshot.removedStakers = dailySnapshot.removedStakers.plus(ONE_BI);
+    }
   }
 
   dailySnapshot.save();

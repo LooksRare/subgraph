@@ -7,5 +7,6 @@ export function initializeOverview(): Overview {
   overview.aggregatorTotalStakedLOOKS = ZERO_BD;
   overview.feeSharingActiveUsers = ZERO_BI;
   overview.feeSharingTotalStakedLOOKS = ZERO_BD;
+  overview.activeStakers = ZERO_BI;
   return overview;
 }
