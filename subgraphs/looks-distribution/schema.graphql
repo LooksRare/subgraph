@@ -82,6 +82,15 @@ type DailySnapshot @entity {
   "Date"
   date: BigInt!
 
+  "Number unique active stakers (Aggregator + Fee Sharing)"
+  activeStakers: BigInt!
+
+  "Daily new stakers (Aggregator + Fee Sharing)"
+  newStakers: BigInt!
+
+  "Daily removed stakers (Aggregator + Fee Sharing)"
+  removedStakers: BigInt!
+
   "Aggregator - Number active users"
   aggregatorActiveUsers: BigInt!
 
@@ -134,6 +143,9 @@ Overview
 type Overview @entity {
   "ID"
   id: ID!
+
+  "Number unique active stakers (Aggregator + Fee Sharing)"
+  activeStakers: BigInt!
 
   "Aggregator - Number active users"
   aggregatorActiveUsers: BigInt!
