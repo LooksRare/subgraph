@@ -8,13 +8,23 @@ on:
       - master
 
 jobs:
-  format:
+  tests:
     name: Matchstick
     runs-on: ubuntu-latest
     container: node:latest
+    
     services:
       postgres:
         image: postgres:latest
+        env:
+          POSTGRES_PASSWORD: postgres
+        # Set health checks to wait until postgres has started
+        options: >-
+          --health-cmd pg_isready
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5        
+        
     steps:
       - name: Checkout code
         uses: actions/checkout@v3
