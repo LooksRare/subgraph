@@ -56,4 +56,4 @@ jobs:
         run: yarn build:mainnet
 
       - name: Run tests
-        run: yarn test
+        run: yarn test -u
