@@ -5,6 +5,9 @@ import { DailySnapshot } from "../../generated/schema";
 export function initializeDailySnapshot(ID: string, dayStartTimestamp: BigInt): DailySnapshot {
   const dailySnapshot = new DailySnapshot(ID);
   dailySnapshot.date = dayStartTimestamp;
+  dailySnapshot.activeStakers = ZERO_BI;
+  dailySnapshot.newStakers = ZERO_BI;
+  dailySnapshot.removedStakers = ZERO_BI;
   dailySnapshot.aggregatorActiveUsers = ZERO_BI;
   dailySnapshot.aggregatorNewUsers = ZERO_BI;
   dailySnapshot.aggregatorRemovedUsers = ZERO_BI;
