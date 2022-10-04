@@ -30,7 +30,8 @@ export function createDepositFeeSharingEvent(
     mockEvent.logType,
     mockEvent.block,
     mockEvent.transaction,
-    mockEvent.parameters
+    mockEvent.parameters,
+    mockEvent.receipt
   );
 
   newDepositEvent.block.timestamp = blockTimestamp;
@@ -68,7 +69,8 @@ export function createHarvestFeeSharingEvent(
     mockEvent.logType,
     mockEvent.block,
     mockEvent.transaction,
-    mockEvent.parameters
+    mockEvent.parameters,
+    mockEvent.receipt
   );
 
   newHarvestEvent.block.timestamp = blockTimestamp;
@@ -106,7 +108,8 @@ export function createWithdrawFeeSharingEvent(
     mockEvent.logType,
     mockEvent.block,
     mockEvent.transaction,
-    mockEvent.parameters
+    mockEvent.parameters,
+    mockEvent.receipt
   );
 
   newWithdrawEvent.block.timestamp = blockTimestamp;
@@ -147,7 +150,8 @@ export function createNewRewardPeriodEvent(
     mockEvent.logType,
     mockEvent.block,
     mockEvent.transaction,
-    mockEvent.parameters
+    mockEvent.parameters,
+    mockEvent.receipt
   );
 
   newRewardPeriodEvent.block.number = blockNumber;

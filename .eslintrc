@@ -3,6 +3,6 @@
   "plugins": ["@typescript-eslint"],
   "extends": ["plugin:@typescript-eslint/recommended", "prettier"],
   "rules": {
-    "@typescript-eslint/ban-types": "off",
-}
+    "@typescript-eslint/ban-types": "off"
+  }
 }

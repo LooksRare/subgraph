@@ -27,7 +27,8 @@ export function createDepositAggregatorEvent(
     mockEvent.logType,
     mockEvent.block,
     mockEvent.transaction,
-    mockEvent.parameters
+    mockEvent.parameters,
+    mockEvent.receipt
   );
 
   newDepositEvent.block.timestamp = blockTimestamp;
@@ -60,7 +61,8 @@ export function createWithdrawAggregatorEvent(
     mockEvent.logType,
     mockEvent.block,
     mockEvent.transaction,
-    mockEvent.parameters
+    mockEvent.parameters,
+    mockEvent.receipt
   );
 
   newWithdrawEvent.block.timestamp = blockTimestamp;
@@ -94,7 +96,8 @@ export function createConversionToLOOKSEvent(
     mockEvent.logType,
     mockEvent.block,
     mockEvent.transaction,
-    mockEvent.parameters
+    mockEvent.parameters,
+    mockEvent.receipt
   );
 
   newConversionEvent.block.number = blockNumber;
