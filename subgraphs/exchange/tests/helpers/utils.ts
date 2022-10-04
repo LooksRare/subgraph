@@ -35,7 +35,8 @@ export function createTakerAskEvent(
     mockEvent.logType,
     mockEvent.block,
     mockEvent.transaction,
-    mockEvent.parameters
+    mockEvent.parameters,
+    mockEvent.receipt
   );
 
   newTakerAskEvent.parameters = [];
@@ -98,7 +99,8 @@ export function createTakerBidEvent(
     mockEvent.logType,
     mockEvent.block,
     mockEvent.transaction,
-    mockEvent.parameters
+    mockEvent.parameters,
+    mockEvent.receipt
   );
 
   newTakerBidEvent.parameters = [];
@@ -151,7 +153,8 @@ export function createRoyaltyPaymentEvent(
     mockEvent.logType,
     mockEvent.block,
     mockEvent.transaction,
-    mockEvent.parameters
+    mockEvent.parameters,
+    mockEvent.receipt
   );
 
   newRoyaltyPaymentEvent.parameters = [];

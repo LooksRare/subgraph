@@ -23,7 +23,8 @@ export function createRoyaltyFeeUpdateEvent(
     mockEvent.logType,
     mockEvent.block,
     mockEvent.transaction,
-    mockEvent.parameters
+    mockEvent.parameters,
+    mockEvent.receipt
   );
 
   newRoyaltyFeeUpdateEvent.parameters = [];

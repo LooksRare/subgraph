@@ -23,7 +23,8 @@ export function createRewardsClaimEvent(
     mockEvent.logType,
     mockEvent.block,
     mockEvent.transaction,
-    mockEvent.parameters
+    mockEvent.parameters,
+    mockEvent.receipt
   );
 
   newRewardsClaimEvent.block.timestamp = blockTimestamp;
