@@ -21,21 +21,21 @@
     "prepare": "husky install"
   },
   "dependencies": {
-    "@looksrare/sdk": "^0.5.0"
+    "@looksrare/sdk": "^0.8.3"
   },
   "devDependencies": {
-    "@commitlint/cli": "^16.0.0",
-    "@commitlint/config-conventional": "^16.0.0",
-    "@graphprotocol/graph-cli": "^0.29.2",
-    "@graphprotocol/graph-ts": "^0.26.0",
-    "@typescript-eslint/eslint-plugin": "^5.16.0",
-    "@typescript-eslint/parser": "^5.16.0",
-    "eslint": "^8.11.0",
+    "@commitlint/cli": "^17.1.2",
+    "@commitlint/config-conventional": "^17.1.0",
+    "@graphprotocol/graph-cli": "^0.34.0",
+    "@graphprotocol/graph-ts": "^0.28.0",
+    "@typescript-eslint/eslint-plugin": "^5.39.0",
+    "@typescript-eslint/parser": "^5.39.0",
+    "eslint": "^8.24.0",
     "eslint-config-prettier": "^8.5.0",
-    "husky": "^7.0.0",
-    "lerna": "^4.0.0",
-    "matchstick-as": "^0.4.3",
-    "prettier": "^2.6.0",
-    "typescript": "^4.6.4"
+    "husky": "^8.0.0",
+    "lerna": "^5.5.4",
+    "matchstick-as": "^0.5.0",
+    "prettier": "^2.7.1",
+    "typescript": "^4.8.4"
   }
 }
