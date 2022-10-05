@@ -89,7 +89,7 @@ dataSources:
     network: mainnet
     source:
       abi: TradingRewardsDistributor
-      address: "0xa35dce3e0e6ceb67a30b8d7f4aee721c949b5970"
+      address: "0x453c1208b400fe47acf275315f14e8f9f9fbc3cd"
       startBlock: 13975044
     mapping:
       kind: ethereum/events
@@ -109,7 +109,7 @@ dataSources:
     network: mainnet
     source:
       abi: AggregatorFeeSharingWithUniswapV3
-      address: "0xa35dce3e0e6ceb67a30b8d7f4aee721c949b5970"
+      address: "0x3ab16af1315dc6c95f83cbf522fecf98d00fd9ba"
       startBlock: 14477871
     mapping:
       kind: ethereum/events
@@ -143,7 +143,7 @@ dataSources:
     network: mainnet
     source:
       abi: MultiRewardsDistributor
-      address: "0xa35dce3e0e6ceb67a30b8d7f4aee721c949b5970"
+      address: "0x0554f068365ed43dcc98dcd7fd7a8208a5638c72"
       startBlock: 14619105
     mapping:
       kind: ethereum/events
