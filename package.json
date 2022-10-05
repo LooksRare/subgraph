@@ -10,9 +10,8 @@
     "subgraphs/**/*"
   ],
   "scripts": {
-    "codegen:rinkeby": "lerna run codegen:rinkeby",
-    "codegen:mainnet": "lerna run codegen:mainnet",
-    "build:rinkeby": "lerna run build:rinkeby",
+    "codegen": "lerna run codegen",
+    "build:goerli": "lerna run build:goerli",
     "build:mainnet": "lerna run build:mainnet",
     "format:check": "prettier --check '*/**/*.{js,ts,yaml,yml,json}'",
     "format:write": "prettier --write '*/**/*.{js,ts,yaml,yml,json}'",

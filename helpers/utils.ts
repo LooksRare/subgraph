@@ -14,7 +14,7 @@ export function toBigDecimal(amount: BigInt, decimals: i32 = 18): BigDecimal {
 }
 
 /**
- * @param quantity amount in ETH (i32)
+ * @param amount amount in ETH (i32)
  * @param decimals number of decimal (optional)
  * @notice Parse the amount into a BigInt instance of the amount of wei.
  */

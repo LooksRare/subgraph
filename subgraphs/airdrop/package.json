@@ -2,15 +2,12 @@
   "name": "airdrop",
   "description": "LooksRare Subgraph",
   "version": "1.0.0",
-  "repository": "git@github.com:looksrare/rare-subgraph.git",
+  "repository": "git@github.com:looksrare/subgraph.git",
   "author": "LooksRare",
   "license": "MIT",
   "scripts": {
-    "codegen:rinkeby": "graph codegen subgraph-rinkeby.yaml",
-    "codegen:mainnet": "graph codegen subgraph-mainnet.yaml",
-    "build:rinkeby": "graph build subgraph-rinkeby.yaml",
-    "build:mainnet": "graph build subgraph-mainnet.yaml",
-    "deploy:rinkeby": "graph deploy --product hosted-service --node https://api.thegraph.com/deploy/ --ipfs https://api.thegraph.com/ipfs/ 0xjurassicpunk/airdrop subgraph-rinkeby.yaml",
+    "codegen": "graph codegen subgraph.yaml",
+    "build:mainnet": "graph build subgraph.yaml",
     "deploy:mainnet": "graph deploy --product hosted-service --node https://api.thegraph.com/deploy/ --ipfs https://api.thegraph.com/ipfs/ looksrare/airdrop subgraph-mainnet.yaml"
   }
 }

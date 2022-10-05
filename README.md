@@ -24,7 +24,7 @@ The documentation for **deployed subgraphs** is available [here](https://docs.lo
 For any of the subgraphs (referred to as `[subgraph]` on the `mainnet` network):
 
 1. Run the `cd subgraphs/[subgraph]` command to move to the subgraph directory.
-2. Run the `yarn codegen:mainnet` command to prepare the TypeScript sources for the GraphQL (`./generated/*`).
+2. Run the `yarn codegen` command to prepare the TypeScript sources for the GraphQL (`./generated/*`).
 3. Run the `yarn build:mainnet` command to build the subgraph, and check compilation errors before deploying.
 4. Run `graph auth --product hosted-service '<ACCESS_TOKEN>'` (for Hosted Service) or `graph auth --studio <DEPLOY KEY>'` (for The Graph network).
 5. Deploy via `yarn deploy:mainnet`.
@@ -38,6 +38,6 @@ The [Matchstick framework](https://thegraph.com/docs/en/developer/matchstick/) r
 For any of the subgraph supporting tests (referred to as `[subgraph]`):
 
 1. Run the `cd subgraphs/[subgraph]` command to move to the subgraph directory.
-2. Run the `yarn codegen:mainnet` command to prepare the TypeScript sources for the GraphQL (`./generated/*`).
+2. Run the `yarn codegen` command to prepare the TypeScript sources for the GraphQL (`./generated/*`).
 3. Run the `yarn build:mainnet` command to build the subgraph, and check compilation errors.
 4. Run the `yarn test` command to execute the tests.

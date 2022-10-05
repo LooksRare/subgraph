@@ -1,0 +1,12 @@
+{
+  "mainnet": {
+    "EIP721": {
+      "startBlock": 4300082
+    }
+  },
+  "goerli": {
+    "EIP721": {
+      "startBlock": 0
+    }
+  }
+}
