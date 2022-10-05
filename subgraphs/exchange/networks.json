@@ -7,7 +7,7 @@
   },
   "goerli": {
     "LooksRareExchange": {
-      "address": "0xD112466471b5438C1ca2D218694200e49d81D047",
+      "address": "0xd112466471b5438c1ca2d218694200e49d81d047",
       "startBlock": 7247379
     }
   }
