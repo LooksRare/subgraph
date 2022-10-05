@@ -1,0 +1,14 @@
+{
+  "mainnet": {
+    "LooksRareExchange": {
+      "address": "0x59728544b08ab483533076417fbbb2fd0b17ce3a",
+      "startBlock": 13885625
+    }
+  },
+  "goerli": {
+    "LooksRareExchange": {
+      "address": "0xD112466471b5438C1ca2D218694200e49d81D047",
+      "startBlock": 7247379
+    }
+  }
+}
