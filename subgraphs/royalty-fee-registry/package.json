@@ -6,7 +6,7 @@
   "author": "LooksRare",
   "license": "MIT",
   "scripts": {
-    "codegen:mainnet": "graph codegen subgraph.yaml",
+    "codegen": "graph codegen subgraph.yaml",
     "build:mainnet": "graph build subgraph.yaml",
     "deploy:mainnet": "graph deploy --product hosted-service --node https://api.thegraph.com/deploy/ --ipfs https://api.thegraph.com/ipfs/ looksrare/royalty-fee-registry subgraph.yaml",
     "deploy:studio": "graph codegen subgraph.yaml && graph build subgraph.yaml && graph deploy --studio looksrare-royalty-fee-registry",
