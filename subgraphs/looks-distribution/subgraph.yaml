@@ -8,8 +8,8 @@ dataSources:
     name: FeeSharingSystem
     network: mainnet
     source:
-      address: "0xbcd7254a1d759efa08ec7c3291b2e85c5dcc12ce"
       abi: FeeSharingSystem
+      address: "0xbcd7254a1d759efa08ec7c3291b2e85c5dcc12ce"
       startBlock: 13975044
     mapping:
       kind: ethereum/events
@@ -44,8 +44,8 @@ dataSources:
     name: StakingPoolForUniswapV2Tokens
     network: mainnet
     source:
-      address: "0x2a70e7f51f6cd40c3e9956aa964137668cbfadc5"
       abi: StakingPoolForUniswapV2Tokens
+      address: "0x2a70e7f51f6cd40c3e9956aa964137668cbfadc5"
       startBlock: 13975044
     mapping:
       kind: ethereum/events
@@ -68,8 +68,8 @@ dataSources:
     name: LooksRareAirdrop
     network: mainnet
     source:
-      address: "0xa35dce3e0e6ceb67a30b8d7f4aee721c949b5970"
       abi: LooksRareAirdrop
+      address: "0xa35dce3e0e6ceb67a30b8d7f4aee721c949b5970"
       startBlock: 13975044
     mapping:
       kind: ethereum/events
@@ -88,8 +88,8 @@ dataSources:
     name: TradingRewardsDistributor
     network: mainnet
     source:
-      address: "0x453c1208b400fe47acf275315f14e8f9f9fbc3cd"
       abi: TradingRewardsDistributor
+      address: "0xa35dce3e0e6ceb67a30b8d7f4aee721c949b5970"
       startBlock: 13975044
     mapping:
       kind: ethereum/events
@@ -108,8 +108,8 @@ dataSources:
     name: AggregatorFeeSharingWithUniswapV3
     network: mainnet
     source:
-      address: "0x3ab16af1315dc6c95f83cbf522fecf98d00fd9ba"
       abi: AggregatorFeeSharingWithUniswapV3
+      address: "0xa35dce3e0e6ceb67a30b8d7f4aee721c949b5970"
       startBlock: 14477871
     mapping:
       kind: ethereum/events
@@ -142,8 +142,8 @@ dataSources:
     name: MultiRewardsDistributor
     network: mainnet
     source:
-      address: "0x0554f068365ed43dcc98dcd7fd7a8208a5638c72"
       abi: MultiRewardsDistributor
+      address: "0xa35dce3e0e6ceb67a30b8d7f4aee721c949b5970"
       startBlock: 14619105
     mapping:
       kind: ethereum/events

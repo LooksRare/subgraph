@@ -1,0 +1,54 @@
+{
+  "mainnet": {
+    "FeeSharingSystem": {
+      "address": "0xbcd7254a1d759efa08ec7c3291b2e85c5dcc12ce",
+      "startBlock": 13975044
+    },
+    "StakingPoolForUniswapV2Tokens": {
+      "address": "0x2a70e7f51f6cd40c3e9956aa964137668cbfadc5",
+      "startBlock": 13975044
+    },
+    "LooksRareAirdrop": {
+      "address": "0xa35dce3e0e6ceb67a30b8d7f4aee721c949b5970",
+      "startBlock": 13975044
+    },
+    "TradingRewardsDistributor": {
+      "address": "0xa35dce3e0e6ceb67a30b8d7f4aee721c949b5970",
+      "startBlock": 13975044
+    },
+    "AggregatorFeeSharingWithUniswapV3": {
+      "address": "0xa35dce3e0e6ceb67a30b8d7f4aee721c949b5970",
+      "startBlock": 14477871
+    },
+    "MultiRewardsDistributor": {
+      "address": "0xa35dce3e0e6ceb67a30b8d7f4aee721c949b5970",
+      "startBlock": 14619105
+    }
+  },
+  "goerli": {
+    "FeeSharingSystem": {
+      "address": "0x8A29E7b241A32158Fd7F267d484199aAD8dd2E31",
+      "startBlock": 7532819
+    },
+    "StakingPoolForUniswapV2Tokens": {
+      "address": "0x0000000000000000000000000000000000000000",
+      "startBlock": 9999999999999999999
+    },
+    "LooksRareAirdrop": {
+      "address": "0x0000000000000000000000000000000000000000",
+      "startBlock": 9999999999999999999
+    },
+    "TradingRewardsDistributor": {
+      "address": "0x0000000000000000000000000000000000000000",
+      "startBlock": 9999999999999999999
+    },
+    "AggregatorFeeSharingWithUniswapV3": {
+      "address": "0x63c38B3BE3eF075a00a5edaeC36F499088c7334C",
+      "startBlock": 7532819
+    },
+    "MultiRewardsDistributor": {
+      "address": "0xdC6dC8d1B784890BA2c38947218F89E963EC2673",
+      "startBlock": 7532819
+    }
+  }
+}
