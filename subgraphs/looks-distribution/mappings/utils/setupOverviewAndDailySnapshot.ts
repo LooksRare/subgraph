@@ -19,6 +19,7 @@ export function setupOverviewAndDailySnapshot(timestamp: BigInt): DailySnapshot 
     }
 
     dailySnapshot = initializeDailySnapshot(ID, dayStartTimestamp);
+    dailySnapshot.activeStakers = overview.activeStakers;
     dailySnapshot.aggregatorActiveUsers = overview.aggregatorActiveUsers;
     dailySnapshot.feeSharingActiveUsers = overview.feeSharingActiveUsers;
     dailySnapshot.aggregatorTotalStakedLOOKS = overview.aggregatorTotalStakedLOOKS;
