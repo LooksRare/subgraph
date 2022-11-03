@@ -1,0 +1,212 @@
+type Aggregator @entity {
+  " { Currency } "
+  id: ID!
+
+  " Trade currency "
+  currency: Bytes!
+
+  " Total number of unique users "
+  users: BigInt!
+
+  " Total number of collections traded "
+  collections: BigInt!
+
+  " Total number of transactions "
+  transactions: BigInt!
+
+  " Total volume "
+  volume: BigDecimal!
+
+  " Aggregator daily data "
+  dailyData: [AggregatorDailyData!]! @derivedFrom(field: "aggregator")
+}
+
+type AggregatorDailyData @entity {
+  " { Currency }-{ Date } "
+  id: ID!
+
+  " Trade currency "
+  currency: Bytes!
+
+  " Pointer to Aggregator "
+  aggregator: Aggregator!
+
+  " Date "
+  date: BigInt!
+
+  " Total number of unique users "
+  users: BigInt!
+
+  " Total number of collections traded "
+  collections: BigInt!
+
+  " Total number of transactions "
+  transactions: BigInt!
+
+  " Total volume "
+  volume: BigDecimal!
+}
+
+type Collection @entity {
+  " { Address }-{ Currency } "
+  id: ID!
+
+  " Trade currency "
+  currency: Bytes!
+
+  " Total number of transactions "
+  transactions: BigInt!
+
+  " Total volume "
+  volume: BigDecimal!
+
+  " Collection daily data "
+  dailyData: [CollectionDailyData!]! @derivedFrom(field: "collection")
+}
+
+type CollectionDailyData @entity {
+  " { Address }-{ Currency }-{ Date } "
+  id: ID!
+
+  " Pointer to Collection "
+  collection: Collection!
+
+  " Trade currency "
+  currency: Bytes!
+
+  " Date "
+  date: BigInt!
+
+  " Total number of transactions "
+  transactions: BigInt!
+
+  " Total volume "
+  volume: BigDecimal!
+}
+
+type Marketplace @entity {
+  " { Marketplace }-{ Currency } "
+  id: ID!
+
+  " Trade currency "
+  currency: Bytes!
+
+  " Total number of unique users "
+  users: BigInt!
+
+  " Total number of collections traded "
+  collections: BigInt!
+
+  " Total number of transactions "
+  transactions: BigInt!
+
+  " Total volume "
+  volume: BigDecimal!
+
+  " Marketplace daily data "
+  dailyData: [MarketplaceDailyData!]! @derivedFrom(field: "marketplace")
+}
+
+type MarketplaceDailyData @entity {
+  " { Marketplace }-{ Currency }-{ Date } "
+  id: ID!
+
+  " Pointer to Marketplace "
+  marketplace: Marketplace!
+
+  " Trade currency "
+  currency: Bytes!
+
+  " Date "
+  date: BigInt!
+
+  " Total number of unique users "
+  users: BigInt!
+
+  " Total number of collections traded "
+  collections: BigInt!
+
+  " Total number of transactions "
+  transactions: BigInt!
+
+  " Total volume "
+  volume: BigDecimal!
+}
+
+type User @entity {
+  " { User }-{ Currency } "
+  id: ID!
+
+  " Trade currency "
+  currency: Bytes!
+
+  " Total number of transactions "
+  transactions: BigInt!
+
+  " Total volume "
+  volume: BigDecimal!
+
+  " User daily data "
+  dailyData: [UserDailyData!]! @derivedFrom(field: "user")
+}
+
+type UserDailyData @entity {
+  " { User }-{ Currency }-{ Date } "
+  id: ID!
+
+  " Pointer to User "
+  user: User!
+
+  " Trade currency "
+  currency: Bytes!
+
+  " Date "
+  date: BigInt!
+
+  " Total number of transactions "
+  transactions: BigInt!
+
+  " Total volume "
+  volume: BigDecimal!
+}
+
+type Transaction @entity {
+    " { Transaction hash }-{ Log index }-{ (optional) ID within bundle } "
+  id: ID!
+
+  " Event transaction hash. "
+  transactionHash: String!
+
+  " Event log index. "
+  logIndex: Int!
+
+  " Block timestamp where the trade is executed. "
+  timestamp: BigInt!
+
+  " Block number where the trade is executed. "
+  blockNumber: BigInt!
+
+  " Whether the trade is in a bundle. "
+  isBundle: Boolean!
+
+  " Pointer to collection "
+  collection: Collection!
+
+  " Token ID of the traded NFT. "
+  tokenId: BigInt!
+
+  " The amount of token to transfer. It should be 1 except for ERC1155 batch. "
+  amount: BigInt!
+
+  " Price. If only 1 tokenId is involved, then the price is determined by the token only. If the trade is incurred by a batch purchasing, then the price is the average price in the batch. "
+  price: BigDecimal!
+
+  " Trade currency "
+  currency: Bytes!
+
+  " Buyer account address "
+  buyer: Bytes!
+
+  " Seller account address "
+  seller: Bytes!
+}
