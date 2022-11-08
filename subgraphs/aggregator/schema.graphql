@@ -107,14 +107,31 @@ type CollectionByCurrency @entity {
 
   " Total volume "
   volume: BigDecimal!
+
+  " Collection daily data "
+  dailyData: [CollectionDailyDataByCurrency!]! @derivedFrom(field: "collectionByCurrency")
 }
 
 type CollectionDailyData @entity {
-  " { Address }-{ Currency }-{ Date } "
+  " { Address }-{ Date } "
   id: ID!
 
   " Pointer to Collection "
   collection: Collection!
+
+  " Date "
+  date: BigInt!
+
+  " Total number of transactions "
+  transactions: BigInt!
+}
+
+type CollectionDailyDataByCurrency @entity {
+  " { Address }-{ Currency }-{ Date } "
+  id: ID!
+
+  " Pointer to CollectionByCurrency "
+  collectionByCurrency: CollectionByCurrency!
 
   " Trade currency "
   currency: Bytes!

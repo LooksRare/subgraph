@@ -11,6 +11,7 @@ import {
   Collection,
   CollectionByCurrency,
   CollectionDailyData,
+  CollectionDailyDataByCurrency,
   Marketplace,
   MarketplaceDailyData,
   Transaction,
@@ -81,10 +82,21 @@ describe("handleOrderFulfilled()", () => {
     const collectionDailyData = CollectionDailyData.load(collectionDailyDataID);
     assert.assertNotNull(collectionDailyData);
     assert.stringEquals(collectionDailyData!.collection.toString(), collection!.id);
-    assert.stringEquals(collectionDailyData!.currency.toHexString(), ZERO_ADDRESS.toHex());
     assert.bigIntEquals(collectionDailyData!.transactions, ONE_BI);
     assert.bigIntEquals(collectionDailyData!.date, ZERO_BI);
-    assert.stringEquals(collectionDailyData!.volume.toString(), transactionVolume);
+
+    const collectionDailyDataByCurrencyID = `${offerToken}-${ZERO_ADDRESS.toHex()}-0`;
+
+    assert.i32Equals(collectionByCurrency!.dailyData.length, 1);
+    assert.stringEquals(collectionByCurrency!.dailyData[0], collectionDailyDataByCurrencyID);
+
+    const collectionDailyDataByCurrency = CollectionDailyDataByCurrency.load(collectionDailyDataByCurrencyID);
+    assert.assertNotNull(collectionDailyDataByCurrency);
+    assert.stringEquals(collectionDailyDataByCurrency!.collectionByCurrency.toString(), collectionByCurrency!.id);
+    assert.stringEquals(collectionDailyDataByCurrency!.currency.toHexString(), ZERO_ADDRESS.toHex());
+    assert.bigIntEquals(collectionDailyDataByCurrency!.transactions, ONE_BI);
+    assert.bigIntEquals(collectionDailyDataByCurrency!.date, ZERO_BI);
+    assert.stringEquals(collectionDailyDataByCurrency!.volume.toString(), transactionVolume);
 
     const aggregator = Aggregator.load("LooksRareAggregator");
     assert.assertNotNull(aggregator);

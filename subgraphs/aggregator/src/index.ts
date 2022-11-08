@@ -5,6 +5,7 @@ import {
   Collection,
   CollectionByCurrency,
   CollectionDailyData,
+  CollectionDailyDataByCurrency,
   Transaction,
   User,
   UserDailyData,
@@ -140,8 +141,6 @@ export function handleOrderFulfilled(event: OrderFulfilled): void {
     collectionDailyData = new CollectionDailyData(collectionDailyDataID);
     const dayStartTimestamp = dayID.times(ONE_DAY_BI);
     collectionDailyData.date = dayStartTimestamp;
-    collectionDailyData.currency = currency;
-    collectionDailyData.volume = ZERO_BD;
     collectionDailyData.transactions = ZERO_BI;
     collectionDailyData.collection = collectionID;
 
@@ -150,8 +149,21 @@ export function handleOrderFulfilled(event: OrderFulfilled): void {
     aggregatorDailyData.collections = aggregatorDailyData.collections.plus(ONE_BI);
     aggregatorDailyDataByCurrency.collections = aggregatorDailyDataByCurrency.collections.plus(ONE_BI);
   }
-  collectionDailyData.volume = collectionDailyData.volume.plus(volume);
   collectionDailyData.transactions = collectionDailyData.transactions.plus(ONE_BI);
+
+  const collectionDailyDataByCurrencyID = `${collectionByCurrencyID}-${dayID.toString()}`;
+  let collectionDailyDataByCurrency = CollectionDailyDataByCurrency.load(collectionDailyDataByCurrencyID);
+  if (!collectionDailyDataByCurrency) {
+    collectionDailyDataByCurrency = new CollectionDailyDataByCurrency(collectionDailyDataByCurrencyID);
+    const dayStartTimestamp = dayID.times(ONE_DAY_BI);
+    collectionDailyDataByCurrency.date = dayStartTimestamp;
+    collectionDailyDataByCurrency.currency = currency;
+    collectionDailyDataByCurrency.volume = ZERO_BD;
+    collectionDailyDataByCurrency.transactions = ZERO_BI;
+    collectionDailyDataByCurrency.collectionByCurrency = collectionByCurrencyID;
+  }
+  collectionDailyDataByCurrency.volume = collectionDailyDataByCurrency.volume.plus(volume);
+  collectionDailyDataByCurrency.transactions = collectionDailyDataByCurrency.transactions.plus(ONE_BI);
 
   const isBundle = offer.length > 1;
 
@@ -188,4 +200,5 @@ export function handleOrderFulfilled(event: OrderFulfilled): void {
   collection.save();
   collectionByCurrency.save();
   collectionDailyData.save();
+  collectionDailyDataByCurrency.save();
 }
