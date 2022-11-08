@@ -8,7 +8,9 @@ import {
   CollectionDailyDataByCurrency,
   Transaction,
   User,
+  UserByCurrency,
   UserDailyData,
+  UserDailyDataByCurrency,
 } from "../generated/schema";
 import { ONE_BI, ZERO_BD, ZERO_BI, ONE_DAY_BI } from "../../../helpers/constants";
 import { getOrInitializeAggregator } from "./utils/getOrInitializeAggregator";
@@ -85,12 +87,10 @@ export function handleOrderFulfilled(event: OrderFulfilled): void {
 
   // 5. User
   const originator = extractOriginator(sweepEvent);
-  const userID = `${originator.toHexString()}-${currency.toHexString()}`;
+  const userID = originator.toHexString();
   let user = User.load(userID);
   if (!user) {
     user = new User(userID);
-    user.currency = currency;
-    user.volume = ZERO_BD;
     user.transactions = ZERO_BI;
 
     // New aggregator/marketplace user
@@ -99,8 +99,18 @@ export function handleOrderFulfilled(event: OrderFulfilled): void {
     marketplace.users = marketplace.users.plus(ONE_BI);
     marketplaceByCurrency.users = marketplaceByCurrency.users.plus(ONE_BI);
   }
-  user.volume = user.volume.plus(volume);
   user.transactions = user.transactions.plus(ONE_BI);
+
+  const userByCurrencyID = `${originator.toHexString()}-${currency.toHexString()}`;
+  let userByCurrency = UserByCurrency.load(userByCurrencyID);
+  if (!userByCurrency) {
+    userByCurrency = new UserByCurrency(userByCurrencyID);
+    userByCurrency.currency = currency;
+    userByCurrency.volume = ZERO_BD;
+    userByCurrency.transactions = ZERO_BI;
+  }
+  userByCurrency.volume = userByCurrency.volume.plus(volume);
+  userByCurrency.transactions = userByCurrency.transactions.plus(ONE_BI);
 
   // 6. UserDailyData
   const userDailyDataID = `${userID}-${dayID.toString()}`;
@@ -109,8 +119,6 @@ export function handleOrderFulfilled(event: OrderFulfilled): void {
     userDailyData = new UserDailyData(userDailyDataID);
     const dayStartTimestamp = dayID.times(ONE_DAY_BI);
     userDailyData.date = dayStartTimestamp;
-    userDailyData.currency = currency;
-    userDailyData.volume = ZERO_BD;
     userDailyData.transactions = ZERO_BI;
     userDailyData.user = userID;
 
@@ -120,8 +128,21 @@ export function handleOrderFulfilled(event: OrderFulfilled): void {
     marketplaceDailyData.users = marketplaceDailyData.users.plus(ONE_BI);
     marketplaceDailyDataByCurrency.users = marketplaceDailyDataByCurrency.users.plus(ONE_BI);
   }
-  userDailyData.volume = userDailyData.volume.plus(volume);
   userDailyData.transactions = userDailyData.transactions.plus(ONE_BI);
+
+  const userDailyDataByCurrencyID = `${userByCurrencyID}-${dayID.toString()}`;
+  let userDailyDataByCurrency = UserDailyDataByCurrency.load(userDailyDataByCurrencyID);
+  if (!userDailyDataByCurrency) {
+    userDailyDataByCurrency = new UserDailyDataByCurrency(userDailyDataByCurrencyID);
+    const dayStartTimestamp = dayID.times(ONE_DAY_BI);
+    userDailyDataByCurrency.date = dayStartTimestamp;
+    userDailyDataByCurrency.currency = currency;
+    userDailyDataByCurrency.volume = ZERO_BD;
+    userDailyDataByCurrency.transactions = ZERO_BI;
+    userDailyDataByCurrency.userByCurrency = userByCurrency.id;
+  }
+  userDailyDataByCurrency.volume = userDailyDataByCurrency.volume.plus(volume);
+  userDailyDataByCurrency.transactions = userDailyDataByCurrency.transactions.plus(ONE_BI);
 
   // 7. Collection
   const collectionID = offerToken.toHexString();
@@ -214,7 +235,9 @@ export function handleOrderFulfilled(event: OrderFulfilled): void {
   marketplaceDailyData.save();
   marketplaceDailyDataByCurrency.save();
   user.save();
+  userByCurrency.save();
   userDailyData.save();
+  userDailyDataByCurrency.save();
   collection.save();
   collectionByCurrency.save();
   collectionDailyData.save();

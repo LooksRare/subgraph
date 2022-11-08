@@ -18,7 +18,9 @@ import {
   MarketplaceDailyDataByCurrency,
   Transaction,
   User,
+  UserByCurrency,
   UserDailyData,
+  UserDailyDataByCurrency,
 } from "../generated/schema";
 import {
   LOOKSRARE_AGGREGATOR,
@@ -179,24 +181,41 @@ describe("handleOrderFulfilled()", () => {
     assert.bigIntEquals(marketplaceDailyDataByCurrency!.users, ONE_BI);
     assert.bigIntEquals(marketplaceDailyDataByCurrency!.collections, ONE_BI);
 
-    const user = User.load(`${Address.fromString(originator).toHexString()}-${ZERO_ADDRESS.toHex()}`);
+    const user = User.load(Address.fromString(originator).toHexString());
     assert.assertNotNull(user);
-    assert.stringEquals(user!.currency.toHexString(), ZERO_ADDRESS.toHex());
     assert.bigIntEquals(user!.transactions, ONE_BI);
-    assert.stringEquals(user!.volume.toString(), transactionVolume);
 
-    const userDailyDataID = `${Address.fromString(originator).toHexString()}-${ZERO_ADDRESS.toHex()}-0`;
+    const userDailyDataID = `${Address.fromString(originator).toHexString()}-0`;
 
     assert.i32Equals(user!.dailyData.length, 1);
     assert.stringEquals(user!.dailyData[0], userDailyDataID);
 
     const userDailyData = UserDailyData.load(userDailyDataID);
     assert.assertNotNull(userDailyData);
-    assert.stringEquals(userDailyData!.currency.toHexString(), ZERO_ADDRESS.toHex());
     assert.bigIntEquals(userDailyData!.transactions, ONE_BI);
     assert.stringEquals(userDailyData!.user, user!.id);
     assert.bigIntEquals(userDailyData!.date, ZERO_BI);
-    assert.stringEquals(userDailyData!.volume.toString(), transactionVolume);
+
+    const userByCurrency = UserByCurrency.load(
+      `${Address.fromString(originator).toHexString()}-${ZERO_ADDRESS.toHex()}`
+    );
+    assert.assertNotNull(userByCurrency);
+    assert.stringEquals(userByCurrency!.currency.toHexString(), ZERO_ADDRESS.toHex());
+    assert.bigIntEquals(userByCurrency!.transactions, ONE_BI);
+    assert.stringEquals(userByCurrency!.volume.toString(), transactionVolume);
+
+    const userDailyDataByCurrencyID = `${Address.fromString(originator).toHexString()}-${ZERO_ADDRESS.toHex()}-0`;
+
+    assert.i32Equals(userByCurrency!.dailyData.length, 1);
+    assert.stringEquals(userByCurrency!.dailyData[0], userDailyDataByCurrencyID);
+
+    const userDailyDataByCurrency = UserDailyDataByCurrency.load(userDailyDataByCurrencyID);
+    assert.assertNotNull(userDailyDataByCurrency);
+    assert.stringEquals(userDailyDataByCurrency!.currency.toHexString(), ZERO_ADDRESS.toHex());
+    assert.bigIntEquals(userDailyDataByCurrency!.transactions, ONE_BI);
+    assert.stringEquals(userDailyDataByCurrency!.userByCurrency, userByCurrency!.id);
+    assert.bigIntEquals(userDailyDataByCurrency!.date, ZERO_BI);
+    assert.stringEquals(userDailyDataByCurrency!.volume.toString(), transactionVolume);
 
     const transactionID = `${event.transaction.hash.toHexString()}-${event.logIndex.toString()}`;
     const transaction = Transaction.load(transactionID);

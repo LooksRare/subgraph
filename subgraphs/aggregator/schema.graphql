@@ -233,6 +233,17 @@ type MarketplaceDailyDataByCurrency @entity {
 }
 
 type User @entity {
+  " { Address } "
+  id: ID!
+
+  " Total number of transactions "
+  transactions: BigInt!
+
+  " User daily data "
+  dailyData: [UserDailyData!]! @derivedFrom(field: "user")
+}
+
+type UserByCurrency @entity {
   " { User }-{ Currency } "
   id: ID!
 
@@ -246,15 +257,29 @@ type User @entity {
   volume: BigDecimal!
 
   " User daily data "
-  dailyData: [UserDailyData!]! @derivedFrom(field: "user")
+  dailyData: [UserDailyDataByCurrency!]! @derivedFrom(field: "userByCurrency")
 }
 
 type UserDailyData @entity {
-  " { User }-{ Currency }-{ Date } "
+  " { User }-{ Date } "
   id: ID!
 
   " Pointer to User "
   user: User!
+
+  " Date "
+  date: BigInt!
+
+  " Total number of transactions "
+  transactions: BigInt!
+}
+
+type UserDailyDataByCurrency @entity {
+  " { User }-{ Currency }-{ Date } "
+  id: ID!
+
+  " Pointer to UserByCurrency "
+  userByCurrency: UserByCurrency!
 
   " Trade currency "
   currency: Bytes!
