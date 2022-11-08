@@ -1,39 +1,25 @@
 /* eslint-disable @typescript-eslint/no-non-null-assertion */
-import { Address, BigDecimal, BigInt, Bytes } from "@graphprotocol/graph-ts";
+import { BigDecimal } from "@graphprotocol/graph-ts";
 import { OrderFulfilled } from "../generated/Seaport/Seaport";
-import {
-  Aggregator,
-  AggregatorByCurrency,
-  AggregatorDailyData,
-  AggregatorDailyDataByCurrency,
-  Collection,
-  CollectionDailyData,
-  Marketplace,
-  MarketplaceDailyData,
-  Transaction,
-  User,
-  UserDailyData,
-} from "../generated/schema";
-import {
-  LOOKSRARE_AGGREGATOR,
-  LOOKSRARE_AGGREGATOR_SWEEP_EVENT_TOPIC,
-  ONE_BI,
-  ZERO_BD,
-  ZERO_BI,
-} from "../../../helpers/constants";
+import { Collection, CollectionDailyData, Transaction, User, UserDailyData } from "../generated/schema";
+import { ONE_BI, ZERO_BD, ZERO_BI, ONE_DAY_BI } from "../../../helpers/constants";
+import { getOrInitializeAggregator } from "./utils/getOrInitializeAggregator";
+import { getOrInitializeAggregatorByCurrency } from "./utils/getOrInitializeAggregatorByCurrency";
+import { getOrInitializeMarketplace } from "./utils/getOrInitializeMarketplace";
+import { getOrInitializeMarketplaceDailyData } from "./utils/getOrInitializeMarketplaceDailyData";
+import { getOrInitializeAggregatorDailyData } from "./utils/getOrInitializeAggregatorDailyData";
+import { findSweepEventFromLogs } from "./utils/findSweepEventFromLogs";
+import { getOrInitializeAggregatorDailyDataByCurrency } from "./utils/getOrInitializeAggregatorDailyDataByCurrency";
+import { extractOriginator } from "./utils/extractOriginator";
+import { isSameOfferToken } from "./utils/isSameOfferToken";
+import { isSameConsiderationToken } from "./utils/isSameConsiderationToken";
+import { calculateVolume } from "./utils/calculateVolume";
 
 export function handleOrderFulfilled(event: OrderFulfilled): void {
   const logs = event.receipt!.logs;
-  const sweepEventIndex = logs.findIndex((_log) => {
-    return (
-      _log.address == LOOKSRARE_AGGREGATOR &&
-      _log.topics[0] == Bytes.fromHexString(LOOKSRARE_AGGREGATOR_SWEEP_EVENT_TOPIC)
-    );
-  });
-  if (sweepEventIndex === -1) {
-    return;
-  }
-  const sweepEvent = logs[sweepEventIndex];
+
+  const sweepEvent = findSweepEventFromLogs(logs);
+  if (!sweepEvent) return;
 
   const offer = event.params.offer;
   const consideration = event.params.consideration;
@@ -41,118 +27,44 @@ export function handleOrderFulfilled(event: OrderFulfilled): void {
   const currency = consideration[0].token;
   const itemType = consideration[0].itemType;
   // NATIVE: 0, ERC20: 1
-  if (itemType > 1) {
-    // TODO: Add test case
-    return;
-  }
+  // TODO: Add test case
+  if (itemType > 1) return;
 
-  for (let i = 0; i < offer.length; i++) {
-    // TODO: add test case
-    if (offer[i].token != offerToken) {
-      return;
-    }
-  }
+  if (!isSameOfferToken(offer)) return;
+  if (!isSameConsiderationToken(consideration)) return;
 
-  let volume = ZERO_BD;
-  for (let i = 0; i < consideration.length; i++) {
-    const receivedItem = consideration[i];
-    volume = volume.plus(receivedItem.amount.toBigDecimal());
-    // TODO: add test case
-    if (receivedItem.token != currency || receivedItem.itemType !== itemType) {
-      return;
-    }
-  }
+  const volume = calculateVolume(consideration);
 
-  const dailyTimestampBigInt = BigInt.fromI32(86400);
-  const dayID = event.block.timestamp.div(dailyTimestampBigInt);
+  const dayID = event.block.timestamp.div(ONE_DAY_BI);
 
   // 1. Aggregator
-  const aggregatorID = "LooksRareAggregator";
-  let aggregator = Aggregator.load(aggregatorID);
-  if (!aggregator) {
-    aggregator = new Aggregator(aggregatorID);
-    aggregator.collections = ZERO_BI;
-    aggregator.transactions = ZERO_BI;
-    aggregator.users = ZERO_BI;
-  }
+  const aggregator = getOrInitializeAggregator();
   aggregator.transactions = aggregator.transactions.plus(ONE_BI);
 
-  const aggregatorByCurrencyID = currency.toHexString();
-  let aggregatorByCurrency = AggregatorByCurrency.load(aggregatorByCurrencyID);
-  if (!aggregatorByCurrency) {
-    aggregatorByCurrency = new AggregatorByCurrency(aggregatorByCurrencyID);
-    aggregatorByCurrency.currency = currency;
-    aggregatorByCurrency.volume = ZERO_BD;
-    aggregatorByCurrency.collections = ZERO_BI;
-    aggregatorByCurrency.transactions = ZERO_BI;
-    aggregatorByCurrency.users = ZERO_BI;
-  }
+  const aggregatorByCurrency = getOrInitializeAggregatorByCurrency(currency);
   aggregatorByCurrency.volume = aggregatorByCurrency.volume.plus(volume);
   aggregatorByCurrency.transactions = aggregatorByCurrency.transactions.plus(ONE_BI);
 
   // 2. Aggregator daily data
-  const aggregatorDailyDataID = dayID.toString();
-  let aggregatorDailyData = AggregatorDailyData.load(aggregatorDailyDataID);
-  if (!aggregatorDailyData) {
-    aggregatorDailyData = new AggregatorDailyData(aggregatorDailyDataID);
-    const dayStartTimestamp = dayID.times(dailyTimestampBigInt);
-    aggregatorDailyData.date = dayStartTimestamp;
-    aggregatorDailyData.collections = ZERO_BI;
-    aggregatorDailyData.transactions = ZERO_BI;
-    aggregatorDailyData.users = ZERO_BI;
-    aggregatorDailyData.aggregator = aggregatorID;
-  }
+  const aggregatorDailyData = getOrInitializeAggregatorDailyData(dayID, aggregator);
   aggregatorDailyData.transactions = aggregatorDailyData.transactions.plus(ONE_BI);
 
-  const aggregatorDailyDataByCurrencyID = `${aggregatorByCurrencyID}-${dayID.toString()}`;
-  let aggregatorDailyDataByCurrency = AggregatorDailyDataByCurrency.load(aggregatorDailyDataByCurrencyID);
-  if (!aggregatorDailyDataByCurrency) {
-    aggregatorDailyDataByCurrency = new AggregatorDailyDataByCurrency(aggregatorDailyDataByCurrencyID);
-    aggregatorDailyDataByCurrency.currency = currency;
-    const dayStartTimestamp = dayID.times(dailyTimestampBigInt);
-    aggregatorDailyDataByCurrency.date = dayStartTimestamp;
-    aggregatorDailyDataByCurrency.volume = ZERO_BD;
-    aggregatorDailyDataByCurrency.collections = ZERO_BI;
-    aggregatorDailyDataByCurrency.transactions = ZERO_BI;
-    aggregatorDailyDataByCurrency.users = ZERO_BI;
-    aggregatorDailyDataByCurrency.aggregatorByCurrency = aggregatorByCurrencyID;
-  }
+  const aggregatorDailyDataByCurrency = getOrInitializeAggregatorDailyDataByCurrency(aggregatorByCurrency, dayID);
   aggregatorDailyDataByCurrency.volume = aggregatorDailyDataByCurrency.volume.plus(volume);
   aggregatorDailyDataByCurrency.transactions = aggregatorDailyDataByCurrency.transactions.plus(ONE_BI);
 
   // 3. Marketplace
-  const marketplaceID = `seaport-${currency.toHexString()}`;
-  let marketplace = Marketplace.load(marketplaceID);
-  if (!marketplace) {
-    marketplace = new Marketplace(marketplaceID);
-    marketplace.currency = currency;
-    marketplace.volume = ZERO_BD;
-    marketplace.collections = ZERO_BI;
-    marketplace.transactions = ZERO_BI;
-    marketplace.users = ZERO_BI;
-  }
+  const marketplace = getOrInitializeMarketplace(currency);
   marketplace.volume = marketplace.volume.plus(volume);
   marketplace.transactions = marketplace.transactions.plus(ONE_BI);
 
   // 4. Marketplace daily data
-  const marketplaceDailyDataID = `${marketplaceID}-${dayID.toString()}`;
-  let marketplaceDailyData = MarketplaceDailyData.load(marketplaceDailyDataID);
-  if (!marketplaceDailyData) {
-    marketplaceDailyData = new MarketplaceDailyData(marketplaceDailyDataID);
-    marketplaceDailyData.currency = currency;
-    const dayStartTimestamp = dayID.times(dailyTimestampBigInt);
-    marketplaceDailyData.date = dayStartTimestamp;
-    marketplaceDailyData.marketplace = marketplaceID;
-    marketplaceDailyData.volume = ZERO_BD;
-    marketplaceDailyData.collections = ZERO_BI;
-    marketplaceDailyData.transactions = ZERO_BI;
-    marketplaceDailyData.users = ZERO_BI;
-  }
+  const marketplaceDailyData = getOrInitializeMarketplaceDailyData(currency, marketplace, dayID);
   marketplaceDailyData.volume = marketplaceDailyData.volume.plus(volume);
   marketplaceDailyData.transactions = marketplaceDailyData.transactions.plus(ONE_BI);
 
   // 5. User
-  const originator = Address.fromHexString(`0x${sweepEvent.topics[1].toHexString().substring(26)}`);
+  const originator = extractOriginator(sweepEvent);
   const userID = `${originator.toHexString()}-${currency.toHexString()}`;
   let user = User.load(userID);
   if (!user) {
@@ -174,7 +86,7 @@ export function handleOrderFulfilled(event: OrderFulfilled): void {
   let userDailyData = UserDailyData.load(userDailyDataID);
   if (!userDailyData) {
     userDailyData = new UserDailyData(userDailyDataID);
-    const dayStartTimestamp = dayID.times(dailyTimestampBigInt);
+    const dayStartTimestamp = dayID.times(ONE_DAY_BI);
     userDailyData.date = dayStartTimestamp;
     userDailyData.currency = currency;
     userDailyData.volume = ZERO_BD;
@@ -211,7 +123,7 @@ export function handleOrderFulfilled(event: OrderFulfilled): void {
   let collectionDailyData = CollectionDailyData.load(collectionDailyDataID);
   if (!collectionDailyData) {
     collectionDailyData = new CollectionDailyData(collectionDailyDataID);
-    const dayStartTimestamp = dayID.times(dailyTimestampBigInt);
+    const dayStartTimestamp = dayID.times(ONE_DAY_BI);
     collectionDailyData.date = dayStartTimestamp;
     collectionDailyData.currency = currency;
     collectionDailyData.volume = ZERO_BD;
