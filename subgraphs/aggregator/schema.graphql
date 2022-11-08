@@ -147,6 +147,23 @@ type CollectionDailyDataByCurrency @entity {
 }
 
 type Marketplace @entity {
+  " { Marketplace } "
+  id: ID!
+
+  " Total number of unique users "
+  users: BigInt!
+
+  " Total number of collections traded "
+  collections: BigInt!
+
+  " Total number of transactions "
+  transactions: BigInt!
+
+  " Marketplace daily data "
+  dailyData: [MarketplaceDailyData!]! @derivedFrom(field: "marketplace")
+}
+
+type MarketplaceByCurrency @entity {
   " { Marketplace }-{ Currency } "
   id: ID!
 
@@ -166,15 +183,35 @@ type Marketplace @entity {
   volume: BigDecimal!
 
   " Marketplace daily data "
-  dailyData: [MarketplaceDailyData!]! @derivedFrom(field: "marketplace")
+  dailyData: [MarketplaceDailyDataByCurrency!]! @derivedFrom(field: "marketplaceByCurrency")
 }
 
 type MarketplaceDailyData @entity {
-  " { Marketplace }-{ Currency }-{ Date } "
+  " { Marketplace }-{ Date } "
   id: ID!
 
   " Pointer to Marketplace "
   marketplace: Marketplace!
+
+  " Date "
+  date: BigInt!
+
+  " Total number of unique users "
+  users: BigInt!
+
+  " Total number of collections traded "
+  collections: BigInt!
+
+  " Total number of transactions "
+  transactions: BigInt!
+}
+
+type MarketplaceDailyDataByCurrency @entity {
+  " { Marketplace }-{ Currency }-{ Date } "
+  id: ID!
+
+  " Pointer to MarketplaceByCurrency "
+  marketplaceByCurrency: MarketplaceByCurrency!
 
   " Trade currency "
   currency: Bytes!

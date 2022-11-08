@@ -13,7 +13,9 @@ import {
   CollectionDailyData,
   CollectionDailyDataByCurrency,
   Marketplace,
+  MarketplaceByCurrency,
   MarketplaceDailyData,
+  MarketplaceDailyDataByCurrency,
   Transaction,
   User,
   UserDailyData,
@@ -135,28 +137,47 @@ describe("handleOrderFulfilled()", () => {
     assert.bigIntEquals(aggregatorDailyDataByCurrency!.users, ONE_BI);
     assert.bigIntEquals(aggregatorDailyDataByCurrency!.collections, ONE_BI);
 
-    const marketplace = Marketplace.load(`seaport-${ZERO_ADDRESS.toHex()}`);
+    const marketplace = Marketplace.load("seaport");
     assert.assertNotNull(marketplace);
-    assert.stringEquals(marketplace!.currency.toHexString(), ZERO_ADDRESS.toHex());
     assert.bigIntEquals(marketplace!.transactions, ONE_BI);
-    assert.stringEquals(marketplace!.volume.toString(), transactionVolume);
     assert.bigIntEquals(marketplace!.users, ONE_BI);
     assert.bigIntEquals(marketplace!.collections, ONE_BI);
 
-    const marketplaceDailyDataID = `seaport-${ZERO_ADDRESS.toHex()}-0`;
+    const marketplaceDailyDataID = `seaport-0`;
 
     assert.i32Equals(marketplace!.dailyData.length, 1);
     assert.stringEquals(marketplace!.dailyData[0], marketplaceDailyDataID);
 
     const marketplaceDailyData = MarketplaceDailyData.load(marketplaceDailyDataID);
     assert.assertNotNull(marketplaceDailyData);
-    assert.stringEquals(marketplaceDailyData!.currency.toHexString(), ZERO_ADDRESS.toHex());
     assert.bigIntEquals(marketplaceDailyData!.transactions, ONE_BI);
     assert.stringEquals(marketplaceDailyData!.marketplace, marketplace!.id);
     assert.bigIntEquals(marketplaceDailyData!.date, ZERO_BI);
-    assert.stringEquals(marketplaceDailyData!.volume.toString(), transactionVolume);
     assert.bigIntEquals(marketplaceDailyData!.users, ONE_BI);
     assert.bigIntEquals(marketplaceDailyData!.collections, ONE_BI);
+
+    const marketplaceByCurrency = MarketplaceByCurrency.load(`seaport-${ZERO_ADDRESS.toHex()}`);
+    assert.assertNotNull(marketplaceByCurrency);
+    assert.stringEquals(marketplaceByCurrency!.currency.toHexString(), ZERO_ADDRESS.toHex());
+    assert.bigIntEquals(marketplaceByCurrency!.transactions, ONE_BI);
+    assert.stringEquals(marketplaceByCurrency!.volume.toString(), transactionVolume);
+    assert.bigIntEquals(marketplaceByCurrency!.users, ONE_BI);
+    assert.bigIntEquals(marketplaceByCurrency!.collections, ONE_BI);
+
+    const marketplaceDailyDataByCurrencyID = `seaport-${ZERO_ADDRESS.toHex()}-0`;
+
+    assert.i32Equals(marketplaceByCurrency!.dailyData.length, 1);
+    assert.stringEquals(marketplaceByCurrency!.dailyData[0], marketplaceDailyDataByCurrencyID);
+
+    const marketplaceDailyDataByCurrency = MarketplaceDailyDataByCurrency.load(marketplaceDailyDataByCurrencyID);
+    assert.assertNotNull(marketplaceDailyDataByCurrency);
+    assert.stringEquals(marketplaceDailyDataByCurrency!.currency.toHexString(), ZERO_ADDRESS.toHex());
+    assert.bigIntEquals(marketplaceDailyDataByCurrency!.transactions, ONE_BI);
+    assert.stringEquals(marketplaceDailyDataByCurrency!.marketplaceByCurrency, marketplaceByCurrency!.id);
+    assert.bigIntEquals(marketplaceDailyDataByCurrency!.date, ZERO_BI);
+    assert.stringEquals(marketplaceDailyDataByCurrency!.volume.toString(), transactionVolume);
+    assert.bigIntEquals(marketplaceDailyDataByCurrency!.users, ONE_BI);
+    assert.bigIntEquals(marketplaceDailyDataByCurrency!.collections, ONE_BI);
 
     const user = User.load(`${Address.fromString(originator).toHexString()}-${ZERO_ADDRESS.toHex()}`);
     assert.assertNotNull(user);

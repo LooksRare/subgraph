@@ -22,6 +22,8 @@ import { extractOriginator } from "./utils/extractOriginator";
 import { isSameOfferToken } from "./utils/isSameOfferToken";
 import { isSameConsiderationToken } from "./utils/isSameConsiderationToken";
 import { calculateVolume } from "./utils/calculateVolume";
+import { getOrInitializeMarketplaceByCurrency } from "./utils/getOrInitializeMarketplaceByCurrency";
+import { getOrInitializeMarketplaceDailyDataByCurrency } from "./utils/getOrInitializeMarketplaceDailyDataByCurrency";
 
 export function handleOrderFulfilled(event: OrderFulfilled): void {
   const logs = event.receipt!.logs;
@@ -62,14 +64,24 @@ export function handleOrderFulfilled(event: OrderFulfilled): void {
   aggregatorDailyDataByCurrency.transactions = aggregatorDailyDataByCurrency.transactions.plus(ONE_BI);
 
   // 3. Marketplace
-  const marketplace = getOrInitializeMarketplace(currency);
-  marketplace.volume = marketplace.volume.plus(volume);
+  const marketplace = getOrInitializeMarketplace();
   marketplace.transactions = marketplace.transactions.plus(ONE_BI);
+
+  const marketplaceByCurrency = getOrInitializeMarketplaceByCurrency(currency);
+  marketplaceByCurrency.volume = marketplaceByCurrency.volume.plus(volume);
+  marketplaceByCurrency.transactions = marketplaceByCurrency.transactions.plus(ONE_BI);
 
   // 4. Marketplace daily data
   const marketplaceDailyData = getOrInitializeMarketplaceDailyData(currency, marketplace, dayID);
-  marketplaceDailyData.volume = marketplaceDailyData.volume.plus(volume);
   marketplaceDailyData.transactions = marketplaceDailyData.transactions.plus(ONE_BI);
+
+  const marketplaceDailyDataByCurrency = getOrInitializeMarketplaceDailyDataByCurrency(
+    currency,
+    marketplaceByCurrency,
+    dayID
+  );
+  marketplaceDailyDataByCurrency.volume = marketplaceDailyDataByCurrency.volume.plus(volume);
+  marketplaceDailyDataByCurrency.transactions = marketplaceDailyDataByCurrency.transactions.plus(ONE_BI);
 
   // 5. User
   const originator = extractOriginator(sweepEvent);
@@ -85,6 +97,7 @@ export function handleOrderFulfilled(event: OrderFulfilled): void {
     aggregator.users = aggregator.users.plus(ONE_BI);
     aggregatorByCurrency.users = aggregatorByCurrency.users.plus(ONE_BI);
     marketplace.users = marketplace.users.plus(ONE_BI);
+    marketplaceByCurrency.users = marketplaceByCurrency.users.plus(ONE_BI);
   }
   user.volume = user.volume.plus(volume);
   user.transactions = user.transactions.plus(ONE_BI);
@@ -105,6 +118,7 @@ export function handleOrderFulfilled(event: OrderFulfilled): void {
     aggregatorDailyData.users = aggregatorDailyData.users.plus(ONE_BI);
     aggregatorDailyDataByCurrency.users = aggregatorDailyDataByCurrency.users.plus(ONE_BI);
     marketplaceDailyData.users = marketplaceDailyData.users.plus(ONE_BI);
+    marketplaceDailyDataByCurrency.users = marketplaceDailyDataByCurrency.users.plus(ONE_BI);
   }
   userDailyData.volume = userDailyData.volume.plus(volume);
   userDailyData.transactions = userDailyData.transactions.plus(ONE_BI);
@@ -120,6 +134,7 @@ export function handleOrderFulfilled(event: OrderFulfilled): void {
     aggregator.collections = aggregator.collections.plus(ONE_BI);
     aggregatorByCurrency.collections = aggregatorByCurrency.collections.plus(ONE_BI);
     marketplace.collections = marketplace.collections.plus(ONE_BI);
+    marketplaceByCurrency.collections = marketplaceByCurrency.collections.plus(ONE_BI);
   }
   collection.transactions = collection.transactions.plus(ONE_BI);
 
@@ -146,6 +161,7 @@ export function handleOrderFulfilled(event: OrderFulfilled): void {
 
     // New aggregator/marketplace collection for the day
     marketplaceDailyData.collections = marketplaceDailyData.collections.plus(ONE_BI);
+    marketplaceDailyDataByCurrency.collections = marketplaceDailyDataByCurrency.collections.plus(ONE_BI);
     aggregatorDailyData.collections = aggregatorDailyData.collections.plus(ONE_BI);
     aggregatorDailyDataByCurrency.collections = aggregatorDailyDataByCurrency.collections.plus(ONE_BI);
   }
@@ -194,7 +210,9 @@ export function handleOrderFulfilled(event: OrderFulfilled): void {
   aggregatorDailyData.save();
   aggregatorDailyDataByCurrency.save();
   marketplace.save();
+  marketplaceByCurrency.save();
   marketplaceDailyData.save();
+  marketplaceDailyDataByCurrency.save();
   user.save();
   userDailyData.save();
   collection.save();
