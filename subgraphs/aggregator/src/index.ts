@@ -1,11 +1,9 @@
 /* eslint-disable @typescript-eslint/no-non-null-assertion */
-import { BigDecimal, log } from "@graphprotocol/graph-ts";
+import { BigDecimal } from "@graphprotocol/graph-ts";
 import { OrderFulfilled } from "../generated/Seaport/Seaport";
 import {
   Collection,
-  CollectionByCurrency,
   CollectionDailyData,
-  CollectionDailyDataByCurrency,
   Transaction,
   User,
   UserByCurrency,
@@ -26,6 +24,8 @@ import { isSameConsiderationToken } from "./utils/isSameConsiderationToken";
 import { calculateVolume } from "./utils/calculateVolume";
 import { getOrInitializeMarketplaceByCurrency } from "./utils/getOrInitializeMarketplaceByCurrency";
 import { getOrInitializeMarketplaceDailyDataByCurrency } from "./utils/getOrInitializeMarketplaceDailyDataByCurrency";
+import { getOrInitializeCollectionByCurrency } from "./utils/getOrInitializeCollectionByCurrency";
+import { getOrInitializeCollectionDailyDataByCurrency } from "./utils/getOrInitializeCollectionDailyDataByCurrency";
 
 export function handleOrderFulfilled(event: OrderFulfilled): void {
   const logs = event.receipt!.logs;
@@ -159,14 +159,7 @@ export function handleOrderFulfilled(event: OrderFulfilled): void {
   }
   collection.transactions = collection.transactions.plus(ONE_BI);
 
-  const collectionByCurrencyID = `${offerToken.toHexString()}-${currency.toHexString()}`;
-  let collectionByCurrency = CollectionByCurrency.load(collectionByCurrencyID);
-  if (!collectionByCurrency) {
-    collectionByCurrency = new CollectionByCurrency(collectionByCurrencyID);
-    collectionByCurrency.currency = currency;
-    collectionByCurrency.volume = ZERO_BD;
-    collectionByCurrency.transactions = ZERO_BI;
-  }
+  const collectionByCurrency = getOrInitializeCollectionByCurrency(offerToken, currency);
   collectionByCurrency.volume = collectionByCurrency.volume.plus(volume);
   collectionByCurrency.transactions = collectionByCurrency.transactions.plus(ONE_BI);
 
@@ -188,17 +181,7 @@ export function handleOrderFulfilled(event: OrderFulfilled): void {
   }
   collectionDailyData.transactions = collectionDailyData.transactions.plus(ONE_BI);
 
-  const collectionDailyDataByCurrencyID = `${collectionByCurrencyID}-${dayID.toString()}`;
-  let collectionDailyDataByCurrency = CollectionDailyDataByCurrency.load(collectionDailyDataByCurrencyID);
-  if (!collectionDailyDataByCurrency) {
-    collectionDailyDataByCurrency = new CollectionDailyDataByCurrency(collectionDailyDataByCurrencyID);
-    const dayStartTimestamp = dayID.times(ONE_DAY_BI);
-    collectionDailyDataByCurrency.date = dayStartTimestamp;
-    collectionDailyDataByCurrency.currency = currency;
-    collectionDailyDataByCurrency.volume = ZERO_BD;
-    collectionDailyDataByCurrency.transactions = ZERO_BI;
-    collectionDailyDataByCurrency.collectionByCurrency = collectionByCurrencyID;
-  }
+  const collectionDailyDataByCurrency = getOrInitializeCollectionDailyDataByCurrency(collectionByCurrency, dayID);
   collectionDailyDataByCurrency.volume = collectionDailyDataByCurrency.volume.plus(volume);
   collectionDailyDataByCurrency.transactions = collectionDailyDataByCurrency.transactions.plus(ONE_BI);
 
