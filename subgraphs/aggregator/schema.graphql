@@ -85,6 +85,17 @@ type AggregatorDailyDataByCurrency @entity {
 }
 
 type Collection @entity {
+  " { Address } "
+  id: ID!
+
+  " Total number of transactions "
+  transactions: BigInt!
+
+  " Collection daily data "
+  dailyData: [CollectionDailyData!]! @derivedFrom(field: "collection")
+}
+
+type CollectionByCurrency @entity {
   " { Address }-{ Currency } "
   id: ID!
 
@@ -96,9 +107,6 @@ type Collection @entity {
 
   " Total volume "
   volume: BigDecimal!
-
-  " Collection daily data "
-  dailyData: [CollectionDailyData!]! @derivedFrom(field: "collection")
 }
 
 type CollectionDailyData @entity {

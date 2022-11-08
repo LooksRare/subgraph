@@ -1,5 +1,5 @@
 /* eslint-disable @typescript-eslint/no-non-null-assertion */
-import { Address, BigInt, Bytes } from "@graphprotocol/graph-ts";
+import { Address, BigInt, Bytes, log } from "@graphprotocol/graph-ts";
 import { assert, describe, test } from "matchstick-as/assembly/index";
 import { createOrderFulfilledEvent, newLog } from "./helpers/utils";
 import { handleOrderFulfilled } from "../src/index";
@@ -9,6 +9,7 @@ import {
   AggregatorDailyData,
   AggregatorDailyDataByCurrency,
   Collection,
+  CollectionByCurrency,
   CollectionDailyData,
   Marketplace,
   MarketplaceDailyData,
@@ -62,13 +63,17 @@ describe("handleOrderFulfilled()", () => {
 
     const transactionVolume = "15296000000000000000";
 
-    const collection = Collection.load(`${offerToken}-${ZERO_ADDRESS.toHex()}`);
+    const collection = Collection.load(offerToken);
     assert.assertNotNull(collection);
-    assert.stringEquals(collection!.currency.toHexString(), ZERO_ADDRESS.toHex());
     assert.bigIntEquals(collection!.transactions, ONE_BI);
-    assert.stringEquals(collection!.volume.toString(), transactionVolume);
 
-    const collectionDailyDataID = `${offerToken}-${ZERO_ADDRESS.toHex()}-0`;
+    const collectionByCurrency = CollectionByCurrency.load(`${offerToken}-${ZERO_ADDRESS.toHex()}`);
+    assert.assertNotNull(collectionByCurrency);
+    assert.stringEquals(collectionByCurrency!.currency.toHexString(), ZERO_ADDRESS.toHex());
+    assert.bigIntEquals(collectionByCurrency!.transactions, ONE_BI);
+    assert.stringEquals(collectionByCurrency!.volume.toString(), transactionVolume);
+
+    const collectionDailyDataID = `${offerToken}-0`;
 
     assert.i32Equals(collection!.dailyData.length, 1);
     assert.stringEquals(collection!.dailyData[0], collectionDailyDataID);

@@ -1,7 +1,14 @@
 /* eslint-disable @typescript-eslint/no-non-null-assertion */
-import { BigDecimal } from "@graphprotocol/graph-ts";
+import { BigDecimal, log } from "@graphprotocol/graph-ts";
 import { OrderFulfilled } from "../generated/Seaport/Seaport";
-import { Collection, CollectionDailyData, Transaction, User, UserDailyData } from "../generated/schema";
+import {
+  Collection,
+  CollectionByCurrency,
+  CollectionDailyData,
+  Transaction,
+  User,
+  UserDailyData,
+} from "../generated/schema";
 import { ONE_BI, ZERO_BD, ZERO_BI, ONE_DAY_BI } from "../../../helpers/constants";
 import { getOrInitializeAggregator } from "./utils/getOrInitializeAggregator";
 import { getOrInitializeAggregatorByCurrency } from "./utils/getOrInitializeAggregatorByCurrency";
@@ -102,12 +109,10 @@ export function handleOrderFulfilled(event: OrderFulfilled): void {
   userDailyData.transactions = userDailyData.transactions.plus(ONE_BI);
 
   // 7. Collection
-  const collectionID = `${offerToken.toHexString()}-${currency.toHexString()}`;
+  const collectionID = offerToken.toHexString();
   let collection = Collection.load(collectionID);
   if (!collection) {
     collection = new Collection(collectionID);
-    collection.currency = currency;
-    collection.volume = ZERO_BD;
     collection.transactions = ZERO_BI;
 
     // New aggregator/marketplace user
@@ -115,8 +120,18 @@ export function handleOrderFulfilled(event: OrderFulfilled): void {
     aggregatorByCurrency.collections = aggregatorByCurrency.collections.plus(ONE_BI);
     marketplace.collections = marketplace.collections.plus(ONE_BI);
   }
-  collection.volume = collection.volume.plus(volume);
   collection.transactions = collection.transactions.plus(ONE_BI);
+
+  const collectionByCurrencyID = `${offerToken.toHexString()}-${currency.toHexString()}`;
+  let collectionByCurrency = CollectionByCurrency.load(collectionByCurrencyID);
+  if (!collectionByCurrency) {
+    collectionByCurrency = new CollectionByCurrency(collectionByCurrencyID);
+    collectionByCurrency.currency = currency;
+    collectionByCurrency.volume = ZERO_BD;
+    collectionByCurrency.transactions = ZERO_BI;
+  }
+  collectionByCurrency.volume = collectionByCurrency.volume.plus(volume);
+  collectionByCurrency.transactions = collectionByCurrency.transactions.plus(ONE_BI);
 
   // 8. CollectionDailyData
   const collectionDailyDataID = `${collectionID}-${dayID.toString()}`;
@@ -171,5 +186,6 @@ export function handleOrderFulfilled(event: OrderFulfilled): void {
   user.save();
   userDailyData.save();
   collection.save();
+  collectionByCurrency.save();
   collectionDailyData.save();
 }
