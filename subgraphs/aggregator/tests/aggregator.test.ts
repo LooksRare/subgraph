@@ -5,7 +5,9 @@ import { createOrderFulfilledEvent, newLog } from "./helpers/utils";
 import { handleOrderFulfilled } from "../src/index";
 import {
   Aggregator,
+  AggregatorByCurrency,
   AggregatorDailyData,
+  AggregatorDailyDataByCurrency,
   Collection,
   CollectionDailyData,
   Marketplace,
@@ -79,27 +81,42 @@ describe("handleOrderFulfilled()", () => {
     assert.bigIntEquals(collectionDailyData!.date, ZERO_BI);
     assert.stringEquals(collectionDailyData!.volume.toString(), transactionVolume);
 
-    const aggregator = Aggregator.load(ZERO_ADDRESS.toHex());
+    const aggregator = Aggregator.load("LooksRareAggregator");
     assert.assertNotNull(aggregator);
-    assert.stringEquals(aggregator!.currency.toHexString(), ZERO_ADDRESS.toHex());
     assert.bigIntEquals(aggregator!.transactions, ONE_BI);
-    assert.stringEquals(aggregator!.volume.toString(), transactionVolume);
     assert.bigIntEquals(aggregator!.users, ONE_BI);
     assert.bigIntEquals(aggregator!.collections, ONE_BI);
 
-    const aggregatorDailyDataID = `${ZERO_ADDRESS.toHex()}-0`;
+    const aggregatorByCurrency = AggregatorByCurrency.load(ZERO_ADDRESS.toHex());
+    assert.assertNotNull(aggregatorByCurrency);
+    assert.stringEquals(aggregatorByCurrency!.currency.toHexString(), ZERO_ADDRESS.toHex());
+    assert.bigIntEquals(aggregatorByCurrency!.transactions, ONE_BI);
+    assert.stringEquals(aggregatorByCurrency!.volume.toString(), transactionVolume);
+    assert.bigIntEquals(aggregatorByCurrency!.users, ONE_BI);
+    assert.bigIntEquals(aggregatorByCurrency!.collections, ONE_BI);
+
+    const aggregatorDailyDataID = "0";
 
     assert.i32Equals(aggregator!.dailyData.length, 1);
     assert.stringEquals(aggregator!.dailyData[0], aggregatorDailyDataID);
 
     const aggregatorDailyData = AggregatorDailyData.load(aggregatorDailyDataID);
     assert.assertNotNull(aggregatorDailyData);
-    assert.stringEquals(aggregatorDailyData!.currency.toHexString(), ZERO_ADDRESS.toHex());
     assert.bigIntEquals(aggregatorDailyData!.transactions, ONE_BI);
     assert.bigIntEquals(aggregatorDailyData!.date, ZERO_BI);
-    assert.stringEquals(aggregatorDailyData!.volume.toString(), transactionVolume);
     assert.bigIntEquals(aggregatorDailyData!.users, ONE_BI);
     assert.bigIntEquals(aggregatorDailyData!.collections, ONE_BI);
+
+    const aggregatorDailyDataByCurrencyID = `${ZERO_ADDRESS.toHex()}-0`;
+
+    const aggregatorDailyDataByCurrency = AggregatorDailyDataByCurrency.load(aggregatorDailyDataByCurrencyID);
+    assert.assertNotNull(aggregatorDailyDataByCurrency);
+    assert.stringEquals(aggregatorDailyDataByCurrency!.currency.toHexString(), ZERO_ADDRESS.toHex());
+    assert.bigIntEquals(aggregatorDailyDataByCurrency!.transactions, ONE_BI);
+    assert.bigIntEquals(aggregatorDailyDataByCurrency!.date, ZERO_BI);
+    assert.stringEquals(aggregatorDailyDataByCurrency!.volume.toString(), transactionVolume);
+    assert.bigIntEquals(aggregatorDailyDataByCurrency!.users, ONE_BI);
+    assert.bigIntEquals(aggregatorDailyDataByCurrency!.collections, ONE_BI);
 
     const marketplace = Marketplace.load(`seaport-${ZERO_ADDRESS.toHex()}`);
     assert.assertNotNull(marketplace);

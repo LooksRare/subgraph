@@ -1,4 +1,21 @@
 type Aggregator @entity {
+  " { Hard-coded to LooksRareAggregator } "
+  id: ID!
+
+  " Total number of unique users "
+  users: BigInt!
+
+  " Total number of collections traded "
+  collections: BigInt!
+
+  " Total number of transactions "
+  transactions: BigInt!
+
+  " Aggregator daily data "
+  dailyData: [AggregatorDailyData!]! @derivedFrom(field: "aggregator")
+}
+
+type AggregatorByCurrency @entity {
   " { Currency } "
   id: ID!
 
@@ -18,18 +35,38 @@ type Aggregator @entity {
   volume: BigDecimal!
 
   " Aggregator daily data "
-  dailyData: [AggregatorDailyData!]! @derivedFrom(field: "aggregator")
+  dailyData: [AggregatorDailyDataByCurrency!]! @derivedFrom(field: "aggregatorByCurrency")
 }
 
 type AggregatorDailyData @entity {
+  " { Date } "
+  id: ID!
+
+  " Pointer to Aggregator "
+  aggregator: Aggregator!
+
+  " Date "
+  date: BigInt!
+
+  " Total number of unique users "
+  users: BigInt!
+
+  " Total number of collections traded "
+  collections: BigInt!
+
+  " Total number of transactions "
+  transactions: BigInt!
+}
+
+type AggregatorDailyDataByCurrency @entity {
   " { Currency }-{ Date } "
   id: ID!
 
   " Trade currency "
   currency: Bytes!
 
-  " Pointer to Aggregator "
-  aggregator: Aggregator!
+  " Pointer to AggregatorByCurrency "
+  aggregatorByCurrency: AggregatorByCurrency!
 
   " Date "
   date: BigInt!

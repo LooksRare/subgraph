@@ -3,7 +3,9 @@ import { Address, BigDecimal, BigInt, Bytes } from "@graphprotocol/graph-ts";
 import { OrderFulfilled } from "../generated/Seaport/Seaport";
 import {
   Aggregator,
+  AggregatorByCurrency,
   AggregatorDailyData,
+  AggregatorDailyDataByCurrency,
   Collection,
   CollectionDailyData,
   Marketplace,
@@ -22,10 +24,10 @@ import {
 
 export function handleOrderFulfilled(event: OrderFulfilled): void {
   const logs = event.receipt!.logs;
-  const sweepEventIndex = logs.findIndex((log) => {
+  const sweepEventIndex = logs.findIndex((_log) => {
     return (
-      log.address !== LOOKSRARE_AGGREGATOR &&
-      log.topics[0] !== Bytes.fromHexString(LOOKSRARE_AGGREGATOR_SWEEP_EVENT_TOPIC)
+      _log.address == LOOKSRARE_AGGREGATOR &&
+      _log.topics[0] == Bytes.fromHexString(LOOKSRARE_AGGREGATOR_SWEEP_EVENT_TOPIC)
     );
   });
   if (sweepEventIndex === -1) {
@@ -65,35 +67,58 @@ export function handleOrderFulfilled(event: OrderFulfilled): void {
   const dayID = event.block.timestamp.div(dailyTimestampBigInt);
 
   // 1. Aggregator
-  const aggregatorID = currency.toHexString();
+  const aggregatorID = "LooksRareAggregator";
   let aggregator = Aggregator.load(aggregatorID);
   if (!aggregator) {
     aggregator = new Aggregator(aggregatorID);
-    aggregator.currency = currency;
-    aggregator.volume = ZERO_BD;
     aggregator.collections = ZERO_BI;
     aggregator.transactions = ZERO_BI;
     aggregator.users = ZERO_BI;
   }
-  aggregator.volume = aggregator.volume.plus(volume);
   aggregator.transactions = aggregator.transactions.plus(ONE_BI);
 
+  const aggregatorByCurrencyID = currency.toHexString();
+  let aggregatorByCurrency = AggregatorByCurrency.load(aggregatorByCurrencyID);
+  if (!aggregatorByCurrency) {
+    aggregatorByCurrency = new AggregatorByCurrency(aggregatorByCurrencyID);
+    aggregatorByCurrency.currency = currency;
+    aggregatorByCurrency.volume = ZERO_BD;
+    aggregatorByCurrency.collections = ZERO_BI;
+    aggregatorByCurrency.transactions = ZERO_BI;
+    aggregatorByCurrency.users = ZERO_BI;
+  }
+  aggregatorByCurrency.volume = aggregatorByCurrency.volume.plus(volume);
+  aggregatorByCurrency.transactions = aggregatorByCurrency.transactions.plus(ONE_BI);
+
   // 2. Aggregator daily data
-  const aggregatorDailyDataID = `${aggregatorID}-${dayID.toString()}`;
+  const aggregatorDailyDataID = dayID.toString();
   let aggregatorDailyData = AggregatorDailyData.load(aggregatorDailyDataID);
   if (!aggregatorDailyData) {
     aggregatorDailyData = new AggregatorDailyData(aggregatorDailyDataID);
-    aggregatorDailyData.currency = currency;
     const dayStartTimestamp = dayID.times(dailyTimestampBigInt);
     aggregatorDailyData.date = dayStartTimestamp;
-    aggregatorDailyData.volume = ZERO_BD;
     aggregatorDailyData.collections = ZERO_BI;
     aggregatorDailyData.transactions = ZERO_BI;
     aggregatorDailyData.users = ZERO_BI;
     aggregatorDailyData.aggregator = aggregatorID;
   }
-  aggregatorDailyData.volume = aggregatorDailyData.volume.plus(volume);
   aggregatorDailyData.transactions = aggregatorDailyData.transactions.plus(ONE_BI);
+
+  const aggregatorDailyDataByCurrencyID = `${aggregatorByCurrencyID}-${dayID.toString()}`;
+  let aggregatorDailyDataByCurrency = AggregatorDailyDataByCurrency.load(aggregatorDailyDataByCurrencyID);
+  if (!aggregatorDailyDataByCurrency) {
+    aggregatorDailyDataByCurrency = new AggregatorDailyDataByCurrency(aggregatorDailyDataByCurrencyID);
+    aggregatorDailyDataByCurrency.currency = currency;
+    const dayStartTimestamp = dayID.times(dailyTimestampBigInt);
+    aggregatorDailyDataByCurrency.date = dayStartTimestamp;
+    aggregatorDailyDataByCurrency.volume = ZERO_BD;
+    aggregatorDailyDataByCurrency.collections = ZERO_BI;
+    aggregatorDailyDataByCurrency.transactions = ZERO_BI;
+    aggregatorDailyDataByCurrency.users = ZERO_BI;
+    aggregatorDailyDataByCurrency.aggregatorByCurrency = aggregatorByCurrencyID;
+  }
+  aggregatorDailyDataByCurrency.volume = aggregatorDailyDataByCurrency.volume.plus(volume);
+  aggregatorDailyDataByCurrency.transactions = aggregatorDailyDataByCurrency.transactions.plus(ONE_BI);
 
   // 3. Marketplace
   const marketplaceID = `seaport-${currency.toHexString()}`;
@@ -138,6 +163,7 @@ export function handleOrderFulfilled(event: OrderFulfilled): void {
 
     // New aggregator/marketplace user
     aggregator.users = aggregator.users.plus(ONE_BI);
+    aggregatorByCurrency.users = aggregatorByCurrency.users.plus(ONE_BI);
     marketplace.users = marketplace.users.plus(ONE_BI);
   }
   user.volume = user.volume.plus(volume);
@@ -157,6 +183,7 @@ export function handleOrderFulfilled(event: OrderFulfilled): void {
 
     // New aggregator/marketplace user for the day
     aggregatorDailyData.users = aggregatorDailyData.users.plus(ONE_BI);
+    aggregatorDailyDataByCurrency.users = aggregatorDailyDataByCurrency.users.plus(ONE_BI);
     marketplaceDailyData.users = marketplaceDailyData.users.plus(ONE_BI);
   }
   userDailyData.volume = userDailyData.volume.plus(volume);
@@ -173,6 +200,7 @@ export function handleOrderFulfilled(event: OrderFulfilled): void {
 
     // New aggregator/marketplace user
     aggregator.collections = aggregator.collections.plus(ONE_BI);
+    aggregatorByCurrency.collections = aggregatorByCurrency.collections.plus(ONE_BI);
     marketplace.collections = marketplace.collections.plus(ONE_BI);
   }
   collection.volume = collection.volume.plus(volume);
@@ -193,6 +221,7 @@ export function handleOrderFulfilled(event: OrderFulfilled): void {
     // New aggregator/marketplace collection for the day
     marketplaceDailyData.collections = marketplaceDailyData.collections.plus(ONE_BI);
     aggregatorDailyData.collections = aggregatorDailyData.collections.plus(ONE_BI);
+    aggregatorDailyDataByCurrency.collections = aggregatorDailyDataByCurrency.collections.plus(ONE_BI);
   }
   collectionDailyData.volume = collectionDailyData.volume.plus(volume);
   collectionDailyData.transactions = collectionDailyData.transactions.plus(ONE_BI);
@@ -222,7 +251,9 @@ export function handleOrderFulfilled(event: OrderFulfilled): void {
   }
 
   aggregator.save();
+  aggregatorByCurrency.save();
   aggregatorDailyData.save();
+  aggregatorDailyDataByCurrency.save();
   marketplace.save();
   marketplaceDailyData.save();
   user.save();
