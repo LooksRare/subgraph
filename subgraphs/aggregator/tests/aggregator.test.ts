@@ -40,7 +40,7 @@ describe("handleOrderFulfilled()", () => {
 
   // https://etherscan.io/tx/0x954e07b648c7b6ceba98bddf79263b5b71f9e09da4d5bc7c10ca15819ae9f966
   const createMockOrderFulfilledEvent = (
-    considerationItemType: i32 = 0,
+    considerationItemTypes: Array<i32> = [0, 0, 0],
     considerationTokens: Array<string> = [ZERO_ADDRESS.toHex(), ZERO_ADDRESS.toHex(), ZERO_ADDRESS.toHex()]
   ): OrderFulfilled => {
     const event = createOrderFulfilledEvent(
@@ -52,7 +52,7 @@ describe("handleOrderFulfilled()", () => {
       offerToken, // offer token
       1333, // offer identifier
       1, // offer amount
-      [considerationItemType, considerationItemType, considerationItemType], // consideration item types
+      considerationItemTypes, // consideration item types
       considerationTokens, // consideration tokens
       [0, 0, 0], // consideration identifier
       ["14496000000000000000", "400000000000000000", "400000000000000000"], // consideration amounts
@@ -117,18 +117,27 @@ describe("handleOrderFulfilled()", () => {
   });
 
   test("does nothing if consideration token is not ETH or ERC20", () => {
-    const event = createMockOrderFulfilledEvent(2);
+    const event = createMockOrderFulfilledEvent([2, 2, 2]);
     handleOrderFulfilled(event);
 
     assertNothingHappened(event);
   });
 
   test("does nothing if consideration tokens are not the same", () => {
-    const event = createMockOrderFulfilledEvent(0, [
-      ZERO_ADDRESS.toHex(),
-      ZERO_ADDRESS.toHex(),
-      "0xA0b86991c6218b36c1d19D4a2e9Eb0cE3606eB48",
-    ]);
+    const event = createMockOrderFulfilledEvent(
+      [0, 0, 0],
+      [ZERO_ADDRESS.toHex(), ZERO_ADDRESS.toHex(), "0xA0b86991c6218b36c1d19D4a2e9Eb0cE3606eB48"]
+    );
+    handleOrderFulfilled(event);
+
+    assertNothingHappened(event);
+  });
+
+  test("does nothing if consideration item types are not the same", () => {
+    const event = createMockOrderFulfilledEvent(
+      [0, 0, 1],
+      [ZERO_ADDRESS.toHex(), ZERO_ADDRESS.toHex(), ZERO_ADDRESS.toHex()]
+    );
     handleOrderFulfilled(event);
 
     assertNothingHappened(event);

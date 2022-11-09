@@ -5,7 +5,6 @@ export function isSameConsiderationToken(consideration: OrderFulfilledConsiderat
   const itemType = consideration[0].itemType;
   for (let i = 0; i < consideration.length; i++) {
     const receivedItem = consideration[i];
-    // TODO: add test case
     if (receivedItem.token != currency || receivedItem.itemType !== itemType) {
       return false;
     }
