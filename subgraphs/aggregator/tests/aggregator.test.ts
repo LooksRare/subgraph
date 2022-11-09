@@ -39,7 +39,10 @@ describe("handleOrderFulfilled()", () => {
   const transactionVolume = "15296000000000000000";
 
   // https://etherscan.io/tx/0x954e07b648c7b6ceba98bddf79263b5b71f9e09da4d5bc7c10ca15819ae9f966
-  const createMockOrderFulfilledEvent = (considerationItemType: i32 = 0): OrderFulfilled => {
+  const createMockOrderFulfilledEvent = (
+    considerationItemType: i32 = 0,
+    considerationTokens: Array<string> = [ZERO_ADDRESS.toHex(), ZERO_ADDRESS.toHex(), ZERO_ADDRESS.toHex()]
+  ): OrderFulfilled => {
     const event = createOrderFulfilledEvent(
       "0xaf4f0380b83f5350ec3c902702ff15b1f3b216080ae3bb82dfec201f8d31c188", // orderHash
       offerer,
@@ -50,7 +53,7 @@ describe("handleOrderFulfilled()", () => {
       1333, // offer identifier
       1, // offer amount
       [considerationItemType, considerationItemType, considerationItemType], // consideration item types
-      [ZERO_ADDRESS.toHex(), ZERO_ADDRESS.toHex(), ZERO_ADDRESS.toHex()], // consideration tokens
+      considerationTokens, // consideration tokens
       [0, 0, 0], // consideration identifier
       ["14496000000000000000", "400000000000000000", "400000000000000000"], // consideration amounts
       [offerer, "0x0000a26b00c1f0df003000390027140000faa719", "0xe974159205528502237758439da8c4dcc03d3023"] // consideration recipients
@@ -115,6 +118,17 @@ describe("handleOrderFulfilled()", () => {
 
   test("does nothing if consideration token is not ETH or ERC20", () => {
     const event = createMockOrderFulfilledEvent(2);
+    handleOrderFulfilled(event);
+
+    assertNothingHappened(event);
+  });
+
+  test("does nothing if consideration tokens are not the same", () => {
+    const event = createMockOrderFulfilledEvent(0, [
+      ZERO_ADDRESS.toHex(),
+      ZERO_ADDRESS.toHex(),
+      "0xA0b86991c6218b36c1d19D4a2e9Eb0cE3606eB48",
+    ]);
     handleOrderFulfilled(event);
 
     assertNothingHappened(event);
