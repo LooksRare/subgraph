@@ -120,47 +120,6 @@ describe("handleOrderFulfilled()", () => {
     clearStore();
   });
 
-  test("does nothing if offer tokens are not the same", () => {
-    const event = createMockOrderFulfilledEvent(
-      [0, 0, 0],
-      [ZERO_ADDRESS.toHex(), ZERO_ADDRESS.toHex(), ZERO_ADDRESS.toHex()],
-      [2, 2],
-      ["0x60bb1e2aa1c9acafb4d34f71585d7e959f387769", ZERO_ADDRESS.toHex()],
-      [1333, 1334],
-      [1, 1]
-    );
-    handleOrderFulfilled(event);
-
-    assertNothingHappened(event);
-  });
-
-  test("does nothing if consideration token is not ETH or ERC20", () => {
-    const event = createMockOrderFulfilledEvent([2, 2, 2]);
-    handleOrderFulfilled(event);
-
-    assertNothingHappened(event);
-  });
-
-  test("does nothing if consideration tokens are not the same", () => {
-    const event = createMockOrderFulfilledEvent(
-      [0, 0, 0],
-      [ZERO_ADDRESS.toHex(), ZERO_ADDRESS.toHex(), "0xA0b86991c6218b36c1d19D4a2e9Eb0cE3606eB48"]
-    );
-    handleOrderFulfilled(event);
-
-    assertNothingHappened(event);
-  });
-
-  test("does nothing if consideration item types are not the same", () => {
-    const event = createMockOrderFulfilledEvent(
-      [0, 0, 1],
-      [ZERO_ADDRESS.toHex(), ZERO_ADDRESS.toHex(), ZERO_ADDRESS.toHex()]
-    );
-    handleOrderFulfilled(event);
-
-    assertNothingHappened(event);
-  });
-
   test("updates Collection", () => {
     const event = createMockOrderFulfilledEvent();
     handleOrderFulfilled(event);
@@ -402,5 +361,46 @@ describe("handleOrderFulfilled()", () => {
     assert.bigIntEquals(transaction!.amount, ONE_BI);
     assert.stringEquals(transaction!.buyer.toHexString(), originator);
     assert.stringEquals(transaction!.seller.toHexString(), offerer);
+  });
+
+  test("does nothing if offer tokens are not the same", () => {
+    const event = createMockOrderFulfilledEvent(
+      [0, 0, 0],
+      [ZERO_ADDRESS.toHex(), ZERO_ADDRESS.toHex(), ZERO_ADDRESS.toHex()],
+      [2, 2],
+      ["0x60bb1e2aa1c9acafb4d34f71585d7e959f387769", ZERO_ADDRESS.toHex()],
+      [1333, 1334],
+      [1, 1]
+    );
+    handleOrderFulfilled(event);
+
+    assertNothingHappened(event);
+  });
+
+  test("does nothing if consideration token is not ETH or ERC20", () => {
+    const event = createMockOrderFulfilledEvent([2, 2, 2]);
+    handleOrderFulfilled(event);
+
+    assertNothingHappened(event);
+  });
+
+  test("does nothing if consideration tokens are not the same", () => {
+    const event = createMockOrderFulfilledEvent(
+      [0, 0, 0],
+      [ZERO_ADDRESS.toHex(), ZERO_ADDRESS.toHex(), "0xA0b86991c6218b36c1d19D4a2e9Eb0cE3606eB48"]
+    );
+    handleOrderFulfilled(event);
+
+    assertNothingHappened(event);
+  });
+
+  test("does nothing if consideration item types are not the same", () => {
+    const event = createMockOrderFulfilledEvent(
+      [0, 0, 1],
+      [ZERO_ADDRESS.toHex(), ZERO_ADDRESS.toHex(), ZERO_ADDRESS.toHex()]
+    );
+    handleOrderFulfilled(event);
+
+    assertNothingHappened(event);
   });
 });
