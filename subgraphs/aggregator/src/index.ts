@@ -97,7 +97,7 @@ export function handleOrderFulfilled(event: OrderFulfilled): void {
   }
   user.transactions = user.transactions.plus(ONE_BI);
 
-  const userByCurrencyID = `${originator.toHexString()}-${currency.toHexString()}`;
+  const userByCurrencyID = `${userID}-${currency.toHexString()}`;
   let userByCurrency = UserByCurrency.load(userByCurrencyID);
   if (!userByCurrency) {
     userByCurrency = new UserByCurrency(userByCurrencyID);
