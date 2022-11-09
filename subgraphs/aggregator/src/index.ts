@@ -1,16 +1,8 @@
 /* eslint-disable @typescript-eslint/no-non-null-assertion */
 import { BigDecimal } from "@graphprotocol/graph-ts";
 import { OrderFulfilled } from "../generated/Seaport/Seaport";
-import {
-  Collection,
-  CollectionDailyData,
-  Transaction,
-  User,
-  UserByCurrency,
-  UserDailyData,
-  UserDailyDataByCurrency,
-} from "../generated/schema";
-import { ONE_BI, ZERO_BD, ZERO_BI, ONE_DAY_BI } from "../../../helpers/constants";
+import { Collection, CollectionDailyData, Transaction, User, UserDailyData } from "../generated/schema";
+import { ONE_BI, ZERO_BI, ONE_DAY_BI } from "../../../helpers/constants";
 import { getOrInitializeAggregator } from "./utils/getOrInitializeAggregator";
 import { getOrInitializeAggregatorByCurrency } from "./utils/getOrInitializeAggregatorByCurrency";
 import { getOrInitializeMarketplace } from "./utils/getOrInitializeMarketplace";
@@ -26,6 +18,8 @@ import { getOrInitializeMarketplaceByCurrency } from "./utils/getOrInitializeMar
 import { getOrInitializeMarketplaceDailyDataByCurrency } from "./utils/getOrInitializeMarketplaceDailyDataByCurrency";
 import { getOrInitializeCollectionByCurrency } from "./utils/getOrInitializeCollectionByCurrency";
 import { getOrInitializeCollectionDailyDataByCurrency } from "./utils/getOrInitializeCollectionDailyDataByCurrency";
+import { getOrInitializeUserByCurrency } from "./utils/getOrInitializeUserByCurrency";
+import { getOrInitializeUserDailyDataByCurrency } from "./utils/getOrInitializeUserDailyDataByCurrency";
 
 export function handleOrderFulfilled(event: OrderFulfilled): void {
   const logs = event.receipt!.logs;
@@ -97,14 +91,7 @@ export function handleOrderFulfilled(event: OrderFulfilled): void {
   }
   user.transactions = user.transactions.plus(ONE_BI);
 
-  const userByCurrencyID = `${userID}-${currency.toHexString()}`;
-  let userByCurrency = UserByCurrency.load(userByCurrencyID);
-  if (!userByCurrency) {
-    userByCurrency = new UserByCurrency(userByCurrencyID);
-    userByCurrency.currency = currency;
-    userByCurrency.volume = ZERO_BD;
-    userByCurrency.transactions = ZERO_BI;
-  }
+  const userByCurrency = getOrInitializeUserByCurrency(user, currency);
   userByCurrency.volume = userByCurrency.volume.plus(volume);
   userByCurrency.transactions = userByCurrency.transactions.plus(ONE_BI);
 
@@ -126,17 +113,7 @@ export function handleOrderFulfilled(event: OrderFulfilled): void {
   }
   userDailyData.transactions = userDailyData.transactions.plus(ONE_BI);
 
-  const userDailyDataByCurrencyID = `${userByCurrencyID}-${dayID.toString()}`;
-  let userDailyDataByCurrency = UserDailyDataByCurrency.load(userDailyDataByCurrencyID);
-  if (!userDailyDataByCurrency) {
-    userDailyDataByCurrency = new UserDailyDataByCurrency(userDailyDataByCurrencyID);
-    const dayStartTimestamp = dayID.times(ONE_DAY_BI);
-    userDailyDataByCurrency.date = dayStartTimestamp;
-    userDailyDataByCurrency.currency = currency;
-    userDailyDataByCurrency.volume = ZERO_BD;
-    userDailyDataByCurrency.transactions = ZERO_BI;
-    userDailyDataByCurrency.userByCurrency = userByCurrency.id;
-  }
+  const userDailyDataByCurrency = getOrInitializeUserDailyDataByCurrency(userByCurrency, dayID);
   userDailyDataByCurrency.volume = userDailyDataByCurrency.volume.plus(volume);
   userDailyDataByCurrency.transactions = userDailyDataByCurrency.transactions.plus(ONE_BI);
 
@@ -185,15 +162,18 @@ export function handleOrderFulfilled(event: OrderFulfilled): void {
 
   // 9. Transaction
   for (let i = 0; i < offer.length; i++) {
+    const transactionHash = event.transaction.hash.toHexString();
+    const logIndex = event.logIndex;
+    const block = event.block;
     const transactionID = isBundle
-      ? `${event.transaction.hash.toHexString()}-${event.logIndex.toString()}-${i.toString()}`
-      : `${event.transaction.hash.toHexString()}-${event.logIndex.toString()}`;
+      ? `${transactionHash}-${logIndex.toString()}-${i.toString()}`
+      : `${transactionHash}-${logIndex.toString()}`;
 
     const transaction = new Transaction(transactionID);
-    transaction.transactionHash = event.transaction.hash.toHexString();
-    transaction.logIndex = event.logIndex.toI32();
-    transaction.timestamp = event.block.timestamp;
-    transaction.blockNumber = event.block.number;
+    transaction.transactionHash = transactionHash;
+    transaction.logIndex = logIndex.toI32();
+    transaction.timestamp = block.timestamp;
+    transaction.blockNumber = block.number;
     transaction.isBundle = isBundle;
     transaction.collection = collection.id;
     transaction.tokenId = offer[i].identifier;
