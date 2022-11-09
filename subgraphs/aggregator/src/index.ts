@@ -77,11 +77,7 @@ export function handleOrderFulfilled(event: OrderFulfilled): void {
   const marketplaceDailyData = getOrInitializeMarketplaceDailyData(currency, marketplace, dayID);
   marketplaceDailyData.transactions = marketplaceDailyData.transactions.plus(ONE_BI);
 
-  const marketplaceDailyDataByCurrency = getOrInitializeMarketplaceDailyDataByCurrency(
-    currency,
-    marketplaceByCurrency,
-    dayID
-  );
+  const marketplaceDailyDataByCurrency = getOrInitializeMarketplaceDailyDataByCurrency(marketplaceByCurrency, dayID);
   marketplaceDailyDataByCurrency.volume = marketplaceDailyDataByCurrency.volume.plus(volume);
   marketplaceDailyDataByCurrency.transactions = marketplaceDailyDataByCurrency.transactions.plus(ONE_BI);
 
