@@ -49,9 +49,9 @@ describe("handleOrderFulfilled()", () => {
       offerToken, // offer token
       1333, // offer identifier
       1, // offer amount
-      considerationItemType, // consideration item type
-      ZERO_ADDRESS.toHex(), // consideration token
-      0, // consideration identifier
+      [considerationItemType, considerationItemType, considerationItemType], // consideration item types
+      [ZERO_ADDRESS.toHex(), ZERO_ADDRESS.toHex(), ZERO_ADDRESS.toHex()], // consideration tokens
+      [0, 0, 0], // consideration identifier
       ["14496000000000000000", "400000000000000000", "400000000000000000"], // consideration amounts
       [offerer, "0x0000a26b00c1f0df003000390027140000faa719", "0xe974159205528502237758439da8c4dcc03d3023"] // consideration recipients
     );
@@ -113,7 +113,7 @@ describe("handleOrderFulfilled()", () => {
     clearStore();
   });
 
-  test("does nothing if cnosideration token is not ETH or ERC20", () => {
+  test("does nothing if consideration token is not ETH or ERC20", () => {
     const event = createMockOrderFulfilledEvent(2);
     handleOrderFulfilled(event);
 

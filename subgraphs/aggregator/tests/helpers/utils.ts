@@ -21,9 +21,9 @@ export function createOrderFulfilledEvent(
   offerToken: string,
   offerIdentifier: i32,
   offerAmount: i32,
-  considerationItemType: i32,
-  considerationToken: string,
-  considerationIdentifier: i32,
+  considerationItemTypes: Array<i32>,
+  considerationTokens: Array<string>,
+  considerationIdentifiers: Array<i32>,
   considerationAmounts: Array<string>,
   considerationRecipients: Array<string>
 ): OrderFulfilled {
@@ -62,9 +62,9 @@ export function createOrderFulfilledEvent(
 
   for (let i = 0; i < considerationAmounts.length; i++) {
     const consideration: Array<ethereum.Value> = [
-      ethereum.Value.fromI32(considerationItemType),
-      ethereum.Value.fromAddress(Address.fromString(considerationToken)),
-      ethereum.Value.fromI32(considerationIdentifier),
+      ethereum.Value.fromI32(considerationItemTypes[i]),
+      ethereum.Value.fromAddress(Address.fromString(considerationTokens[i])),
+      ethereum.Value.fromI32(considerationIdentifiers[i]),
       ethereum.Value.fromUnsignedBigInt(BigInt.fromString(considerationAmounts[i])),
       ethereum.Value.fromAddress(Address.fromString(considerationRecipients[i])),
     ];
