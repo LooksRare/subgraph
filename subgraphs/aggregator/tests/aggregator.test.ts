@@ -41,17 +41,21 @@ describe("handleOrderFulfilled()", () => {
   // https://etherscan.io/tx/0x954e07b648c7b6ceba98bddf79263b5b71f9e09da4d5bc7c10ca15819ae9f966
   const createMockOrderFulfilledEvent = (
     considerationItemTypes: Array<i32> = [0, 0, 0],
-    considerationTokens: Array<string> = [ZERO_ADDRESS.toHex(), ZERO_ADDRESS.toHex(), ZERO_ADDRESS.toHex()]
+    considerationTokens: Array<string> = [ZERO_ADDRESS.toHex(), ZERO_ADDRESS.toHex(), ZERO_ADDRESS.toHex()],
+    offerItemTypes: Array<i32> = [2],
+    offerTokens: Array<string> = ["0x60bb1e2aa1c9acafb4d34f71585d7e959f387769"],
+    offerIdentifiers: Array<i32> = [1333],
+    offerAmounts: Array<i32> = [1]
   ): OrderFulfilled => {
     const event = createOrderFulfilledEvent(
       "0xaf4f0380b83f5350ec3c902702ff15b1f3b216080ae3bb82dfec201f8d31c188", // orderHash
       offerer,
       "0x004c00500000ad104d7dbd00e3ae0a5c00560c00", // zone
       recipient,
-      [2], // offer item types
-      [offerToken], // offer tokens
-      [1333], // offer identifiers
-      [1], // offer amounts
+      offerItemTypes,
+      offerTokens,
+      offerIdentifiers,
+      offerAmounts,
       considerationItemTypes, // consideration item types
       considerationTokens, // consideration tokens
       [0, 0, 0], // consideration identifier
@@ -114,6 +118,20 @@ describe("handleOrderFulfilled()", () => {
 
   afterEach(() => {
     clearStore();
+  });
+
+  test("does nothing if offer tokens are not the same", () => {
+    const event = createMockOrderFulfilledEvent(
+      [0, 0, 0],
+      [ZERO_ADDRESS.toHex(), ZERO_ADDRESS.toHex(), ZERO_ADDRESS.toHex()],
+      [2, 2],
+      ["0x60bb1e2aa1c9acafb4d34f71585d7e959f387769", ZERO_ADDRESS.toHex()],
+      [1333, 1334],
+      [1, 1]
+    );
+    handleOrderFulfilled(event);
+
+    assertNothingHappened(event);
   });
 
   test("does nothing if consideration token is not ETH or ERC20", () => {
