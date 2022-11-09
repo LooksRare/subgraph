@@ -39,7 +39,7 @@ describe("handleOrderFulfilled()", () => {
   const transactionVolume = "15296000000000000000";
 
   // https://etherscan.io/tx/0x954e07b648c7b6ceba98bddf79263b5b71f9e09da4d5bc7c10ca15819ae9f966
-  const createMockOrderFulfilledEvent = (): OrderFulfilled => {
+  const createMockOrderFulfilledEvent = (considerationItemType: i32 = 0): OrderFulfilled => {
     const event = createOrderFulfilledEvent(
       "0xaf4f0380b83f5350ec3c902702ff15b1f3b216080ae3bb82dfec201f8d31c188", // orderHash
       offerer,
@@ -49,7 +49,7 @@ describe("handleOrderFulfilled()", () => {
       offerToken, // offer token
       1333, // offer identifier
       1, // offer amount
-      0, // consideration item type
+      considerationItemType, // consideration item type
       ZERO_ADDRESS.toHex(), // consideration token
       0, // consideration identifier
       ["14496000000000000000", "400000000000000000", "400000000000000000"], // consideration amounts
@@ -68,8 +68,56 @@ describe("handleOrderFulfilled()", () => {
     return event;
   };
 
+  const assertNothingHappened = (event: OrderFulfilled): void => {
+    const collection = Collection.load(offerToken);
+    assert.assertNull(collection);
+    const collectionByCurrency = CollectionByCurrency.load(`${offerToken}-${ZERO_ADDRESS.toHex()}`);
+    assert.assertNull(collectionByCurrency);
+    const collectionDailyData = CollectionDailyData.load(`${offerToken}-0`);
+    assert.assertNull(collectionDailyData);
+    const collectionDailyDataByCurrency = CollectionDailyDataByCurrency.load(`${offerToken}-${ZERO_ADDRESS.toHex()}-0`);
+    assert.assertNull(collectionDailyDataByCurrency);
+    const aggregator = Aggregator.load("LooksRareAggregator");
+    assert.assertNull(aggregator);
+    const aggregatorDailyData = AggregatorDailyData.load("0");
+    assert.assertNull(aggregatorDailyData);
+    const aggregatorByCurrency = AggregatorByCurrency.load(ZERO_ADDRESS.toHex());
+    assert.assertNull(aggregatorByCurrency);
+    const aggregatorDailyDataByCurrency = AggregatorDailyDataByCurrency.load(`${ZERO_ADDRESS.toHex()}-0`);
+    assert.assertNull(aggregatorDailyDataByCurrency);
+    const marketplace = Marketplace.load("seaport");
+    assert.assertNull(marketplace);
+    const marketplaceDailyData = MarketplaceDailyData.load("seaport-0");
+    assert.assertNull(marketplaceDailyData);
+    const marketplaceByCurrency = MarketplaceByCurrency.load(`seaport-${ZERO_ADDRESS.toHex()}`);
+    assert.assertNull(marketplaceByCurrency);
+    const marketplaceDailyDataByCurrency = MarketplaceDailyDataByCurrency.load(`seaport-${ZERO_ADDRESS.toHex()}-0`);
+    assert.assertNull(marketplaceDailyDataByCurrency);
+    const user = User.load(Address.fromString(originator).toHexString());
+    assert.assertNull(user);
+    const userDailyData = UserDailyData.load(`${Address.fromString(originator).toHexString()}-0`);
+    assert.assertNull(userDailyData);
+    const userByCurrency = UserByCurrency.load(
+      `${Address.fromString(originator).toHexString()}-${ZERO_ADDRESS.toHex()}`
+    );
+    assert.assertNull(userByCurrency);
+    const userDailyDataByCurrency = UserDailyDataByCurrency.load(
+      `${Address.fromString(originator).toHexString()}-${ZERO_ADDRESS.toHex()}-0`
+    );
+    assert.assertNull(userDailyDataByCurrency);
+    const transaction = Transaction.load(`${event.transaction.hash.toHexString()}-${event.logIndex.toString()}`);
+    assert.assertNull(transaction);
+  };
+
   afterEach(() => {
     clearStore();
+  });
+
+  test("does nothing if cnosideration token is not ETH or ERC20", () => {
+    const event = createMockOrderFulfilledEvent(2);
+    handleOrderFulfilled(event);
+
+    assertNothingHappened(event);
   });
 
   test("updates Collection", () => {

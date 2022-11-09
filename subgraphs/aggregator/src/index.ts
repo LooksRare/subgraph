@@ -33,7 +33,6 @@ export function handleOrderFulfilled(event: OrderFulfilled): void {
   const currency = consideration[0].token;
   const itemType = consideration[0].itemType;
   // NATIVE: 0, ERC20: 1
-  // TODO: Add test case
   if (itemType > 1) return;
 
   if (!isSameOfferToken(offer)) return;
