@@ -17,10 +17,10 @@ export function createOrderFulfilledEvent(
   offerer: string,
   zone: string,
   recipient: string,
-  offerItemType: i32,
-  offerToken: string,
-  offerIdentifier: i32,
-  offerAmount: i32,
+  offerItemTypes: Array<i32>,
+  offerTokens: Array<string>,
+  offerIdentifiers: Array<i32>,
+  offerAmounts: Array<i32>,
   considerationItemTypes: Array<i32>,
   considerationTokens: Array<string>,
   considerationIdentifiers: Array<i32>,
@@ -47,15 +47,20 @@ export function createOrderFulfilledEvent(
     ethereum.Value.fromAddress(Address.fromString(recipient))
   );
 
-  const offer: Array<ethereum.Value> = [
-    ethereum.Value.fromUnsignedBigInt(BigInt.fromI32(offerItemType)),
-    ethereum.Value.fromAddress(Address.fromString(offerToken)),
-    ethereum.Value.fromI32(offerIdentifier),
-    ethereum.Value.fromI32(offerAmount),
-  ];
+  const offerTupleArray: Array<ethereum.Tuple> = [];
 
-  const offerTuple = changetype<ethereum.Tuple>(offer);
-  const offerTupleArray: Array<ethereum.Tuple> = [offerTuple];
+  for (let i = 0; i < offerAmounts.length; i++) {
+    const offer: Array<ethereum.Value> = [
+      ethereum.Value.fromUnsignedBigInt(BigInt.fromI32(offerItemTypes[i])),
+      ethereum.Value.fromAddress(Address.fromString(offerTokens[i])),
+      ethereum.Value.fromI32(offerIdentifiers[i]),
+      ethereum.Value.fromI32(offerAmounts[i]),
+    ];
+
+    const offerTuple = changetype<ethereum.Tuple>(offer);
+    offerTupleArray.push(offerTuple);
+  }
+
   const offerParam = new ethereum.EventParam("offer", ethereum.Value.fromTupleArray(offerTupleArray));
 
   const considerationTupleArray: Array<ethereum.Tuple> = [];

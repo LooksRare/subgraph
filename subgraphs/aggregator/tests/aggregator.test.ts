@@ -48,10 +48,10 @@ describe("handleOrderFulfilled()", () => {
       offerer,
       "0x004c00500000ad104d7dbd00e3ae0a5c00560c00", // zone
       recipient,
-      2, // offer item type
-      offerToken, // offer token
-      1333, // offer identifier
-      1, // offer amount
+      [2], // offer item types
+      [offerToken], // offer tokens
+      [1333], // offer identifiers
+      [1], // offer amounts
       considerationItemTypes, // consideration item types
       considerationTokens, // consideration tokens
       [0, 0, 0], // consideration identifier
