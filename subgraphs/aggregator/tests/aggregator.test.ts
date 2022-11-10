@@ -359,7 +359,7 @@ describe("handleOrderFulfilled()", () => {
     assert.stringEquals(transaction!.price.toString(), transactionVolume);
     assert.stringEquals(transaction!.currency.toHexString(), ZERO_ADDRESS.toHex());
     assert.bigIntEquals(transaction!.amount, ONE_BI);
-    assert.stringEquals(transaction!.buyer.toHexString(), originator);
+    assert.stringEquals(transaction!.buyer, originator);
     assert.stringEquals(transaction!.seller.toHexString(), offerer);
   });
 

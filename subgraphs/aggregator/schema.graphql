@@ -328,8 +328,8 @@ type Transaction @entity {
   " Trade currency "
   currency: Bytes!
 
-  " Buyer account address "
-  buyer: Bytes!
+  " Buyer account (Pointer to User) "
+  buyer: User!
 
   " Seller account address "
   seller: Bytes!

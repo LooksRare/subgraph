@@ -179,7 +179,7 @@ export function handleOrderFulfilled(event: OrderFulfilled): void {
     transaction.price = volume.div(BigDecimal.fromString(offer.length.toString()));
     transaction.currency = currency;
     transaction.amount = offer[i].amount;
-    transaction.buyer = originator;
+    transaction.buyer = user.id;
     transaction.seller = consideration[0].recipient;
     transaction.save();
   }
