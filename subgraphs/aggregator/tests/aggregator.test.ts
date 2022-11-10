@@ -301,6 +301,9 @@ describe("handleOrderFulfilled()", () => {
 
     assert.i32Equals(user!.dailyData.length, 1);
     assert.stringEquals(user!.dailyData[0], `${Address.fromString(originator).toHexString()}-0`);
+
+    assert.i32Equals(user!.byCurrency.length, 1);
+    assert.stringEquals(user!.byCurrency[0], `${Address.fromString(originator).toHexString()}-${ZERO_ADDRESS.toHex()}`);
   });
 
   test("updates UserDailyData", () => {

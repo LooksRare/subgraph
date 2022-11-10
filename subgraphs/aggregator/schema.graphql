@@ -265,6 +265,9 @@ type User @entity {
 
   " User daily data "
   dailyData: [UserDailyData!]! @derivedFrom(field: "user")
+
+  " User by currency "
+  byCurrency: [UserByCurrency!]! @derivedFrom(field: "user")
 }
 
 type UserByCurrency @entity {
@@ -282,6 +285,9 @@ type UserByCurrency @entity {
 
   " User daily data "
   dailyData: [UserDailyDataByCurrency!]! @derivedFrom(field: "userByCurrency")
+
+  " Pointer to User "
+  user: User!
 }
 
 type UserDailyData @entity {

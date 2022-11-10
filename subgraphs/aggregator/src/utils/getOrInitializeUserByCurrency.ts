@@ -10,6 +10,7 @@ export function getOrInitializeUserByCurrency(user: User, currency: Bytes): User
     userByCurrency.currency = currency;
     userByCurrency.volume = ZERO_BD;
     userByCurrency.transactions = ZERO_BI;
+    userByCurrency.user = user.id;
   }
   return userByCurrency;
 }
