@@ -222,6 +222,9 @@ type MarketplaceDailyData @entity {
 
   " Total number of transactions "
   transactions: BigInt!
+
+  " Marketplace by currency "
+  byCurrency: [MarketplaceDailyDataByCurrency!]! @derivedFrom(field: "marketplaceDailyData")
 }
 
 type MarketplaceDailyDataByCurrency @entity {
@@ -230,6 +233,9 @@ type MarketplaceDailyDataByCurrency @entity {
 
   " Pointer to MarketplaceByCurrency "
   marketplaceByCurrency: MarketplaceByCurrency!
+
+  " Pointer to MarketplaceDailyData "
+  marketplaceDailyData: MarketplaceDailyData!
 
   " Trade currency "
   currency: Bytes!

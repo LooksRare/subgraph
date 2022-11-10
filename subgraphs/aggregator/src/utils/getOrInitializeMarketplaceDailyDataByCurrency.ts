@@ -1,8 +1,9 @@
 import { BigInt } from "@graphprotocol/graph-ts";
 import { ZERO_BD, ZERO_BI, ONE_DAY_BI } from "../../../../helpers/constants";
-import { MarketplaceByCurrency, MarketplaceDailyDataByCurrency } from "../../generated/schema";
+import { MarketplaceByCurrency, MarketplaceDailyData, MarketplaceDailyDataByCurrency } from "../../generated/schema";
 
 export function getOrInitializeMarketplaceDailyDataByCurrency(
+  marketplaceDailyData: MarketplaceDailyData,
   marketplaceByCurrency: MarketplaceByCurrency,
   dayID: BigInt
 ): MarketplaceDailyDataByCurrency {
@@ -18,6 +19,7 @@ export function getOrInitializeMarketplaceDailyDataByCurrency(
     marketplaceDailyDataByCurrency.collections = ZERO_BI;
     marketplaceDailyDataByCurrency.transactions = ZERO_BI;
     marketplaceDailyDataByCurrency.users = ZERO_BI;
+    marketplaceDailyDataByCurrency.marketplaceDailyData = marketplaceDailyData.id;
   }
   return marketplaceDailyDataByCurrency;
 }
