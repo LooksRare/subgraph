@@ -54,7 +54,11 @@ export function handleOrderFulfilled(event: OrderFulfilled): void {
   const aggregatorDailyData = getOrInitializeAggregatorDailyData(dayID, aggregator);
   aggregatorDailyData.transactions = aggregatorDailyData.transactions.plus(ONE_BI);
 
-  const aggregatorDailyDataByCurrency = getOrInitializeAggregatorDailyDataByCurrency(aggregatorByCurrency, dayID);
+  const aggregatorDailyDataByCurrency = getOrInitializeAggregatorDailyDataByCurrency(
+    aggregatorByCurrency,
+    aggregatorDailyData,
+    dayID
+  );
   aggregatorDailyDataByCurrency.volume = aggregatorDailyDataByCurrency.volume.plus(volume);
   aggregatorDailyDataByCurrency.transactions = aggregatorDailyDataByCurrency.transactions.plus(ONE_BI);
 

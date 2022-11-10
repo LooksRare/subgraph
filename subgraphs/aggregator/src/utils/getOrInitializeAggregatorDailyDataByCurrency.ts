@@ -1,9 +1,10 @@
 import { BigInt } from "@graphprotocol/graph-ts";
 import { ZERO_BD, ZERO_BI, ONE_DAY_BI } from "../../../../helpers/constants";
-import { AggregatorByCurrency, AggregatorDailyDataByCurrency } from "../../generated/schema";
+import { AggregatorByCurrency, AggregatorDailyData, AggregatorDailyDataByCurrency } from "../../generated/schema";
 
 export function getOrInitializeAggregatorDailyDataByCurrency(
   aggregatorByCurrency: AggregatorByCurrency,
+  aggregatorDailyData: AggregatorDailyData,
   dayID: BigInt
 ): AggregatorDailyDataByCurrency {
   const aggregatorDailyDataByCurrencyID = `${aggregatorByCurrency.id}-${dayID.toString()}`;
@@ -18,6 +19,7 @@ export function getOrInitializeAggregatorDailyDataByCurrency(
     aggregatorDailyDataByCurrency.transactions = ZERO_BI;
     aggregatorDailyDataByCurrency.users = ZERO_BI;
     aggregatorDailyDataByCurrency.aggregatorByCurrency = aggregatorByCurrency.id;
+    aggregatorDailyDataByCurrency.aggregatorDailyData = aggregatorDailyData.id;
   }
   return aggregatorDailyDataByCurrency;
 }

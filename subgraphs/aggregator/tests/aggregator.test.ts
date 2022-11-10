@@ -199,6 +199,9 @@ describe("handleOrderFulfilled()", () => {
     assert.bigIntEquals(aggregatorDailyData!.date, ZERO_BI);
     assert.bigIntEquals(aggregatorDailyData!.users, ONE_BI);
     assert.bigIntEquals(aggregatorDailyData!.collections, ONE_BI);
+
+    assert.i32Equals(aggregatorDailyData!.byCurrency.length, 1);
+    assert.stringEquals(aggregatorDailyData!.byCurrency[0], `${ZERO_ADDRESS.toHex()}-0`);
   });
 
   test("updates AggregatorByCurrency", () => {
@@ -227,6 +230,7 @@ describe("handleOrderFulfilled()", () => {
     assert.stringEquals(aggregatorDailyDataByCurrency!.volume.toString(), transactionVolume);
     assert.bigIntEquals(aggregatorDailyDataByCurrency!.users, ONE_BI);
     assert.bigIntEquals(aggregatorDailyDataByCurrency!.collections, ONE_BI);
+    assert.stringEquals(aggregatorDailyDataByCurrency!.aggregatorByCurrency, ZERO_ADDRESS.toHex());
   });
 
   test("updates Marketplace", () => {

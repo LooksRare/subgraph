@@ -62,6 +62,9 @@ type AggregatorDailyData @entity {
 
   " Total number of transactions "
   transactions: BigInt!
+
+  " Aggregator daily data by currency "
+  byCurrency: [AggregatorDailyDataByCurrency!]! @derivedFrom(field: "aggregatorDailyData")
 }
 
 type AggregatorDailyDataByCurrency @entity {
@@ -73,6 +76,9 @@ type AggregatorDailyDataByCurrency @entity {
 
   " Pointer to AggregatorByCurrency "
   aggregatorByCurrency: AggregatorByCurrency!
+
+  " Pointer to AggregatorDailyData "
+  aggregatorDailyData: AggregatorDailyData!
 
   " Date "
   date: BigInt!
