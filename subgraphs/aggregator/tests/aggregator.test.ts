@@ -167,9 +167,14 @@ describe("handleOrderFulfilled()", () => {
       `${offerToken}-${ZERO_ADDRESS.toHex()}`
     );
     assert.stringEquals(collectionDailyDataByCurrency!.currency.toHexString(), ZERO_ADDRESS.toHex());
-    assert.bigIntEquals(collectionDailyDataByCurrency!.transactions, ONE_BI);
     assert.bigIntEquals(collectionDailyDataByCurrency!.date, ZERO_BI);
     assert.stringEquals(collectionDailyDataByCurrency!.volume.toString(), transactionVolume);
+
+    assert.i32Equals(collectionDailyDataByCurrency!.transactions.length, 1);
+    assert.stringEquals(
+      collectionDailyDataByCurrency!.transactions[0],
+      `${event.transaction.hash.toHexString()}-${event.logIndex.toString()}`
+    );
   });
 
   test("updates Aggregator", () => {
@@ -225,12 +230,17 @@ describe("handleOrderFulfilled()", () => {
     const aggregatorDailyDataByCurrency = AggregatorDailyDataByCurrency.load(`${ZERO_ADDRESS.toHex()}-0`);
     assert.assertNotNull(aggregatorDailyDataByCurrency);
     assert.stringEquals(aggregatorDailyDataByCurrency!.currency.toHexString(), ZERO_ADDRESS.toHex());
-    assert.bigIntEquals(aggregatorDailyDataByCurrency!.transactions, ONE_BI);
     assert.bigIntEquals(aggregatorDailyDataByCurrency!.date, ZERO_BI);
     assert.stringEquals(aggregatorDailyDataByCurrency!.volume.toString(), transactionVolume);
     assert.bigIntEquals(aggregatorDailyDataByCurrency!.users, ONE_BI);
     assert.bigIntEquals(aggregatorDailyDataByCurrency!.collections, ONE_BI);
     assert.stringEquals(aggregatorDailyDataByCurrency!.aggregatorByCurrency, ZERO_ADDRESS.toHex());
+
+    assert.i32Equals(aggregatorDailyDataByCurrency!.transactions.length, 1);
+    assert.stringEquals(
+      aggregatorDailyDataByCurrency!.transactions[0],
+      `${event.transaction.hash.toHexString()}-${event.logIndex.toString()}`
+    );
   });
 
   test("updates Marketplace", () => {
@@ -283,12 +293,17 @@ describe("handleOrderFulfilled()", () => {
     const marketplaceDailyDataByCurrency = MarketplaceDailyDataByCurrency.load(`seaport-${ZERO_ADDRESS.toHex()}-0`);
     assert.assertNotNull(marketplaceDailyDataByCurrency);
     assert.stringEquals(marketplaceDailyDataByCurrency!.currency.toHexString(), ZERO_ADDRESS.toHex());
-    assert.bigIntEquals(marketplaceDailyDataByCurrency!.transactions, ONE_BI);
     assert.stringEquals(marketplaceDailyDataByCurrency!.marketplaceByCurrency, `seaport-${ZERO_ADDRESS.toHex()}`);
     assert.bigIntEquals(marketplaceDailyDataByCurrency!.date, ZERO_BI);
     assert.stringEquals(marketplaceDailyDataByCurrency!.volume.toString(), transactionVolume);
     assert.bigIntEquals(marketplaceDailyDataByCurrency!.users, ONE_BI);
     assert.bigIntEquals(marketplaceDailyDataByCurrency!.collections, ONE_BI);
+
+    assert.i32Equals(marketplaceDailyDataByCurrency!.transactions.length, 1);
+    assert.stringEquals(
+      marketplaceDailyDataByCurrency!.transactions[0],
+      `${event.transaction.hash.toHexString()}-${event.logIndex.toString()}`
+    );
   });
 
   test("updates User", () => {
@@ -351,13 +366,18 @@ describe("handleOrderFulfilled()", () => {
     );
     assert.assertNotNull(userDailyDataByCurrency);
     assert.stringEquals(userDailyDataByCurrency!.currency.toHexString(), ZERO_ADDRESS.toHex());
-    assert.bigIntEquals(userDailyDataByCurrency!.transactions, ONE_BI);
     assert.stringEquals(
       userDailyDataByCurrency!.userByCurrency,
       `${Address.fromString(originator).toHexString()}-${ZERO_ADDRESS.toHex()}`
     );
     assert.bigIntEquals(userDailyDataByCurrency!.date, ZERO_BI);
     assert.stringEquals(userDailyDataByCurrency!.volume.toString(), transactionVolume);
+
+    assert.i32Equals(userDailyDataByCurrency!.transactions.length, 1);
+    assert.stringEquals(
+      userDailyDataByCurrency!.transactions[0],
+      `${event.transaction.hash.toHexString()}-${event.logIndex.toString()}`
+    );
   });
 
   test("updates Transaction", () => {
@@ -378,6 +398,13 @@ describe("handleOrderFulfilled()", () => {
     assert.bigIntEquals(transaction!.amount, ONE_BI);
     assert.stringEquals(transaction!.buyer, originator);
     assert.stringEquals(transaction!.seller.toHexString(), offerer);
+    assert.stringEquals(transaction!.aggregatorDailyDataByCurrency, `${ZERO_ADDRESS.toHex()}-0`);
+    assert.stringEquals(transaction!.collectionDailyDataByCurrency, `${offerToken}-${ZERO_ADDRESS.toHex()}-0`);
+    assert.stringEquals(transaction!.marketplaceDailyDataByCurrency, `seaport-${ZERO_ADDRESS.toHex()}-0`);
+    assert.stringEquals(
+      transaction!.userDailyDataByCurrency,
+      `${Address.fromString(originator).toHexString()}-${ZERO_ADDRESS.toHex()}-0`
+    );
   });
 
   test("does nothing if offer tokens are not the same", () => {

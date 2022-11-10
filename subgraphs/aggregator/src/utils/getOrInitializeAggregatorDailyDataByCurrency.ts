@@ -16,7 +16,6 @@ export function getOrInitializeAggregatorDailyDataByCurrency(
     aggregatorDailyDataByCurrency.date = dayStartTimestamp;
     aggregatorDailyDataByCurrency.volume = ZERO_BD;
     aggregatorDailyDataByCurrency.collections = ZERO_BI;
-    aggregatorDailyDataByCurrency.transactions = ZERO_BI;
     aggregatorDailyDataByCurrency.users = ZERO_BI;
     aggregatorDailyDataByCurrency.aggregatorByCurrency = aggregatorByCurrency.id;
     aggregatorDailyDataByCurrency.aggregatorDailyData = aggregatorDailyData.id;

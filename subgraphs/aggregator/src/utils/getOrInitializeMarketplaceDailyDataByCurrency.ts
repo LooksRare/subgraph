@@ -17,7 +17,6 @@ export function getOrInitializeMarketplaceDailyDataByCurrency(
     marketplaceDailyDataByCurrency.marketplaceByCurrency = marketplaceByCurrency.id;
     marketplaceDailyDataByCurrency.volume = ZERO_BD;
     marketplaceDailyDataByCurrency.collections = ZERO_BI;
-    marketplaceDailyDataByCurrency.transactions = ZERO_BI;
     marketplaceDailyDataByCurrency.users = ZERO_BI;
     marketplaceDailyDataByCurrency.marketplaceDailyData = marketplaceDailyData.id;
   }

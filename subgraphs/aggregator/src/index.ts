@@ -60,7 +60,6 @@ export function handleOrderFulfilled(event: OrderFulfilled): void {
     dayID
   );
   aggregatorDailyDataByCurrency.volume = aggregatorDailyDataByCurrency.volume.plus(volume);
-  aggregatorDailyDataByCurrency.transactions = aggregatorDailyDataByCurrency.transactions.plus(ONE_BI);
 
   // 3. Marketplace
   const marketplace = getOrInitializeMarketplace();
@@ -80,7 +79,6 @@ export function handleOrderFulfilled(event: OrderFulfilled): void {
     dayID
   );
   marketplaceDailyDataByCurrency.volume = marketplaceDailyDataByCurrency.volume.plus(volume);
-  marketplaceDailyDataByCurrency.transactions = marketplaceDailyDataByCurrency.transactions.plus(ONE_BI);
 
   // 5. User
   const originator = extractOriginator(sweepEvent);
@@ -122,7 +120,6 @@ export function handleOrderFulfilled(event: OrderFulfilled): void {
 
   const userDailyDataByCurrency = getOrInitializeUserDailyDataByCurrency(userDailyData, userByCurrency, dayID);
   userDailyDataByCurrency.volume = userDailyDataByCurrency.volume.plus(volume);
-  userDailyDataByCurrency.transactions = userDailyDataByCurrency.transactions.plus(ONE_BI);
 
   // 7. Collection
   const collectionID = offerToken.toHexString();
@@ -163,9 +160,25 @@ export function handleOrderFulfilled(event: OrderFulfilled): void {
 
   const collectionDailyDataByCurrency = getOrInitializeCollectionDailyDataByCurrency(collectionByCurrency, dayID);
   collectionDailyDataByCurrency.volume = collectionDailyDataByCurrency.volume.plus(volume);
-  collectionDailyDataByCurrency.transactions = collectionDailyDataByCurrency.transactions.plus(ONE_BI);
 
   const isBundle = offer.length > 1;
+
+  aggregator.save();
+  aggregatorByCurrency.save();
+  aggregatorDailyData.save();
+  aggregatorDailyDataByCurrency.save();
+  marketplace.save();
+  marketplaceByCurrency.save();
+  marketplaceDailyData.save();
+  marketplaceDailyDataByCurrency.save();
+  user.save();
+  userByCurrency.save();
+  userDailyData.save();
+  userDailyDataByCurrency.save();
+  collection.save();
+  collectionByCurrency.save();
+  collectionDailyData.save();
+  collectionDailyDataByCurrency.save();
 
   // 9. Transaction
   for (let i = 0; i < offer.length; i++) {
@@ -189,23 +202,10 @@ export function handleOrderFulfilled(event: OrderFulfilled): void {
     transaction.amount = offer[i].amount;
     transaction.buyer = user.id;
     transaction.seller = consideration[0].recipient;
+    transaction.aggregatorDailyDataByCurrency = aggregatorDailyDataByCurrency.id;
+    transaction.collectionDailyDataByCurrency = collectionDailyDataByCurrency.id;
+    transaction.marketplaceDailyDataByCurrency = marketplaceDailyDataByCurrency.id;
+    transaction.userDailyDataByCurrency = userDailyDataByCurrency.id;
     transaction.save();
   }
-
-  aggregator.save();
-  aggregatorByCurrency.save();
-  aggregatorDailyData.save();
-  aggregatorDailyDataByCurrency.save();
-  marketplace.save();
-  marketplaceByCurrency.save();
-  marketplaceDailyData.save();
-  marketplaceDailyDataByCurrency.save();
-  user.save();
-  userByCurrency.save();
-  userDailyData.save();
-  userDailyDataByCurrency.save();
-  collection.save();
-  collectionByCurrency.save();
-  collectionDailyData.save();
-  collectionDailyDataByCurrency.save();
 }

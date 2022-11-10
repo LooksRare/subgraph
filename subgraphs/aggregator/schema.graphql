@@ -89,8 +89,8 @@ type AggregatorDailyDataByCurrency @entity {
   " Total number of collections traded "
   collections: BigInt!
 
-  " Total number of transactions "
-  transactions: BigInt!
+  " Transactions "
+  transactions: [Transaction!]! @derivedFrom(field: "aggregatorDailyDataByCurrency")
 
   " Total volume "
   volume: BigDecimal!
@@ -151,8 +151,8 @@ type CollectionDailyDataByCurrency @entity {
   " Date "
   date: BigInt!
 
-  " Total number of transactions "
-  transactions: BigInt!
+  " Transactions "
+  transactions: [Transaction!]! @derivedFrom(field: "collectionDailyDataByCurrency")
 
   " Total volume "
   volume: BigDecimal!
@@ -249,8 +249,8 @@ type MarketplaceDailyDataByCurrency @entity {
   " Total number of collections traded "
   collections: BigInt!
 
-  " Total number of transactions "
-  transactions: BigInt!
+  " Transactions "
+  transactions: [Transaction!]! @derivedFrom(field: "marketplaceDailyDataByCurrency")
 
   " Total volume "
   volume: BigDecimal!
@@ -323,8 +323,8 @@ type UserDailyDataByCurrency @entity {
   " Date "
   date: BigInt!
 
-  " Total number of transactions "
-  transactions: BigInt!
+  " Transactions "
+  transactions: [Transaction!]! @derivedFrom(field: "userDailyDataByCurrency")
 
   " Total volume "
   volume: BigDecimal!
@@ -369,4 +369,16 @@ type Transaction @entity {
 
   " Seller account address "
   seller: Bytes!
+
+  " Pointer to AggregatorDailyDataByCurrency "
+  aggregatorDailyDataByCurrency: AggregatorDailyDataByCurrency!
+
+  " Pointer to CollectionDailyDataByCurrency "
+  collectionDailyDataByCurrency: CollectionDailyDataByCurrency!
+
+  " Pointer to MarketplaceDailyDataByCurrency "
+  marketplaceDailyDataByCurrency: MarketplaceDailyDataByCurrency!
+
+  " Pointer to UserDailyDataByCurrency "
+  userDailyDataByCurrency: UserDailyDataByCurrency!
 }

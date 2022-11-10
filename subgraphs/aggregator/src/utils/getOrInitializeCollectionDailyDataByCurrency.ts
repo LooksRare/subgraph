@@ -1,5 +1,5 @@
 import { BigInt } from "@graphprotocol/graph-ts";
-import { ZERO_BD, ZERO_BI, ONE_DAY_BI } from "../../../../helpers/constants";
+import { ZERO_BD, ONE_DAY_BI } from "../../../../helpers/constants";
 import { CollectionByCurrency, CollectionDailyDataByCurrency } from "../../generated/schema";
 
 export function getOrInitializeCollectionDailyDataByCurrency(
@@ -14,7 +14,6 @@ export function getOrInitializeCollectionDailyDataByCurrency(
     collectionDailyDataByCurrency.date = dayStartTimestamp;
     collectionDailyDataByCurrency.currency = collectionByCurrency.currency;
     collectionDailyDataByCurrency.volume = ZERO_BD;
-    collectionDailyDataByCurrency.transactions = ZERO_BI;
     collectionDailyDataByCurrency.collectionByCurrency = collectionByCurrency.id;
   }
   return collectionDailyDataByCurrency;
