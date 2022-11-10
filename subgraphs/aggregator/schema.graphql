@@ -173,6 +173,9 @@ type Marketplace @entity {
 
   " Marketplace daily data "
   dailyData: [MarketplaceDailyData!]! @derivedFrom(field: "marketplace")
+
+  " Marketplace by currency "
+  byCurrency: [MarketplaceByCurrency!]! @derivedFrom(field: "marketplace")
 }
 
 type MarketplaceByCurrency @entity {
@@ -196,6 +199,9 @@ type MarketplaceByCurrency @entity {
 
   " Marketplace daily data "
   dailyData: [MarketplaceDailyDataByCurrency!]! @derivedFrom(field: "marketplaceByCurrency")
+
+  " Marketplace "
+  marketplace: Marketplace!
 }
 
 type MarketplaceDailyData @entity {

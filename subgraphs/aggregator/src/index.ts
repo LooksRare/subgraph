@@ -66,7 +66,7 @@ export function handleOrderFulfilled(event: OrderFulfilled): void {
   const marketplace = getOrInitializeMarketplace();
   marketplace.transactions = marketplace.transactions.plus(ONE_BI);
 
-  const marketplaceByCurrency = getOrInitializeMarketplaceByCurrency(currency);
+  const marketplaceByCurrency = getOrInitializeMarketplaceByCurrency(marketplace, currency);
   marketplaceByCurrency.volume = marketplaceByCurrency.volume.plus(volume);
   marketplaceByCurrency.transactions = marketplaceByCurrency.transactions.plus(ONE_BI);
 
