@@ -46,7 +46,7 @@ export function handleOrderFulfilled(event: OrderFulfilled): void {
   const aggregator = getOrInitializeAggregator();
   aggregator.transactions = aggregator.transactions.plus(ONE_BI);
 
-  const aggregatorByCurrency = getOrInitializeAggregatorByCurrency(currency);
+  const aggregatorByCurrency = getOrInitializeAggregatorByCurrency(aggregator, currency);
   aggregatorByCurrency.volume = aggregatorByCurrency.volume.plus(volume);
   aggregatorByCurrency.transactions = aggregatorByCurrency.transactions.plus(ONE_BI);
 

@@ -1,12 +1,13 @@
 import { Bytes } from "@graphprotocol/graph-ts";
 import { ZERO_BD, ZERO_BI } from "../../../../helpers/constants";
-import { AggregatorByCurrency } from "../../generated/schema";
+import { Aggregator, AggregatorByCurrency } from "../../generated/schema";
 
-export function getOrInitializeAggregatorByCurrency(currency: Bytes): AggregatorByCurrency {
+export function getOrInitializeAggregatorByCurrency(aggregator: Aggregator, currency: Bytes): AggregatorByCurrency {
   const aggregatorByCurrencyID = currency.toHexString();
   let aggregatorByCurrency = AggregatorByCurrency.load(aggregatorByCurrencyID);
   if (!aggregatorByCurrency) {
     aggregatorByCurrency = new AggregatorByCurrency(aggregatorByCurrencyID);
+    aggregatorByCurrency.aggregator = aggregator.id;
     aggregatorByCurrency.currency = currency;
     aggregatorByCurrency.volume = ZERO_BD;
     aggregatorByCurrency.collections = ZERO_BI;
