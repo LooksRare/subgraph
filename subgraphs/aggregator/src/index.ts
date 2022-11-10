@@ -120,7 +120,7 @@ export function handleOrderFulfilled(event: OrderFulfilled): void {
   }
   userDailyData.transactions = userDailyData.transactions.plus(ONE_BI);
 
-  const userDailyDataByCurrency = getOrInitializeUserDailyDataByCurrency(userByCurrency, dayID);
+  const userDailyDataByCurrency = getOrInitializeUserDailyDataByCurrency(userDailyData, userByCurrency, dayID);
   userDailyDataByCurrency.volume = userDailyDataByCurrency.volume.plus(volume);
   userDailyDataByCurrency.transactions = userDailyDataByCurrency.transactions.plus(ONE_BI);
 

@@ -315,6 +315,12 @@ describe("handleOrderFulfilled()", () => {
     assert.bigIntEquals(userDailyData!.transactions, ONE_BI);
     assert.stringEquals(userDailyData!.user, Address.fromString(originator).toHexString());
     assert.bigIntEquals(userDailyData!.date, ZERO_BI);
+
+    assert.i32Equals(userDailyData!.byCurrency.length, 1);
+    assert.stringEquals(
+      userDailyData!.byCurrency[0],
+      `${Address.fromString(originator).toHexString()}-${ZERO_ADDRESS.toHex()}-0`
+    );
   });
 
   test("updates UserByCurrency", () => {

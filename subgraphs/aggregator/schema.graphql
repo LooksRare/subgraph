@@ -302,6 +302,9 @@ type UserDailyData @entity {
 
   " Total number of transactions "
   transactions: BigInt!
+
+  " User daily data by currency "
+  byCurrency: [UserDailyDataByCurrency!]! @derivedFrom(field: "userDailyData")
 }
 
 type UserDailyDataByCurrency @entity {
@@ -310,6 +313,9 @@ type UserDailyDataByCurrency @entity {
 
   " Pointer to UserByCurrency "
   userByCurrency: UserByCurrency!
+
+  " Pointer to UserDailyData "
+  userDailyData: UserDailyData!
 
   " Trade currency "
   currency: Bytes!
