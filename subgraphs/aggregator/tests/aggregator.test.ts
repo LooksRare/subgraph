@@ -502,14 +502,21 @@ describe("Aggregator", () => {
       clearStore();
     });
 
-    test("updates Collection", () => {
-      // const event = createMockTakerBidEvent();
-      // handleTakerBid(event);
-      // const collection = Collection.load(collectionAddress);
-      // assert.assertNotNull(collection);
-      // assert.bigIntEquals(collection!.transactions, ONE_BI);
-      // assert.i32Equals(collection!.dailyData.length, 1);
-      // assert.stringEquals(collection!.dailyData[0], `${collectionAddress}-0`);
+    test("updates Aggregator", () => {
+      const event = createMockTakerBidEvent();
+      handleTakerBid(event);
+
+      const aggregator = Aggregator.load("LooksRareAggregator");
+      assert.assertNotNull(aggregator);
+      assert.bigIntEquals(aggregator!.transactions, ONE_BI);
+      // assert.bigIntEquals(aggregator!.users, ONE_BI);
+      // assert.bigIntEquals(aggregator!.collections, ONE_BI);
+
+      // assert.i32Equals(aggregator!.dailyData.length, 1);
+      // assert.stringEquals(aggregator!.dailyData[0], "0");
+
+      // assert.i32Equals(aggregator!.byCurrency.length, 1);
+      // assert.stringEquals(aggregator!.byCurrency[0], ZERO_ADDRESS.toHex());
     });
   });
 });
