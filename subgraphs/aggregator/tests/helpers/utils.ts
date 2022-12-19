@@ -1,5 +1,6 @@
 import { Address, BigInt, Bytes, ethereum, Wrapped } from "@graphprotocol/graph-ts";
 import { newMockEvent } from "matchstick-as";
+import { TakerBid } from "../../generated/LooksRareV1/LooksRareExchange";
 import { OrderFulfilled } from "../../generated/Seaport/Seaport";
 
 /**
@@ -11,6 +12,15 @@ export function parseEther(amount: i64, decimals: u8 = 18): BigInt {
   const adjuster = BigInt.fromI64(10).pow(decimals);
   return BigInt.fromI64(amount).times(adjuster);
 }
+
+const stringEventParam = (key: string, value: string): ethereum.EventParam =>
+  new ethereum.EventParam(key, ethereum.Value.fromString(value));
+
+const addressEventParam = (key: string, value: string): ethereum.EventParam =>
+  new ethereum.EventParam(key, ethereum.Value.fromAddress(Address.fromString(value)));
+
+const uintEventParam = (key: string, value: i32): ethereum.EventParam =>
+  new ethereum.EventParam(key, ethereum.Value.fromUnsignedBigInt(BigInt.fromI32(value)));
 
 export function createOrderFulfilledEvent(
   orderHash: string,
@@ -39,13 +49,10 @@ export function createOrderFulfilledEvent(
     mockEvent.receipt
   );
 
-  const orderHashParam = new ethereum.EventParam("orderHash", ethereum.Value.fromString(orderHash));
-  const offererParam = new ethereum.EventParam("offerer", ethereum.Value.fromAddress(Address.fromString(offerer)));
-  const zoneParam = new ethereum.EventParam("zone", ethereum.Value.fromAddress(Address.fromString(zone)));
-  const recipientParam = new ethereum.EventParam(
-    "recipient",
-    ethereum.Value.fromAddress(Address.fromString(recipient))
-  );
+  const orderHashParam = stringEventParam("orderHash", orderHash);
+  const offererParam = addressEventParam("offerer", offerer);
+  const zoneParam = addressEventParam("zone", zone);
+  const recipientParam = addressEventParam("recipient", recipient);
 
   const offerTupleArray: Array<ethereum.Tuple> = [];
 
@@ -91,6 +98,54 @@ export function createOrderFulfilledEvent(
   orderFulfilledEvent.parameters.push(considerationParam);
 
   return orderFulfilledEvent;
+}
+
+export function createTakerBidEvent(
+  orderHash: string,
+  orderNonce: i32,
+  taker: string,
+  maker: string,
+  strategy: string,
+  currency: string,
+  collection: string,
+  tokenId: i32,
+  price: i64
+): TakerBid {
+  const mockEvent = newMockEvent();
+  const takerBidEvent = new TakerBid(
+    mockEvent.address,
+    mockEvent.logIndex,
+    mockEvent.transactionLogIndex,
+    mockEvent.logType,
+    mockEvent.block,
+    mockEvent.transaction,
+    [],
+    mockEvent.receipt
+  );
+
+  const orderHashParam = stringEventParam("orderHash", orderHash);
+  const orderNonceParam = uintEventParam("orderNonce", orderNonce);
+  const takerParam = addressEventParam("taker", taker);
+  const makerParam = addressEventParam("maker", maker);
+  const strategyParam = addressEventParam("strategy", strategy);
+  const currencyParam = addressEventParam("currency", currency);
+  const collectionParam = addressEventParam("collection", collection);
+  const tokenIdParam = uintEventParam("tokenId", tokenId);
+  const amountParam = uintEventParam("amount", 1);
+  const priceParam = new ethereum.EventParam("price", ethereum.Value.fromUnsignedBigInt(BigInt.fromI64(price)));
+
+  takerBidEvent.parameters.push(orderHashParam);
+  takerBidEvent.parameters.push(orderNonceParam);
+  takerBidEvent.parameters.push(takerParam);
+  takerBidEvent.parameters.push(makerParam);
+  takerBidEvent.parameters.push(strategyParam);
+  takerBidEvent.parameters.push(currencyParam);
+  takerBidEvent.parameters.push(collectionParam);
+  takerBidEvent.parameters.push(tokenIdParam);
+  takerBidEvent.parameters.push(amountParam);
+  takerBidEvent.parameters.push(priceParam);
+
+  return takerBidEvent;
 }
 
 export function newLog(address: Address, topics: Array<Bytes>): ethereum.Log {
