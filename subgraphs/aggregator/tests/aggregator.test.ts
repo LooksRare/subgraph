@@ -721,28 +721,23 @@ describe("Aggregator", () => {
       // );
     });
 
-    // test("updates UserDailyDataByCurrency", () => {
-    //   const event = createMockOrderFulfilledEvent();
-    //   handleOrderFulfilled(event);
+    test("updates UserDailyDataByCurrency", () => {
+      const event = createMockTakerBidEvent();
+      handleTakerBid(event);
 
-    //   const userDailyDataByCurrency = UserDailyDataByCurrency.load(
-    //     `${originator}-${ZERO_ADDRESS.toHex()}-0`
-    //   );
-    //   assert.assertNotNull(userDailyDataByCurrency);
-    //   assert.stringEquals(userDailyDataByCurrency!.currency.toHexString(), ZERO_ADDRESS.toHex());
-    //   assert.stringEquals(
-    //     userDailyDataByCurrency!.userByCurrency,
-    //     `${originator}-${ZERO_ADDRESS.toHex()}`
-    //   );
-    //   assert.bigIntEquals(userDailyDataByCurrency!.date, ZERO_BI);
-    //   assert.stringEquals(userDailyDataByCurrency!.volume.toString(), transactionVolume);
+      const userDailyDataByCurrency = UserDailyDataByCurrency.load(`${originator}-${currency}-0`);
+      assert.assertNotNull(userDailyDataByCurrency);
+      assert.stringEquals(userDailyDataByCurrency!.currency.toHexString(), currency);
+      assert.stringEquals(userDailyDataByCurrency!.userByCurrency, `${originator}-${currency}`);
+      assert.bigIntEquals(userDailyDataByCurrency!.date, ZERO_BI);
+      assert.stringEquals(userDailyDataByCurrency!.volume.toString(), transactionVolume);
 
-    //   assert.i32Equals(userDailyDataByCurrency!.transactions.length, 1);
-    //   assert.stringEquals(
-    //     userDailyDataByCurrency!.transactions[0],
-    //     `${event.transaction.hash.toHexString()}-${event.logIndex.toString()}`
-    //   );
-    // });
+      // assert.i32Equals(userDailyDataByCurrency!.transactions.length, 1);
+      // assert.stringEquals(
+      //   userDailyDataByCurrency!.transactions[0],
+      //   `${event.transaction.hash.toHexString()}-${event.logIndex.toString()}`
+      // );
+    });
 
     // test("updates Transaction", () => {
     //   const event = createMockOrderFulfilledEvent();
