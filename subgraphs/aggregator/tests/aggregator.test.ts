@@ -682,25 +682,33 @@ describe("Aggregator", () => {
       // assert.stringEquals(marketplaceByCurrency!.dailyData[0], `Seaport-${ZERO_ADDRESS.toHex()}-0`);
     });
 
-    // test("updates MarketplaceDailyDataByCurrency", () => {
-    //   const event = createMockOrderFulfilledEvent();
-    //   handleOrderFulfilled(event);
+    test("updates MarketplaceDailyDataByCurrency", () => {
+      const event = createMockTakerBidEvent();
+      handleTakerBid(event);
 
-    //   const marketplaceDailyDataByCurrency = MarketplaceDailyDataByCurrency.load(`Seaport-${ZERO_ADDRESS.toHex()}-0`);
-    //   assert.assertNotNull(marketplaceDailyDataByCurrency);
-    //   assert.stringEquals(marketplaceDailyDataByCurrency!.currency.toHexString(), ZERO_ADDRESS.toHex());
-    //   assert.stringEquals(marketplaceDailyDataByCurrency!.marketplaceByCurrency, `Seaport-${ZERO_ADDRESS.toHex()}`);
-    //   assert.bigIntEquals(marketplaceDailyDataByCurrency!.date, ZERO_BI);
-    //   assert.stringEquals(marketplaceDailyDataByCurrency!.volume.toString(), transactionVolume);
-    //   assert.bigIntEquals(marketplaceDailyDataByCurrency!.users, ONE_BI);
-    //   assert.bigIntEquals(marketplaceDailyDataByCurrency!.collections, ONE_BI);
+      const marketplaceDailyDataByCurrency = MarketplaceDailyDataByCurrency.load(
+        `LooksRareV1-${Address.fromString(currency).toHexString()}-0`
+      );
+      assert.assertNotNull(marketplaceDailyDataByCurrency);
+      assert.stringEquals(
+        marketplaceDailyDataByCurrency!.currency.toHexString(),
+        Address.fromString(currency).toHexString()
+      );
+      assert.stringEquals(
+        marketplaceDailyDataByCurrency!.marketplaceByCurrency,
+        `LooksRareV1-${Address.fromString(currency).toHexString()}`
+      );
+      assert.bigIntEquals(marketplaceDailyDataByCurrency!.date, ZERO_BI);
+      assert.stringEquals(marketplaceDailyDataByCurrency!.volume.toString(), transactionVolume);
+      // assert.bigIntEquals(marketplaceDailyDataByCurrency!.users, ONE_BI);
+      // assert.bigIntEquals(marketplaceDailyDataByCurrency!.collections, ONE_BI);
 
-    //   assert.i32Equals(marketplaceDailyDataByCurrency!.transactions.length, 1);
-    //   assert.stringEquals(
-    //     marketplaceDailyDataByCurrency!.transactions[0],
-    //     `${event.transaction.hash.toHexString()}-${event.logIndex.toString()}`
-    //   );
-    // });
+      // assert.i32Equals(marketplaceDailyDataByCurrency!.transactions.length, 1);
+      // assert.stringEquals(
+      //   marketplaceDailyDataByCurrency!.transactions[0],
+      //   `${event.transaction.hash.toHexString()}-${event.logIndex.toString()}`
+      // );
+    });
 
     // test("updates User", () => {
     //   const event = createMockOrderFulfilledEvent();

@@ -7,6 +7,7 @@ import { getOrInitializeAggregatorDailyDataByCurrency } from "../utils/getOrInit
 import { getOrInitializeMarketplace } from "../utils/getOrInitializeMarketplace";
 import { getOrInitializeMarketplaceByCurrency } from "../utils/getOrInitializeMarketplaceByCurrency";
 import { getOrInitializeMarketplaceDailyData } from "../utils/getOrInitializeMarketplaceDailyData";
+import { getOrInitializeMarketplaceDailyDataByCurrency } from "../utils/getOrInitializeMarketplaceDailyDataByCurrency";
 
 export function handleTakerBid(event: TakerBid): void {
   const currency = event.params.currency;
@@ -47,6 +48,14 @@ export function handleTakerBid(event: TakerBid): void {
   const marketplaceDailyData = getOrInitializeMarketplaceDailyData(currency, marketplace, dayID);
   marketplaceDailyData.transactions = marketplaceDailyData.transactions.plus(ONE_BI);
 
+  // 8. Marketplace daily data by currency
+  const marketplaceDailyDataByCurrency = getOrInitializeMarketplaceDailyDataByCurrency(
+    marketplaceDailyData,
+    marketplaceByCurrency,
+    dayID
+  );
+  marketplaceDailyDataByCurrency.volume = marketplaceDailyDataByCurrency.volume.plus(price);
+
   aggregator.save();
   aggregatorByCurrency.save();
   aggregatorDailyData.save();
@@ -54,4 +63,5 @@ export function handleTakerBid(event: TakerBid): void {
   marketplace.save();
   marketplaceByCurrency.save();
   marketplaceDailyData.save();
+  marketplaceDailyDataByCurrency.save();
 }
