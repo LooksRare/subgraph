@@ -506,16 +506,16 @@ describe("Aggregator", () => {
       // assert.stringEquals(collectionByCurrency!.dailyData[0], `${collectionAddress}-${currency}-0`);
     });
 
-    // test("updates CollectionDailyData", () => {
-    //   const event = createMockOrderFulfilledEvent();
-    //   handleOrderFulfilled(event);
+    test("updates CollectionDailyData", () => {
+      const event = createMockTakerBidEvent();
+      handleTakerBid(event);
 
-    //   const collectionDailyData = CollectionDailyData.load(`${offerToken}-0`);
-    //   assert.assertNotNull(collectionDailyData);
-    //   assert.stringEquals(collectionDailyData!.collection.toString(), offerToken);
-    //   assert.bigIntEquals(collectionDailyData!.transactions, ONE_BI);
-    //   assert.bigIntEquals(collectionDailyData!.date, ZERO_BI);
-    // });
+      const collectionDailyData = CollectionDailyData.load(`${collectionAddress}-0`);
+      assert.assertNotNull(collectionDailyData);
+      assert.stringEquals(collectionDailyData!.collection.toString(), collectionAddress);
+      // assert.bigIntEquals(collectionDailyData!.transactions, ONE_BI);
+      assert.bigIntEquals(collectionDailyData!.date, ZERO_BI);
+    });
 
     // test("updates CollectionDailyDataByCurrency", () => {
     //   const event = createMockOrderFulfilledEvent();

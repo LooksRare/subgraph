@@ -1,6 +1,6 @@
 import { ONE_BI, ONE_DAY_BI, ZERO_BI } from "../../../../helpers/constants";
 import { TakerBid } from "../../generated/LooksRareV1/LooksRareExchange";
-import { Collection, User, UserDailyData } from "../../generated/schema";
+import { Collection, CollectionDailyData, User, UserDailyData } from "../../generated/schema";
 import { extractOriginator } from "../utils/extractOriginator";
 import { findSweepEventFromLogs } from "../utils/findSweepEventFromLogs";
 import { getOrInitializeAggregator } from "../utils/getOrInitializeAggregator";
@@ -124,9 +124,28 @@ export function handleTakerBid(event: TakerBid): void {
   }
   collection.transactions = collection.transactions.plus(ONE_BI);
 
+  // 13. CollectionByCurrency
   const collectionByCurrency = getOrInitializeCollectionByCurrency(event.params.collection, currency);
   collectionByCurrency.volume = collectionByCurrency.volume.plus(price);
   collectionByCurrency.transactions = collectionByCurrency.transactions.plus(ONE_BI);
+
+  // 14. CollectionDailyData
+  const collectionDailyDataID = `${collection.id}-${dayID.toString()}`;
+  let collectionDailyData = CollectionDailyData.load(collectionDailyDataID);
+  if (!collectionDailyData) {
+    collectionDailyData = new CollectionDailyData(collectionDailyDataID);
+    const dayStartTimestamp = dayID.times(ONE_DAY_BI);
+    collectionDailyData.date = dayStartTimestamp;
+    collectionDailyData.transactions = ZERO_BI;
+    collectionDailyData.collection = collection.id;
+
+    // New aggregator/marketplace collection for the day
+    marketplaceDailyData.collections = marketplaceDailyData.collections.plus(ONE_BI);
+    marketplaceDailyDataByCurrency.collections = marketplaceDailyDataByCurrency.collections.plus(ONE_BI);
+    aggregatorDailyData.collections = aggregatorDailyData.collections.plus(ONE_BI);
+    aggregatorDailyDataByCurrency.collections = aggregatorDailyDataByCurrency.collections.plus(ONE_BI);
+  }
+  collectionDailyData.transactions = collectionDailyData.transactions.plus(ONE_BI);
 
   aggregator.save();
   aggregatorByCurrency.save();
@@ -142,4 +161,5 @@ export function handleTakerBid(event: TakerBid): void {
   userDailyDataByCurrency.save();
   collection.save();
   collectionByCurrency.save();
+  collectionDailyData.save();
 }
