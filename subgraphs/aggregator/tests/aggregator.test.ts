@@ -664,21 +664,23 @@ describe("Aggregator", () => {
     //   assert.bigIntEquals(marketplaceDailyData!.collections, ONE_BI);
     // });
 
-    // test("updates MarketplaceByCurrency", () => {
-    //   const event = createMockOrderFulfilledEvent();
-    //   handleOrderFulfilled(event);
+    test("updates MarketplaceByCurrency", () => {
+      const event = createMockTakerBidEvent();
+      handleTakerBid(event);
 
-    //   const marketplaceByCurrency = MarketplaceByCurrency.load(`Seaport-${ZERO_ADDRESS.toHex()}`);
-    //   assert.assertNotNull(marketplaceByCurrency);
-    //   assert.stringEquals(marketplaceByCurrency!.currency.toHexString(), ZERO_ADDRESS.toHex());
-    //   assert.bigIntEquals(marketplaceByCurrency!.transactions, ONE_BI);
-    //   assert.stringEquals(marketplaceByCurrency!.volume.toString(), transactionVolume);
-    //   assert.bigIntEquals(marketplaceByCurrency!.users, ONE_BI);
-    //   assert.bigIntEquals(marketplaceByCurrency!.collections, ONE_BI);
+      const marketplaceByCurrency = MarketplaceByCurrency.load(
+        `LooksRareV1-${Address.fromString(currency).toHexString()}`
+      );
+      assert.assertNotNull(marketplaceByCurrency);
+      assert.stringEquals(marketplaceByCurrency!.currency.toHexString(), Address.fromString(currency).toHexString());
+      assert.bigIntEquals(marketplaceByCurrency!.transactions, ONE_BI);
+      assert.stringEquals(marketplaceByCurrency!.volume.toString(), transactionVolume);
+      // assert.bigIntEquals(marketplaceByCurrency!.users, ONE_BI);
+      // assert.bigIntEquals(marketplaceByCurrency!.collections, ONE_BI);
 
-    //   assert.i32Equals(marketplaceByCurrency!.dailyData.length, 1);
-    //   assert.stringEquals(marketplaceByCurrency!.dailyData[0], `Seaport-${ZERO_ADDRESS.toHex()}-0`);
-    // });
+      // assert.i32Equals(marketplaceByCurrency!.dailyData.length, 1);
+      // assert.stringEquals(marketplaceByCurrency!.dailyData[0], `Seaport-${ZERO_ADDRESS.toHex()}-0`);
+    });
 
     // test("updates MarketplaceDailyDataByCurrency", () => {
     //   const event = createMockOrderFulfilledEvent();
