@@ -98,13 +98,13 @@ describe("Aggregator", () => {
         assert.assertNull(aggregatorByCurrency);
         const aggregatorDailyDataByCurrency = AggregatorDailyDataByCurrency.load(`${ZERO_ADDRESS.toHex()}-0`);
         assert.assertNull(aggregatorDailyDataByCurrency);
-        const marketplace = Marketplace.load("seaport");
+        const marketplace = Marketplace.load("Seaport");
         assert.assertNull(marketplace);
-        const marketplaceDailyData = MarketplaceDailyData.load("seaport-0");
+        const marketplaceDailyData = MarketplaceDailyData.load("Seaport-0");
         assert.assertNull(marketplaceDailyData);
-        const marketplaceByCurrency = MarketplaceByCurrency.load(`seaport-${ZERO_ADDRESS.toHex()}`);
+        const marketplaceByCurrency = MarketplaceByCurrency.load(`Seaport-${ZERO_ADDRESS.toHex()}`);
         assert.assertNull(marketplaceByCurrency);
-        const marketplaceDailyDataByCurrency = MarketplaceDailyDataByCurrency.load(`seaport-${ZERO_ADDRESS.toHex()}-0`);
+        const marketplaceDailyDataByCurrency = MarketplaceDailyDataByCurrency.load(`Seaport-${ZERO_ADDRESS.toHex()}-0`);
         assert.assertNull(marketplaceDailyDataByCurrency);
         const user = User.load(Address.fromString(originator).toHexString());
         assert.assertNull(user);
@@ -255,24 +255,24 @@ describe("Aggregator", () => {
         const event = createMockOrderFulfilledEvent();
         handleOrderFulfilled(event);
 
-        const marketplace = Marketplace.load("seaport");
+        const marketplace = Marketplace.load("Seaport");
         assert.assertNotNull(marketplace);
         assert.bigIntEquals(marketplace!.transactions, ONE_BI);
         assert.bigIntEquals(marketplace!.users, ONE_BI);
         assert.bigIntEquals(marketplace!.collections, ONE_BI);
 
         assert.i32Equals(marketplace!.dailyData.length, 1);
-        assert.stringEquals(marketplace!.dailyData[0], "seaport-0");
+        assert.stringEquals(marketplace!.dailyData[0], "Seaport-0");
       });
 
       test("updates MarketplaceDailyData", () => {
         const event = createMockOrderFulfilledEvent();
         handleOrderFulfilled(event);
 
-        const marketplaceDailyData = MarketplaceDailyData.load("seaport-0");
+        const marketplaceDailyData = MarketplaceDailyData.load("Seaport-0");
         assert.assertNotNull(marketplaceDailyData);
         assert.bigIntEquals(marketplaceDailyData!.transactions, ONE_BI);
-        assert.stringEquals(marketplaceDailyData!.marketplace, "seaport");
+        assert.stringEquals(marketplaceDailyData!.marketplace, "Seaport");
         assert.bigIntEquals(marketplaceDailyData!.date, ZERO_BI);
         assert.bigIntEquals(marketplaceDailyData!.users, ONE_BI);
         assert.bigIntEquals(marketplaceDailyData!.collections, ONE_BI);
@@ -282,7 +282,7 @@ describe("Aggregator", () => {
         const event = createMockOrderFulfilledEvent();
         handleOrderFulfilled(event);
 
-        const marketplaceByCurrency = MarketplaceByCurrency.load(`seaport-${ZERO_ADDRESS.toHex()}`);
+        const marketplaceByCurrency = MarketplaceByCurrency.load(`Seaport-${ZERO_ADDRESS.toHex()}`);
         assert.assertNotNull(marketplaceByCurrency);
         assert.stringEquals(marketplaceByCurrency!.currency.toHexString(), ZERO_ADDRESS.toHex());
         assert.bigIntEquals(marketplaceByCurrency!.transactions, ONE_BI);
@@ -291,17 +291,17 @@ describe("Aggregator", () => {
         assert.bigIntEquals(marketplaceByCurrency!.collections, ONE_BI);
 
         assert.i32Equals(marketplaceByCurrency!.dailyData.length, 1);
-        assert.stringEquals(marketplaceByCurrency!.dailyData[0], `seaport-${ZERO_ADDRESS.toHex()}-0`);
+        assert.stringEquals(marketplaceByCurrency!.dailyData[0], `Seaport-${ZERO_ADDRESS.toHex()}-0`);
       });
 
       test("updates MarketplaceDailyDataByCurrency", () => {
         const event = createMockOrderFulfilledEvent();
         handleOrderFulfilled(event);
 
-        const marketplaceDailyDataByCurrency = MarketplaceDailyDataByCurrency.load(`seaport-${ZERO_ADDRESS.toHex()}-0`);
+        const marketplaceDailyDataByCurrency = MarketplaceDailyDataByCurrency.load(`Seaport-${ZERO_ADDRESS.toHex()}-0`);
         assert.assertNotNull(marketplaceDailyDataByCurrency);
         assert.stringEquals(marketplaceDailyDataByCurrency!.currency.toHexString(), ZERO_ADDRESS.toHex());
-        assert.stringEquals(marketplaceDailyDataByCurrency!.marketplaceByCurrency, `seaport-${ZERO_ADDRESS.toHex()}`);
+        assert.stringEquals(marketplaceDailyDataByCurrency!.marketplaceByCurrency, `Seaport-${ZERO_ADDRESS.toHex()}`);
         assert.bigIntEquals(marketplaceDailyDataByCurrency!.date, ZERO_BI);
         assert.stringEquals(marketplaceDailyDataByCurrency!.volume.toString(), transactionVolume);
         assert.bigIntEquals(marketplaceDailyDataByCurrency!.users, ONE_BI);
@@ -411,7 +411,7 @@ describe("Aggregator", () => {
         assert.stringEquals(transaction!.seller.toHexString(), offerer);
         assert.stringEquals(transaction!.aggregatorDailyDataByCurrency, `${ZERO_ADDRESS.toHex()}-0`);
         assert.stringEquals(transaction!.collectionDailyDataByCurrency, `${offerToken}-${ZERO_ADDRESS.toHex()}-0`);
-        assert.stringEquals(transaction!.marketplaceDailyDataByCurrency, `seaport-${ZERO_ADDRESS.toHex()}-0`);
+        assert.stringEquals(transaction!.marketplaceDailyDataByCurrency, `Seaport-${ZERO_ADDRESS.toHex()}-0`);
         assert.stringEquals(
           transaction!.userDailyDataByCurrency,
           `${Address.fromString(originator).toHexString()}-${ZERO_ADDRESS.toHex()}-0`
@@ -637,28 +637,28 @@ describe("Aggregator", () => {
       // );
     });
 
-    // test("updates Marketplace", () => {
-    //   const event = createMockOrderFulfilledEvent();
-    //   handleOrderFulfilled(event);
+    test("updates Marketplace", () => {
+      const event = createMockTakerBidEvent();
+      handleTakerBid(event);
 
-    //   const marketplace = Marketplace.load("seaport");
-    //   assert.assertNotNull(marketplace);
-    //   assert.bigIntEquals(marketplace!.transactions, ONE_BI);
-    //   assert.bigIntEquals(marketplace!.users, ONE_BI);
-    //   assert.bigIntEquals(marketplace!.collections, ONE_BI);
+      const marketplace = Marketplace.load("LooksRareV1");
+      assert.assertNotNull(marketplace);
+      assert.bigIntEquals(marketplace!.transactions, ONE_BI);
+      // assert.bigIntEquals(marketplace!.users, ONE_BI);
+      // assert.bigIntEquals(marketplace!.collections, ONE_BI);
 
-    //   assert.i32Equals(marketplace!.dailyData.length, 1);
-    //   assert.stringEquals(marketplace!.dailyData[0], "seaport-0");
-    // });
+      // assert.i32Equals(marketplace!.dailyData.length, 1);
+      // assert.stringEquals(marketplace!.dailyData[0], "LooksRareV1-0");
+    });
 
     // test("updates MarketplaceDailyData", () => {
     //   const event = createMockOrderFulfilledEvent();
     //   handleOrderFulfilled(event);
 
-    //   const marketplaceDailyData = MarketplaceDailyData.load("seaport-0");
+    //   const marketplaceDailyData = MarketplaceDailyData.load("Seaport-0");
     //   assert.assertNotNull(marketplaceDailyData);
     //   assert.bigIntEquals(marketplaceDailyData!.transactions, ONE_BI);
-    //   assert.stringEquals(marketplaceDailyData!.marketplace, "seaport");
+    //   assert.stringEquals(marketplaceDailyData!.marketplace, "Seaport");
     //   assert.bigIntEquals(marketplaceDailyData!.date, ZERO_BI);
     //   assert.bigIntEquals(marketplaceDailyData!.users, ONE_BI);
     //   assert.bigIntEquals(marketplaceDailyData!.collections, ONE_BI);
@@ -668,7 +668,7 @@ describe("Aggregator", () => {
     //   const event = createMockOrderFulfilledEvent();
     //   handleOrderFulfilled(event);
 
-    //   const marketplaceByCurrency = MarketplaceByCurrency.load(`seaport-${ZERO_ADDRESS.toHex()}`);
+    //   const marketplaceByCurrency = MarketplaceByCurrency.load(`Seaport-${ZERO_ADDRESS.toHex()}`);
     //   assert.assertNotNull(marketplaceByCurrency);
     //   assert.stringEquals(marketplaceByCurrency!.currency.toHexString(), ZERO_ADDRESS.toHex());
     //   assert.bigIntEquals(marketplaceByCurrency!.transactions, ONE_BI);
@@ -677,17 +677,17 @@ describe("Aggregator", () => {
     //   assert.bigIntEquals(marketplaceByCurrency!.collections, ONE_BI);
 
     //   assert.i32Equals(marketplaceByCurrency!.dailyData.length, 1);
-    //   assert.stringEquals(marketplaceByCurrency!.dailyData[0], `seaport-${ZERO_ADDRESS.toHex()}-0`);
+    //   assert.stringEquals(marketplaceByCurrency!.dailyData[0], `Seaport-${ZERO_ADDRESS.toHex()}-0`);
     // });
 
     // test("updates MarketplaceDailyDataByCurrency", () => {
     //   const event = createMockOrderFulfilledEvent();
     //   handleOrderFulfilled(event);
 
-    //   const marketplaceDailyDataByCurrency = MarketplaceDailyDataByCurrency.load(`seaport-${ZERO_ADDRESS.toHex()}-0`);
+    //   const marketplaceDailyDataByCurrency = MarketplaceDailyDataByCurrency.load(`Seaport-${ZERO_ADDRESS.toHex()}-0`);
     //   assert.assertNotNull(marketplaceDailyDataByCurrency);
     //   assert.stringEquals(marketplaceDailyDataByCurrency!.currency.toHexString(), ZERO_ADDRESS.toHex());
-    //   assert.stringEquals(marketplaceDailyDataByCurrency!.marketplaceByCurrency, `seaport-${ZERO_ADDRESS.toHex()}`);
+    //   assert.stringEquals(marketplaceDailyDataByCurrency!.marketplaceByCurrency, `Seaport-${ZERO_ADDRESS.toHex()}`);
     //   assert.bigIntEquals(marketplaceDailyDataByCurrency!.date, ZERO_BI);
     //   assert.stringEquals(marketplaceDailyDataByCurrency!.volume.toString(), transactionVolume);
     //   assert.bigIntEquals(marketplaceDailyDataByCurrency!.users, ONE_BI);
@@ -797,7 +797,7 @@ describe("Aggregator", () => {
     //   assert.stringEquals(transaction!.seller.toHexString(), offerer);
     //   assert.stringEquals(transaction!.aggregatorDailyDataByCurrency, `${ZERO_ADDRESS.toHex()}-0`);
     //   assert.stringEquals(transaction!.collectionDailyDataByCurrency, `${offerToken}-${ZERO_ADDRESS.toHex()}-0`);
-    //   assert.stringEquals(transaction!.marketplaceDailyDataByCurrency, `seaport-${ZERO_ADDRESS.toHex()}-0`);
+    //   assert.stringEquals(transaction!.marketplaceDailyDataByCurrency, `Seaport-${ZERO_ADDRESS.toHex()}-0`);
     //   assert.stringEquals(
     //     transaction!.userDailyDataByCurrency,
     //     `${Address.fromString(originator).toHexString()}-${ZERO_ADDRESS.toHex()}-0`
