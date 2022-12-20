@@ -446,7 +446,7 @@ describe("Aggregator", () => {
     const maker = "0x1317ecFFFE454f7f5b8F8D1B1e0951d6c55E9615";
     const strategy = "0x579af6FD30BF83a5Ac0D636bc619f98DBdeb930c";
     const currency = "0xc02aaa39b223fe8d0a0e5c4f27ead9083c756cc2";
-    const collectionAddress = "0x34d85c9CDeB23FA97cb08333b511ac86E1C4E258";
+    const collectionAddress = "0x34d85c9cdeb23fa97cb08333b511ac86e1c4e258";
     const tokenId = 69174;
     const price = 1278000000000000000;
     const transactionVolume = "1278000000000000000";
@@ -481,16 +481,16 @@ describe("Aggregator", () => {
       clearStore();
     });
 
-    // test("updates Collection", () => {
-    //   const event = createMockOrderFulfilledEvent();
-    //   handleOrderFulfilled(event);
-    //   const collection = Collection.load(offerToken);
-    //   assert.assertNotNull(collection);
-    //   assert.bigIntEquals(collection!.transactions, ONE_BI);
+    test("updates Collection", () => {
+      const event = createMockTakerBidEvent();
+      handleTakerBid(event);
+      const collection = Collection.load(collectionAddress);
+      assert.assertNotNull(collection);
+      assert.bigIntEquals(collection!.transactions, ONE_BI);
 
-    //   assert.i32Equals(collection!.dailyData.length, 1);
-    //   assert.stringEquals(collection!.dailyData[0], `${offerToken}-0`);
-    // });
+      // assert.i32Equals(collection!.dailyData.length, 1);
+      // assert.stringEquals(collection!.dailyData[0], `${collectionAddress}-0`);
+    });
 
     // test("updates CollectionByCurrency", () => {
     //   const event = createMockOrderFulfilledEvent();
