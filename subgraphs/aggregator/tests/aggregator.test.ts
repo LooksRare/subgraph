@@ -616,8 +616,8 @@ describe("Aggregator", () => {
       // assert.bigIntEquals(marketplace!.users, ONE_BI);
       // assert.bigIntEquals(marketplace!.collections, ONE_BI);
 
-      // assert.i32Equals(marketplace!.dailyData.length, 1);
-      // assert.stringEquals(marketplace!.dailyData[0], "LooksRareV1-0");
+      assert.i32Equals(marketplace!.dailyData.length, 1);
+      assert.stringEquals(marketplace!.dailyData[0], "LooksRareV1-0");
     });
 
     test("updates MarketplaceDailyData", () => {
@@ -645,8 +645,8 @@ describe("Aggregator", () => {
       // assert.bigIntEquals(marketplaceByCurrency!.users, ONE_BI);
       // assert.bigIntEquals(marketplaceByCurrency!.collections, ONE_BI);
 
-      // assert.i32Equals(marketplaceByCurrency!.dailyData.length, 1);
-      // assert.stringEquals(marketplaceByCurrency!.dailyData[0], `Seaport-${ZERO_ADDRESS.toHex()}-0`);
+      assert.i32Equals(marketplaceByCurrency!.dailyData.length, 1);
+      assert.stringEquals(marketplaceByCurrency!.dailyData[0], `LooksRareV1-${currency}-0`);
     });
 
     test("updates MarketplaceDailyDataByCurrency", () => {
@@ -677,14 +677,11 @@ describe("Aggregator", () => {
       assert.assertNotNull(user);
       assert.bigIntEquals(user!.transactions, ONE_BI);
 
-      // assert.i32Equals(user!.dailyData.length, 1);
-      // assert.stringEquals(user!.dailyData[0], `${originator}-0`);
+      assert.i32Equals(user!.dailyData.length, 1);
+      assert.stringEquals(user!.dailyData[0], `${originator}-0`);
 
-      // assert.i32Equals(user!.byCurrency.length, 1);
-      // assert.stringEquals(
-      //   user!.byCurrency[0],
-      //   `${originator}-${ZERO_ADDRESS.toHex()}`
-      // );
+      assert.i32Equals(user!.byCurrency.length, 1);
+      assert.stringEquals(user!.byCurrency[0], `${originator}-${currency}`);
     });
 
     test("updates UserDailyData", () => {
@@ -697,11 +694,8 @@ describe("Aggregator", () => {
       assert.stringEquals(userDailyData!.user, originator);
       assert.bigIntEquals(userDailyData!.date, ZERO_BI);
 
-      // assert.i32Equals(userDailyData!.byCurrency.length, 1);
-      // assert.stringEquals(
-      //   userDailyData!.byCurrency[0],
-      //   `${originator}-${ZERO_ADDRESS.toHex()}-0`
-      // );
+      assert.i32Equals(userDailyData!.byCurrency.length, 1);
+      assert.stringEquals(userDailyData!.byCurrency[0], `${originator}-${currency}-0`);
     });
 
     test("updates UserByCurrency", () => {
@@ -714,11 +708,8 @@ describe("Aggregator", () => {
       assert.bigIntEquals(userByCurrency!.transactions, ONE_BI);
       assert.stringEquals(userByCurrency!.volume.toString(), transactionVolume);
 
-      // assert.i32Equals(userByCurrency!.dailyData.length, 1);
-      // assert.stringEquals(
-      //   userByCurrency!.dailyData[0],
-      //   `${originator}-${currency}-0`
-      // );
+      assert.i32Equals(userByCurrency!.dailyData.length, 1);
+      assert.stringEquals(userByCurrency!.dailyData[0], `${originator}-${currency}-0`);
     });
 
     test("updates UserDailyDataByCurrency", () => {
