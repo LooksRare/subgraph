@@ -758,15 +758,5 @@ describe("Aggregator", () => {
 
     //   assertNothingHappened(event);
     // });
-
-    // test("does nothing if consideration tokens are not the same", () => {
-    //   const event = createMockOrderFulfilledEvent(
-    //     [0, 0, 0],
-    //     [ZERO_ADDRESS.toHex(), ZERO_ADDRESS.toHex(), "0xA0b86991c6218b36c1d19D4a2e9Eb0cE3606eB48"]
-    //   );
-    //   handleOrderFulfilled(event);
-
-    //   assertNothingHappened(event);
-    // });
   });
 });
