@@ -1,5 +1,8 @@
-import { ONE_BI, ONE_DAY_BI } from "../../../../helpers/constants";
+import { ONE_BI, ONE_DAY_BI, ZERO_BI } from "../../../../helpers/constants";
 import { TakerBid } from "../../generated/LooksRareV1/LooksRareExchange";
+import { User } from "../../generated/schema";
+import { extractOriginator } from "../utils/extractOriginator";
+import { findSweepEventFromLogs } from "../utils/findSweepEventFromLogs";
 import { getOrInitializeAggregator } from "../utils/getOrInitializeAggregator";
 import { getOrInitializeAggregatorByCurrency } from "../utils/getOrInitializeAggregatorByCurrency";
 import { getOrInitializeAggregatorDailyData } from "../utils/getOrInitializeAggregatorDailyData";
@@ -10,6 +13,11 @@ import { getOrInitializeMarketplaceDailyData } from "../utils/getOrInitializeMar
 import { getOrInitializeMarketplaceDailyDataByCurrency } from "../utils/getOrInitializeMarketplaceDailyDataByCurrency";
 
 export function handleTakerBid(event: TakerBid): void {
+  const logs = event.receipt!.logs;
+
+  const sweepEvent = findSweepEventFromLogs(logs);
+  if (!sweepEvent) return;
+
   const currency = event.params.currency;
   const price = event.params.price.toBigDecimal();
   const dayID = event.block.timestamp.div(ONE_DAY_BI);
@@ -56,6 +64,22 @@ export function handleTakerBid(event: TakerBid): void {
   );
   marketplaceDailyDataByCurrency.volume = marketplaceDailyDataByCurrency.volume.plus(price);
 
+  // 9. User
+  const originator = extractOriginator(sweepEvent);
+  const userID = originator.toHexString();
+  let user = User.load(userID);
+  if (!user) {
+    user = new User(userID);
+    user.transactions = ZERO_BI;
+
+    // New aggregator/marketplace user
+    aggregator.users = aggregator.users.plus(ONE_BI);
+    aggregatorByCurrency.users = aggregatorByCurrency.users.plus(ONE_BI);
+    marketplace.users = marketplace.users.plus(ONE_BI);
+    marketplaceByCurrency.users = marketplaceByCurrency.users.plus(ONE_BI);
+  }
+  user.transactions = user.transactions.plus(ONE_BI);
+
   aggregator.save();
   aggregatorByCurrency.save();
   aggregatorDailyData.save();
@@ -64,4 +88,5 @@ export function handleTakerBid(event: TakerBid): void {
   marketplaceByCurrency.save();
   marketplaceDailyData.save();
   marketplaceDailyDataByCurrency.save();
+  user.save();
 }

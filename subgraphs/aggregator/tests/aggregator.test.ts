@@ -710,23 +710,23 @@ describe("Aggregator", () => {
       // );
     });
 
-    // test("updates User", () => {
-    //   const event = createMockOrderFulfilledEvent();
-    //   handleOrderFulfilled(event);
+    test("updates User", () => {
+      const event = createMockTakerBidEvent();
+      handleTakerBid(event);
 
-    //   const user = User.load(Address.fromString(originator).toHexString());
-    //   assert.assertNotNull(user);
-    //   assert.bigIntEquals(user!.transactions, ONE_BI);
+      const user = User.load(Address.fromString(originator).toHexString());
+      assert.assertNotNull(user);
+      assert.bigIntEquals(user!.transactions, ONE_BI);
 
-    //   assert.i32Equals(user!.dailyData.length, 1);
-    //   assert.stringEquals(user!.dailyData[0], `${Address.fromString(originator).toHexString()}-0`);
+      // assert.i32Equals(user!.dailyData.length, 1);
+      // assert.stringEquals(user!.dailyData[0], `${Address.fromString(originator).toHexString()}-0`);
 
-    //   assert.i32Equals(user!.byCurrency.length, 1);
-    //   assert.stringEquals(
-    //     user!.byCurrency[0],
-    //     `${Address.fromString(originator).toHexString()}-${ZERO_ADDRESS.toHex()}`
-    //   );
-    // });
+      // assert.i32Equals(user!.byCurrency.length, 1);
+      // assert.stringEquals(
+      //   user!.byCurrency[0],
+      //   `${Address.fromString(originator).toHexString()}-${ZERO_ADDRESS.toHex()}`
+      // );
+    });
 
     // test("updates UserDailyData", () => {
     //   const event = createMockOrderFulfilledEvent();
