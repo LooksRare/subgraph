@@ -751,12 +751,5 @@ describe("Aggregator", () => {
       assert.stringEquals(transaction!.marketplaceDailyDataByCurrency, `LooksRareV1-${currency}-0`);
       assert.stringEquals(transaction!.userDailyDataByCurrency, `${originator}-${currency}-0`);
     });
-
-    // test("does nothing if consideration token is not ETH or ERC20", () => {
-    //   const event = createMockOrderFulfilledEvent([2, 2, 2]);
-    //   handleOrderFulfilled(event);
-
-    //   assertNothingHappened(event);
-    // });
   });
 });
