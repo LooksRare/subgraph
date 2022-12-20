@@ -1,5 +1,5 @@
 /* eslint-disable @typescript-eslint/no-non-null-assertion */
-import { Address, BigInt, Bytes } from "@graphprotocol/graph-ts";
+import { BigInt, Bytes } from "@graphprotocol/graph-ts";
 import { afterEach, assert, clearStore, describe, test } from "matchstick-as/assembly/index";
 import { createOrderFulfilledEvent, createTakerBidEvent, newLog } from "./helpers/utils";
 import { handleOrderFulfilled } from "../src/Seaport/index";
