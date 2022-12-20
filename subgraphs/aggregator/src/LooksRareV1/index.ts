@@ -8,6 +8,7 @@ import { getOrInitializeAggregatorByCurrency } from "../utils/getOrInitializeAgg
 import { getOrInitializeAggregatorDailyData } from "../utils/getOrInitializeAggregatorDailyData";
 import { getOrInitializeAggregatorDailyDataByCurrency } from "../utils/getOrInitializeAggregatorDailyDataByCurrency";
 import { getOrInitializeCollectionByCurrency } from "../utils/getOrInitializeCollectionByCurrency";
+import { getOrInitializeCollectionDailyDataByCurrency } from "../utils/getOrInitializeCollectionDailyDataByCurrency";
 import { getOrInitializeMarketplace } from "../utils/getOrInitializeMarketplace";
 import { getOrInitializeMarketplaceByCurrency } from "../utils/getOrInitializeMarketplaceByCurrency";
 import { getOrInitializeMarketplaceDailyData } from "../utils/getOrInitializeMarketplaceDailyData";
@@ -147,6 +148,9 @@ export function handleTakerBid(event: TakerBid): void {
   }
   collectionDailyData.transactions = collectionDailyData.transactions.plus(ONE_BI);
 
+  const collectionDailyDataByCurrency = getOrInitializeCollectionDailyDataByCurrency(collectionByCurrency, dayID);
+  collectionDailyDataByCurrency.volume = collectionDailyDataByCurrency.volume.plus(price);
+
   aggregator.save();
   aggregatorByCurrency.save();
   aggregatorDailyData.save();
@@ -162,4 +166,5 @@ export function handleTakerBid(event: TakerBid): void {
   collection.save();
   collectionByCurrency.save();
   collectionDailyData.save();
+  collectionDailyDataByCurrency.save();
 }
