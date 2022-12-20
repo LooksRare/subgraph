@@ -468,7 +468,7 @@ describe("Aggregator", () => {
     const taker = "0x9E69b59b8d2A094CB1117f92Ff7DCf51Ed467B41";
     const maker = "0x1317ecFFFE454f7f5b8F8D1B1e0951d6c55E9615";
     const strategy = "0x579af6FD30BF83a5Ac0D636bc619f98DBdeb930c";
-    const currency = "0xC02aaA39b223FE8D0A0e5C4F27eAD9083C756Cc2";
+    const currency = "0xc02aaa39b223fe8d0a0e5c4f27ead9083c756cc2";
     const collectionAddress = "0x34d85c9CDeB23FA97cb08333b511ac86E1C4E258";
     const tokenId = 69174;
     const price = 1278000000000000000;
@@ -577,7 +577,7 @@ describe("Aggregator", () => {
       assert.stringEquals(aggregator!.dailyData[0], "0");
 
       assert.i32Equals(aggregator!.byCurrency.length, 1);
-      assert.stringEquals(aggregator!.byCurrency[0], Address.fromString(currency).toHexString());
+      assert.stringEquals(aggregator!.byCurrency[0], currency);
     });
 
     test("updates AggregatorDailyData", () => {
@@ -592,16 +592,16 @@ describe("Aggregator", () => {
       // assert.bigIntEquals(aggregatorDailyData!.collections, ONE_BI);
 
       assert.i32Equals(aggregatorDailyData!.byCurrency.length, 1);
-      assert.stringEquals(aggregatorDailyData!.byCurrency[0], `${Address.fromString(currency).toHexString()}-0`);
+      assert.stringEquals(aggregatorDailyData!.byCurrency[0], `${currency}-0`);
     });
 
     test("updates AggregatorByCurrency", () => {
       const event = createMockTakerBidEvent();
       handleTakerBid(event);
 
-      const aggregatorByCurrency = AggregatorByCurrency.load(Address.fromString(currency).toHexString());
+      const aggregatorByCurrency = AggregatorByCurrency.load(currency);
       assert.assertNotNull(aggregatorByCurrency);
-      assert.stringEquals(aggregatorByCurrency!.currency.toHexString(), Address.fromString(currency).toHexString());
+      assert.stringEquals(aggregatorByCurrency!.currency.toHexString(), currency);
       assert.bigIntEquals(aggregatorByCurrency!.transactions, ONE_BI);
       assert.stringEquals(aggregatorByCurrency!.volume.toString(), transactionVolume);
       // assert.bigIntEquals(aggregatorByCurrency!.users, ONE_BI);
@@ -613,22 +613,14 @@ describe("Aggregator", () => {
       const event = createMockTakerBidEvent();
       handleTakerBid(event);
 
-      const aggregatorDailyDataByCurrency = AggregatorDailyDataByCurrency.load(
-        `${Address.fromString(currency).toHexString()}-0`
-      );
+      const aggregatorDailyDataByCurrency = AggregatorDailyDataByCurrency.load(`${currency}-0`);
       assert.assertNotNull(aggregatorDailyDataByCurrency);
-      assert.stringEquals(
-        aggregatorDailyDataByCurrency!.currency.toHexString(),
-        Address.fromString(currency).toHexString()
-      );
+      assert.stringEquals(aggregatorDailyDataByCurrency!.currency.toHexString(), currency);
       assert.bigIntEquals(aggregatorDailyDataByCurrency!.date, ZERO_BI);
       assert.stringEquals(aggregatorDailyDataByCurrency!.volume.toString(), transactionVolume);
       // assert.bigIntEquals(aggregatorDailyDataByCurrency!.users, ONE_BI);
       // assert.bigIntEquals(aggregatorDailyDataByCurrency!.collections, ONE_BI);
-      assert.stringEquals(
-        aggregatorDailyDataByCurrency!.aggregatorByCurrency,
-        Address.fromString(currency).toHexString()
-      );
+      assert.stringEquals(aggregatorDailyDataByCurrency!.aggregatorByCurrency, currency);
 
       // assert.i32Equals(aggregatorDailyDataByCurrency!.transactions.length, 1);
       // assert.stringEquals(
@@ -668,11 +660,9 @@ describe("Aggregator", () => {
       const event = createMockTakerBidEvent();
       handleTakerBid(event);
 
-      const marketplaceByCurrency = MarketplaceByCurrency.load(
-        `LooksRareV1-${Address.fromString(currency).toHexString()}`
-      );
+      const marketplaceByCurrency = MarketplaceByCurrency.load(`LooksRareV1-${currency}`);
       assert.assertNotNull(marketplaceByCurrency);
-      assert.stringEquals(marketplaceByCurrency!.currency.toHexString(), Address.fromString(currency).toHexString());
+      assert.stringEquals(marketplaceByCurrency!.currency.toHexString(), currency);
       assert.bigIntEquals(marketplaceByCurrency!.transactions, ONE_BI);
       assert.stringEquals(marketplaceByCurrency!.volume.toString(), transactionVolume);
       // assert.bigIntEquals(marketplaceByCurrency!.users, ONE_BI);
@@ -686,18 +676,10 @@ describe("Aggregator", () => {
       const event = createMockTakerBidEvent();
       handleTakerBid(event);
 
-      const marketplaceDailyDataByCurrency = MarketplaceDailyDataByCurrency.load(
-        `LooksRareV1-${Address.fromString(currency).toHexString()}-0`
-      );
+      const marketplaceDailyDataByCurrency = MarketplaceDailyDataByCurrency.load(`LooksRareV1-${currency}-0`);
       assert.assertNotNull(marketplaceDailyDataByCurrency);
-      assert.stringEquals(
-        marketplaceDailyDataByCurrency!.currency.toHexString(),
-        Address.fromString(currency).toHexString()
-      );
-      assert.stringEquals(
-        marketplaceDailyDataByCurrency!.marketplaceByCurrency,
-        `LooksRareV1-${Address.fromString(currency).toHexString()}`
-      );
+      assert.stringEquals(marketplaceDailyDataByCurrency!.currency.toHexString(), currency);
+      assert.stringEquals(marketplaceDailyDataByCurrency!.marketplaceByCurrency, `LooksRareV1-${currency}`);
       assert.bigIntEquals(marketplaceDailyDataByCurrency!.date, ZERO_BI);
       assert.stringEquals(marketplaceDailyDataByCurrency!.volume.toString(), transactionVolume);
       // assert.bigIntEquals(marketplaceDailyDataByCurrency!.users, ONE_BI);
@@ -749,18 +731,16 @@ describe("Aggregator", () => {
       const event = createMockTakerBidEvent();
       handleTakerBid(event);
 
-      const userByCurrency = UserByCurrency.load(
-        `${Address.fromString(originator).toHexString()}-${Address.fromString(currency).toHexString()}`
-      );
+      const userByCurrency = UserByCurrency.load(`${Address.fromString(originator).toHexString()}-${currency}`);
       assert.assertNotNull(userByCurrency);
-      assert.stringEquals(userByCurrency!.currency.toHexString(), Address.fromString(currency).toHexString());
+      assert.stringEquals(userByCurrency!.currency.toHexString(), currency);
       assert.bigIntEquals(userByCurrency!.transactions, ONE_BI);
       assert.stringEquals(userByCurrency!.volume.toString(), transactionVolume);
 
       // assert.i32Equals(userByCurrency!.dailyData.length, 1);
       // assert.stringEquals(
       //   userByCurrency!.dailyData[0],
-      //   `${Address.fromString(originator).toHexString()}-${Address.fromString(currency).toHexString()}-0`
+      //   `${Address.fromString(originator).toHexString()}-${currency}-0`
       // );
     });
 
