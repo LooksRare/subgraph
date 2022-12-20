@@ -745,24 +745,24 @@ describe("Aggregator", () => {
     //   );
     // });
 
-    // test("updates UserByCurrency", () => {
-    //   const event = createMockOrderFulfilledEvent();
-    //   handleOrderFulfilled(event);
+    test("updates UserByCurrency", () => {
+      const event = createMockTakerBidEvent();
+      handleTakerBid(event);
 
-    //   const userByCurrency = UserByCurrency.load(
-    //     `${Address.fromString(originator).toHexString()}-${ZERO_ADDRESS.toHex()}`
-    //   );
-    //   assert.assertNotNull(userByCurrency);
-    //   assert.stringEquals(userByCurrency!.currency.toHexString(), ZERO_ADDRESS.toHex());
-    //   assert.bigIntEquals(userByCurrency!.transactions, ONE_BI);
-    //   assert.stringEquals(userByCurrency!.volume.toString(), transactionVolume);
+      const userByCurrency = UserByCurrency.load(
+        `${Address.fromString(originator).toHexString()}-${Address.fromString(currency).toHexString()}`
+      );
+      assert.assertNotNull(userByCurrency);
+      assert.stringEquals(userByCurrency!.currency.toHexString(), Address.fromString(currency).toHexString());
+      assert.bigIntEquals(userByCurrency!.transactions, ONE_BI);
+      assert.stringEquals(userByCurrency!.volume.toString(), transactionVolume);
 
-    //   assert.i32Equals(userByCurrency!.dailyData.length, 1);
-    //   assert.stringEquals(
-    //     userByCurrency!.dailyData[0],
-    //     `${Address.fromString(originator).toHexString()}-${ZERO_ADDRESS.toHex()}-0`
-    //   );
-    // });
+      // assert.i32Equals(userByCurrency!.dailyData.length, 1);
+      // assert.stringEquals(
+      //   userByCurrency!.dailyData[0],
+      //   `${Address.fromString(originator).toHexString()}-${Address.fromString(currency).toHexString()}-0`
+      // );
+    });
 
     // test("updates UserDailyDataByCurrency", () => {
     //   const event = createMockOrderFulfilledEvent();
