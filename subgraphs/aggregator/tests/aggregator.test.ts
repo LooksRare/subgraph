@@ -442,8 +442,8 @@ describe("Aggregator", () => {
     const originator = "0x000000000000000000000000000000000000dead";
     const orderHash = "00ed94ffdbe019f354bd2ec49557fb3d9fafe4929c06bfbec00c05ac82902a8a";
     const orderNonce = 70;
-    const taker = "0x9E69b59b8d2A094CB1117f92Ff7DCf51Ed467B41";
-    const maker = "0x1317ecFFFE454f7f5b8F8D1B1e0951d6c55E9615";
+    const taker = "0x9e69b59b8d2a094cb1117f92ff7dcf51ed467b41";
+    const maker = "0x1317ecfffe454f7f5b8f8d1b1e0951d6c55e9615";
     const strategy = "0x579af6FD30BF83a5Ac0D636bc619f98DBdeb930c";
     const currency = "0xc02aaa39b223fe8d0a0e5c4f27ead9083c756cc2";
     const collectionAddress = "0x34d85c9cdeb23fa97cb08333b511ac86e1c4e258";
@@ -728,32 +728,29 @@ describe("Aggregator", () => {
       // );
     });
 
-    // test("updates Transaction", () => {
-    //   const event = createMockOrderFulfilledEvent();
-    //   handleOrderFulfilled(event);
+    test("updates Transaction", () => {
+      const event = createMockTakerBidEvent();
+      handleTakerBid(event);
 
-    //   const transaction = Transaction.load(`${event.transaction.hash.toHexString()}-${event.logIndex.toString()}`);
-    //   assert.assertNotNull(transaction);
-    //   assert.stringEquals(transaction!.transactionHash, event.transaction.hash.toHexString());
-    //   assert.stringEquals(transaction!.logIndex.toString(), event.logIndex.toString());
-    //   assert.bigIntEquals(transaction!.timestamp, event.block.timestamp);
-    //   assert.bigIntEquals(transaction!.blockNumber, event.block.number);
-    //   assert.booleanEquals(transaction!.isBundle, false);
-    //   assert.stringEquals(transaction!.collection, offerToken);
-    //   assert.bigIntEquals(transaction!.tokenId, BigInt.fromI32(1333));
-    //   assert.stringEquals(transaction!.price.toString(), transactionVolume);
-    //   assert.stringEquals(transaction!.currency.toHexString(), ZERO_ADDRESS.toHex());
-    //   assert.bigIntEquals(transaction!.amount, ONE_BI);
-    //   assert.stringEquals(transaction!.buyer, originator);
-    //   assert.stringEquals(transaction!.seller.toHexString(), offerer);
-    //   assert.stringEquals(transaction!.aggregatorDailyDataByCurrency, `${ZERO_ADDRESS.toHex()}-0`);
-    //   assert.stringEquals(transaction!.collectionDailyDataByCurrency, `${offerToken}-${ZERO_ADDRESS.toHex()}-0`);
-    //   assert.stringEquals(transaction!.marketplaceDailyDataByCurrency, `Seaport-${ZERO_ADDRESS.toHex()}-0`);
-    //   assert.stringEquals(
-    //     transaction!.userDailyDataByCurrency,
-    //     `${originator}-${ZERO_ADDRESS.toHex()}-0`
-    //   );
-    // });
+      const transaction = Transaction.load(`${event.transaction.hash.toHexString()}-${event.logIndex.toString()}`);
+      assert.assertNotNull(transaction);
+      assert.stringEquals(transaction!.transactionHash, event.transaction.hash.toHexString());
+      assert.stringEquals(transaction!.logIndex.toString(), event.logIndex.toString());
+      assert.bigIntEquals(transaction!.timestamp, event.block.timestamp);
+      assert.bigIntEquals(transaction!.blockNumber, event.block.number);
+      assert.booleanEquals(transaction!.isBundle, false);
+      assert.stringEquals(transaction!.collection, collectionAddress);
+      assert.bigIntEquals(transaction!.tokenId, BigInt.fromI32(69174));
+      assert.stringEquals(transaction!.price.toString(), transactionVolume);
+      assert.stringEquals(transaction!.currency.toHexString(), currency);
+      assert.bigIntEquals(transaction!.amount, ONE_BI);
+      assert.stringEquals(transaction!.buyer, originator);
+      assert.stringEquals(transaction!.seller.toHexString(), maker);
+      assert.stringEquals(transaction!.aggregatorDailyDataByCurrency, `${currency}-0`);
+      assert.stringEquals(transaction!.collectionDailyDataByCurrency, `${collectionAddress}-${currency}-0`);
+      assert.stringEquals(transaction!.marketplaceDailyDataByCurrency, `LooksRareV1-${currency}-0`);
+      assert.stringEquals(transaction!.userDailyDataByCurrency, `${originator}-${currency}-0`);
+    });
 
     // test("does nothing if offer tokens are not the same", () => {
     //   const event = createMockOrderFulfilledEvent(

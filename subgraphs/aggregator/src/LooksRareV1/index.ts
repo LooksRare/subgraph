@@ -1,6 +1,7 @@
+import { BigInt } from "@graphprotocol/graph-ts";
 import { ONE_BI, ONE_DAY_BI, ZERO_BI } from "../../../../helpers/constants";
 import { TakerBid } from "../../generated/LooksRareV1/LooksRareExchange";
-import { Collection, CollectionDailyData, User, UserDailyData } from "../../generated/schema";
+import { Collection, CollectionDailyData, Transaction, User, UserDailyData } from "../../generated/schema";
 import { extractOriginator } from "../utils/extractOriginator";
 import { findSweepEventFromLogs } from "../utils/findSweepEventFromLogs";
 import { getOrInitializeAggregator } from "../utils/getOrInitializeAggregator";
@@ -150,6 +151,30 @@ export function handleTakerBid(event: TakerBid): void {
 
   const collectionDailyDataByCurrency = getOrInitializeCollectionDailyDataByCurrency(collectionByCurrency, dayID);
   collectionDailyDataByCurrency.volume = collectionDailyDataByCurrency.volume.plus(price);
+
+  const transactionHash = event.transaction.hash.toHexString();
+  const logIndex = event.logIndex;
+  const block = event.block;
+  const transactionID = `${transactionHash}-${logIndex.toString()}`;
+
+  const transaction = new Transaction(transactionID);
+  transaction.transactionHash = transactionHash;
+  transaction.logIndex = logIndex.toI32();
+  transaction.timestamp = block.timestamp;
+  transaction.blockNumber = block.number;
+  transaction.isBundle = false;
+  transaction.collection = collection.id;
+  transaction.tokenId = event.params.tokenId;
+  transaction.price = price;
+  transaction.currency = currency;
+  transaction.amount = BigInt.fromI32(1);
+  transaction.buyer = user.id;
+  transaction.seller = event.params.maker;
+  transaction.aggregatorDailyDataByCurrency = aggregatorDailyDataByCurrency.id;
+  transaction.collectionDailyDataByCurrency = collectionDailyDataByCurrency.id;
+  transaction.marketplaceDailyDataByCurrency = marketplaceDailyDataByCurrency.id;
+  transaction.userDailyDataByCurrency = userDailyDataByCurrency.id;
+  transaction.save();
 
   aggregator.save();
   aggregatorByCurrency.save();
