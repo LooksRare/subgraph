@@ -1,6 +1,6 @@
 import { ONE_BI, ONE_DAY_BI, ZERO_BI } from "../../../../helpers/constants";
 import { TakerBid } from "../../generated/LooksRareV1/LooksRareExchange";
-import { User, UserDailyData } from "../../generated/schema";
+import { Collection, User, UserDailyData } from "../../generated/schema";
 import { extractOriginator } from "../utils/extractOriginator";
 import { findSweepEventFromLogs } from "../utils/findSweepEventFromLogs";
 import { getOrInitializeAggregator } from "../utils/getOrInitializeAggregator";
@@ -22,6 +22,7 @@ export function handleTakerBid(event: TakerBid): void {
 
   const currency = event.params.currency;
   const price = event.params.price.toBigDecimal();
+  const collectionAddress = event.params.collection.toHexString();
   const dayID = event.block.timestamp.div(ONE_DAY_BI);
 
   // 1. Aggregator
@@ -108,6 +109,20 @@ export function handleTakerBid(event: TakerBid): void {
   const userDailyDataByCurrency = getOrInitializeUserDailyDataByCurrency(userDailyData, userByCurrency, dayID);
   userDailyDataByCurrency.volume = userDailyDataByCurrency.volume.plus(price);
 
+  // 12. Collection
+  let collection = Collection.load(collectionAddress);
+  if (!collection) {
+    collection = new Collection(collectionAddress);
+    collection.transactions = ZERO_BI;
+
+    // New aggregator/marketplace user
+    aggregator.collections = aggregator.collections.plus(ONE_BI);
+    aggregatorByCurrency.collections = aggregatorByCurrency.collections.plus(ONE_BI);
+    marketplace.collections = marketplace.collections.plus(ONE_BI);
+    marketplaceByCurrency.collections = marketplaceByCurrency.collections.plus(ONE_BI);
+  }
+  collection.transactions = collection.transactions.plus(ONE_BI);
+
   aggregator.save();
   aggregatorByCurrency.save();
   aggregatorDailyData.save();
@@ -120,4 +135,5 @@ export function handleTakerBid(event: TakerBid): void {
   userByCurrency.save();
   userDailyData.save();
   userDailyDataByCurrency.save();
+  collection.save();
 }
