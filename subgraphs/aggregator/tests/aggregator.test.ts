@@ -651,18 +651,18 @@ describe("Aggregator", () => {
       // assert.stringEquals(marketplace!.dailyData[0], "LooksRareV1-0");
     });
 
-    // test("updates MarketplaceDailyData", () => {
-    //   const event = createMockOrderFulfilledEvent();
-    //   handleOrderFulfilled(event);
+    test("updates MarketplaceDailyData", () => {
+      const event = createMockTakerBidEvent();
+      handleTakerBid(event);
 
-    //   const marketplaceDailyData = MarketplaceDailyData.load("Seaport-0");
-    //   assert.assertNotNull(marketplaceDailyData);
-    //   assert.bigIntEquals(marketplaceDailyData!.transactions, ONE_BI);
-    //   assert.stringEquals(marketplaceDailyData!.marketplace, "Seaport");
-    //   assert.bigIntEquals(marketplaceDailyData!.date, ZERO_BI);
-    //   assert.bigIntEquals(marketplaceDailyData!.users, ONE_BI);
-    //   assert.bigIntEquals(marketplaceDailyData!.collections, ONE_BI);
-    // });
+      const marketplaceDailyData = MarketplaceDailyData.load("LooksRareV1-0");
+      assert.assertNotNull(marketplaceDailyData);
+      assert.bigIntEquals(marketplaceDailyData!.transactions, ONE_BI);
+      assert.stringEquals(marketplaceDailyData!.marketplace, "LooksRareV1");
+      assert.bigIntEquals(marketplaceDailyData!.date, ZERO_BI);
+      // assert.bigIntEquals(marketplaceDailyData!.users, ONE_BI);
+      // assert.bigIntEquals(marketplaceDailyData!.collections, ONE_BI);
+    });
 
     test("updates MarketplaceByCurrency", () => {
       const event = createMockTakerBidEvent();
