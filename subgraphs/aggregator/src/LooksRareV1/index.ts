@@ -12,6 +12,7 @@ import { getOrInitializeMarketplaceByCurrency } from "../utils/getOrInitializeMa
 import { getOrInitializeMarketplaceDailyData } from "../utils/getOrInitializeMarketplaceDailyData";
 import { getOrInitializeMarketplaceDailyDataByCurrency } from "../utils/getOrInitializeMarketplaceDailyDataByCurrency";
 import { getOrInitializeUserByCurrency } from "../utils/getOrInitializeUserByCurrency";
+import { getOrInitializeUserDailyDataByCurrency } from "../utils/getOrInitializeUserDailyDataByCurrency";
 
 export function handleTakerBid(event: TakerBid): void {
   const logs = event.receipt!.logs;
@@ -103,6 +104,10 @@ export function handleTakerBid(event: TakerBid): void {
   }
   userDailyData.transactions = userDailyData.transactions.plus(ONE_BI);
 
+  // 11. UesrDailyDataByCurrency
+  const userDailyDataByCurrency = getOrInitializeUserDailyDataByCurrency(userDailyData, userByCurrency, dayID);
+  userDailyDataByCurrency.volume = userDailyDataByCurrency.volume.plus(price);
+
   aggregator.save();
   aggregatorByCurrency.save();
   aggregatorDailyData.save();
@@ -114,4 +119,5 @@ export function handleTakerBid(event: TakerBid): void {
   user.save();
   userByCurrency.save();
   userDailyData.save();
+  userDailyDataByCurrency.save();
 }
