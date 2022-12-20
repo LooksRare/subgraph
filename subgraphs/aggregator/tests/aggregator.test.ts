@@ -517,28 +517,26 @@ describe("Aggregator", () => {
       assert.bigIntEquals(collectionDailyData!.date, ZERO_BI);
     });
 
-    // test("updates CollectionDailyDataByCurrency", () => {
-    //   const event = createMockOrderFulfilledEvent();
-    //   handleOrderFulfilled(event);
+    test("updates CollectionDailyDataByCurrency", () => {
+      const event = createMockTakerBidEvent();
+      handleTakerBid(event);
 
-    //   const collectionDailyDataByCurrency = CollectionDailyDataByCurrency.load(
-    //     `${offerToken}-${ZERO_ADDRESS.toHex()}-0`
-    //   );
-    //   assert.assertNotNull(collectionDailyDataByCurrency);
-    //   assert.stringEquals(
-    //     collectionDailyDataByCurrency!.collectionByCurrency.toString(),
-    //     `${offerToken}-${ZERO_ADDRESS.toHex()}`
-    //   );
-    //   assert.stringEquals(collectionDailyDataByCurrency!.currency.toHexString(), ZERO_ADDRESS.toHex());
-    //   assert.bigIntEquals(collectionDailyDataByCurrency!.date, ZERO_BI);
-    //   assert.stringEquals(collectionDailyDataByCurrency!.volume.toString(), transactionVolume);
+      const collectionDailyDataByCurrency = CollectionDailyDataByCurrency.load(`${collectionAddress}-${currency}-0`);
+      assert.assertNotNull(collectionDailyDataByCurrency);
+      assert.stringEquals(
+        collectionDailyDataByCurrency!.collectionByCurrency.toString(),
+        `${collectionAddress}-${currency}`
+      );
+      assert.stringEquals(collectionDailyDataByCurrency!.currency.toHexString(), currency);
+      assert.bigIntEquals(collectionDailyDataByCurrency!.date, ZERO_BI);
+      assert.stringEquals(collectionDailyDataByCurrency!.volume.toString(), transactionVolume);
 
-    //   assert.i32Equals(collectionDailyDataByCurrency!.transactions.length, 1);
-    //   assert.stringEquals(
-    //     collectionDailyDataByCurrency!.transactions[0],
-    //     `${event.transaction.hash.toHexString()}-${event.logIndex.toString()}`
-    //   );
-    // });
+      // assert.i32Equals(collectionDailyDataByCurrency!.transactions.length, 1);
+      // assert.stringEquals(
+      //   collectionDailyDataByCurrency!.transactions[0],
+      //   `${event.transaction.hash.toHexString()}-${event.logIndex.toString()}`
+      // );
+    });
 
     test("updates Aggregator", () => {
       const event = createMockTakerBidEvent();
