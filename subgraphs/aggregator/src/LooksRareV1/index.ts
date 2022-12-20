@@ -174,7 +174,6 @@ export function handleTakerBid(event: TakerBid): void {
   transaction.collectionDailyDataByCurrency = collectionDailyDataByCurrency.id;
   transaction.marketplaceDailyDataByCurrency = marketplaceDailyDataByCurrency.id;
   transaction.userDailyDataByCurrency = userDailyDataByCurrency.id;
-  transaction.save();
 
   aggregator.save();
   aggregatorByCurrency.save();
@@ -192,4 +191,5 @@ export function handleTakerBid(event: TakerBid): void {
   collectionByCurrency.save();
   collectionDailyData.save();
   collectionDailyDataByCurrency.save();
+  transaction.save();
 }

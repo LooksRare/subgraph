@@ -531,11 +531,11 @@ describe("Aggregator", () => {
       assert.bigIntEquals(collectionDailyDataByCurrency!.date, ZERO_BI);
       assert.stringEquals(collectionDailyDataByCurrency!.volume.toString(), transactionVolume);
 
-      // assert.i32Equals(collectionDailyDataByCurrency!.transactions.length, 1);
-      // assert.stringEquals(
-      //   collectionDailyDataByCurrency!.transactions[0],
-      //   `${event.transaction.hash.toHexString()}-${event.logIndex.toString()}`
-      // );
+      assert.i32Equals(collectionDailyDataByCurrency!.transactions.length, 1);
+      assert.stringEquals(
+        collectionDailyDataByCurrency!.transactions[0],
+        `${event.transaction.hash.toHexString()}-${event.logIndex.toString()}`
+      );
     });
 
     test("updates Aggregator", () => {
@@ -597,11 +597,11 @@ describe("Aggregator", () => {
       assert.bigIntEquals(aggregatorDailyDataByCurrency!.collections, ONE_BI);
       assert.stringEquals(aggregatorDailyDataByCurrency!.aggregatorByCurrency, currency);
 
-      // assert.i32Equals(aggregatorDailyDataByCurrency!.transactions.length, 1);
-      // assert.stringEquals(
-      //   aggregatorDailyDataByCurrency!.transactions[0],
-      //   `${event.transaction.hash.toHexString()}-${event.logIndex.toString()}`
-      // );
+      assert.i32Equals(aggregatorDailyDataByCurrency!.transactions.length, 1);
+      assert.stringEquals(
+        aggregatorDailyDataByCurrency!.transactions[0],
+        `${event.transaction.hash.toHexString()}-${event.logIndex.toString()}`
+      );
     });
 
     test("updates Marketplace", () => {
@@ -660,11 +660,11 @@ describe("Aggregator", () => {
       assert.bigIntEquals(marketplaceDailyDataByCurrency!.users, ONE_BI);
       assert.bigIntEquals(marketplaceDailyDataByCurrency!.collections, ONE_BI);
 
-      // assert.i32Equals(marketplaceDailyDataByCurrency!.transactions.length, 1);
-      // assert.stringEquals(
-      //   marketplaceDailyDataByCurrency!.transactions[0],
-      //   `${event.transaction.hash.toHexString()}-${event.logIndex.toString()}`
-      // );
+      assert.i32Equals(marketplaceDailyDataByCurrency!.transactions.length, 1);
+      assert.stringEquals(
+        marketplaceDailyDataByCurrency!.transactions[0],
+        `${event.transaction.hash.toHexString()}-${event.logIndex.toString()}`
+      );
     });
 
     test("updates User", () => {
@@ -721,11 +721,11 @@ describe("Aggregator", () => {
       assert.bigIntEquals(userDailyDataByCurrency!.date, ZERO_BI);
       assert.stringEquals(userDailyDataByCurrency!.volume.toString(), transactionVolume);
 
-      // assert.i32Equals(userDailyDataByCurrency!.transactions.length, 1);
-      // assert.stringEquals(
-      //   userDailyDataByCurrency!.transactions[0],
-      //   `${event.transaction.hash.toHexString()}-${event.logIndex.toString()}`
-      // );
+      assert.i32Equals(userDailyDataByCurrency!.transactions.length, 1);
+      assert.stringEquals(
+        userDailyDataByCurrency!.transactions[0],
+        `${event.transaction.hash.toHexString()}-${event.logIndex.toString()}`
+      );
     });
 
     test("updates Transaction", () => {
