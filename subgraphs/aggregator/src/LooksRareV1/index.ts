@@ -1,6 +1,6 @@
 import { ONE_BI, ONE_DAY_BI, ZERO_BI } from "../../../../helpers/constants";
 import { TakerBid } from "../../generated/LooksRareV1/LooksRareExchange";
-import { User } from "../../generated/schema";
+import { User, UserDailyData } from "../../generated/schema";
 import { extractOriginator } from "../utils/extractOriginator";
 import { findSweepEventFromLogs } from "../utils/findSweepEventFromLogs";
 import { getOrInitializeAggregator } from "../utils/getOrInitializeAggregator";
@@ -85,6 +85,24 @@ export function handleTakerBid(event: TakerBid): void {
   userByCurrency.volume = userByCurrency.volume.plus(price);
   userByCurrency.transactions = userByCurrency.transactions.plus(ONE_BI);
 
+  // 10. UserDailyData
+  const userDailyDataID = `${userID}-${dayID.toString()}`;
+  let userDailyData = UserDailyData.load(userDailyDataID);
+  if (!userDailyData) {
+    userDailyData = new UserDailyData(userDailyDataID);
+    const dayStartTimestamp = dayID.times(ONE_DAY_BI);
+    userDailyData.date = dayStartTimestamp;
+    userDailyData.transactions = ZERO_BI;
+    userDailyData.user = userID;
+
+    // New aggregator/marketplace user for the day
+    aggregatorDailyData.users = aggregatorDailyData.users.plus(ONE_BI);
+    aggregatorDailyDataByCurrency.users = aggregatorDailyDataByCurrency.users.plus(ONE_BI);
+    marketplaceDailyData.users = marketplaceDailyData.users.plus(ONE_BI);
+    marketplaceDailyDataByCurrency.users = marketplaceDailyDataByCurrency.users.plus(ONE_BI);
+  }
+  userDailyData.transactions = userDailyData.transactions.plus(ONE_BI);
+
   aggregator.save();
   aggregatorByCurrency.save();
   aggregatorDailyData.save();
@@ -95,4 +113,5 @@ export function handleTakerBid(event: TakerBid): void {
   marketplaceDailyDataByCurrency.save();
   user.save();
   userByCurrency.save();
+  userDailyData.save();
 }
