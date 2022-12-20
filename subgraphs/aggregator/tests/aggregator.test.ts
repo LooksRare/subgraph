@@ -573,27 +573,27 @@ describe("Aggregator", () => {
       // assert.bigIntEquals(aggregator!.users, ONE_BI);
       // assert.bigIntEquals(aggregator!.collections, ONE_BI);
 
-      // assert.i32Equals(aggregator!.dailyData.length, 1);
-      // assert.stringEquals(aggregator!.dailyData[0], "0");
+      assert.i32Equals(aggregator!.dailyData.length, 1);
+      assert.stringEquals(aggregator!.dailyData[0], "0");
 
       assert.i32Equals(aggregator!.byCurrency.length, 1);
       assert.stringEquals(aggregator!.byCurrency[0], Address.fromString(currency).toHexString());
     });
 
-    // test("updates AggregatorDailyData", () => {
-    //   const event = createMockOrderFulfilledEvent();
-    //   handleOrderFulfilled(event);
+    test("updates AggregatorDailyData", () => {
+      const event = createMockTakerBidEvent();
+      handleTakerBid(event);
 
-    //   const aggregatorDailyData = AggregatorDailyData.load("0");
-    //   assert.assertNotNull(aggregatorDailyData);
-    //   assert.bigIntEquals(aggregatorDailyData!.transactions, ONE_BI);
-    //   assert.bigIntEquals(aggregatorDailyData!.date, ZERO_BI);
-    //   assert.bigIntEquals(aggregatorDailyData!.users, ONE_BI);
-    //   assert.bigIntEquals(aggregatorDailyData!.collections, ONE_BI);
+      const aggregatorDailyData = AggregatorDailyData.load("0");
+      assert.assertNotNull(aggregatorDailyData);
+      assert.bigIntEquals(aggregatorDailyData!.transactions, ONE_BI);
+      assert.bigIntEquals(aggregatorDailyData!.date, ZERO_BI);
+      // assert.bigIntEquals(aggregatorDailyData!.users, ONE_BI);
+      // assert.bigIntEquals(aggregatorDailyData!.collections, ONE_BI);
 
-    //   assert.i32Equals(aggregatorDailyData!.byCurrency.length, 1);
-    //   assert.stringEquals(aggregatorDailyData!.byCurrency[0], `${ZERO_ADDRESS.toHex()}-0`);
-    // });
+      assert.i32Equals(aggregatorDailyData!.byCurrency.length, 1);
+      assert.stringEquals(aggregatorDailyData!.byCurrency[0], `${Address.fromString(currency).toHexString()}-0`);
+    });
 
     test("updates AggregatorByCurrency", () => {
       const event = createMockTakerBidEvent();
@@ -609,25 +609,33 @@ describe("Aggregator", () => {
       assert.stringEquals(aggregatorByCurrency!.aggregator, "LooksRareAggregator");
     });
 
-    // test("updates AggregatorDailyDataByCurrency", () => {
-    //   const event = createMockOrderFulfilledEvent();
-    //   handleOrderFulfilled(event);
+    test("updates AggregatorDailyDataByCurrency", () => {
+      const event = createMockTakerBidEvent();
+      handleTakerBid(event);
 
-    //   const aggregatorDailyDataByCurrency = AggregatorDailyDataByCurrency.load(`${ZERO_ADDRESS.toHex()}-0`);
-    //   assert.assertNotNull(aggregatorDailyDataByCurrency);
-    //   assert.stringEquals(aggregatorDailyDataByCurrency!.currency.toHexString(), ZERO_ADDRESS.toHex());
-    //   assert.bigIntEquals(aggregatorDailyDataByCurrency!.date, ZERO_BI);
-    //   assert.stringEquals(aggregatorDailyDataByCurrency!.volume.toString(), transactionVolume);
-    //   assert.bigIntEquals(aggregatorDailyDataByCurrency!.users, ONE_BI);
-    //   assert.bigIntEquals(aggregatorDailyDataByCurrency!.collections, ONE_BI);
-    //   assert.stringEquals(aggregatorDailyDataByCurrency!.aggregatorByCurrency, ZERO_ADDRESS.toHex());
+      const aggregatorDailyDataByCurrency = AggregatorDailyDataByCurrency.load(
+        `${Address.fromString(currency).toHexString()}-0`
+      );
+      assert.assertNotNull(aggregatorDailyDataByCurrency);
+      assert.stringEquals(
+        aggregatorDailyDataByCurrency!.currency.toHexString(),
+        Address.fromString(currency).toHexString()
+      );
+      assert.bigIntEquals(aggregatorDailyDataByCurrency!.date, ZERO_BI);
+      assert.stringEquals(aggregatorDailyDataByCurrency!.volume.toString(), transactionVolume);
+      // assert.bigIntEquals(aggregatorDailyDataByCurrency!.users, ONE_BI);
+      // assert.bigIntEquals(aggregatorDailyDataByCurrency!.collections, ONE_BI);
+      assert.stringEquals(
+        aggregatorDailyDataByCurrency!.aggregatorByCurrency,
+        Address.fromString(currency).toHexString()
+      );
 
-    //   assert.i32Equals(aggregatorDailyDataByCurrency!.transactions.length, 1);
-    //   assert.stringEquals(
-    //     aggregatorDailyDataByCurrency!.transactions[0],
-    //     `${event.transaction.hash.toHexString()}-${event.logIndex.toString()}`
-    //   );
-    // });
+      // assert.i32Equals(aggregatorDailyDataByCurrency!.transactions.length, 1);
+      // assert.stringEquals(
+      //   aggregatorDailyDataByCurrency!.transactions[0],
+      //   `${event.transaction.hash.toHexString()}-${event.logIndex.toString()}`
+      // );
+    });
 
     // test("updates Marketplace", () => {
     //   const event = createMockOrderFulfilledEvent();
