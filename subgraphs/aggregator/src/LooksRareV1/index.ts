@@ -4,6 +4,7 @@ import { getOrInitializeAggregator } from "../utils/getOrInitializeAggregator";
 import { getOrInitializeAggregatorByCurrency } from "../utils/getOrInitializeAggregatorByCurrency";
 import { getOrInitializeAggregatorDailyData } from "../utils/getOrInitializeAggregatorDailyData";
 import { getOrInitializeAggregatorDailyDataByCurrency } from "../utils/getOrInitializeAggregatorDailyDataByCurrency";
+import { getOrInitializeMarketplace } from "../utils/getOrInitializeMarketplace";
 
 export function handleTakerBid(event: TakerBid): void {
   const currency = event.params.currency;
@@ -31,8 +32,12 @@ export function handleTakerBid(event: TakerBid): void {
   );
   aggregatorDailyDataByCurrency.volume = aggregatorDailyDataByCurrency.volume.plus(price);
 
+  const marketplace = getOrInitializeMarketplace("LooksRareV1");
+  marketplace.transactions = marketplace.transactions.plus(ONE_BI);
+
   aggregator.save();
   aggregatorByCurrency.save();
   aggregatorDailyData.save();
   aggregatorDailyDataByCurrency.save();
+  marketplace.save();
 }

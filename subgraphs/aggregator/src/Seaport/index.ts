@@ -62,7 +62,7 @@ export function handleOrderFulfilled(event: OrderFulfilled): void {
   aggregatorDailyDataByCurrency.volume = aggregatorDailyDataByCurrency.volume.plus(volume);
 
   // 3. Marketplace
-  const marketplace = getOrInitializeMarketplace();
+  const marketplace = getOrInitializeMarketplace("Seaport");
   marketplace.transactions = marketplace.transactions.plus(ONE_BI);
 
   const marketplaceByCurrency = getOrInitializeMarketplaceByCurrency(marketplace, currency);
