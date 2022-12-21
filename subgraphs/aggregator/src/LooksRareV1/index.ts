@@ -86,11 +86,12 @@ export function handleTakerBid(event: TakerBid): void {
   }
   user.transactions = user.transactions.plus(ONE_BI);
 
+  // 10. User by currency
   const userByCurrency = getOrInitializeUserByCurrency(user, currency);
   userByCurrency.volume = userByCurrency.volume.plus(price);
   userByCurrency.transactions = userByCurrency.transactions.plus(ONE_BI);
 
-  // 10. UserDailyData
+  // 11. User daily data
   const userDailyDataID = `${userID}-${dayID.toString()}`;
   let userDailyData = UserDailyData.load(userDailyDataID);
   if (!userDailyData) {
@@ -108,11 +109,11 @@ export function handleTakerBid(event: TakerBid): void {
   }
   userDailyData.transactions = userDailyData.transactions.plus(ONE_BI);
 
-  // 11. UesrDailyDataByCurrency
+  // 12. User daily data by currency
   const userDailyDataByCurrency = getOrInitializeUserDailyDataByCurrency(userDailyData, userByCurrency, dayID);
   userDailyDataByCurrency.volume = userDailyDataByCurrency.volume.plus(price);
 
-  // 12. Collection
+  // 13. Collection
   let collection = Collection.load(collectionAddress);
   if (!collection) {
     collection = new Collection(collectionAddress);
@@ -126,12 +127,12 @@ export function handleTakerBid(event: TakerBid): void {
   }
   collection.transactions = collection.transactions.plus(ONE_BI);
 
-  // 13. CollectionByCurrency
+  // 14. Collection by currency
   const collectionByCurrency = getOrInitializeCollectionByCurrency(event.params.collection, currency);
   collectionByCurrency.volume = collectionByCurrency.volume.plus(price);
   collectionByCurrency.transactions = collectionByCurrency.transactions.plus(ONE_BI);
 
-  // 14. CollectionDailyData
+  // 15. Collection daily data
   const collectionDailyDataID = `${collection.id}-${dayID.toString()}`;
   let collectionDailyData = CollectionDailyData.load(collectionDailyDataID);
   if (!collectionDailyData) {
@@ -149,6 +150,7 @@ export function handleTakerBid(event: TakerBid): void {
   }
   collectionDailyData.transactions = collectionDailyData.transactions.plus(ONE_BI);
 
+  // 16. Collection daily data by currency
   const collectionDailyDataByCurrency = getOrInitializeCollectionDailyDataByCurrency(collectionByCurrency, dayID);
   collectionDailyDataByCurrency.volume = collectionDailyDataByCurrency.volume.plus(price);
 
@@ -157,6 +159,7 @@ export function handleTakerBid(event: TakerBid): void {
   const block = event.block;
   const transactionID = `${transactionHash}-${logIndex.toString()}`;
 
+  // 17. Transaction
   const transaction = new Transaction(transactionID);
   transaction.transactionHash = transactionHash;
   transaction.logIndex = logIndex.toI32();

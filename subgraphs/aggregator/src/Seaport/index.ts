@@ -46,14 +46,16 @@ export function handleOrderFulfilled(event: OrderFulfilled): void {
   const aggregator = getOrInitializeAggregator();
   aggregator.transactions = aggregator.transactions.plus(ONE_BI);
 
+  // 2. Aggregator by currency
   const aggregatorByCurrency = getOrInitializeAggregatorByCurrency(aggregator, currency);
   aggregatorByCurrency.volume = aggregatorByCurrency.volume.plus(volume);
   aggregatorByCurrency.transactions = aggregatorByCurrency.transactions.plus(ONE_BI);
 
-  // 2. Aggregator daily data
+  // 3. Aggregator daily data
   const aggregatorDailyData = getOrInitializeAggregatorDailyData(dayID, aggregator);
   aggregatorDailyData.transactions = aggregatorDailyData.transactions.plus(ONE_BI);
 
+  // 4. Aggregator daily data by currency
   const aggregatorDailyDataByCurrency = getOrInitializeAggregatorDailyDataByCurrency(
     aggregatorByCurrency,
     aggregatorDailyData,
@@ -61,18 +63,20 @@ export function handleOrderFulfilled(event: OrderFulfilled): void {
   );
   aggregatorDailyDataByCurrency.volume = aggregatorDailyDataByCurrency.volume.plus(volume);
 
-  // 3. Marketplace
+  // 5. Marketplace
   const marketplace = getOrInitializeMarketplace("Seaport");
   marketplace.transactions = marketplace.transactions.plus(ONE_BI);
 
+  // 6. Marketplace by currency
   const marketplaceByCurrency = getOrInitializeMarketplaceByCurrency(marketplace, currency);
   marketplaceByCurrency.volume = marketplaceByCurrency.volume.plus(volume);
   marketplaceByCurrency.transactions = marketplaceByCurrency.transactions.plus(ONE_BI);
 
-  // 4. Marketplace daily data
+  // 7. Marketplace daily data
   const marketplaceDailyData = getOrInitializeMarketplaceDailyData(currency, marketplace, dayID);
   marketplaceDailyData.transactions = marketplaceDailyData.transactions.plus(ONE_BI);
 
+  // 8. Marketplace daily data by currency
   const marketplaceDailyDataByCurrency = getOrInitializeMarketplaceDailyDataByCurrency(
     marketplaceDailyData,
     marketplaceByCurrency,
@@ -80,7 +84,7 @@ export function handleOrderFulfilled(event: OrderFulfilled): void {
   );
   marketplaceDailyDataByCurrency.volume = marketplaceDailyDataByCurrency.volume.plus(volume);
 
-  // 5. User
+  // 9. User
   const originator = extractOriginator(sweepEvent);
   const userID = originator.toHexString();
   let user = User.load(userID);
@@ -96,11 +100,12 @@ export function handleOrderFulfilled(event: OrderFulfilled): void {
   }
   user.transactions = user.transactions.plus(ONE_BI);
 
+  // 10. User by currency
   const userByCurrency = getOrInitializeUserByCurrency(user, currency);
   userByCurrency.volume = userByCurrency.volume.plus(volume);
   userByCurrency.transactions = userByCurrency.transactions.plus(ONE_BI);
 
-  // 6. UserDailyData
+  // 11. User daily data
   const userDailyDataID = `${userID}-${dayID.toString()}`;
   let userDailyData = UserDailyData.load(userDailyDataID);
   if (!userDailyData) {
@@ -118,10 +123,11 @@ export function handleOrderFulfilled(event: OrderFulfilled): void {
   }
   userDailyData.transactions = userDailyData.transactions.plus(ONE_BI);
 
+  // 12. User daily data by currency
   const userDailyDataByCurrency = getOrInitializeUserDailyDataByCurrency(userDailyData, userByCurrency, dayID);
   userDailyDataByCurrency.volume = userDailyDataByCurrency.volume.plus(volume);
 
-  // 7. Collection
+  // 13. Collection
   const collectionID = offerToken.toHexString();
   let collection = Collection.load(collectionID);
   if (!collection) {
@@ -136,11 +142,12 @@ export function handleOrderFulfilled(event: OrderFulfilled): void {
   }
   collection.transactions = collection.transactions.plus(ONE_BI);
 
+  // 14. Collection by currency
   const collectionByCurrency = getOrInitializeCollectionByCurrency(offerToken, currency);
   collectionByCurrency.volume = collectionByCurrency.volume.plus(volume);
   collectionByCurrency.transactions = collectionByCurrency.transactions.plus(ONE_BI);
 
-  // 8. CollectionDailyData
+  // 15. Collection daily data
   const collectionDailyDataID = `${collectionID}-${dayID.toString()}`;
   let collectionDailyData = CollectionDailyData.load(collectionDailyDataID);
   if (!collectionDailyData) {
@@ -158,6 +165,7 @@ export function handleOrderFulfilled(event: OrderFulfilled): void {
   }
   collectionDailyData.transactions = collectionDailyData.transactions.plus(ONE_BI);
 
+  // 16. Collection daily data by currency
   const collectionDailyDataByCurrency = getOrInitializeCollectionDailyDataByCurrency(collectionByCurrency, dayID);
   collectionDailyDataByCurrency.volume = collectionDailyDataByCurrency.volume.plus(volume);
 
@@ -180,7 +188,7 @@ export function handleOrderFulfilled(event: OrderFulfilled): void {
   collectionDailyData.save();
   collectionDailyDataByCurrency.save();
 
-  // 9. Transaction
+  // 17. Transaction
   for (let i = 0; i < offer.length; i++) {
     const transactionHash = event.transaction.hash.toHexString();
     const logIndex = event.logIndex;
