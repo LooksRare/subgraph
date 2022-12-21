@@ -1,6 +1,6 @@
 import { BigDecimal } from "@graphprotocol/graph-ts";
-import { ZERO_BD } from "../../../../helpers/constants";
-import { OrderFulfilledConsiderationStruct } from "../../generated/Seaport/Seaport";
+import { ZERO_BD } from "../../../../../helpers/constants";
+import { OrderFulfilledConsiderationStruct } from "../../../generated/Seaport/Seaport";
 
 export function calculateVolume(consideration: OrderFulfilledConsiderationStruct[]): BigDecimal {
   let volume = ZERO_BD;

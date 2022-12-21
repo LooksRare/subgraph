@@ -1,4 +1,4 @@
-import { OrderFulfilledOfferStruct } from "../../generated/Seaport/Seaport";
+import { OrderFulfilledOfferStruct } from "../../../generated/Seaport/Seaport";
 
 export function isSameOfferToken(offer: OrderFulfilledOfferStruct[]): boolean {
   const offerToken = offer[0].token;
