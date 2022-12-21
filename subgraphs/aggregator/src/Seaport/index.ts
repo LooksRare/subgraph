@@ -11,9 +11,9 @@ import { getOrInitializeAggregatorDailyData } from "../utils/getOrInitializeAggr
 import { findSweepEventFromLogs } from "../utils/findSweepEventFromLogs";
 import { getOrInitializeAggregatorDailyDataByCurrency } from "../utils/getOrInitializeAggregatorDailyDataByCurrency";
 import { extractOriginator } from "../utils/extractOriginator";
-import { isSameOfferToken } from "../utils/isSameOfferToken";
-import { isSameConsiderationToken } from "../utils/isSameConsiderationToken";
-import { calculateVolume } from "../utils/calculateVolume";
+import { isSameOfferToken } from "../utils/Seaport/isSameOfferToken";
+import { isSameConsiderationToken } from "../utils/Seaport/isSameConsiderationToken";
+import { calculateVolume } from "../utils/Seaport/calculateVolume";
 import { getOrInitializeMarketplaceByCurrency } from "../utils/getOrInitializeMarketplaceByCurrency";
 import { getOrInitializeMarketplaceDailyDataByCurrency } from "../utils/getOrInitializeMarketplaceDailyDataByCurrency";
 import { getOrInitializeCollectionByCurrency } from "../utils/getOrInitializeCollectionByCurrency";

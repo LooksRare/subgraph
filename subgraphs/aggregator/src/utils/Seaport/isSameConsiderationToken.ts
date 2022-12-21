@@ -1,4 +1,4 @@
-import { OrderFulfilledConsiderationStruct } from "../../generated/Seaport/Seaport";
+import { OrderFulfilledConsiderationStruct } from "../../../generated/Seaport/Seaport";
 
 export function isSameConsiderationToken(consideration: OrderFulfilledConsiderationStruct[]): boolean {
   const currency = consideration[0].token;
