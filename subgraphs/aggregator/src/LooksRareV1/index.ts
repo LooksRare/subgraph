@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-non-null-assertion */
 import { BigInt } from "@graphprotocol/graph-ts";
 import { ONE_BI, ONE_DAY_BI, ZERO_BI } from "../../../../helpers/constants";
 import { TakerBid } from "../../generated/LooksRareV1/LooksRareExchange";
