@@ -19,6 +19,7 @@ import {
   expectUserDailyDataByCurrencyUpdated,
   expectUserDailyDataUpdated,
   expectUserUpdated,
+  originatorPadded,
 } from "./helpers/sharedTests";
 import { handleOrderFulfilled } from "../src/Seaport/index";
 import {
@@ -88,7 +89,7 @@ describe("Aggregator", () => {
         event!.receipt!.logs = [
           newLog(LOOKSRARE_AGGREGATOR, [
             Bytes.fromHexString(LOOKSRARE_AGGREGATOR_SWEEP_EVENT_TOPIC),
-            Bytes.fromHexString("0x000000000000000000000000000000000000000000000000000000000000dEaD"),
+            Bytes.fromHexString(originatorPadded),
           ]),
           event!.receipt!.logs[0],
         ];

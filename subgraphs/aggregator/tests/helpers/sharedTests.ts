@@ -21,6 +21,7 @@ import {
 } from "../../generated/schema";
 
 export const originator = "0x000000000000000000000000000000000000dead";
+export const originatorPadded = "0x000000000000000000000000000000000000000000000000000000000000dEaD";
 
 export const expectAggregatorUpdated = (currency: string): void => {
   const aggregator = Aggregator.load("LooksRareAggregator");
