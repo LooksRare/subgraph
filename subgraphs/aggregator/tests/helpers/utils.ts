@@ -2,16 +2,6 @@ import { Address, BigInt, Bytes, ethereum, Wrapped } from "@graphprotocol/graph-
 import { newMockEvent } from "matchstick-as";
 import { OrderFulfilled } from "../../generated/Seaport/Seaport";
 
-/**
- * @param amount amount in ETH (i64)
- * @param decimals number of decimal (optional)
- * @notice Parse the amount into a BigInt instance of the amount of wei.
- */
-export function parseEther(amount: i64, decimals: u8 = 18): BigInt {
-  const adjuster = BigInt.fromI64(10).pow(decimals);
-  return BigInt.fromI64(amount).times(adjuster);
-}
-
 export function createOrderFulfilledEvent(
   orderHash: string,
   offerer: string,
