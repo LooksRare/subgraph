@@ -1,0 +1,384 @@
+type Aggregator @entity {
+  " { Hard-coded to LooksRareAggregator } "
+  id: ID!
+
+  " Total number of unique users "
+  users: BigInt!
+
+  " Total number of collections traded "
+  collections: BigInt!
+
+  " Total number of transactions "
+  transactions: BigInt!
+
+  " Aggregator by currency "
+  byCurrency: [AggregatorByCurrency!]! @derivedFrom(field: "aggregator")
+
+  " Aggregator daily data "
+  dailyData: [AggregatorDailyData!]! @derivedFrom(field: "aggregator")
+}
+
+type AggregatorByCurrency @entity {
+  " { Currency } "
+  id: ID!
+
+  " Trade currency "
+  currency: Bytes!
+
+  " Total number of unique users "
+  users: BigInt!
+
+  " Total number of collections traded "
+  collections: BigInt!
+
+  " Total number of transactions "
+  transactions: BigInt!
+
+  " Total volume "
+  volume: BigDecimal!
+
+  " Pointer to Aggregator "
+  aggregator: Aggregator!
+
+  " Aggregator daily data "
+  dailyData: [AggregatorDailyDataByCurrency!]! @derivedFrom(field: "aggregatorByCurrency")
+}
+
+type AggregatorDailyData @entity {
+  " { Date } "
+  id: ID!
+
+  " Pointer to Aggregator "
+  aggregator: Aggregator!
+
+  " Date "
+  date: BigInt!
+
+  " Total number of unique users "
+  users: BigInt!
+
+  " Total number of collections traded "
+  collections: BigInt!
+
+  " Total number of transactions "
+  transactions: BigInt!
+
+  " Aggregator daily data by currency "
+  byCurrency: [AggregatorDailyDataByCurrency!]! @derivedFrom(field: "aggregatorDailyData")
+}
+
+type AggregatorDailyDataByCurrency @entity {
+  " { Currency }-{ Date } "
+  id: ID!
+
+  " Trade currency "
+  currency: Bytes!
+
+  " Pointer to AggregatorByCurrency "
+  aggregatorByCurrency: AggregatorByCurrency!
+
+  " Pointer to AggregatorDailyData "
+  aggregatorDailyData: AggregatorDailyData!
+
+  " Date "
+  date: BigInt!
+
+  " Total number of unique users "
+  users: BigInt!
+
+  " Total number of collections traded "
+  collections: BigInt!
+
+  " Transactions "
+  transactions: [Transaction!]! @derivedFrom(field: "aggregatorDailyDataByCurrency")
+
+  " Total volume "
+  volume: BigDecimal!
+}
+
+type Collection @entity {
+  " { Address } "
+  id: ID!
+
+  " Total number of transactions "
+  transactions: BigInt!
+
+  " Collection daily data "
+  dailyData: [CollectionDailyData!]! @derivedFrom(field: "collection")
+}
+
+type CollectionByCurrency @entity {
+  " { Address }-{ Currency } "
+  id: ID!
+
+  " Trade currency "
+  currency: Bytes!
+
+  " Total number of transactions "
+  transactions: BigInt!
+
+  " Total volume "
+  volume: BigDecimal!
+
+  " Collection daily data "
+  dailyData: [CollectionDailyDataByCurrency!]! @derivedFrom(field: "collectionByCurrency")
+}
+
+type CollectionDailyData @entity {
+  " { Address }-{ Date } "
+  id: ID!
+
+  " Pointer to Collection "
+  collection: Collection!
+
+  " Date "
+  date: BigInt!
+
+  " Total number of transactions "
+  transactions: BigInt!
+}
+
+type CollectionDailyDataByCurrency @entity {
+  " { Address }-{ Currency }-{ Date } "
+  id: ID!
+
+  " Pointer to CollectionByCurrency "
+  collectionByCurrency: CollectionByCurrency!
+
+  " Trade currency "
+  currency: Bytes!
+
+  " Date "
+  date: BigInt!
+
+  " Transactions "
+  transactions: [Transaction!]! @derivedFrom(field: "collectionDailyDataByCurrency")
+
+  " Total volume "
+  volume: BigDecimal!
+}
+
+type Marketplace @entity {
+  " { Marketplace } "
+  id: ID!
+
+  " Total number of unique users "
+  users: BigInt!
+
+  " Total number of collections traded "
+  collections: BigInt!
+
+  " Total number of transactions "
+  transactions: BigInt!
+
+  " Marketplace daily data "
+  dailyData: [MarketplaceDailyData!]! @derivedFrom(field: "marketplace")
+
+  " Marketplace by currency "
+  byCurrency: [MarketplaceByCurrency!]! @derivedFrom(field: "marketplace")
+}
+
+type MarketplaceByCurrency @entity {
+  " { Marketplace }-{ Currency } "
+  id: ID!
+
+  " Trade currency "
+  currency: Bytes!
+
+  " Total number of unique users "
+  users: BigInt!
+
+  " Total number of collections traded "
+  collections: BigInt!
+
+  " Total number of transactions "
+  transactions: BigInt!
+
+  " Total volume "
+  volume: BigDecimal!
+
+  " Marketplace daily data "
+  dailyData: [MarketplaceDailyDataByCurrency!]! @derivedFrom(field: "marketplaceByCurrency")
+
+  " Marketplace "
+  marketplace: Marketplace!
+}
+
+type MarketplaceDailyData @entity {
+  " { Marketplace }-{ Date } "
+  id: ID!
+
+  " Pointer to Marketplace "
+  marketplace: Marketplace!
+
+  " Date "
+  date: BigInt!
+
+  " Total number of unique users "
+  users: BigInt!
+
+  " Total number of collections traded "
+  collections: BigInt!
+
+  " Total number of transactions "
+  transactions: BigInt!
+
+  " Marketplace by currency "
+  byCurrency: [MarketplaceDailyDataByCurrency!]! @derivedFrom(field: "marketplaceDailyData")
+}
+
+type MarketplaceDailyDataByCurrency @entity {
+  " { Marketplace }-{ Currency }-{ Date } "
+  id: ID!
+
+  " Pointer to MarketplaceByCurrency "
+  marketplaceByCurrency: MarketplaceByCurrency!
+
+  " Pointer to MarketplaceDailyData "
+  marketplaceDailyData: MarketplaceDailyData!
+
+  " Trade currency "
+  currency: Bytes!
+
+  " Date "
+  date: BigInt!
+
+  " Total number of unique users "
+  users: BigInt!
+
+  " Total number of collections traded "
+  collections: BigInt!
+
+  " Transactions "
+  transactions: [Transaction!]! @derivedFrom(field: "marketplaceDailyDataByCurrency")
+
+  " Total volume "
+  volume: BigDecimal!
+}
+
+type User @entity {
+  " { Address } "
+  id: ID!
+
+  " Total number of transactions "
+  transactions: BigInt!
+
+  " User daily data "
+  dailyData: [UserDailyData!]! @derivedFrom(field: "user")
+
+  " User by currency "
+  byCurrency: [UserByCurrency!]! @derivedFrom(field: "user")
+}
+
+type UserByCurrency @entity {
+  " { User }-{ Currency } "
+  id: ID!
+
+  " Trade currency "
+  currency: Bytes!
+
+  " Total number of transactions "
+  transactions: BigInt!
+
+  " Total volume "
+  volume: BigDecimal!
+
+  " User daily data "
+  dailyData: [UserDailyDataByCurrency!]! @derivedFrom(field: "userByCurrency")
+
+  " Pointer to User "
+  user: User!
+}
+
+type UserDailyData @entity {
+  " { User }-{ Date } "
+  id: ID!
+
+  " Pointer to User "
+  user: User!
+
+  " Date "
+  date: BigInt!
+
+  " Total number of transactions "
+  transactions: BigInt!
+
+  " User daily data by currency "
+  byCurrency: [UserDailyDataByCurrency!]! @derivedFrom(field: "userDailyData")
+}
+
+type UserDailyDataByCurrency @entity {
+  " { User }-{ Currency }-{ Date } "
+  id: ID!
+
+  " Pointer to UserByCurrency "
+  userByCurrency: UserByCurrency!
+
+  " Pointer to UserDailyData "
+  userDailyData: UserDailyData!
+
+  " Trade currency "
+  currency: Bytes!
+
+  " Date "
+  date: BigInt!
+
+  " Transactions "
+  transactions: [Transaction!]! @derivedFrom(field: "userDailyDataByCurrency")
+
+  " Total volume "
+  volume: BigDecimal!
+}
+
+type Transaction @entity {
+    " { Transaction hash }-{ Log index }-{ (optional) ID within bundle } "
+  id: ID!
+
+  " Event transaction hash. "
+  transactionHash: String!
+
+  " Event log index. "
+  logIndex: Int!
+
+  " Block timestamp where the trade is executed. "
+  timestamp: BigInt!
+
+  " Block number where the trade is executed. "
+  blockNumber: BigInt!
+
+  " Whether the trade is in a bundle. "
+  isBundle: Boolean!
+
+  " Pointer to collection "
+  collection: Collection!
+
+  " Token ID of the traded NFT. "
+  tokenId: BigInt!
+
+  " The amount of token to transfer. It should be 1 except for ERC1155 batch. "
+  amount: BigInt!
+
+  " Price. If only 1 tokenId is involved, then the price is determined by the token only. If the trade is incurred by a batch purchasing, then the price is the average price in the batch. "
+  price: BigDecimal!
+
+  " Trade currency "
+  currency: Bytes!
+
+  " Buyer account (Pointer to User) "
+  buyer: User!
+
+  " Seller account address "
+  seller: Bytes!
+
+  " Pointer to AggregatorDailyDataByCurrency "
+  aggregatorDailyDataByCurrency: AggregatorDailyDataByCurrency!
+
+  " Pointer to CollectionDailyDataByCurrency "
+  collectionDailyDataByCurrency: CollectionDailyDataByCurrency!
+
+  " Pointer to MarketplaceDailyDataByCurrency "
+  marketplaceDailyDataByCurrency: MarketplaceDailyDataByCurrency!
+
+  " Pointer to UserDailyDataByCurrency "
+  userDailyDataByCurrency: UserDailyDataByCurrency!
+}
