@@ -135,6 +135,9 @@ describe("Aggregator", () => {
         assert.assertNull(transaction);
       };
 
+      const getTransactionId = (event: OrderFulfilled): string =>
+        `${event.transaction.hash.toHexString()}-${event.logIndex.toString()}`;
+
       afterEach(() => {
         clearStore();
       });
@@ -221,7 +224,7 @@ describe("Aggregator", () => {
           "Seaport",
           ZERO_ADDRESS.toHex(),
           transactionVolume,
-          `${event.transaction.hash.toHexString()}-${event.logIndex.toString()}`
+          getTransactionId(event)
         );
       });
 
@@ -246,18 +249,14 @@ describe("Aggregator", () => {
       test("updates UserDailyDataByCurrency", () => {
         const event = createMockOrderFulfilledEvent();
         handleOrderFulfilled(event);
-        expectUserDailyDataByCurrencyUpdated(
-          ZERO_ADDRESS.toHex(),
-          transactionVolume,
-          `${event.transaction.hash.toHexString()}-${event.logIndex.toString()}`
-        );
+        expectUserDailyDataByCurrencyUpdated(ZERO_ADDRESS.toHex(), transactionVolume, getTransactionId(event));
       });
 
       test("updates Transaction", () => {
         const event = createMockOrderFulfilledEvent();
         handleOrderFulfilled(event);
 
-        const transaction = Transaction.load(`${event.transaction.hash.toHexString()}-${event.logIndex.toString()}`);
+        const transaction = Transaction.load(getTransactionId(event));
         assert.assertNotNull(transaction);
         assert.stringEquals(transaction!.transactionHash, event.transaction.hash.toHexString());
         assert.stringEquals(transaction!.logIndex.toString(), event.logIndex.toString());
@@ -351,13 +350,16 @@ describe("Aggregator", () => {
       event!.receipt!.logs = [
         newLog(LOOKSRARE_AGGREGATOR, [
           Bytes.fromHexString(LOOKSRARE_AGGREGATOR_SWEEP_EVENT_TOPIC),
-          Bytes.fromHexString("0x000000000000000000000000000000000000000000000000000000000000dEaD"),
+          Bytes.fromHexString(originatorPadded),
         ]),
         event!.receipt!.logs[0],
       ];
 
       return event;
     };
+
+    const getTransactionId = (event: TakerBid): string =>
+      `${event.transaction.hash.toHexString()}-${event.logIndex.toString()}`;
 
     afterEach(() => {
       clearStore();
@@ -388,7 +390,7 @@ describe("Aggregator", () => {
         collectionAddress,
         currency,
         transactionVolume,
-        `${event.transaction.hash.toHexString()}-${event.logIndex.toString()}`
+        getTransactionId(event)
       );
     });
 
@@ -413,11 +415,7 @@ describe("Aggregator", () => {
     test("updates AggregatorDailyDataByCurrency", () => {
       const event = createMockTakerBidEvent();
       handleTakerBid(event);
-      expectAggregatorDailyDataByCurrencyUpdated(
-        currency,
-        transactionVolume,
-        `${event.transaction.hash.toHexString()}-${event.logIndex.toString()}`
-      );
+      expectAggregatorDailyDataByCurrencyUpdated(currency, transactionVolume, getTransactionId(event));
     });
 
     test("updates Marketplace", () => {
@@ -441,12 +439,7 @@ describe("Aggregator", () => {
     test("updates MarketplaceDailyDataByCurrency", () => {
       const event = createMockTakerBidEvent();
       handleTakerBid(event);
-      expectMarketplaceDailyDataByCurrencyUpdated(
-        "LooksRareV1",
-        currency,
-        transactionVolume,
-        `${event.transaction.hash.toHexString()}-${event.logIndex.toString()}`
-      );
+      expectMarketplaceDailyDataByCurrencyUpdated("LooksRareV1", currency, transactionVolume, getTransactionId(event));
     });
 
     test("updates User", () => {
@@ -470,18 +463,14 @@ describe("Aggregator", () => {
     test("updates UserDailyDataByCurrency", () => {
       const event = createMockTakerBidEvent();
       handleTakerBid(event);
-      expectUserDailyDataByCurrencyUpdated(
-        currency,
-        transactionVolume,
-        `${event.transaction.hash.toHexString()}-${event.logIndex.toString()}`
-      );
+      expectUserDailyDataByCurrencyUpdated(currency, transactionVolume, getTransactionId(event));
     });
 
     test("updates Transaction", () => {
       const event = createMockTakerBidEvent();
       handleTakerBid(event);
 
-      const transaction = Transaction.load(`${event.transaction.hash.toHexString()}-${event.logIndex.toString()}`);
+      const transaction = Transaction.load(getTransactionId(event));
       assert.assertNotNull(transaction);
       assert.stringEquals(transaction!.transactionHash, event.transaction.hash.toHexString());
       assert.stringEquals(transaction!.logIndex.toString(), event.logIndex.toString());
