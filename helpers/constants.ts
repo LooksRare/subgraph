@@ -1,4 +1,4 @@
-import { Address, BigDecimal, BigInt } from "@graphprotocol/graph-ts";
+import { Address, BigDecimal, BigInt, ByteArray, crypto } from "@graphprotocol/graph-ts";
 
 export const ZERO_BI = BigInt.zero();
 export const ONE_BI = BigInt.fromI32(1);
@@ -13,5 +13,6 @@ export const ONE_DAY_BI = BigInt.fromI32(86400);
 
 // TODO: Update it with the real address
 export const LOOKSRARE_AGGREGATOR = Address.fromString("0x0000000000000000000000000000000000069420");
-export const LOOKSRARE_AGGREGATOR_SWEEP_EVENT_TOPIC =
-  "0x807273efecfbeb7ae7d3a2189d1ed5a7db80074eed86e7d80b10bb925cd1db73";
+export const LOOKSRARE_AGGREGATOR_SWEEP_EVENT_TOPIC = crypto
+  .keccak256(ByteArray.fromUTF8("Sweep(address)"))
+  .toHexString();
