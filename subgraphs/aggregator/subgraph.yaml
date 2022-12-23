@@ -22,7 +22,7 @@ dataSources:
           handler: handleOrderFulfilled
       file: ./src/Seaport/index.ts
   - kind: ethereum
-    name: LooksRareV1
+    name: LooksRareExchange
     network: mainnet
     source:
       address: "0x59728544B08AB483533076417FbBB2fD0B17CE3a"
