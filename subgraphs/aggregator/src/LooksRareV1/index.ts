@@ -23,6 +23,7 @@ export function handleTakerBid(event: TakerBid): void {
 
   const sweepEvent = findSweepEventFromLogs(logs);
   if (!sweepEvent) return;
+  if (sweepEvent.transactionLogIndex >= event.transactionLogIndex) return;
 
   const currency = event.params.currency;
   const price = event.params.price.toBigDecimal();

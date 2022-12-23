@@ -70,10 +70,11 @@ describe("Aggregator", () => {
 
         // Fake a LooksRareAggregator Sweep event
         event!.receipt!.logs = [
-          newLog(LOOKSRARE_AGGREGATOR, [
-            Bytes.fromHexString(LOOKSRARE_AGGREGATOR_SWEEP_EVENT_TOPIC),
-            Bytes.fromHexString(originatorPadded),
-          ]),
+          newLog(
+            LOOKSRARE_AGGREGATOR,
+            [Bytes.fromHexString(LOOKSRARE_AGGREGATOR_SWEEP_EVENT_TOPIC), Bytes.fromHexString(originatorPadded)],
+            event.transactionLogIndex.minus(BigInt.fromI32(1))
+          ),
           event!.receipt!.logs[0],
         ];
 
@@ -262,22 +263,36 @@ describe("Aggregator", () => {
         const event = createMockOrderFulfilledEvent();
         // matching contract address, but not topic0
         event!.receipt!.logs = [
-          newLog(LOOKSRARE_AGGREGATOR, [
-            // actual sweep topic + 1
-            Bytes.fromHexString("0x807273efecfbeb7ae7d3a2189d1ed5a7db80074eed86e7d80b10bb925cd1db74"),
-            Bytes.fromHexString(originatorPadded),
-          ]),
+          newLog(
+            LOOKSRARE_AGGREGATOR,
+            [
+              // actual sweep topic + 1
+              Bytes.fromHexString("0x807273efecfbeb7ae7d3a2189d1ed5a7db80074eed86e7d80b10bb925cd1db74"),
+              Bytes.fromHexString(originatorPadded),
+            ],
+            event.transactionLogIndex.minus(BigInt.fromI32(1))
+          ),
           event!.receipt!.logs[1],
         ];
         handleOrderFulfilled(event);
         // matching topic0, but not contract address
         event!.receipt!.logs = [
-          newLog(Address.fromString("0x000000000000000000000000000000000000002a"), [
-            Bytes.fromHexString(LOOKSRARE_AGGREGATOR_SWEEP_EVENT_TOPIC),
-            Bytes.fromHexString(originatorPadded),
-          ]),
+          newLog(
+            Address.fromString("0x000000000000000000000000000000000000002a"),
+            [Bytes.fromHexString(LOOKSRARE_AGGREGATOR_SWEEP_EVENT_TOPIC), Bytes.fromHexString(originatorPadded)],
+            event.transactionLogIndex.minus(BigInt.fromI32(1))
+          ),
           event!.receipt!.logs[1],
         ];
+        handleOrderFulfilled(event);
+        expectNothingHappened("Seaport", offerToken, ZERO_ADDRESS.toHex(), getTransactionId(event));
+      });
+
+      test("does not include trades whose log indexes are less than the aggregator sweep event's log index", () => {
+        const event = createMockOrderFulfilledEvent();
+        event!.receipt!.logs = [event!.receipt!.logs[1], event!.receipt!.logs[0]];
+        event!.receipt!.logs[0].transactionLogIndex = BigInt.fromI32(1);
+        event!.receipt!.logs[1].transactionLogIndex = BigInt.fromI32(2);
         handleOrderFulfilled(event);
         expectNothingHappened("Seaport", offerToken, ZERO_ADDRESS.toHex(), getTransactionId(event));
       });
@@ -313,10 +328,11 @@ describe("Aggregator", () => {
 
       // Fake a LooksRareAggregator Sweep event
       event!.receipt!.logs = [
-        newLog(LOOKSRARE_AGGREGATOR, [
-          Bytes.fromHexString(LOOKSRARE_AGGREGATOR_SWEEP_EVENT_TOPIC),
-          Bytes.fromHexString(originatorPadded),
-        ]),
+        newLog(
+          LOOKSRARE_AGGREGATOR,
+          [Bytes.fromHexString(LOOKSRARE_AGGREGATOR_SWEEP_EVENT_TOPIC), Bytes.fromHexString(originatorPadded)],
+          event.transactionLogIndex.minus(BigInt.fromI32(1))
+        ),
         event!.receipt!.logs[0],
       ];
 
@@ -459,22 +475,36 @@ describe("Aggregator", () => {
       const event = createMockTakerBidEvent();
       // matching contract address, but not topic0
       event!.receipt!.logs = [
-        newLog(LOOKSRARE_AGGREGATOR, [
-          // actual sweep topic + 1
-          Bytes.fromHexString("0x807273efecfbeb7ae7d3a2189d1ed5a7db80074eed86e7d80b10bb925cd1db74"),
-          Bytes.fromHexString(originatorPadded),
-        ]),
+        newLog(
+          LOOKSRARE_AGGREGATOR,
+          [
+            // actual sweep topic + 1
+            Bytes.fromHexString("0x807273efecfbeb7ae7d3a2189d1ed5a7db80074eed86e7d80b10bb925cd1db74"),
+            Bytes.fromHexString(originatorPadded),
+          ],
+          event.transactionLogIndex.minus(BigInt.fromI32(1))
+        ),
         event!.receipt!.logs[1],
       ];
       handleTakerBid(event);
       // matching topic0, but not contract address
       event!.receipt!.logs = [
-        newLog(Address.fromString("0x000000000000000000000000000000000000002a"), [
-          Bytes.fromHexString(LOOKSRARE_AGGREGATOR_SWEEP_EVENT_TOPIC),
-          Bytes.fromHexString(originatorPadded),
-        ]),
+        newLog(
+          Address.fromString("0x000000000000000000000000000000000000002a"),
+          [Bytes.fromHexString(LOOKSRARE_AGGREGATOR_SWEEP_EVENT_TOPIC), Bytes.fromHexString(originatorPadded)],
+          event.transactionLogIndex.minus(BigInt.fromI32(1))
+        ),
         event!.receipt!.logs[1],
       ];
+      handleTakerBid(event);
+      expectNothingHappened("LooksRareV1", collectionAddress, currency, getTransactionId(event));
+    });
+
+    test("does not include trades whose log indexes are less than the aggregator sweep event's log index", () => {
+      const event = createMockTakerBidEvent();
+      event!.receipt!.logs = [event!.receipt!.logs[1], event!.receipt!.logs[0]];
+      event!.receipt!.logs[0].transactionLogIndex = BigInt.fromI32(1);
+      event!.receipt!.logs[1].transactionLogIndex = BigInt.fromI32(2);
       handleTakerBid(event);
       expectNothingHappened("LooksRareV1", collectionAddress, currency, getTransactionId(event));
     });

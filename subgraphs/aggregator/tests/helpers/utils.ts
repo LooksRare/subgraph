@@ -138,7 +138,7 @@ export function createTakerBidEvent(
   return takerBidEvent;
 }
 
-export function newLog(address: Address, topics: Array<Bytes>): ethereum.Log {
+export function newLog(address: Address, topics: Array<Bytes>, transactionLogIndex: BigInt): ethereum.Log {
   // Copied from https://github.com/LimeChain/matchstick-as/blob/886a3ff95bc760ccacec06d23c577d332ae03e4d/assembly/defaults.ts#L35
   const defaultAddress = Address.fromString("0xA16081F360e3847006dB660bae1c6d1b2e17eC2A");
   const defaultAddressBytes = defaultAddress as Bytes;
@@ -155,7 +155,7 @@ export function newLog(address: Address, topics: Array<Bytes>): ethereum.Log {
     defaultAddressBytes, // transactionHash
     defaultBigInt, // transactionIndex
     defaultBigInt, // logIndex
-    defaultBigInt, // transactionLogIndex
+    transactionLogIndex,
     defaultEventDataLogType, // logType
     new Wrapped(false) // removed
   );

@@ -26,6 +26,7 @@ export function handleOrderFulfilled(event: OrderFulfilled): void {
 
   const sweepEvent = findSweepEventFromLogs(logs);
   if (!sweepEvent) return;
+  if (sweepEvent.transactionLogIndex >= event.transactionLogIndex) return;
 
   const offer = event.params.offer;
   const consideration = event.params.consideration;
