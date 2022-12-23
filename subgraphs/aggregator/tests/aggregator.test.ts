@@ -113,7 +113,7 @@ describe("Aggregator", () => {
           offerToken,
           ZERO_ADDRESS.toHex(),
           transactionVolume,
-          `${event.transaction.hash.toHexString()}-${event.logIndex.toString()}`
+          getTransactionId(event)
         );
       });
 
@@ -138,11 +138,7 @@ describe("Aggregator", () => {
       test("updates AggregatorDailyDataByCurrency", () => {
         const event = createMockOrderFulfilledEvent();
         handleOrderFulfilled(event);
-        expectAggregatorDailyDataByCurrencyUpdated(
-          ZERO_ADDRESS.toHex(),
-          transactionVolume,
-          `${event.transaction.hash.toHexString()}-${event.logIndex.toString()}`
-        );
+        expectAggregatorDailyDataByCurrencyUpdated(ZERO_ADDRESS.toHex(), transactionVolume, getTransactionId(event));
       });
 
       test("updates Marketplace", () => {
