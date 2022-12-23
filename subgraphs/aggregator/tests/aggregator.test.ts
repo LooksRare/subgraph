@@ -1,5 +1,5 @@
 /* eslint-disable @typescript-eslint/no-non-null-assertion */
-import { BigInt, Bytes } from "@graphprotocol/graph-ts";
+import { Address, BigInt, Bytes } from "@graphprotocol/graph-ts";
 import { afterEach, assert, clearStore, describe, test } from "matchstick-as/assembly/index";
 import { createOrderFulfilledEvent, createTakerBidEvent, newLog } from "./helpers/utils";
 import {
@@ -15,6 +15,7 @@ import {
   expectMarketplaceDailyDataByCurrencyUpdated,
   expectMarketplaceDailyDataUpdated,
   expectMarketplaceUpdated,
+  expectNothingHappened,
   expectUserByCurrencyUpdated,
   expectUserDailyDataByCurrencyUpdated,
   expectUserDailyDataUpdated,
@@ -22,25 +23,7 @@ import {
   originatorPadded,
 } from "./helpers/sharedTests";
 import { handleOrderFulfilled } from "../src/Seaport/index";
-import {
-  Aggregator,
-  AggregatorByCurrency,
-  AggregatorDailyData,
-  AggregatorDailyDataByCurrency,
-  Collection,
-  CollectionByCurrency,
-  CollectionDailyData,
-  CollectionDailyDataByCurrency,
-  Marketplace,
-  MarketplaceByCurrency,
-  MarketplaceDailyData,
-  MarketplaceDailyDataByCurrency,
-  Transaction,
-  User,
-  UserByCurrency,
-  UserDailyData,
-  UserDailyDataByCurrency,
-} from "../generated/schema";
+import { Transaction } from "../generated/schema";
 import {
   LOOKSRARE_AGGREGATOR,
   LOOKSRARE_AGGREGATOR_SWEEP_EVENT_TOPIC,
@@ -95,45 +78,6 @@ describe("Aggregator", () => {
         ];
 
         return event;
-      };
-
-      const assertNothingHappened = (event: OrderFulfilled): void => {
-        const collection = Collection.load(offerToken);
-        assert.assertNull(collection);
-        const collectionByCurrency = CollectionByCurrency.load(`${offerToken}-${ZERO_ADDRESS.toHex()}`);
-        assert.assertNull(collectionByCurrency);
-        const collectionDailyData = CollectionDailyData.load(`${offerToken}-0`);
-        assert.assertNull(collectionDailyData);
-        const collectionDailyDataByCurrency = CollectionDailyDataByCurrency.load(
-          `${offerToken}-${ZERO_ADDRESS.toHex()}-0`
-        );
-        assert.assertNull(collectionDailyDataByCurrency);
-        const aggregator = Aggregator.load("LooksRareAggregator");
-        assert.assertNull(aggregator);
-        const aggregatorDailyData = AggregatorDailyData.load("0");
-        assert.assertNull(aggregatorDailyData);
-        const aggregatorByCurrency = AggregatorByCurrency.load(ZERO_ADDRESS.toHex());
-        assert.assertNull(aggregatorByCurrency);
-        const aggregatorDailyDataByCurrency = AggregatorDailyDataByCurrency.load(`${ZERO_ADDRESS.toHex()}-0`);
-        assert.assertNull(aggregatorDailyDataByCurrency);
-        const marketplace = Marketplace.load("Seaport");
-        assert.assertNull(marketplace);
-        const marketplaceDailyData = MarketplaceDailyData.load("Seaport-0");
-        assert.assertNull(marketplaceDailyData);
-        const marketplaceByCurrency = MarketplaceByCurrency.load(`Seaport-${ZERO_ADDRESS.toHex()}`);
-        assert.assertNull(marketplaceByCurrency);
-        const marketplaceDailyDataByCurrency = MarketplaceDailyDataByCurrency.load(`Seaport-${ZERO_ADDRESS.toHex()}-0`);
-        assert.assertNull(marketplaceDailyDataByCurrency);
-        const user = User.load(originator);
-        assert.assertNull(user);
-        const userDailyData = UserDailyData.load(`${originator}-0`);
-        assert.assertNull(userDailyData);
-        const userByCurrency = UserByCurrency.load(`${originator}-${ZERO_ADDRESS.toHex()}`);
-        assert.assertNull(userByCurrency);
-        const userDailyDataByCurrency = UserDailyDataByCurrency.load(`${originator}-${ZERO_ADDRESS.toHex()}-0`);
-        assert.assertNull(userDailyDataByCurrency);
-        const transaction = Transaction.load(`${event.transaction.hash.toHexString()}-${event.logIndex.toString()}`);
-        assert.assertNull(transaction);
       };
 
       const getTransactionId = (event: OrderFulfilled): string =>
@@ -287,15 +231,13 @@ describe("Aggregator", () => {
           [1, 1]
         );
         handleOrderFulfilled(event);
-
-        assertNothingHappened(event);
+        expectNothingHappened("Seaport", offerToken, ZERO_ADDRESS.toHex(), getTransactionId(event));
       });
 
       test("does nothing if consideration token is not ETH or ERC20", () => {
         const event = createMockOrderFulfilledEvent([2, 2, 2]);
         handleOrderFulfilled(event);
-
-        assertNothingHappened(event);
+        expectNothingHappened("Seaport", offerToken, ZERO_ADDRESS.toHex(), getTransactionId(event));
       });
 
       test("does nothing if consideration tokens are not the same", () => {
@@ -304,8 +246,7 @@ describe("Aggregator", () => {
           [ZERO_ADDRESS.toHex(), ZERO_ADDRESS.toHex(), "0xA0b86991c6218b36c1d19D4a2e9Eb0cE3606eB48"]
         );
         handleOrderFulfilled(event);
-
-        assertNothingHappened(event);
+        expectNothingHappened("Seaport", offerToken, ZERO_ADDRESS.toHex(), getTransactionId(event));
       });
 
       test("does nothing if consideration item types are not the same", () => {
@@ -314,8 +255,31 @@ describe("Aggregator", () => {
           [ZERO_ADDRESS.toHex(), ZERO_ADDRESS.toHex(), ZERO_ADDRESS.toHex()]
         );
         handleOrderFulfilled(event);
+        expectNothingHappened("Seaport", offerToken, ZERO_ADDRESS.toHex(), getTransactionId(event));
+      });
 
-        assertNothingHappened(event);
+      test("does nothing if no aggregator sweep event is found", () => {
+        const event = createMockOrderFulfilledEvent();
+        // matching contract address, but not topic0
+        event!.receipt!.logs = [
+          newLog(LOOKSRARE_AGGREGATOR, [
+            // actual sweep topic + 1
+            Bytes.fromHexString("0x807273efecfbeb7ae7d3a2189d1ed5a7db80074eed86e7d80b10bb925cd1db74"),
+            Bytes.fromHexString(originatorPadded),
+          ]),
+          event!.receipt!.logs[1],
+        ];
+        handleOrderFulfilled(event);
+        // matching topic0, but not contract address
+        event!.receipt!.logs = [
+          newLog(Address.fromString("0x000000000000000000000000000000000000002a"), [
+            Bytes.fromHexString(LOOKSRARE_AGGREGATOR_SWEEP_EVENT_TOPIC),
+            Bytes.fromHexString(originatorPadded),
+          ]),
+          event!.receipt!.logs[1],
+        ];
+        handleOrderFulfilled(event);
+        expectNothingHappened("Seaport", offerToken, ZERO_ADDRESS.toHex(), getTransactionId(event));
       });
     });
   });
@@ -489,6 +453,30 @@ describe("Aggregator", () => {
       assert.stringEquals(transaction!.collectionDailyDataByCurrency, `${collectionAddress}-${currency}-0`);
       assert.stringEquals(transaction!.marketplaceDailyDataByCurrency, `LooksRareV1-${currency}-0`);
       assert.stringEquals(transaction!.userDailyDataByCurrency, `${originator}-${currency}-0`);
+    });
+
+    test("does nothing if no aggregator sweep event is found", () => {
+      const event = createMockTakerBidEvent();
+      // matching contract address, but not topic0
+      event!.receipt!.logs = [
+        newLog(LOOKSRARE_AGGREGATOR, [
+          // actual sweep topic + 1
+          Bytes.fromHexString("0x807273efecfbeb7ae7d3a2189d1ed5a7db80074eed86e7d80b10bb925cd1db74"),
+          Bytes.fromHexString(originatorPadded),
+        ]),
+        event!.receipt!.logs[1],
+      ];
+      handleTakerBid(event);
+      // matching topic0, but not contract address
+      event!.receipt!.logs = [
+        newLog(Address.fromString("0x000000000000000000000000000000000000002a"), [
+          Bytes.fromHexString(LOOKSRARE_AGGREGATOR_SWEEP_EVENT_TOPIC),
+          Bytes.fromHexString(originatorPadded),
+        ]),
+        event!.receipt!.logs[1],
+      ];
+      handleTakerBid(event);
+      expectNothingHappened("LooksRareV1", collectionAddress, currency, getTransactionId(event));
     });
   });
 });

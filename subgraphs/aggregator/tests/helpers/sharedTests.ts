@@ -14,6 +14,7 @@ import {
   MarketplaceByCurrency,
   MarketplaceDailyData,
   MarketplaceDailyDataByCurrency,
+  Transaction,
   User,
   UserByCurrency,
   UserDailyData,
@@ -227,4 +228,46 @@ export const expectUserDailyDataByCurrencyUpdated = (currency: string, volume: s
 
   assert.i32Equals(userDailyDataByCurrency!.transactions.length, 1);
   assert.stringEquals(userDailyDataByCurrency!.transactions[0], transactionId);
+};
+
+export const expectNothingHappened = (
+  exchange: string,
+  collectionAddress: string,
+  currency: string,
+  transactionId: string
+): void => {
+  const collection = Collection.load(collectionAddress);
+  assert.assertNull(collection);
+  const collectionByCurrency = CollectionByCurrency.load(`${collectionAddress}-${currency}`);
+  assert.assertNull(collectionByCurrency);
+  const collectionDailyData = CollectionDailyData.load(`${collectionAddress}-0`);
+  assert.assertNull(collectionDailyData);
+  const collectionDailyDataByCurrency = CollectionDailyDataByCurrency.load(`${collectionAddress}-${currency}-0`);
+  assert.assertNull(collectionDailyDataByCurrency);
+  const aggregator = Aggregator.load("LooksRareAggregator");
+  assert.assertNull(aggregator);
+  const aggregatorDailyData = AggregatorDailyData.load("0");
+  assert.assertNull(aggregatorDailyData);
+  const aggregatorByCurrency = AggregatorByCurrency.load(currency);
+  assert.assertNull(aggregatorByCurrency);
+  const aggregatorDailyDataByCurrency = AggregatorDailyDataByCurrency.load(`${currency}-0`);
+  assert.assertNull(aggregatorDailyDataByCurrency);
+  const marketplace = Marketplace.load(exchange);
+  assert.assertNull(marketplace);
+  const marketplaceDailyData = MarketplaceDailyData.load(`${exchange}-0`);
+  assert.assertNull(marketplaceDailyData);
+  const marketplaceByCurrency = MarketplaceByCurrency.load(`${exchange}-${currency}`);
+  assert.assertNull(marketplaceByCurrency);
+  const marketplaceDailyDataByCurrency = MarketplaceDailyDataByCurrency.load(`${exchange}-${currency}-0`);
+  assert.assertNull(marketplaceDailyDataByCurrency);
+  const user = User.load(originator);
+  assert.assertNull(user);
+  const userDailyData = UserDailyData.load(`${originator}-0`);
+  assert.assertNull(userDailyData);
+  const userByCurrency = UserByCurrency.load(`${originator}-${currency}`);
+  assert.assertNull(userByCurrency);
+  const userDailyDataByCurrency = UserDailyDataByCurrency.load(`${originator}-${currency}-0`);
+  assert.assertNull(userDailyDataByCurrency);
+  const transaction = Transaction.load(transactionId);
+  assert.assertNull(transaction);
 };
