@@ -25,7 +25,8 @@ export function createOrderFulfilledEvent(
   considerationTokens: Array<string>,
   considerationIdentifiers: Array<i32>,
   considerationAmounts: Array<string>,
-  considerationRecipients: Array<string>
+  considerationRecipients: Array<string>,
+  timestamp: i32
 ): OrderFulfilled {
   const mockEvent = newMockEvent();
   const orderFulfilledEvent = new OrderFulfilled(
@@ -38,6 +39,8 @@ export function createOrderFulfilledEvent(
     [],
     mockEvent.receipt
   );
+
+  orderFulfilledEvent.block.timestamp = BigInt.fromI32(timestamp);
 
   const orderHashParam = stringEventParam("orderHash", orderHash);
   const offererParam = addressEventParam("offerer", offerer);
@@ -99,7 +102,8 @@ export function createTakerBidEvent(
   currency: string,
   collection: string,
   tokenId: i32,
-  price: i64
+  price: i64,
+  timestamp: i32
 ): TakerBid {
   const mockEvent = newMockEvent();
   const takerBidEvent = new TakerBid(
@@ -112,6 +116,8 @@ export function createTakerBidEvent(
     [],
     mockEvent.receipt
   );
+
+  takerBidEvent.block.timestamp = BigInt.fromI32(timestamp);
 
   const orderHashParam = stringEventParam("orderHash", orderHash);
   const orderNonceParam = uintEventParam("orderNonce", orderNonce);

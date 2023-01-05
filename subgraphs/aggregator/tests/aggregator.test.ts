@@ -42,6 +42,7 @@ describe("Aggregator", () => {
       const recipient = "0xac5484132f22d4551d10ac7b6eaf8356b4beaaec";
       const offerToken = "0x60bb1e2aa1c9acafb4d34f71585d7e959f387769";
       const transactionVolume = "15296000000000000000";
+      const dayID = "19299";
 
       // https://etherscan.io/tx/0x954e07b648c7b6ceba98bddf79263b5b71f9e09da4d5bc7c10ca15819ae9f966
       const createMockOrderFulfilledEvent = (
@@ -65,7 +66,8 @@ describe("Aggregator", () => {
           considerationTokens, // consideration tokens
           [0, 0, 0], // consideration identifier
           ["14496000000000000000", "400000000000000000", "400000000000000000"], // consideration amounts
-          [offerer, "0x0000a26b00c1f0df003000390027140000faa719", "0xe974159205528502237758439da8c4dcc03d3023"] // consideration recipients
+          [offerer, "0x0000a26b00c1f0df003000390027140000faa719", "0xe974159205528502237758439da8c4dcc03d3023"], // consideration recipients
+          1667474207 // block timestamp
         );
 
         // Fake a LooksRareAggregator Sweep event
@@ -91,19 +93,19 @@ describe("Aggregator", () => {
       test("updates Collection", () => {
         const event = createMockOrderFulfilledEvent();
         handleOrderFulfilled(event);
-        expectCollectionUpdated(offerToken);
+        expectCollectionUpdated(offerToken, dayID);
       });
 
       test("updates CollectionByCurrency", () => {
         const event = createMockOrderFulfilledEvent();
         handleOrderFulfilled(event);
-        expectCollectionByCurrencyUpdated(offerToken, ZERO_ADDRESS.toHex(), transactionVolume);
+        expectCollectionByCurrencyUpdated(offerToken, ZERO_ADDRESS.toHex(), transactionVolume, dayID);
       });
 
       test("updates CollectionDailyData", () => {
         const event = createMockOrderFulfilledEvent();
         handleOrderFulfilled(event);
-        expectCollectionDailyDataUpdated(offerToken);
+        expectCollectionDailyDataUpdated(offerToken, dayID);
       });
 
       test("updates CollectionDailyDataByCurrency", () => {
@@ -113,20 +115,21 @@ describe("Aggregator", () => {
           offerToken,
           ZERO_ADDRESS.toHex(),
           transactionVolume,
-          getTransactionId(event)
+          getTransactionId(event),
+          dayID
         );
       });
 
       test("updates Aggregator", () => {
         const event = createMockOrderFulfilledEvent();
         handleOrderFulfilled(event);
-        expectAggregatorUpdated(ZERO_ADDRESS.toHex());
+        expectAggregatorUpdated(ZERO_ADDRESS.toHex(), dayID);
       });
 
       test("updates AggregatorDailyData", () => {
         const event = createMockOrderFulfilledEvent();
         handleOrderFulfilled(event);
-        expectAggregatorDailyDataUpdated(ZERO_ADDRESS.toHex());
+        expectAggregatorDailyDataUpdated(ZERO_ADDRESS.toHex(), dayID);
       });
 
       test("updates AggregatorByCurrency", () => {
@@ -138,25 +141,30 @@ describe("Aggregator", () => {
       test("updates AggregatorDailyDataByCurrency", () => {
         const event = createMockOrderFulfilledEvent();
         handleOrderFulfilled(event);
-        expectAggregatorDailyDataByCurrencyUpdated(ZERO_ADDRESS.toHex(), transactionVolume, getTransactionId(event));
+        expectAggregatorDailyDataByCurrencyUpdated(
+          ZERO_ADDRESS.toHex(),
+          transactionVolume,
+          getTransactionId(event),
+          dayID
+        );
       });
 
       test("updates Marketplace", () => {
         const event = createMockOrderFulfilledEvent();
         handleOrderFulfilled(event);
-        expectMarketplaceUpdated("Seaport");
+        expectMarketplaceUpdated("Seaport", dayID);
       });
 
       test("updates MarketplaceDailyData", () => {
         const event = createMockOrderFulfilledEvent();
         handleOrderFulfilled(event);
-        expectMarketplaceDailyDataUpdated("Seaport");
+        expectMarketplaceDailyDataUpdated("Seaport", dayID);
       });
 
       test("updates MarketplaceByCurrency", () => {
         const event = createMockOrderFulfilledEvent();
         handleOrderFulfilled(event);
-        expectMarketplaceByCurrencyUpdated("Seaport", ZERO_ADDRESS.toHex(), transactionVolume);
+        expectMarketplaceByCurrencyUpdated("Seaport", ZERO_ADDRESS.toHex(), transactionVolume, dayID);
       });
 
       test("updates MarketplaceDailyDataByCurrency", () => {
@@ -166,32 +174,33 @@ describe("Aggregator", () => {
           "Seaport",
           ZERO_ADDRESS.toHex(),
           transactionVolume,
-          getTransactionId(event)
+          getTransactionId(event),
+          dayID
         );
       });
 
       test("updates User", () => {
         const event = createMockOrderFulfilledEvent();
         handleOrderFulfilled(event);
-        expectUserUpdated(ZERO_ADDRESS.toHex());
+        expectUserUpdated(ZERO_ADDRESS.toHex(), dayID);
       });
 
       test("updates UserDailyData", () => {
         const event = createMockOrderFulfilledEvent();
         handleOrderFulfilled(event);
-        expectUserDailyDataUpdated(ZERO_ADDRESS.toHex());
+        expectUserDailyDataUpdated(ZERO_ADDRESS.toHex(), dayID);
       });
 
       test("updates UserByCurrency", () => {
         const event = createMockOrderFulfilledEvent();
         handleOrderFulfilled(event);
-        expectUserByCurrencyUpdated(ZERO_ADDRESS.toHex(), transactionVolume);
+        expectUserByCurrencyUpdated(ZERO_ADDRESS.toHex(), transactionVolume, dayID);
       });
 
       test("updates UserDailyDataByCurrency", () => {
         const event = createMockOrderFulfilledEvent();
         handleOrderFulfilled(event);
-        expectUserDailyDataByCurrencyUpdated(ZERO_ADDRESS.toHex(), transactionVolume, getTransactionId(event));
+        expectUserDailyDataByCurrencyUpdated(ZERO_ADDRESS.toHex(), transactionVolume, getTransactionId(event), dayID);
       });
 
       test("updates Transaction", () => {
@@ -212,10 +221,13 @@ describe("Aggregator", () => {
         assert.bigIntEquals(transaction!.amount, ONE_BI);
         assert.stringEquals(transaction!.buyer, originator);
         assert.stringEquals(transaction!.seller.toHexString(), offerer);
-        assert.stringEquals(transaction!.aggregatorDailyDataByCurrency, `${ZERO_ADDRESS.toHex()}-0`);
-        assert.stringEquals(transaction!.collectionDailyDataByCurrency, `${offerToken}-${ZERO_ADDRESS.toHex()}-0`);
-        assert.stringEquals(transaction!.marketplaceDailyDataByCurrency, `Seaport-${ZERO_ADDRESS.toHex()}-0`);
-        assert.stringEquals(transaction!.userDailyDataByCurrency, `${originator}-${ZERO_ADDRESS.toHex()}-0`);
+        assert.stringEquals(transaction!.aggregatorDailyDataByCurrency, `${ZERO_ADDRESS.toHex()}-${dayID}`);
+        assert.stringEquals(
+          transaction!.collectionDailyDataByCurrency,
+          `${offerToken}-${ZERO_ADDRESS.toHex()}-${dayID}`
+        );
+        assert.stringEquals(transaction!.marketplaceDailyDataByCurrency, `Seaport-${ZERO_ADDRESS.toHex()}-${dayID}`);
+        assert.stringEquals(transaction!.userDailyDataByCurrency, `${originator}-${ZERO_ADDRESS.toHex()}-${dayID}`);
       });
 
       test("does nothing if offer tokens are not the same", () => {
@@ -228,13 +240,13 @@ describe("Aggregator", () => {
           [1, 1]
         );
         handleOrderFulfilled(event);
-        expectNothingHappened("Seaport", offerToken, ZERO_ADDRESS.toHex(), getTransactionId(event));
+        expectNothingHappened("Seaport", offerToken, ZERO_ADDRESS.toHex(), getTransactionId(event), dayID);
       });
 
       test("does nothing if consideration token is not ETH or ERC20", () => {
         const event = createMockOrderFulfilledEvent([2, 2, 2]);
         handleOrderFulfilled(event);
-        expectNothingHappened("Seaport", offerToken, ZERO_ADDRESS.toHex(), getTransactionId(event));
+        expectNothingHappened("Seaport", offerToken, ZERO_ADDRESS.toHex(), getTransactionId(event), dayID);
       });
 
       test("does nothing if consideration tokens are not the same", () => {
@@ -243,7 +255,7 @@ describe("Aggregator", () => {
           [ZERO_ADDRESS.toHex(), ZERO_ADDRESS.toHex(), "0xA0b86991c6218b36c1d19D4a2e9Eb0cE3606eB48"]
         );
         handleOrderFulfilled(event);
-        expectNothingHappened("Seaport", offerToken, ZERO_ADDRESS.toHex(), getTransactionId(event));
+        expectNothingHappened("Seaport", offerToken, ZERO_ADDRESS.toHex(), getTransactionId(event), dayID);
       });
 
       test("does nothing if consideration item types are not the same", () => {
@@ -252,7 +264,7 @@ describe("Aggregator", () => {
           [ZERO_ADDRESS.toHex(), ZERO_ADDRESS.toHex(), ZERO_ADDRESS.toHex()]
         );
         handleOrderFulfilled(event);
-        expectNothingHappened("Seaport", offerToken, ZERO_ADDRESS.toHex(), getTransactionId(event));
+        expectNothingHappened("Seaport", offerToken, ZERO_ADDRESS.toHex(), getTransactionId(event), dayID);
       });
 
       test("does nothing if no aggregator sweep event is found", () => {
@@ -281,7 +293,7 @@ describe("Aggregator", () => {
           event!.receipt!.logs[1],
         ];
         handleOrderFulfilled(event);
-        expectNothingHappened("Seaport", offerToken, ZERO_ADDRESS.toHex(), getTransactionId(event));
+        expectNothingHappened("Seaport", offerToken, ZERO_ADDRESS.toHex(), getTransactionId(event), dayID);
       });
 
       test("does not include trades whose log indexes are less than the aggregator sweep event's log index", () => {
@@ -290,7 +302,7 @@ describe("Aggregator", () => {
         event!.receipt!.logs[0].transactionLogIndex = BigInt.fromI32(1);
         event!.receipt!.logs[1].transactionLogIndex = BigInt.fromI32(2);
         handleOrderFulfilled(event);
-        expectNothingHappened("Seaport", offerToken, ZERO_ADDRESS.toHex(), getTransactionId(event));
+        expectNothingHappened("Seaport", offerToken, ZERO_ADDRESS.toHex(), getTransactionId(event), dayID);
       });
     });
   });
@@ -307,6 +319,7 @@ describe("Aggregator", () => {
     const tokenId = 69174;
     const price = 1278000000000000000;
     const transactionVolume = "1278000000000000000";
+    const dayID = "19345";
 
     // https://etherscan.io/tx/0x1e02a428f82dc81fa1d86db251167343181eace2631ed14c43eed3474bcd6dac
     const createMockTakerBidEvent = (): TakerBid => {
@@ -319,7 +332,8 @@ describe("Aggregator", () => {
         currency,
         collectionAddress,
         tokenId,
-        price
+        price,
+        1671460823
       );
 
       // Fake a LooksRareAggregator Sweep event
@@ -345,19 +359,19 @@ describe("Aggregator", () => {
     test("updates Collection", () => {
       const event = createMockTakerBidEvent();
       handleTakerBid(event);
-      expectCollectionUpdated(collectionAddress);
+      expectCollectionUpdated(collectionAddress, dayID);
     });
 
     test("updates CollectionByCurrency", () => {
       const event = createMockTakerBidEvent();
       handleTakerBid(event);
-      expectCollectionByCurrencyUpdated(collectionAddress, currency, transactionVolume);
+      expectCollectionByCurrencyUpdated(collectionAddress, currency, transactionVolume, dayID);
     });
 
     test("updates CollectionDailyData", () => {
       const event = createMockTakerBidEvent();
       handleTakerBid(event);
-      expectCollectionDailyDataUpdated(collectionAddress);
+      expectCollectionDailyDataUpdated(collectionAddress, dayID);
     });
 
     test("updates CollectionDailyDataByCurrency", () => {
@@ -367,20 +381,21 @@ describe("Aggregator", () => {
         collectionAddress,
         currency,
         transactionVolume,
-        getTransactionId(event)
+        getTransactionId(event),
+        dayID
       );
     });
 
     test("updates Aggregator", () => {
       const event = createMockTakerBidEvent();
       handleTakerBid(event);
-      expectAggregatorUpdated(currency);
+      expectAggregatorUpdated(currency, dayID);
     });
 
     test("updates AggregatorDailyData", () => {
       const event = createMockTakerBidEvent();
       handleTakerBid(event);
-      expectAggregatorDailyDataUpdated(currency);
+      expectAggregatorDailyDataUpdated(currency, dayID);
     });
 
     test("updates AggregatorByCurrency", () => {
@@ -392,55 +407,61 @@ describe("Aggregator", () => {
     test("updates AggregatorDailyDataByCurrency", () => {
       const event = createMockTakerBidEvent();
       handleTakerBid(event);
-      expectAggregatorDailyDataByCurrencyUpdated(currency, transactionVolume, getTransactionId(event));
+      expectAggregatorDailyDataByCurrencyUpdated(currency, transactionVolume, getTransactionId(event), dayID);
     });
 
     test("updates Marketplace", () => {
       const event = createMockTakerBidEvent();
       handleTakerBid(event);
-      expectMarketplaceUpdated("LooksRareV1");
+      expectMarketplaceUpdated("LooksRareV1", dayID);
     });
 
     test("updates MarketplaceDailyData", () => {
       const event = createMockTakerBidEvent();
       handleTakerBid(event);
-      expectMarketplaceDailyDataUpdated("LooksRareV1");
+      expectMarketplaceDailyDataUpdated("LooksRareV1", dayID);
     });
 
     test("updates MarketplaceByCurrency", () => {
       const event = createMockTakerBidEvent();
       handleTakerBid(event);
-      expectMarketplaceByCurrencyUpdated("LooksRareV1", currency, transactionVolume);
+      expectMarketplaceByCurrencyUpdated("LooksRareV1", currency, transactionVolume, dayID);
     });
 
     test("updates MarketplaceDailyDataByCurrency", () => {
       const event = createMockTakerBidEvent();
       handleTakerBid(event);
-      expectMarketplaceDailyDataByCurrencyUpdated("LooksRareV1", currency, transactionVolume, getTransactionId(event));
+      expectMarketplaceDailyDataByCurrencyUpdated(
+        "LooksRareV1",
+        currency,
+        transactionVolume,
+        getTransactionId(event),
+        dayID
+      );
     });
 
     test("updates User", () => {
       const event = createMockTakerBidEvent();
       handleTakerBid(event);
-      expectUserUpdated(currency);
+      expectUserUpdated(currency, dayID);
     });
 
     test("updates UserDailyData", () => {
       const event = createMockTakerBidEvent();
       handleTakerBid(event);
-      expectUserDailyDataUpdated(currency);
+      expectUserDailyDataUpdated(currency, dayID);
     });
 
     test("updates UserByCurrency", () => {
       const event = createMockTakerBidEvent();
       handleTakerBid(event);
-      expectUserByCurrencyUpdated(currency, transactionVolume);
+      expectUserByCurrencyUpdated(currency, transactionVolume, dayID);
     });
 
     test("updates UserDailyDataByCurrency", () => {
       const event = createMockTakerBidEvent();
       handleTakerBid(event);
-      expectUserDailyDataByCurrencyUpdated(currency, transactionVolume, getTransactionId(event));
+      expectUserDailyDataByCurrencyUpdated(currency, transactionVolume, getTransactionId(event), dayID);
     });
 
     test("updates Transaction", () => {
@@ -461,10 +482,10 @@ describe("Aggregator", () => {
       assert.bigIntEquals(transaction!.amount, ONE_BI);
       assert.stringEquals(transaction!.buyer, originator);
       assert.stringEquals(transaction!.seller.toHexString(), maker);
-      assert.stringEquals(transaction!.aggregatorDailyDataByCurrency, `${currency}-0`);
-      assert.stringEquals(transaction!.collectionDailyDataByCurrency, `${collectionAddress}-${currency}-0`);
-      assert.stringEquals(transaction!.marketplaceDailyDataByCurrency, `LooksRareV1-${currency}-0`);
-      assert.stringEquals(transaction!.userDailyDataByCurrency, `${originator}-${currency}-0`);
+      assert.stringEquals(transaction!.aggregatorDailyDataByCurrency, `${currency}-${dayID}`);
+      assert.stringEquals(transaction!.collectionDailyDataByCurrency, `${collectionAddress}-${currency}-${dayID}`);
+      assert.stringEquals(transaction!.marketplaceDailyDataByCurrency, `LooksRareV1-${currency}-${dayID}`);
+      assert.stringEquals(transaction!.userDailyDataByCurrency, `${originator}-${currency}-${dayID}`);
     });
 
     test("does nothing if no aggregator sweep event is found", () => {
@@ -493,7 +514,7 @@ describe("Aggregator", () => {
         event!.receipt!.logs[1],
       ];
       handleTakerBid(event);
-      expectNothingHappened("LooksRareV1", collectionAddress, currency, getTransactionId(event));
+      expectNothingHappened("LooksRareV1", collectionAddress, currency, getTransactionId(event), dayID);
     });
 
     test("does not include trades whose log indexes are less than the aggregator sweep event's log index", () => {
@@ -502,7 +523,7 @@ describe("Aggregator", () => {
       event!.receipt!.logs[0].transactionLogIndex = BigInt.fromI32(1);
       event!.receipt!.logs[1].transactionLogIndex = BigInt.fromI32(2);
       handleTakerBid(event);
-      expectNothingHappened("LooksRareV1", collectionAddress, currency, getTransactionId(event));
+      expectNothingHappened("LooksRareV1", collectionAddress, currency, getTransactionId(event), dayID);
     });
   });
 });
