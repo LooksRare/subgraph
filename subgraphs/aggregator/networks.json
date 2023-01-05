@@ -1,5 +1,16 @@
 {
   "mainnet": {
+    "LooksRareV1": {
+      "address": "0x59728544B08AB483533076417FbBB2fD0B17CE3a"
+    },
+    "Seaport": {
+      "address": "0x00000000006c3852cbEf3e08E8dF289169EdE581"
+    }
+  },
+  "goerli": {
+    "LooksRareV1": {
+      "address": "0xD112466471b5438C1ca2D218694200e49d81D047"
+    },
     "Seaport": {
       "address": "0x00000000006c3852cbEf3e08E8dF289169EdE581"
     }

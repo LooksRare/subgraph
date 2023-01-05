@@ -3,7 +3,7 @@ import { ZERO_BD, ZERO_BI } from "../../../../helpers/constants";
 import { Marketplace, MarketplaceByCurrency } from "../../generated/schema";
 
 export function getOrInitializeMarketplaceByCurrency(marketplace: Marketplace, currency: Bytes): MarketplaceByCurrency {
-  const ID = `seaport-${currency.toHexString()}`;
+  const ID = `${marketplace.id}-${currency.toHexString()}`;
   let marketplaceByCurrency = MarketplaceByCurrency.load(ID);
   if (!marketplaceByCurrency) {
     marketplaceByCurrency = new MarketplaceByCurrency(ID);
