@@ -11,6 +11,7 @@ jobs:
   tests:
     name: Matchstick
     runs-on: ubuntu-latest
+    timeout-minutes: 10
     container: node:18
 
     services:
