@@ -1,7 +1,8 @@
 import { Address, BigInt } from "@graphprotocol/graph-ts";
-import { Blockchain, Collection, Owner, Token, Transaction } from "../generated/schema";
-import { Transfer } from "../generated/EIP721/EIP721";
+import { ONE_BI } from "../../../helpers/constants";
 import { toBigDecimal } from "../../../helpers/utils";
+import { Transfer } from "../generated/EIP721/EIP721";
+import { Blockchain, Collection, Owner, Token, Transaction } from "../generated/schema";
 import { fetchName, fetchSymbol, fetchTokenURI } from "./utils/eip721";
 
 export function handleTransfer(event: Transfer): void {
@@ -14,7 +15,7 @@ export function handleTransfer(event: Transfer): void {
     blockchain.totalTransactions = BigInt.zero();
     blockchain.save();
   }
-  blockchain.totalTransactions = blockchain.totalTransactions.plus(BigInt.fromI32(1));
+  blockchain.totalTransactions = blockchain.totalTransactions.plus(ONE_BI);
   blockchain.save();
 
   let collection = Collection.load(event.address.toHex());
@@ -31,10 +32,10 @@ export function handleTransfer(event: Transfer): void {
     collection.save();
 
     // Blockchain
-    blockchain.totalCollections = blockchain.totalCollections.plus(BigInt.fromI32(1));
+    blockchain.totalCollections = blockchain.totalCollections.plus(ONE_BI);
     blockchain.save();
   }
-  collection.totalTransactions = collection.totalTransactions.plus(BigInt.fromI32(1));
+  collection.totalTransactions = collection.totalTransactions.plus(ONE_BI);
   collection.updatedAt = event.block.timestamp;
   collection.save();
 
@@ -50,10 +51,8 @@ export function handleTransfer(event: Transfer): void {
     from.updatedAt = event.block.timestamp;
     from.save();
   }
-  from.totalTokens = event.params.from.equals(Address.zero())
-    ? from.totalTokens
-    : from.totalTokens.minus(BigInt.fromI32(1));
-  from.totalTransactions = from.totalTransactions.plus(BigInt.fromI32(1));
+  from.totalTokens = event.params.from.equals(Address.zero()) ? from.totalTokens : from.totalTokens.minus(ONE_BI);
+  from.totalTransactions = from.totalTransactions.plus(ONE_BI);
   from.updatedAt = event.block.timestamp;
   from.save();
 
@@ -69,8 +68,8 @@ export function handleTransfer(event: Transfer): void {
     to.updatedAt = event.block.timestamp;
     to.save();
   }
-  to.totalTokens = to.totalTokens.plus(BigInt.fromI32(1));
-  to.totalTransactions = to.totalTransactions.plus(BigInt.fromI32(1));
+  to.totalTokens = to.totalTokens.plus(ONE_BI);
+  to.totalTransactions = to.totalTransactions.plus(ONE_BI);
   to.updatedAt = event.block.timestamp;
   to.save();
 
@@ -91,20 +90,20 @@ export function handleTransfer(event: Transfer): void {
     token.save();
 
     // Owner - as Receiver
-    to.totalTokensMinted = to.totalTokensMinted.plus(BigInt.fromI32(1));
+    to.totalTokensMinted = to.totalTokensMinted.plus(ONE_BI);
     to.save();
 
     // Collection
-    collection.totalTokens = collection.totalTokens.plus(BigInt.fromI32(1));
+    collection.totalTokens = collection.totalTokens.plus(ONE_BI);
     collection.save();
 
     // Blockchain
-    blockchain.totalTokens = blockchain.totalTokens.plus(BigInt.fromI32(1));
+    blockchain.totalTokens = blockchain.totalTokens.plus(ONE_BI);
     blockchain.save();
   }
   token.owner = to.id;
   token.burned = event.params.to.equals(Address.zero());
-  token.totalTransactions = token.totalTransactions.plus(BigInt.fromI32(1));
+  token.totalTransactions = token.totalTransactions.plus(ONE_BI);
   token.updatedAt = event.block.timestamp;
   token.save();
 

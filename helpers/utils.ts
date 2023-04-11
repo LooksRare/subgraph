@@ -1,4 +1,5 @@
 import { BigDecimal, BigInt } from "@graphprotocol/graph-ts";
+import { TEN_BI } from "./constants";
 
 /**
  * @param amount amount in BigInt
@@ -6,11 +7,7 @@ import { BigDecimal, BigInt } from "@graphprotocol/graph-ts";
  * @notice Parse the amount into a BigDecimal instance expressed in decimals
  */
 export function toBigDecimal(amount: BigInt, decimals: i32 = 18): BigDecimal {
-  return amount.divDecimal(
-    BigInt.fromI32(10)
-      .pow(decimals as u8)
-      .toBigDecimal()
-  );
+  return amount.divDecimal(TEN_BI.pow(decimals as u8).toBigDecimal());
 }
 
 /**
@@ -19,6 +16,6 @@ export function toBigDecimal(amount: BigInt, decimals: i32 = 18): BigDecimal {
  * @notice Parse the amount into a BigInt instance of the amount of wei.
  */
 export function parseEther(amount: i32, decimals: u8 = 18): BigInt {
-  const adjuster = BigInt.fromI32(10).pow(decimals);
+  const adjuster = TEN_BI.pow(decimals);
   return BigInt.fromI32(amount).times(adjuster);
 }

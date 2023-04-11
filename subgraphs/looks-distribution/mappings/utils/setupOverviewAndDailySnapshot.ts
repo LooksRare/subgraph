@@ -1,12 +1,12 @@
 import { BigInt } from "@graphprotocol/graph-ts";
-import { ONE_BI, ZERO_BI } from "../../../../helpers/constants";
+import { ONE_BI, ONE_DAY_BI, ZERO_BI } from "../../../../helpers/constants";
 import { DailySnapshot, Overview } from "../../generated/schema";
 import { initializeDailySnapshot } from "./initializeDailySnapshot";
 import { initializeOverview } from "./initializeOverview";
 import { fetchTotalAmountStakedAggregator, fetchTotalAmountStakedFeeSharing } from "./rpc-calls/fetchTotalAmountStaked";
 
 export function setupOverviewAndDailySnapshot(timestamp: BigInt): DailySnapshot {
-  const dailyTimestampBigInt = BigInt.fromI32(86400);
+  const dailyTimestampBigInt = ONE_DAY_BI;
   const dayID = timestamp.div(dailyTimestampBigInt);
   const dayStartTimestamp = dayID.times(dailyTimestampBigInt);
   const ID = dayID.toString();
