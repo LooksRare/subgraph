@@ -1,5 +1,5 @@
-import { Address, BigInt } from "@graphprotocol/graph-ts";
-import { ONE_BI } from "../../../helpers/constants";
+import { BigInt } from "@graphprotocol/graph-ts";
+import { ONE_BI, ZERO_ADDRESS } from "../../../helpers/constants";
 import { toBigDecimal } from "../../../helpers/utils";
 import { Transfer } from "../generated/EIP721/EIP721";
 import { Blockchain, Collection, Owner, Token, Transaction } from "../generated/schema";
@@ -51,7 +51,7 @@ export function handleTransfer(event: Transfer): void {
     from.updatedAt = event.block.timestamp;
     from.save();
   }
-  from.totalTokens = event.params.from.equals(Address.zero()) ? from.totalTokens : from.totalTokens.minus(ONE_BI);
+  from.totalTokens = event.params.from.equals(ZERO_ADDRESS) ? from.totalTokens : from.totalTokens.minus(ONE_BI);
   from.totalTransactions = from.totalTransactions.plus(ONE_BI);
   from.updatedAt = event.block.timestamp;
   from.save();
@@ -102,7 +102,7 @@ export function handleTransfer(event: Transfer): void {
     blockchain.save();
   }
   token.owner = to.id;
-  token.burned = event.params.to.equals(Address.zero());
+  token.burned = event.params.to.equals(ZERO_ADDRESS);
   token.totalTransactions = token.totalTransactions.plus(ONE_BI);
   token.updatedAt = event.block.timestamp;
   token.save();

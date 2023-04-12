@@ -1,5 +1,5 @@
-import { Address, BigInt, log } from "@graphprotocol/graph-ts";
-import { ONE_BI } from "../../../helpers/constants";
+import { BigInt, log } from "@graphprotocol/graph-ts";
+import { ONE_BI, ZERO_ADDRESS } from "../../../helpers/constants";
 import { toBigDecimal } from "../../../helpers/utils";
 import { TransferBatch, TransferSingle, URI } from "../generated/EIP1155/EIP1155";
 import { Blockchain, Collection, Owner, Token, Transaction } from "../generated/schema";
@@ -51,7 +51,7 @@ export function handleTransferBatch(event: TransferBatch): void {
     from.updatedAt = event.block.timestamp;
     from.save();
   }
-  from.totalTokens = event.params._from.equals(Address.zero()) ? from.totalTokens : from.totalTokens.minus(ONE_BI);
+  from.totalTokens = event.params._from.equals(ZERO_ADDRESS) ? from.totalTokens : from.totalTokens.minus(ONE_BI);
   from.totalTransactions = from.totalTransactions.plus(ONE_BI);
   from.updatedAt = event.block.timestamp;
   from.save();
@@ -104,7 +104,7 @@ export function handleTransferBatch(event: TransferBatch): void {
       blockchain.save();
     }
     token.owner = to.id;
-    token.burned = event.params._to.equals(Address.zero());
+    token.burned = event.params._to.equals(ZERO_ADDRESS);
     token.totalTransactions = token.totalTransactions.plus(ONE_BI);
     token.updatedAt = event.block.timestamp;
     token.save();
@@ -171,7 +171,7 @@ export function handleTransferSingle(event: TransferSingle): void {
     from.updatedAt = event.block.timestamp;
     from.save();
   }
-  from.totalTokens = event.params._from.equals(Address.zero()) ? from.totalTokens : from.totalTokens.minus(ONE_BI);
+  from.totalTokens = event.params._from.equals(ZERO_ADDRESS) ? from.totalTokens : from.totalTokens.minus(ONE_BI);
   from.totalTransactions = from.totalTransactions.plus(ONE_BI);
   from.updatedAt = event.block.timestamp;
   from.save();
@@ -222,7 +222,7 @@ export function handleTransferSingle(event: TransferSingle): void {
     blockchain.save();
   }
   token.owner = to.id;
-  token.burned = event.params._to.equals(Address.zero());
+  token.burned = event.params._to.equals(ZERO_ADDRESS);
   token.totalTransactions = token.totalTransactions.plus(ONE_BI);
   token.updatedAt = event.block.timestamp;
   token.save();
