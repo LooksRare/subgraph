@@ -6,8 +6,8 @@ dataSources:
     name: Seaport
     network: mainnet
     source:
-      address: "0x00000000000001ad428e4906aE43D8F9852d0dD6"
       abi: Seaport
+      address: "0x00000000000001ad428e4906aE43D8F9852d0dD6"
     mapping:
       kind: ethereum/events
       apiVersion: 0.0.6
@@ -26,8 +26,8 @@ dataSources:
     name: LooksRareV1
     network: mainnet
     source:
-      address: "0x59728544B08AB483533076417FbBB2fD0B17CE3a"
       abi: LooksRareExchange
+      address: "0x59728544B08AB483533076417FbBB2fD0B17CE3a"
     mapping:
       kind: ethereum/events
       apiVersion: 0.0.6

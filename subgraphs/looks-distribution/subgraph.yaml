@@ -23,9 +23,9 @@ dataSources:
         - User
       abis:
         - name: AggregatorFeeSharingWithUniswapV3
-          file: ../../node_modules/@looksrare/sdk/dist/abis/AggregatorFeeSharingWithUniswapV3.json
+          file: ../../node_modules/@looksrare/sdk/dist/AggregatorFeeSharingWithUniswapV3Abi.json
         - name: FeeSharingSystem
-          file: ../../node_modules/@looksrare/sdk/dist/abis/FeeSharingSystem.json
+          file: ../../node_modules/@looksrare/sdk/dist/FeeSharingSystemAbi.json
       callHandlers:
         - function: withdraw(uint256,bool)
           handler: handleCallWithdrawFeeSharing
@@ -56,7 +56,7 @@ dataSources:
         - User
       abis:
         - name: StakingPoolForUniswapV2Tokens
-          file: ../../node_modules/@looksrare/sdk/dist/abis/StakingPoolForUniswapV2Tokens.json
+          file: ../../node_modules/@looksrare/sdk/dist/StakingPoolForUniswapV2TokensAbi.json
       eventHandlers:
         - event: Deposit(indexed address,uint256,uint256)
           handler: handleDepositStakingV2
@@ -80,7 +80,7 @@ dataSources:
         - User
       abis:
         - name: LooksRareAirdrop
-          file: ../../node_modules/@looksrare/sdk/dist/abis/LooksRareAirdrop.json
+          file: ../../node_modules/@looksrare/sdk/dist/LooksRareAirdropAbi.json
       eventHandlers:
         - event: AirdropRewardsClaim(indexed address,uint256)
           handler: handleAirdropClaim
@@ -100,7 +100,7 @@ dataSources:
         - User
       abis:
         - name: TradingRewardsDistributor
-          file: ../../node_modules/@looksrare/sdk/dist/abis/TradingRewardsDistributor.json
+          file: ../../node_modules/@looksrare/sdk/dist/TradingRewardsDistributorAbi.json
       eventHandlers:
         - event: RewardsClaim(indexed address,indexed uint256,uint256)
           handler: handleTradingRewardsClaim
@@ -123,9 +123,9 @@ dataSources:
         - User
       abis:
         - name: AggregatorFeeSharingWithUniswapV3
-          file: ../../node_modules/@looksrare/sdk/dist/abis/AggregatorFeeSharingWithUniswapV3.json
+          file: ../../node_modules/@looksrare/sdk/dist/AggregatorFeeSharingWithUniswapV3Abi.json
         - name: FeeSharingSystem
-          file: ../../node_modules/@looksrare/sdk/dist/abis/FeeSharingSystem.json
+          file: ../../node_modules/@looksrare/sdk/dist/FeeSharingSystemAbi.json
       callHandlers:
         - function: withdraw(uint256)
           handler: handleCallWithdrawAggregatorUniswapV3
