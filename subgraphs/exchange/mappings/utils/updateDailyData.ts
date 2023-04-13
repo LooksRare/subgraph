@@ -1,5 +1,5 @@
-import { Address, BigInt, BigDecimal } from "@graphprotocol/graph-ts";
-import { ONE_BI, ZERO_BD, ZERO_BI } from "../../../../helpers/constants";
+import { Address, BigDecimal, BigInt } from "@graphprotocol/graph-ts";
+import { ONE_BI, ONE_DAY_BI, ZERO_BD, ZERO_BI } from "../../../../helpers/constants";
 import {
   CollectionDailyData,
   ExchangeDailyData,
@@ -15,7 +15,7 @@ export function updateCollectionDailyData(
   timestamp: BigInt,
   isTakerAsk: boolean
 ): void {
-  const dailyTimestampBigInt = BigInt.fromI32(86400);
+  const dailyTimestampBigInt = ONE_DAY_BI;
   const dayID = timestamp.div(dailyTimestampBigInt);
   const dayStartTimestamp = dayID.times(dailyTimestampBigInt);
   const ID = dayID.toString() + "-" + collection.toHex();
@@ -63,7 +63,7 @@ export function updateCollectionDailyData(
 }
 
 export function updateRoyaltyForCollectionDailyData(collection: Address, royalty: BigDecimal, timestamp: BigInt): void {
-  const dailyTimestampBigInt = BigInt.fromI32(86400);
+  const dailyTimestampBigInt = ONE_DAY_BI;
   const dayID = timestamp.div(dailyTimestampBigInt);
   const dayStartTimestamp = dayID.times(dailyTimestampBigInt);
   const ID = dayID.toString() + "-" + collection.toHex();
@@ -93,7 +93,7 @@ export function updateExchangeDailyData(
   timestamp: BigInt,
   isTakerAsk: boolean
 ): void {
-  const dailyTimestampBigInt = BigInt.fromI32(86400);
+  const dailyTimestampBigInt = ONE_DAY_BI;
   const dayID = timestamp.div(dailyTimestampBigInt);
   const dayStartTimestamp = dayID.times(dailyTimestampBigInt);
   const ID = dayID.toString();
@@ -139,7 +139,7 @@ export function updateExecutionStrategyDailyData(
   timestamp: BigInt,
   isTakerAsk: boolean
 ): void {
-  const dailyTimestampBigInt = BigInt.fromI32(86400);
+  const dailyTimestampBigInt = ONE_DAY_BI;
   const dayID = timestamp.div(dailyTimestampBigInt);
   const dayStartTimestamp = dayID.times(dailyTimestampBigInt);
   const ID = dayID.toString() + "-" + strategy.toHex();
@@ -171,7 +171,7 @@ export function updateExecutionStrategyDailyData(
 }
 
 export function updateUserDailyData(user: Address, strategy: Address, volume: BigDecimal, timestamp: BigInt): void {
-  const dailyTimestampBigInt = BigInt.fromI32(86400);
+  const dailyTimestampBigInt = ONE_DAY_BI;
   const dayID = timestamp.div(dailyTimestampBigInt);
   const dayStartTimestamp = dayID.times(dailyTimestampBigInt);
   const ID = dayID.toString() + "-" + user.toHex();

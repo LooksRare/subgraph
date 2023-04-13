@@ -1,5 +1,4 @@
 /* eslint-disable @typescript-eslint/no-non-null-assertion */
-import { BigInt } from "@graphprotocol/graph-ts";
 import { ONE_BI, ONE_DAY_BI, ZERO_BI } from "../../../../helpers/constants";
 import { TakerBid } from "../../generated/LooksRareV1/LooksRareExchange";
 import { Collection, CollectionDailyData, Transaction, User, UserDailyData } from "../../generated/schema";
@@ -172,7 +171,7 @@ export function handleTakerBid(event: TakerBid): void {
   transaction.tokenId = event.params.tokenId;
   transaction.price = price;
   transaction.currency = currency;
-  transaction.amount = BigInt.fromI32(1);
+  transaction.amount = ONE_BI;
   transaction.buyer = user.id;
   transaction.seller = event.params.maker;
   transaction.aggregatorDailyDataByCurrency = aggregatorDailyDataByCurrency.id;
