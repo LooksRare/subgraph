@@ -1,0 +1,43 @@
+specVersion: 0.0.4
+description: LooksRare Raffle
+repository: https://github.com/looksrare
+schema:
+  file: ./schema.graphql
+dataSources:
+  - kind: ethereum/contract
+    name: Raffle
+    network: mainnet
+    source:
+      abi: Raffle
+      address: "0x0000000000009703EcD0fFEa3143fc9096DE91B0"
+      startBlock: 17236721
+    mapping:
+      kind: ethereum/events
+      apiVersion: 0.0.6
+      language: wasm/assemblyscript
+      file: ./mappings/index.ts
+      entities:
+        - Raffle
+        - Currency
+        - Pricing
+        - Prize
+        - Participant
+        - Entry
+      abis:
+        - name: Raffle
+          file: ./abis/Raffle.json
+        - name: IRaffle
+          file: ./abis/IRaffle.json
+        - name: ERC20
+          file: ./abis/ERC20.json
+      eventHandlers:
+        - event: CurrenciesStatusUpdated(address[],bool)
+          handler: handleCurrenciesStatusUpdated
+        - event: RaffleStatusUpdated(uint256,uint8)
+          handler: handleRaffleStatusUpdated
+        - event: EntrySold(uint256,address,uint40,uint208)
+          handler: handleEntrySold
+        - event: EntryRefunded(uint256,address,uint208)
+          handler: handleEntryRefunded
+        - event: PrizesClaimed(uint256,uint256[])
+          handler: handlePrizesClaimed

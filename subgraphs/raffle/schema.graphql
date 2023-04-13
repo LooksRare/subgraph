@@ -1,0 +1,219 @@
+"""
+Raffle Status
+"""
+enum RaffleStatus {
+    None
+    Created
+    Open
+    Drawing
+    RandomnessFulfilled
+    Drawn
+    Complete
+    Refundable
+    Cancelled
+    unknown
+}
+
+"""
+Token Type
+"""
+enum TokenType {
+    ERC721
+    ERC1155
+    ETH
+    ERC20
+    unknown
+}
+
+"""
+Transaction
+"""
+type Transaction @entity {
+    "ID (hash)"
+    id: ID!
+
+    "Hash"
+    hash: Bytes!
+
+    "Raffle"
+    raffle: Raffle!
+
+    "Participant"
+    participant: Participant!
+
+    "Entry"
+    entry: Entry!
+    "Entry Purchased"
+    entriesCount: BigInt!
+
+    "Gas Limit"
+    gasLimit: BigInt!
+    "Gas Price (in wei)"
+    gasPrice: BigDecimal!
+
+    "Block number"
+    block: BigInt!
+    "Block timestamp"
+    timestamp: BigInt!
+}
+
+"""
+Participant
+"""
+type Participant @entity {
+    id: ID!
+
+    totalRaffles: BigInt!
+    totalTickets: BigInt!
+    tickets: [Entry!]! @derivedFrom(field: "participant")
+    winners: [Winner!] @derivedFrom(field: "participant")
+    transactions: [Transaction!] @derivedFrom(field: "participant")
+}
+
+"""
+Winner
+"""
+type Winner @entity {
+    id: ID!
+
+    raffle: Raffle!
+
+    winnerIndex: BigInt!
+
+    "participant"
+    participant: Participant!
+    "entryIndex"
+    entryIndex: BigInt!
+    entry: Entry!
+    "prizeIndex"
+    prizeIndex: BigInt!
+    prize: Prize!
+    "claimed"
+    claimed: Boolean!
+    claimedHash: Bytes
+}
+
+"""
+Entry
+"""
+type Entry @entity {
+    id: ID!
+
+    raffle: Raffle!
+    participant: Participant!
+
+    totalTickets: BigInt!
+    totalPrice: BigDecimal!
+    refunded: Boolean!
+
+    winners: [Winner!] @derivedFrom(field: "entry")
+    transactions: [Transaction!] @derivedFrom(field: "entry")
+}
+
+"""
+Prize
+"""
+type Prize @entity {
+    id: ID!
+
+    prizeId: BigInt!
+
+    raffle: Raffle!
+
+    "prizeTier"
+    tier: BigInt!
+
+    "prizeType"
+    type: TokenType!
+
+    "prizeAddress"
+    address: Bytes
+    "prizeId"
+    tokenId: BigInt
+    "prizeAmount"
+    amount: BigInt
+
+    "winnersCount"
+    totalWinners: BigInt!
+    "cumulativeWinnersCount"
+    totalWinnersCumulative: BigInt!
+}
+
+"""
+Pricing
+"""
+type Pricing @entity {
+    id: ID!
+
+    raffle: Raffle!
+
+    "entriesCount"
+    totalEntries: BigInt!
+
+    "price"
+    price: BigDecimal!
+}
+
+"""
+Currency
+"""
+type Currency @entity {
+  id: ID!
+
+  name: String!
+
+  symbol: String!
+
+  decimals: BigInt!
+
+  isAllowed: Boolean!
+}
+
+type RaffleStatusLog @entity {
+    "ID"
+    id: ID!
+    "Raffle"
+    raffle: Raffle!
+    "Status"
+    status: RaffleStatus!
+    "Transaction Hash"
+    transaction: Bytes!
+    "Block number"
+    block: BigInt!
+    "Block timestamp"
+    timestamp: BigInt!
+}
+
+"""
+Raffle
+"""
+type Raffle @entity {
+    id: ID!
+
+    raffleId: BigInt!
+
+    currency: Currency!
+
+    owner: Bytes!
+    status: RaffleStatus!
+    lastStatusUpdate: BigInt
+    statusLog: [RaffleStatusLog!]! @derivedFrom(field: "raffle")
+    cutoffTime: BigInt!
+    minimumEntries: BigInt!
+    maximumEntriesPerParticipant: BigInt!
+    prizeValue: BigDecimal!
+    currentPool: BigDecimal!
+
+    pricing: [Pricing!]! @derivedFrom(field: "raffle")
+
+    prizes: [Prize!]! @derivedFrom(field: "raffle")
+
+    totalUsers: BigInt!
+    totalTickets: BigInt!
+    tickets: [Entry!]! @derivedFrom(field: "raffle")
+
+    totalWinners: BigInt!
+    winners: [Winner!] @derivedFrom(field: "raffle")
+
+    transactions: [Transaction!]! @derivedFrom(field: "raffle")
+}
