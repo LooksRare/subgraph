@@ -8,6 +8,6 @@
   "scripts": {
     "codegen": "graph codegen subgraph.yaml",
     "build:mainnet": "graph build subgraph.yaml",
-    "deploy:mainnet": "graph deploy --product hosted-service --node https://api.thegraph.com/deploy/ --ipfs https://api.thegraph.com/ipfs/ looksrare/airdrop subgraph-mainnet.yaml"
+    "deploy:mainnet": "graph deploy --product hosted-service looksrare/airdrop subgraph-mainnet.yaml"
   }
 }
