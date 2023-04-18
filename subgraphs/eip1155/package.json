@@ -2,7 +2,7 @@
   "name": "eip1155",
   "description": "LooksRare Subgraph",
   "version": "1.0.0",
-  "repository": "git@github.com:looksrare/rare-subgraph.git",
+  "repository": "git@github.com:looksrare/subgraph.git",
   "author": "LooksRare",
   "license": "MIT",
   "scripts": {
