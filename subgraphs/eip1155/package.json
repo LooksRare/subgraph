@@ -2,14 +2,14 @@
   "name": "eip1155",
   "description": "LooksRare Subgraph",
   "version": "1.0.0",
-  "repository": "git@github.com:looksrare/rare-subgraph.git",
+  "repository": "git@github.com:looksrare/subgraph.git",
   "author": "LooksRare",
   "license": "MIT",
   "scripts": {
     "codegen": "graph codegen subgraph.yaml",
     "build:goerli": "graph build subgraph.yaml --network goerli",
     "build:mainnet": "graph build subgraph.yaml --network mainnet",
-    "deploy:goerli": "graph deploy --product hosted-service --node https://api.thegraph.com/deploy/ --ipfs https://api.thegraph.com/ipfs/ 0xjurassicpunk/eip1155 subgraph.yaml --network goerli",
-    "deploy:mainnet": "graph deploy --product hosted-service --node https://api.thegraph.com/deploy/ --ipfs https://api.thegraph.com/ipfs/ looksrare/eip1155 subgraph.yaml --network mainnet"
+    "deploy:goerli": "graph deploy --product hosted-service 0xjurassicpunk/eip1155 subgraph.yaml --network goerli",
+    "deploy:mainnet": "graph deploy --product hosted-service looksrare/eip1155 subgraph.yaml --network mainnet"
   }
 }
