@@ -1,6 +1,6 @@
 import { BigInt, log } from "@graphprotocol/graph-ts";
-import { ONE_BI, ZERO_BD, ZERO_BI } from "../../../helpers/constants";
-import { toBigDecimal } from "../../../helpers/utils";
+import { ONE_BI, ZERO_BD, ZERO_BI } from "../../../../helpers/constants";
+import { toBigDecimal } from "../../../../helpers/utils";
 import { EntryRefunded, EntrySold, RaffleStatusUpdated } from "../generated/Raffle/IRaffle";
 import { CurrenciesStatusUpdated, PrizesClaimed, Raffle as RaffleContract } from "../generated/Raffle/Raffle";
 import { Entry, Participant, Pricing, Prize, Raffle, RaffleStatusLog, Transaction, Winner } from "../generated/schema";
