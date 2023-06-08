@@ -1,0 +1,14 @@
+{
+  "mainnet": {
+    "Raffle": {
+      "address": "0x0000000000009703EcD0fFEa3143fc9096DE91B0",
+      "startBlock": 17236721
+    }
+  },
+  "goerli": {
+    "Raffle": {
+      "address": "0xC5F7FCde87e30Aa339d3d61B4fe3c1C261f6EEe2",
+      "startBlock": 8970588
+    }
+  }
+}
