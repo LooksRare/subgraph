@@ -14,6 +14,11 @@ enum RaffleStatus {
     unknown
 }
 
+enum RaffleVersion {
+    V1
+    V2
+}
+
 """
 Token Type
 """
@@ -197,12 +202,15 @@ type Raffle @entity {
     owner: Bytes!
     status: RaffleStatus!
     lastStatusUpdate: BigInt
+    drawnAt: BigInt
     statusLog: [RaffleStatusLog!]! @derivedFrom(field: "raffle")
     cutoffTime: BigInt!
     minimumEntries: BigInt!
     maximumEntriesPerParticipant: BigInt!
+    isMinimumEntriesFixed: Boolean!
     prizeValue: BigDecimal!
     currentPool: BigDecimal!
+    version: RaffleVersion!
 
     pricing: [Pricing!]! @derivedFrom(field: "raffle")
 

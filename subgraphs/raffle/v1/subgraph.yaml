@@ -6,11 +6,11 @@ schema:
 dataSources:
   - kind: ethereum/contract
     name: Raffle
-    network: mainnet
+    network: goerli
     source:
       abi: Raffle
-      address: "0x0000000000009703EcD0fFEa3143fc9096DE91B0"
-      startBlock: 17236721
+      address: "0xC5F7FCde87e30Aa339d3d61B4fe3c1C261f6EEe2"
+      startBlock: 8970588
     mapping:
       kind: ethereum/events
       apiVersion: 0.0.7
@@ -32,12 +32,51 @@ dataSources:
           file: ./abis/ERC20.json
       eventHandlers:
         - event: CurrenciesStatusUpdated(address[],bool)
-          handler: handleCurrenciesStatusUpdated
+          handler: handleCurrenciesStatusUpdatedV1
         - event: RaffleStatusUpdated(uint256,uint8)
-          handler: handleRaffleStatusUpdated
+          handler: handleRaffleStatusUpdatedV1
         - event: EntrySold(uint256,address,uint40,uint208)
-          handler: handleEntrySold
+          handler: handleEntrySoldV1
         - event: EntryRefunded(uint256,address,uint208)
-          handler: handleEntryRefunded
+          handler: handleEntryRefundedV1
         - event: PrizesClaimed(uint256,uint256[])
-          handler: handlePrizesClaimed
+          handler: handlePrizesClaimedV1
+  - kind: ethereum/contract
+    name: RaffleV2
+    network: goerli
+    source:
+      abi: RaffleV2
+      address: "0x5A6451Eb148054a17262e56EF4e55203C36f095a"
+      startBlock: 9137599
+    mapping:
+      kind: ethereum/events
+      apiVersion: 0.0.6
+      language: wasm/assemblyscript
+      file: ./mappings/index.ts
+      entities:
+        - Raffle
+        - Currency
+        - Pricing
+        - Prize
+        - Participant
+        - Entry
+      abis:
+        - name: RaffleV2
+          file: ./abis/RaffleV2.json
+        - name: IRaffleV2
+          file: ./abis/IRaffleV2.json
+        - name: ERC20
+          file: ./abis/ERC20.json
+      eventHandlers:
+        - event: CurrenciesStatusUpdated(address[],bool)
+          handler: handleCurrenciesStatusUpdatedV2
+        - event: RaffleStatusUpdated(uint256,uint8)
+          handler: handleRaffleStatusUpdatedV2
+        - event: EntrySold(uint256,address,uint40,uint208)
+          handler: handleEntrySoldV2
+        - event: EntryRefunded(uint256,address,uint208)
+          handler: handleEntryRefundedV2
+        - event: PrizeClaimed(uint256,uint256)
+          handler: handlePrizeClaimedV2
+        - event: PrizesClaimed(uint256,uint256[])
+          handler: handlePrizesClaimedV2
