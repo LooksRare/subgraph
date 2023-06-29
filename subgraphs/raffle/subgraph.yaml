@@ -46,8 +46,8 @@ dataSources:
     network: goerli
     source:
       abi: RaffleV2
-      address: "0x5A6451Eb148054a17262e56EF4e55203C36f095a"
-      startBlock: 9137599
+      address: "0x27F2107832432D9415d6CdaD49e03765520cC177"
+      startBlock: 9249440
     mapping:
       kind: ethereum/events
       apiVersion: 0.0.6

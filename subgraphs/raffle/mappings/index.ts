@@ -1,6 +1,6 @@
 import { BigInt, log } from "@graphprotocol/graph-ts";
-import { ONE_BI, ZERO_BD, ZERO_BI } from "../../../../helpers/constants";
-import { toBigDecimal } from "../../../../helpers/utils";
+import { ONE_BI, ZERO_BD, ZERO_BI } from "../../../helpers/constants";
+import { toBigDecimal } from "../../../helpers/utils";
 import {
   EntryRefunded as EntryRefundedV1,
   EntrySold as EntrySoldV1,

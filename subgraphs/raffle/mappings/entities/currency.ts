@@ -1,5 +1,5 @@
 import { Address } from "@graphprotocol/graph-ts";
-import { ZERO_ADDRESS } from "../../../../../helpers/constants";
+import { ZERO_ADDRESS } from "../../../../helpers/constants";
 import { Currency } from "../../generated/schema";
 import { fetchDecimals, fetchName, fetchSymbol } from "../utils/ERC20";
 
