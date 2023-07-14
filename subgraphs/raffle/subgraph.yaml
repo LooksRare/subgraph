@@ -6,11 +6,11 @@ schema:
 dataSources:
   - kind: ethereum/contract
     name: Raffle
-    network: goerli
+    network: mainnet
     source:
       abi: Raffle
-      address: "0xC5F7FCde87e30Aa339d3d61B4fe3c1C261f6EEe2"
-      startBlock: 8970588
+      address: "0x0000000000009703EcD0fFEa3143fc9096DE91B0"
+      startBlock: 17236721
     mapping:
       kind: ethereum/events
       apiVersion: 0.0.7
@@ -43,11 +43,11 @@ dataSources:
           handler: handlePrizesClaimedV1
   - kind: ethereum/contract
     name: RaffleV2
-    network: goerli
+    network: mainnet
     source:
       abi: RaffleV2
-      address: "0x27F2107832432D9415d6CdaD49e03765520cC177"
-      startBlock: 9249440
+      address: "0x0000000000aDEaD599C11A0C9a7475B67852c1D0"
+      startBlock: 17687869
     mapping:
       kind: ethereum/events
       apiVersion: 0.0.6
