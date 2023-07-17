@@ -175,6 +175,12 @@
       },
       {
         "indexed": false,
+        "internalType": "address",
+        "name": "recipient",
+        "type": "address"
+      },
+      {
+        "indexed": false,
         "internalType": "uint40",
         "name": "entriesCount",
         "type": "uint40"

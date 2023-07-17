@@ -72,7 +72,7 @@ dataSources:
           handler: handleCurrenciesStatusUpdatedV2
         - event: RaffleStatusUpdated(uint256,uint8)
           handler: handleRaffleStatusUpdatedV2
-        - event: EntrySold(uint256,address,uint40,uint208)
+        - event: EntrySold(uint256,address,address,uint40,uint208)
           handler: handleEntrySoldV2
         - event: EntryRefunded(uint256,address,uint208)
           handler: handleEntryRefundedV2

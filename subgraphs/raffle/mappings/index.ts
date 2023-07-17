@@ -408,9 +408,9 @@ export function handleEntrySoldV2(event: EntrySoldV2): void {
   raffle.save();
 
   // Participant
-  let participant = Participant.load(event.params.buyer.toHex());
+  let participant = Participant.load(event.params.recipient.toHex());
   if (participant === null) {
-    participant = new Participant(event.params.buyer.toHex());
+    participant = new Participant(event.params.recipient.toHex());
     participant.totalRaffles = ZERO_BI;
     participant.totalTickets = ZERO_BI;
     participant.save();
@@ -419,11 +419,11 @@ export function handleEntrySoldV2(event: EntrySoldV2): void {
   participant.save();
 
   // Entry
-  let entry = Entry.load(`${event.params.raffleId.toString()}-v2-${event.params.buyer.toHex()}`);
+  let entry = Entry.load(`${event.params.raffleId.toString()}-v2-${event.params.recipient.toHex()}`);
   if (entry === null) {
-    entry = new Entry(`${event.params.raffleId.toString()}-v2-${event.params.buyer.toHex()}`);
+    entry = new Entry(`${event.params.raffleId.toString()}-v2-${event.params.recipient.toHex()}`);
     entry.raffle = `${event.params.raffleId.toString()}-v2`;
-    entry.participant = event.params.buyer.toHex();
+    entry.participant = event.params.recipient.toHex();
     entry.totalTickets = ZERO_BI;
     entry.totalPrice = ZERO_BD;
     entry.refunded = false;
@@ -444,8 +444,8 @@ export function handleEntrySoldV2(event: EntrySoldV2): void {
     transaction = new Transaction(event.transaction.hash.toHex());
     transaction.hash = event.transaction.hash;
     transaction.raffle = `${event.params.raffleId.toString()}-v2`;
-    transaction.participant = event.params.buyer.toHex();
-    transaction.entry = `${event.params.raffleId.toString()}-${event.params.buyer.toHex()}`;
+    transaction.participant = event.params.recipient.toHex();
+    transaction.entry = `${event.params.raffleId.toString()}-v2-${event.params.recipient.toHex()}`;
     transaction.entriesCount = ZERO_BI;
     transaction.gasLimit = event.transaction.gasLimit;
     transaction.gasPrice = toBigDecimal(event.transaction.gasPrice);

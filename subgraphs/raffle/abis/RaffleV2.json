@@ -35,6 +35,11 @@
         "internalType": "uint16",
         "name": "_protocolFeeBp",
         "type": "uint16"
+      },
+      {
+        "internalType": "address",
+        "name": "_transferManager",
+        "type": "address"
       }
     ],
     "stateMutability": "nonpayable",
@@ -63,11 +68,6 @@
   {
     "inputs": [],
     "name": "ERC20TransferFail",
-    "type": "error"
-  },
-  {
-    "inputs": [],
-    "name": "ERC20TransferFromFail",
     "type": "error"
   },
   {
@@ -304,6 +304,12 @@
         "indexed": false,
         "internalType": "address",
         "name": "buyer",
+        "type": "address"
+      },
+      {
+        "indexed": false,
+        "internalType": "address",
+        "name": "recipient",
         "type": "address"
       },
       {
@@ -1288,13 +1294,13 @@
         "type": "bool"
       },
       {
-        "internalType": "uint248",
-        "name": "randomWord",
-        "type": "uint248"
+        "internalType": "uint80",
+        "name": "raffleId",
+        "type": "uint80"
       },
       {
         "internalType": "uint256",
-        "name": "raffleId",
+        "name": "randomWord",
         "type": "uint256"
       }
     ],
