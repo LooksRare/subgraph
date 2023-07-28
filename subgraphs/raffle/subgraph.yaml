@@ -3,6 +3,11 @@ description: LooksRare Raffle
 repository: https://github.com/looksrare
 schema:
   file: ./schema.graphql
+features:
+  - grafting
+graft:
+  base: QmPPZkk4G6PtUoC1Kvvqg5dDayhg4PMZRPw56Q6tJfFf79
+  block: 17687869
 dataSources:
   - kind: ethereum/contract
     name: Raffle

@@ -325,8 +325,8 @@ export function handleRaffleStatusUpdatedV2(event: RaffleStatusUpdatedV2): void 
     );
     raffle.save();
   }
-  raffle.status = statusIdToEnumV2(event.params.status);
   raffle.lastStatusUpdate = event.block.timestamp;
+  raffle.status = statusIdToEnumV2(event.params.status);
   raffle.save();
 
   // Status is Open, Prizes are available
@@ -338,6 +338,7 @@ export function handleRaffleStatusUpdatedV2(event: RaffleStatusUpdatedV2): void 
       return;
     }
     for (let i = 0; i < prizesData.length; i++) {
+      // Prize
       const prize = new Prize(`${event.params.raffleId.toString()}-v2-${i.toString()}`);
       prize.prizeId = BigInt.fromI32(i).plus(ONE_BI);
       prize.raffle = `${event.params.raffleId.toString()}-v2`;
@@ -439,6 +440,7 @@ export function handleEntrySoldV2(event: EntrySoldV2): void {
   entry.totalPrice = entry.totalPrice.plus(toBigDecimal(event.params.price));
   entry.save();
 
+  // Transaction
   let transaction = Transaction.load(event.transaction.hash.toHex());
   if (transaction === null) {
     transaction = new Transaction(event.transaction.hash.toHex());
