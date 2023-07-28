@@ -4,7 +4,7 @@ import { CollectionByCurrency, CollectionDailyDataByCurrency } from "../../gener
 
 export function getOrInitializeCollectionDailyDataByCurrency(
   collectionByCurrency: CollectionByCurrency,
-  dayID: BigInt
+  dayID: BigInt,
 ): CollectionDailyDataByCurrency {
   const collectionDailyDataByCurrencyID = `${collectionByCurrency.id}-${dayID.toString()}`;
   let collectionDailyDataByCurrency = CollectionDailyDataByCurrency.load(collectionDailyDataByCurrencyID);

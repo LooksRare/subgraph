@@ -5,7 +5,7 @@ import { UserByCurrency, UserDailyData, UserDailyDataByCurrency } from "../../ge
 export function getOrInitializeUserDailyDataByCurrency(
   userDailyData: UserDailyData,
   userByCurrency: UserByCurrency,
-  dayID: BigInt
+  dayID: BigInt,
 ): UserDailyDataByCurrency {
   const userDailyDataByCurrencyID = `${userByCurrency.id}-${dayID.toString()}`;
   let userDailyDataByCurrency = UserDailyDataByCurrency.load(userDailyDataByCurrencyID);

@@ -38,7 +38,7 @@ test("TakerBid event updates all entities", () => {
     COLLECTION,
     tokenId,
     amount,
-    price
+    price,
   );
   handleTakerBid(newTakerBidEvent);
 
@@ -56,7 +56,7 @@ test("TakerBid event updates all entities", () => {
       assert.stringEquals(makerUserDailyData.dailyVolume.toString(), makerUser.totalVolume.toString());
       assert.stringEquals(
         makerUserDailyData.dailyVolumeExcludingZeroFee.toString(),
-        makerUserDailyData.dailyVolume.toString()
+        makerUserDailyData.dailyVolume.toString(),
       );
     } else {
       log.warning("UserDailyData (maker) doesn't exist", []);
@@ -80,7 +80,7 @@ test("TakerBid event updates all entities", () => {
       assert.stringEquals(takerUserDailyData.dailyVolume.toString(), takerUser.totalVolume.toString());
       assert.stringEquals(
         takerUserDailyData.dailyVolumeExcludingZeroFee.toString(),
-        takerUserDailyData.dailyVolume.toString()
+        takerUserDailyData.dailyVolume.toString(),
       );
     } else {
       log.warning("UserDailyData (taker) doesn't exist", []);
@@ -137,11 +137,11 @@ test("TakerBid event updates all entities", () => {
       assert.stringEquals(collectionDailyData.dailyTakerAskVolume.toString(), "0");
       assert.stringEquals(
         collectionDailyData.dailyVolumeExcludingZeroFee.toString(),
-        collection.totalVolume.toString()
+        collection.totalVolume.toString(),
       );
       assert.stringEquals(
         collectionDailyData.dailyVolumeExcludingZeroFee.toString(),
-        collectionDailyData.dailyVolume.toString()
+        collectionDailyData.dailyVolume.toString(),
       );
       assert.stringEquals(collectionDailyData.dailyRoyalty.toString(), collection.totalRoyaltyPaid.toString());
     } else {
@@ -179,7 +179,7 @@ test("TakerAsk event updates all entities as expected", () => {
     COLLECTION,
     tokenId,
     amount,
-    price
+    price,
   );
   handleTakerAsk(newTakerAskEvent);
 
@@ -197,7 +197,7 @@ test("TakerAsk event updates all entities as expected", () => {
       assert.stringEquals(makerUserDailyData.dailyVolume.toString(), makerUser.totalVolume.toString());
       assert.stringEquals(
         makerUserDailyData.dailyVolumeExcludingZeroFee.toString(),
-        makerUserDailyData.dailyVolume.toString()
+        makerUserDailyData.dailyVolume.toString(),
       );
     } else {
       log.warning("UserDailyData (maker) doesn't exist", []);
@@ -220,7 +220,7 @@ test("TakerAsk event updates all entities as expected", () => {
       assert.stringEquals(takerUserDailyData.dailyVolume.toString(), takerUser.totalVolume.toString());
       assert.stringEquals(
         takerUserDailyData.dailyVolumeExcludingZeroFee.toString(),
-        takerUserDailyData.dailyVolume.toString()
+        takerUserDailyData.dailyVolume.toString(),
       );
     } else {
       log.warning("UserDailyData (taker) doesn't exist", []);
@@ -277,11 +277,11 @@ test("TakerAsk event updates all entities as expected", () => {
       assert.stringEquals(collectionDailyData.dailyTakerBidVolume.toString(), "0");
       assert.stringEquals(
         collectionDailyData.dailyVolumeExcludingZeroFee.toString(),
-        collection.totalVolume.toString()
+        collection.totalVolume.toString(),
       );
       assert.stringEquals(
         collectionDailyData.dailyVolumeExcludingZeroFee.toString(),
-        collectionDailyData.dailyVolume.toString()
+        collectionDailyData.dailyVolume.toString(),
       );
       assert.stringEquals(collectionDailyData.dailyRoyalty.toString(), collection.totalRoyaltyPaid.toString());
     } else {
@@ -305,7 +305,7 @@ test("RoyaltyPayment", () => {
     tokenId,
     royaltyRecipientAddress,
     WETH,
-    royaltyAmount
+    royaltyAmount,
   );
   handleRoyaltyPayment(newRoyaltyPaymentEvent);
 
@@ -335,11 +335,11 @@ test("RoyaltyPayment", () => {
       assert.stringEquals(collectionDailyData.dailyTakerBidVolume.toString(), "0");
       assert.stringEquals(
         collectionDailyData.dailyVolumeExcludingZeroFee.toString(),
-        collection.totalVolume.toString()
+        collection.totalVolume.toString(),
       );
       assert.stringEquals(
         collectionDailyData.dailyVolumeExcludingZeroFee.toString(),
-        collectionDailyData.dailyVolume.toString()
+        collectionDailyData.dailyVolume.toString(),
       );
       assert.stringEquals(collectionDailyData.dailyRoyalty.toString(), collection.totalRoyaltyPaid.toString());
     } else {

@@ -46,7 +46,7 @@ export function handleTakerBid(event: TakerBid): void {
   const aggregatorDailyDataByCurrency = getOrInitializeAggregatorDailyDataByCurrency(
     aggregatorByCurrency,
     aggregatorDailyData,
-    dayID
+    dayID,
   );
   aggregatorDailyDataByCurrency.volume = aggregatorDailyDataByCurrency.volume.plus(price);
 
@@ -67,7 +67,7 @@ export function handleTakerBid(event: TakerBid): void {
   const marketplaceDailyDataByCurrency = getOrInitializeMarketplaceDailyDataByCurrency(
     marketplaceDailyData,
     marketplaceByCurrency,
-    dayID
+    dayID,
   );
   marketplaceDailyDataByCurrency.volume = marketplaceDailyDataByCurrency.volume.plus(price);
 

@@ -18,7 +18,7 @@ export function getRaffle(contract: Raffle, raffleId: BigInt): Raffle__rafflesRe
 
 export function getPricing(
   contract: Raffle,
-  raffleId: BigInt
+  raffleId: BigInt,
 ): Array<Raffle__getPricingOptionsResultPricingOptionsStruct> | null {
   const result = contract.try_getPricingOptions(raffleId);
   if (!result.reverted) {

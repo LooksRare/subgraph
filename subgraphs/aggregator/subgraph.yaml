@@ -1,4 +1,4 @@
-specVersion: 0.0.4
+specVersion: 0.0.5
 schema:
   file: ./schema.graphql
 dataSources:
@@ -10,7 +10,7 @@ dataSources:
       address: "0x00000000000001ad428e4906aE43D8F9852d0dD6"
     mapping:
       kind: ethereum/events
-      apiVersion: 0.0.6
+      apiVersion: 0.0.7
       language: wasm/assemblyscript
       entities:
         - OrderFulfilled
@@ -30,7 +30,7 @@ dataSources:
       address: "0x59728544B08AB483533076417FbBB2fD0B17CE3a"
     mapping:
       kind: ethereum/events
-      apiVersion: 0.0.6
+      apiVersion: 0.0.7
       language: wasm/assemblyscript
       entities:
         - TakerBid

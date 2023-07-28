@@ -93,7 +93,7 @@ export function updateNumberUsersAggregator(timestamp: BigInt, isIncrease: boole
 export function updateDailySnapshotConversion(
   timestamp: BigInt,
   amountSold: BigDecimal,
-  amountReceived: BigDecimal
+  amountReceived: BigDecimal,
 ): void {
   const dailySnapshot = setupOverviewAndDailySnapshot(timestamp);
   dailySnapshot.aggregatorTotalStakedLOOKS = dailySnapshot.aggregatorTotalStakedLOOKS.plus(amountSold);

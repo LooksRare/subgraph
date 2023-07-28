@@ -63,7 +63,7 @@ export function handleRaffleStatusUpdated(event: RaffleStatusUpdated): void {
     raffle.prizeValue = toBigDecimal(
       pricingData[pricingData.length - 1].price
         .div(pricingData[pricingData.length - 1].entriesCount)
-        .times(raffle.minimumEntries)
+        .times(raffle.minimumEntries),
     );
     raffle.save();
   }

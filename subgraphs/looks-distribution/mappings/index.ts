@@ -63,7 +63,7 @@ export function handleDepositFeeSharing(event: DepositFeeSharing): void {
 
   if (event.params.harvestedAmount.gt(ZERO_BI)) {
     user.feeSharingTotalCollectedWETH = user.feeSharingTotalCollectedWETH.plus(
-      toBigDecimal(event.params.harvestedAmount)
+      toBigDecimal(event.params.harvestedAmount),
     );
     user.feeSharingLastHarvestDate = event.block.timestamp;
   }
@@ -87,7 +87,7 @@ export function handleHarvestFeeSharing(event: HarvestFeeSharing): void {
   }
 
   user.feeSharingTotalCollectedWETH = user.feeSharingTotalCollectedWETH.plus(
-    toBigDecimal(event.params.harvestedAmount)
+    toBigDecimal(event.params.harvestedAmount),
   );
   user.feeSharingLastHarvestDate = event.block.timestamp;
 
@@ -110,11 +110,11 @@ export function handleWithdrawFeeSharing(event: WithdrawFeeSharing): void {
 
   if (user.feeSharingAdjustedDepositAmount.ge(toBigDecimal(event.params.amount))) {
     user.feeSharingAdjustedDepositAmount = user.feeSharingAdjustedDepositAmount.minus(
-      toBigDecimal(event.params.amount)
+      toBigDecimal(event.params.amount),
     );
   } else {
     user.feeSharingTotalCollectedLOOKS = user.feeSharingTotalCollectedLOOKS.plus(
-      toBigDecimal(event.params.amount).minus(user.feeSharingAdjustedDepositAmount)
+      toBigDecimal(event.params.amount).minus(user.feeSharingAdjustedDepositAmount),
     );
     user.feeSharingAdjustedDepositAmount = ZERO_BD;
   }
@@ -123,7 +123,7 @@ export function handleWithdrawFeeSharing(event: WithdrawFeeSharing): void {
 
   if (event.params.harvestedAmount.gt(ZERO_BI)) {
     user.feeSharingTotalCollectedWETH = user.feeSharingTotalCollectedWETH.plus(
-      toBigDecimal(event.params.harvestedAmount)
+      toBigDecimal(event.params.harvestedAmount),
     );
     user.feeSharingLastHarvestDate = event.block.timestamp;
   }
@@ -199,7 +199,7 @@ export function handleDepositStakingV2(event: DepositStakingV2): void {
   if (event.params.harvestedAmount.gt(ZERO_BI)) {
     user.stakingPoolUniswapV2LastHarvestDate = event.block.timestamp;
     user.stakingPoolUniswapV2TotalCollectedLOOKS = user.stakingPoolUniswapV2TotalCollectedLOOKS.plus(
-      toBigDecimal(event.params.harvestedAmount)
+      toBigDecimal(event.params.harvestedAmount),
     );
   }
 
@@ -217,7 +217,7 @@ export function handleHarvestStakingV2(event: HarvestStakingV2): void {
 
   user.stakingPoolUniswapV2LastHarvestDate = event.block.timestamp;
   user.stakingPoolUniswapV2TotalCollectedLOOKS = user.stakingPoolUniswapV2TotalCollectedLOOKS.plus(
-    toBigDecimal(event.params.harvestedAmount)
+    toBigDecimal(event.params.harvestedAmount),
   );
 
   user.save();
@@ -237,7 +237,7 @@ export function handleWithdrawStakingV2(event: WithdrawStakingV2): void {
   if (event.params.harvestedAmount !== ZERO_BI) {
     user.stakingPoolUniswapV2LastHarvestDate = event.block.timestamp;
     user.stakingPoolUniswapV2TotalCollectedLOOKS = user.stakingPoolUniswapV2TotalCollectedLOOKS.plus(
-      toBigDecimal(event.params.harvestedAmount)
+      toBigDecimal(event.params.harvestedAmount),
     );
   }
 
@@ -275,11 +275,11 @@ export function handleWithdrawAggregatorUniswapV3(event: WithdrawAggregatorUnisw
 
   if (user.aggregatorAdjustedDepositAmount.ge(toBigDecimal(event.params.amount))) {
     user.aggregatorAdjustedDepositAmount = user.aggregatorAdjustedDepositAmount.minus(
-      toBigDecimal(event.params.amount)
+      toBigDecimal(event.params.amount),
     );
   } else {
     user.aggregatorTotalCollectedLOOKS = user.aggregatorTotalCollectedLOOKS.plus(
-      toBigDecimal(event.params.amount).minus(user.aggregatorAdjustedDepositAmount)
+      toBigDecimal(event.params.amount).minus(user.aggregatorAdjustedDepositAmount),
     );
     user.aggregatorAdjustedDepositAmount = ZERO_BD;
   }

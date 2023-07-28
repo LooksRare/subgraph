@@ -13,7 +13,7 @@ export function updateCollectionDailyData(
   strategy: Address,
   volume: BigDecimal,
   timestamp: BigInt,
-  isTakerAsk: boolean
+  isTakerAsk: boolean,
 ): void {
   const dailyTimestampBigInt = ONE_DAY_BI;
   const dayID = timestamp.div(dailyTimestampBigInt);
@@ -91,7 +91,7 @@ export function updateExchangeDailyData(
   strategy: Address,
   volume: BigDecimal,
   timestamp: BigInt,
-  isTakerAsk: boolean
+  isTakerAsk: boolean,
 ): void {
   const dailyTimestampBigInt = ONE_DAY_BI;
   const dayID = timestamp.div(dailyTimestampBigInt);
@@ -137,7 +137,7 @@ export function updateExecutionStrategyDailyData(
   strategy: Address,
   volume: BigDecimal,
   timestamp: BigInt,
-  isTakerAsk: boolean
+  isTakerAsk: boolean,
 ): void {
   const dailyTimestampBigInt = ONE_DAY_BI;
   const dayID = timestamp.div(dailyTimestampBigInt);

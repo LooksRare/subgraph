@@ -20,7 +20,7 @@ export function createDepositFeeSharingEvent(
   user: Address,
   amount: BigInt,
   harvestedAmount: BigInt,
-  blockTimestamp: BigInt = ZERO_BI
+  blockTimestamp: BigInt = ZERO_BI,
 ): DepositFeeSharing {
   const mockEvent = newMockEvent();
   const newDepositEvent = new DepositFeeSharing(
@@ -31,7 +31,7 @@ export function createDepositFeeSharingEvent(
     mockEvent.block,
     mockEvent.transaction,
     mockEvent.parameters,
-    mockEvent.receipt
+    mockEvent.receipt,
   );
 
   newDepositEvent.block.timestamp = blockTimestamp;
@@ -41,7 +41,7 @@ export function createDepositFeeSharingEvent(
   const amountParam = new ethereum.EventParam("amount", ethereum.Value.fromSignedBigInt(amount));
   const harvestedAmountParam = new ethereum.EventParam(
     "harvestedAmount",
-    ethereum.Value.fromSignedBigInt(harvestedAmount)
+    ethereum.Value.fromSignedBigInt(harvestedAmount),
   );
 
   newDepositEvent.parameters.push(userParam);
@@ -59,7 +59,7 @@ export function createDepositFeeSharingEvent(
 export function createHarvestFeeSharingEvent(
   user: Address,
   harvestedAmount: BigInt,
-  blockTimestamp: BigInt = ZERO_BI
+  blockTimestamp: BigInt = ZERO_BI,
 ): HarvestFeeSharing {
   const mockEvent = newMockEvent();
   const newHarvestEvent = new HarvestFeeSharing(
@@ -70,7 +70,7 @@ export function createHarvestFeeSharingEvent(
     mockEvent.block,
     mockEvent.transaction,
     mockEvent.parameters,
-    mockEvent.receipt
+    mockEvent.receipt,
   );
 
   newHarvestEvent.block.timestamp = blockTimestamp;
@@ -79,7 +79,7 @@ export function createHarvestFeeSharingEvent(
   const userParam = new ethereum.EventParam("user", ethereum.Value.fromAddress(user));
   const harvestedAmountParam = new ethereum.EventParam(
     "harvestedAmount",
-    ethereum.Value.fromSignedBigInt(harvestedAmount)
+    ethereum.Value.fromSignedBigInt(harvestedAmount),
   );
 
   newHarvestEvent.parameters.push(userParam);
@@ -98,7 +98,7 @@ export function createWithdrawFeeSharingEvent(
   user: Address,
   amount: BigInt,
   harvestedAmount: BigInt,
-  blockTimestamp: BigInt = ZERO_BI
+  blockTimestamp: BigInt = ZERO_BI,
 ): WithdrawFeeSharing {
   const mockEvent = newMockEvent();
   const newWithdrawEvent = new WithdrawFeeSharing(
@@ -109,7 +109,7 @@ export function createWithdrawFeeSharingEvent(
     mockEvent.block,
     mockEvent.transaction,
     mockEvent.parameters,
-    mockEvent.receipt
+    mockEvent.receipt,
   );
 
   newWithdrawEvent.block.timestamp = blockTimestamp;
@@ -119,7 +119,7 @@ export function createWithdrawFeeSharingEvent(
   const amountParam = new ethereum.EventParam("amount", ethereum.Value.fromSignedBigInt(amount));
   const harvestedAmountParam = new ethereum.EventParam(
     "harvestedAmount",
-    ethereum.Value.fromSignedBigInt(harvestedAmount)
+    ethereum.Value.fromSignedBigInt(harvestedAmount),
   );
 
   newWithdrawEvent.parameters.push(userParam);
@@ -140,7 +140,7 @@ export function createNewRewardPeriodEvent(
   rewardPerBlock: BigInt,
   reward: BigInt,
   blockNumber: BigInt = ZERO_BI,
-  blockTimestamp: BigInt = ZERO_BI
+  blockTimestamp: BigInt = ZERO_BI,
 ): NewRewardPeriod {
   const mockEvent = newMockEvent();
   const newRewardPeriodEvent = new NewRewardPeriod(
@@ -151,7 +151,7 @@ export function createNewRewardPeriodEvent(
     mockEvent.block,
     mockEvent.transaction,
     mockEvent.parameters,
-    mockEvent.receipt
+    mockEvent.receipt,
   );
 
   newRewardPeriodEvent.block.number = blockNumber;
@@ -161,7 +161,7 @@ export function createNewRewardPeriodEvent(
   const numberBlocksParam = new ethereum.EventParam("numberBlocks", ethereum.Value.fromSignedBigInt(numberBlocks));
   const rewardPerBlockPAram = new ethereum.EventParam(
     "rewardPerBlock",
-    ethereum.Value.fromSignedBigInt(rewardPerBlock)
+    ethereum.Value.fromSignedBigInt(rewardPerBlock),
   );
   const rewardParam = new ethereum.EventParam("reward", ethereum.Value.fromSignedBigInt(reward));
 
@@ -181,7 +181,7 @@ export function createWithdrawFeeSharingCall(to: Address, from: Address, blockTi
     mockCall.block,
     mockCall.transaction,
     mockCall.inputValues,
-    mockCall.outputValues
+    mockCall.outputValues,
   );
 
   newWithdrawCall.block.timestamp = blockTimestamp;
@@ -198,7 +198,7 @@ export function createWithdrawAllFeeSharingCall(to: Address, from: Address, bloc
     mockCall.block,
     mockCall.transaction,
     mockCall.inputValues,
-    mockCall.outputValues
+    mockCall.outputValues,
   );
 
   newWithdrawAllCall.block.timestamp = blockTimestamp;

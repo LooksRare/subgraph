@@ -33,7 +33,7 @@ test("Deposit + Withdraw (inferior to deposited amount) events", () => {
     userAddress,
     amountDepositedInLOOKSWei,
     harvestedAmountInWETHWei,
-    blockTimestamp
+    blockTimestamp,
   );
 
   createMockedFunction(FEE_SHARING_ADDRESS, "totalShares", "totalShares():(uint256)").returns([
@@ -43,7 +43,7 @@ test("Deposit + Withdraw (inferior to deposited amount) events", () => {
   createMockedFunction(
     FEE_SHARING_ADDRESS,
     "calculateSharePriceInLOOKS",
-    "calculateSharePriceInLOOKS():(uint256)"
+    "calculateSharePriceInLOOKS():(uint256)",
   ).returns([ethereum.Value.fromSignedBigInt(ONE_ETHER_IN_WEI)]);
 
   handleDepositFeeSharing(newDepositEvent);
@@ -70,7 +70,7 @@ test("Deposit + Withdraw (inferior to deposited amount) events", () => {
     userAddress,
     amountWithdrawnInLOOKSWei,
     harvestedAmountInWETHWei,
-    blockTimestamp
+    blockTimestamp,
   );
 
   handleWithdrawFeeSharing(newWithdrawEvent);
@@ -80,7 +80,7 @@ test("Deposit + Withdraw (inferior to deposited amount) events", () => {
     assert.assertTrue(user.feeSharingIsActive);
     assert.stringEquals(
       user.feeSharingAdjustedDepositAmount.toString(),
-      (amountDepositedInLOOKS - amountWithdrawnInLOOKS).toString()
+      (amountDepositedInLOOKS - amountWithdrawnInLOOKS).toString(),
     );
     // LOOKS are not marked as collected until the adjusted deposit amount reaches 0
     assert.stringEquals(user.feeSharingTotalCollectedLOOKS.toString(), "0");
@@ -124,7 +124,7 @@ test("Deposit + Withdraw (inferior to deposited amount) events", () => {
     userAddress,
     amountWithdrawnInLOOKSWei,
     harvestedAmountInWETHWei,
-    blockTimestamp
+    blockTimestamp,
   );
 
   handleWithdrawFeeSharing(newWithdrawEvent);
@@ -179,7 +179,7 @@ test("NewRewardEvent creates RewardPeriod entity", () => {
     rewardPerBlockInWeiWETH,
     rewardInWeiWETH,
     blockNumber,
-    blockTimestamp
+    blockTimestamp,
   );
   handleNewRewardPeriod(newRewardPeriodEvent);
 

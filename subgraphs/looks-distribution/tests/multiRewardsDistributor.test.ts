@@ -25,7 +25,7 @@ test("Trading/Listing rewards claimed", () => {
     totalAmount,
     treeIds,
     amountsClaimed,
-    blockTimestamp
+    blockTimestamp,
   );
   handleMultiRewardsClaim(newRewardsClaimEvent);
 
@@ -56,7 +56,7 @@ test("Trading/Listing rewards claimed", () => {
     totalAmount,
     treeIds,
     amountsClaimed,
-    blockTimestamp
+    blockTimestamp,
   );
   handleMultiRewardsClaim(newRewardsClaimEvent);
 
@@ -86,7 +86,7 @@ test("Trading/Listing rewards claimed", () => {
     totalAmount,
     treeIds,
     amountsClaimed,
-    blockTimestamp
+    blockTimestamp,
   );
   handleMultiRewardsClaim(newRewardsClaimEvent);
 
@@ -117,7 +117,7 @@ test("Trading/Listing rewards claimed", () => {
     totalAmount,
     treeIds,
     amountsClaimed,
-    blockTimestamp
+    blockTimestamp,
   );
   handleMultiRewardsClaim(newRewardsClaimEvent);
 
