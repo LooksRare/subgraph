@@ -13,7 +13,7 @@ export function createRoyaltyFeeUpdateEvent(
   collection: Address,
   setter: Address,
   receiver: Address,
-  fee: BigInt
+  fee: BigInt,
 ): RoyaltyFeeUpdate {
   const mockEvent = newMockEvent();
   const newRoyaltyFeeUpdateEvent = new RoyaltyFeeUpdate(
@@ -24,7 +24,7 @@ export function createRoyaltyFeeUpdateEvent(
     mockEvent.block,
     mockEvent.transaction,
     mockEvent.parameters,
-    mockEvent.receipt
+    mockEvent.receipt,
   );
 
   newRoyaltyFeeUpdateEvent.parameters = [];

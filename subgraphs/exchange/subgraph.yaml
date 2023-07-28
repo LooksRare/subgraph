@@ -1,4 +1,4 @@
-specVersion: 0.0.4
+specVersion: 0.0.5
 description: Volumes & royalties of users, creators, and collections.
 repository: https://github.com/looksrare
 schema:
@@ -13,7 +13,7 @@ dataSources:
       startBlock: 13885625
     mapping:
       kind: ethereum/events
-      apiVersion: 0.0.6
+      apiVersion: 0.0.7
       language: wasm/assemblyscript
       file: ./mappings/index.ts
       entities:

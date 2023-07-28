@@ -36,7 +36,7 @@ test("Deposit + Withdraw (inferior to deposited amount) events", () => {
   createMockedFunction(
     AGGREGATOR_ADDRESS,
     "calculateSharePriceInLOOKS",
-    "calculateSharePriceInLOOKS():(uint256)"
+    "calculateSharePriceInLOOKS():(uint256)",
   ).returns([ethereum.Value.fromSignedBigInt(ONE_ETHER_IN_WEI)]);
 
   handleDepositAggregatorUniswapV3(newDepositEvent);
@@ -65,7 +65,7 @@ test("Deposit + Withdraw (inferior to deposited amount) events", () => {
     assert.assertTrue(user.aggregatorIsActive);
     assert.stringEquals(
       user.aggregatorAdjustedDepositAmount.toString(),
-      (amountDepositedInLOOKS - amountWithdrawnInLOOKS).toString()
+      (amountDepositedInLOOKS - amountWithdrawnInLOOKS).toString(),
     );
     // LOOKS are not marked as collected until the adjusted deposit amount reaches 0
     assert.stringEquals(user.aggregatorTotalCollectedLOOKS.toString(), "0");
@@ -138,7 +138,7 @@ test("ConversionToLOOKS event creates AggregatorConversion entity", () => {
     amountSoldInWETHWei,
     amountReceivedInLOOKSWei,
     blockNumber,
-    blockTimestamp
+    blockTimestamp,
   );
   handleConversionToLOOKSAggregatorUniswapV3(newConversionEvent);
 

@@ -13,7 +13,7 @@ export function createRewardsClaimEvent(
   user: Address,
   rewardRound: BigInt,
   amount: BigInt,
-  blockTimestamp: BigInt = ZERO_BI
+  blockTimestamp: BigInt = ZERO_BI,
 ): RewardsClaim {
   const mockEvent = newMockEvent();
   const newRewardsClaimEvent = new RewardsClaim(
@@ -24,7 +24,7 @@ export function createRewardsClaimEvent(
     mockEvent.block,
     mockEvent.transaction,
     mockEvent.parameters,
-    mockEvent.receipt
+    mockEvent.receipt,
   );
 
   newRewardsClaimEvent.block.timestamp = blockTimestamp;

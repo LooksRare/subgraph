@@ -5,7 +5,7 @@ import { MarketplaceByCurrency, MarketplaceDailyData, MarketplaceDailyDataByCurr
 export function getOrInitializeMarketplaceDailyDataByCurrency(
   marketplaceDailyData: MarketplaceDailyData,
   marketplaceByCurrency: MarketplaceByCurrency,
-  dayID: BigInt
+  dayID: BigInt,
 ): MarketplaceDailyDataByCurrency {
   const ID = `${marketplaceByCurrency.id}-${dayID.toString()}`;
   let marketplaceDailyDataByCurrency = MarketplaceDailyDataByCurrency.load(ID);

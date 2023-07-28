@@ -31,7 +31,7 @@ export function setupOverviewAndDailySnapshot(timestamp: BigInt): DailySnapshot 
 
     if (overview.feeSharingActiveUsers.gt(ZERO_BI)) {
       overview.feeSharingTotalStakedLOOKS = fetchTotalAmountStakedFeeSharing().minus(
-        overview.aggregatorTotalStakedLOOKS
+        overview.aggregatorTotalStakedLOOKS,
       );
     }
     overview.save();

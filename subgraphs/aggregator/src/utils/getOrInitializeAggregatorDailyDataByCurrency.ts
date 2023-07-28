@@ -5,7 +5,7 @@ import { AggregatorByCurrency, AggregatorDailyData, AggregatorDailyDataByCurrenc
 export function getOrInitializeAggregatorDailyDataByCurrency(
   aggregatorByCurrency: AggregatorByCurrency,
   aggregatorDailyData: AggregatorDailyData,
-  dayID: BigInt
+  dayID: BigInt,
 ): AggregatorDailyDataByCurrency {
   const aggregatorDailyDataByCurrencyID = `${aggregatorByCurrency.id}-${dayID.toString()}`;
   let aggregatorDailyDataByCurrency = AggregatorDailyDataByCurrency.load(aggregatorDailyDataByCurrencyID);

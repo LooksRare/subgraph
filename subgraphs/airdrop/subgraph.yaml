@@ -1,4 +1,4 @@
-specVersion: 0.0.4
+specVersion: 0.0.5
 description: OpenSea indexer for LooksRare airdrop
 repository: https://github.com/looksrare
 schema:
@@ -13,7 +13,7 @@ dataSources:
       startBlock: 12642194
     mapping:
       kind: ethereum/events
-      apiVersion: 0.0.6
+      apiVersion: 0.0.7
       language: wasm/assemblyscript
       file: ./mappings/index.ts
       entities:

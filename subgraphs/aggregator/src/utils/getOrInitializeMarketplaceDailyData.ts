@@ -5,7 +5,7 @@ import { Marketplace, MarketplaceDailyData } from "../../generated/schema";
 export function getOrInitializeMarketplaceDailyData(
   currency: Bytes,
   marketplace: Marketplace,
-  dayID: BigInt
+  dayID: BigInt,
 ): MarketplaceDailyData {
   const marketplaceDailyDataID = `${marketplace.id}-${dayID.toString()}`;
   let marketplaceDailyData = MarketplaceDailyData.load(marketplaceDailyDataID);

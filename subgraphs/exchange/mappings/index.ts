@@ -105,25 +105,25 @@ export function handleTakerAsk(event: TakerAsk): void {
     event.params.strategy,
     toBigDecimal(event.params.price),
     event.block.timestamp,
-    true
+    true,
   );
   updateExecutionStrategyDailyData(
     event.params.strategy,
     toBigDecimal(event.params.price),
     event.block.timestamp,
-    true
+    true,
   );
   updateUserDailyData(
     event.params.maker,
     event.params.strategy,
     toBigDecimal(event.params.price),
-    event.block.timestamp
+    event.block.timestamp,
   );
   updateUserDailyData(
     event.params.taker,
     event.params.strategy,
     toBigDecimal(event.params.price),
-    event.block.timestamp
+    event.block.timestamp,
   );
 }
 
@@ -207,25 +207,25 @@ export function handleTakerBid(event: TakerBid): void {
     event.params.strategy,
     toBigDecimal(event.params.price),
     event.block.timestamp,
-    false
+    false,
   );
   updateExecutionStrategyDailyData(
     event.params.strategy,
     toBigDecimal(event.params.price),
     event.block.timestamp,
-    false
+    false,
   );
   updateUserDailyData(
     event.params.maker,
     event.params.strategy,
     toBigDecimal(event.params.price),
-    event.block.timestamp
+    event.block.timestamp,
   );
   updateUserDailyData(
     event.params.taker,
     event.params.strategy,
     toBigDecimal(event.params.price),
-    event.block.timestamp
+    event.block.timestamp,
   );
 }
 

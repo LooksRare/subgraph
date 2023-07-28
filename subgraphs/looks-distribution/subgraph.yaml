@@ -1,4 +1,4 @@
-specVersion: 0.0.4
+specVersion: 0.0.5
 description: LooksRare LOOKS distribution contracts
 repository: https://github.com/looksrare
 schema:
@@ -13,7 +13,7 @@ dataSources:
       startBlock: 13975044
     mapping:
       kind: ethereum/events
-      apiVersion: 0.0.6
+      apiVersion: 0.0.7
       language: wasm/assemblyscript
       file: ./mappings/index.ts
       entities:
@@ -49,7 +49,7 @@ dataSources:
       startBlock: 13975044
     mapping:
       kind: ethereum/events
-      apiVersion: 0.0.6
+      apiVersion: 0.0.7
       language: wasm/assemblyscript
       file: ./mappings/index.ts
       entities:
@@ -73,7 +73,7 @@ dataSources:
       startBlock: 13975044
     mapping:
       kind: ethereum/events
-      apiVersion: 0.0.6
+      apiVersion: 0.0.7
       language: wasm/assemblyscript
       file: ./mappings/index.ts
       entities:
@@ -93,7 +93,7 @@ dataSources:
       startBlock: 13975044
     mapping:
       kind: ethereum/events
-      apiVersion: 0.0.6
+      apiVersion: 0.0.7
       language: wasm/assemblyscript
       file: ./mappings/index.ts
       entities:
@@ -113,7 +113,7 @@ dataSources:
       startBlock: 14477871
     mapping:
       kind: ethereum/events
-      apiVersion: 0.0.6
+      apiVersion: 0.0.7
       language: wasm/assemblyscript
       file: ./mappings/index.ts
       entities:
@@ -147,7 +147,7 @@ dataSources:
       startBlock: 14619105
     mapping:
       kind: ethereum/events
-      apiVersion: 0.0.6
+      apiVersion: 0.0.7
       language: wasm/assemblyscript
       file: ./mappings/index.ts
       entities:

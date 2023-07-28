@@ -17,7 +17,7 @@ import { ZERO_BI } from "../../../../../helpers/constants";
 export function createDepositAggregatorEvent(
   user: Address,
   amount: BigInt,
-  blockTimestamp: BigInt = ZERO_BI
+  blockTimestamp: BigInt = ZERO_BI,
 ): DepositAggregatorUniswapV3 {
   const mockEvent = newMockEvent();
   const newDepositEvent = new DepositAggregatorUniswapV3(
@@ -28,7 +28,7 @@ export function createDepositAggregatorEvent(
     mockEvent.block,
     mockEvent.transaction,
     mockEvent.parameters,
-    mockEvent.receipt
+    mockEvent.receipt,
   );
 
   newDepositEvent.block.timestamp = blockTimestamp;
@@ -51,7 +51,7 @@ export function createDepositAggregatorEvent(
 export function createWithdrawAggregatorEvent(
   user: Address,
   amount: BigInt,
-  blockTimestamp: BigInt = ZERO_BI
+  blockTimestamp: BigInt = ZERO_BI,
 ): WithdrawAggregatorUniswapV3 {
   const mockEvent = newMockEvent();
   const newWithdrawEvent = new WithdrawAggregatorUniswapV3(
@@ -62,7 +62,7 @@ export function createWithdrawAggregatorEvent(
     mockEvent.block,
     mockEvent.transaction,
     mockEvent.parameters,
-    mockEvent.receipt
+    mockEvent.receipt,
   );
 
   newWithdrawEvent.block.timestamp = blockTimestamp;
@@ -86,7 +86,7 @@ export function createConversionToLOOKSEvent(
   amountSold: BigInt,
   amountReceived: BigInt,
   blockNumber: BigInt = ZERO_BI,
-  blockTimestamp: BigInt = ZERO_BI
+  blockTimestamp: BigInt = ZERO_BI,
 ): ConversionToLOOKS {
   const mockEvent = newMockEvent();
   const newConversionEvent = new ConversionToLOOKS(
@@ -97,7 +97,7 @@ export function createConversionToLOOKSEvent(
     mockEvent.block,
     mockEvent.transaction,
     mockEvent.parameters,
-    mockEvent.receipt
+    mockEvent.receipt,
   );
 
   newConversionEvent.block.number = blockNumber;
@@ -107,7 +107,7 @@ export function createConversionToLOOKSEvent(
   const amountSoldParam = new ethereum.EventParam("amountSold", ethereum.Value.fromSignedBigInt(amountSold));
   const amountReceivedParam = new ethereum.EventParam(
     "amountReceived",
-    ethereum.Value.fromSignedBigInt(amountReceived)
+    ethereum.Value.fromSignedBigInt(amountReceived),
   );
 
   newConversionEvent.parameters.push(amountSoldParam);
@@ -125,7 +125,7 @@ export function createWithdrawAggregatorCall(to: Address, from: Address, blockTi
     mockCall.block,
     mockCall.transaction,
     mockCall.inputValues,
-    mockCall.outputValues
+    mockCall.outputValues,
   );
 
   newWithdrawCall.block.timestamp = blockTimestamp;
@@ -142,7 +142,7 @@ export function createWithdrawAllAggregatorCall(to: Address, from: Address, bloc
     mockCall.block,
     mockCall.transaction,
     mockCall.inputValues,
-    mockCall.outputValues
+    mockCall.outputValues,
   );
 
   newWithdrawAllCall.block.timestamp = blockTimestamp;

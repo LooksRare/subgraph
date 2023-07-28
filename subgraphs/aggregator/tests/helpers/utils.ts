@@ -26,7 +26,7 @@ export function createOrderFulfilledEvent(
   considerationIdentifiers: Array<i32>,
   considerationAmounts: Array<string>,
   considerationRecipients: Array<string>,
-  timestamp: i32
+  timestamp: i32,
 ): OrderFulfilled {
   const mockEvent = newMockEvent();
   const orderFulfilledEvent = new OrderFulfilled(
@@ -37,7 +37,7 @@ export function createOrderFulfilledEvent(
     mockEvent.block,
     mockEvent.transaction,
     [],
-    mockEvent.receipt
+    mockEvent.receipt,
   );
 
   orderFulfilledEvent.block.timestamp = BigInt.fromI32(timestamp);
@@ -80,7 +80,7 @@ export function createOrderFulfilledEvent(
 
   const considerationParam = new ethereum.EventParam(
     "consideration",
-    ethereum.Value.fromTupleArray(considerationTupleArray)
+    ethereum.Value.fromTupleArray(considerationTupleArray),
   );
 
   orderFulfilledEvent.parameters.push(orderHashParam);
@@ -103,7 +103,7 @@ export function createTakerBidEvent(
   collection: string,
   tokenId: i32,
   price: i64,
-  timestamp: i32
+  timestamp: i32,
 ): TakerBid {
   const mockEvent = newMockEvent();
   const takerBidEvent = new TakerBid(
@@ -114,7 +114,7 @@ export function createTakerBidEvent(
     mockEvent.block,
     mockEvent.transaction,
     [],
-    mockEvent.receipt
+    mockEvent.receipt,
   );
 
   takerBidEvent.block.timestamp = BigInt.fromI32(timestamp);
@@ -163,6 +163,6 @@ export function newLog(address: Address, topics: Array<Bytes>, transactionLogInd
     defaultBigInt, // logIndex
     transactionLogIndex,
     defaultEventDataLogType, // logType
-    new Wrapped(false) // removed
+    new Wrapped(false), // removed
   );
 }

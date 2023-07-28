@@ -17,7 +17,7 @@ export function createMultiRewardsClaim(
   totalAmount: BigInt,
   treeIds: i32[],
   amounts: BigInt[],
-  blockTimestamp: BigInt = ZERO_BI
+  blockTimestamp: BigInt = ZERO_BI,
 ): MultiRewardsClaim {
   const mockEvent = newMockEvent();
   const newRewardsClaimEvent = new MultiRewardsClaim(
@@ -28,7 +28,7 @@ export function createMultiRewardsClaim(
     mockEvent.block,
     mockEvent.transaction,
     mockEvent.parameters,
-    mockEvent.receipt
+    mockEvent.receipt,
   );
 
   newRewardsClaimEvent.block.timestamp = blockTimestamp;

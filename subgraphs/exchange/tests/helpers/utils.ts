@@ -25,7 +25,7 @@ export function createTakerAskEvent(
   collection: Address,
   tokenId: BigInt,
   amount: BigInt,
-  price: BigInt
+  price: BigInt,
 ): TakerAsk {
   const mockEvent = newMockEvent();
   const newTakerAskEvent = new TakerAsk(
@@ -36,7 +36,7 @@ export function createTakerAskEvent(
     mockEvent.block,
     mockEvent.transaction,
     mockEvent.parameters,
-    mockEvent.receipt
+    mockEvent.receipt,
   );
 
   newTakerAskEvent.parameters = [];
@@ -89,7 +89,7 @@ export function createTakerBidEvent(
   collection: Address,
   tokenId: BigInt,
   amount: BigInt,
-  price: BigInt
+  price: BigInt,
 ): TakerBid {
   const mockEvent = newMockEvent();
   const newTakerBidEvent = new TakerBid(
@@ -100,7 +100,7 @@ export function createTakerBidEvent(
     mockEvent.block,
     mockEvent.transaction,
     mockEvent.parameters,
-    mockEvent.receipt
+    mockEvent.receipt,
   );
 
   newTakerBidEvent.parameters = [];
@@ -143,7 +143,7 @@ export function createRoyaltyPaymentEvent(
   tokenId: BigInt,
   royaltyRecipient: Address,
   currency: Address,
-  amount: BigInt
+  amount: BigInt,
 ): RoyaltyPayment {
   const mockEvent = newMockEvent();
   const newRoyaltyPaymentEvent = new RoyaltyPayment(
@@ -154,7 +154,7 @@ export function createRoyaltyPaymentEvent(
     mockEvent.block,
     mockEvent.transaction,
     mockEvent.parameters,
-    mockEvent.receipt
+    mockEvent.receipt,
   );
 
   newRoyaltyPaymentEvent.parameters = [];
@@ -163,7 +163,7 @@ export function createRoyaltyPaymentEvent(
   const tokenIdParam = new ethereum.EventParam("tokenId", ethereum.Value.fromSignedBigInt(tokenId));
   const royaltyRecipientParam = new ethereum.EventParam(
     "royaltyRecipient",
-    ethereum.Value.fromAddress(royaltyRecipient)
+    ethereum.Value.fromAddress(royaltyRecipient),
   );
   const currencyParam = new ethereum.EventParam("currency", ethereum.Value.fromAddress(currency));
   const amountParam = new ethereum.EventParam("amount", ethereum.Value.fromSignedBigInt(amount));

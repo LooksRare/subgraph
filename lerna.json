@@ -1,6 +1,8 @@
 {
   "npmClient": "yarn",
-  "packages": ["subgraphs/**/*"],
-  "useWorkspaces": true,
-  "version": "independent"
+  "packages": [
+    "subgraphs/**/*"
+  ],
+  "version": "independent",
+  "$schema": "./node_modules/lerna/schemas/lerna-schema.json"
 }

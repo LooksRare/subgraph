@@ -51,7 +51,7 @@ describe("Aggregator", () => {
         offerItemTypes: Array<i32> = [2],
         offerTokens: Array<string> = ["0x60bb1e2aa1c9acafb4d34f71585d7e959f387769"],
         offerIdentifiers: Array<i32> = [1333],
-        offerAmounts: Array<i32> = [1]
+        offerAmounts: Array<i32> = [1],
       ): OrderFulfilled => {
         const event = createOrderFulfilledEvent(
           "0xaf4f0380b83f5350ec3c902702ff15b1f3b216080ae3bb82dfec201f8d31c188", // orderHash
@@ -67,7 +67,7 @@ describe("Aggregator", () => {
           [0, 0, 0], // consideration identifier
           ["14496000000000000000", "400000000000000000", "400000000000000000"], // consideration amounts
           [offerer, "0x0000a26b00c1f0df003000390027140000faa719", "0xe974159205528502237758439da8c4dcc03d3023"], // consideration recipients
-          1667474207 // block timestamp
+          1667474207, // block timestamp
         );
 
         // Fake a LooksRareAggregator Sweep event
@@ -75,7 +75,7 @@ describe("Aggregator", () => {
           newLog(
             LOOKSRARE_AGGREGATOR,
             [Bytes.fromHexString(LOOKSRARE_AGGREGATOR_SWEEP_EVENT_TOPIC), Bytes.fromHexString(originatorPadded)],
-            event.transactionLogIndex.minus(BigInt.fromI32(1))
+            event.transactionLogIndex.minus(BigInt.fromI32(1)),
           ),
           event!.receipt!.logs[0],
         ];
@@ -116,7 +116,7 @@ describe("Aggregator", () => {
           ZERO_ADDRESS.toHex(),
           transactionVolume,
           getTransactionId(event),
-          dayID
+          dayID,
         );
       });
 
@@ -145,7 +145,7 @@ describe("Aggregator", () => {
           ZERO_ADDRESS.toHex(),
           transactionVolume,
           getTransactionId(event),
-          dayID
+          dayID,
         );
       });
 
@@ -175,7 +175,7 @@ describe("Aggregator", () => {
           ZERO_ADDRESS.toHex(),
           transactionVolume,
           getTransactionId(event),
-          dayID
+          dayID,
         );
       });
 
@@ -224,7 +224,7 @@ describe("Aggregator", () => {
         assert.stringEquals(transaction!.aggregatorDailyDataByCurrency, `${ZERO_ADDRESS.toHex()}-${dayID}`);
         assert.stringEquals(
           transaction!.collectionDailyDataByCurrency,
-          `${offerToken}-${ZERO_ADDRESS.toHex()}-${dayID}`
+          `${offerToken}-${ZERO_ADDRESS.toHex()}-${dayID}`,
         );
         assert.stringEquals(transaction!.marketplaceDailyDataByCurrency, `Seaport-${ZERO_ADDRESS.toHex()}-${dayID}`);
         assert.stringEquals(transaction!.userDailyDataByCurrency, `${originator}-${ZERO_ADDRESS.toHex()}-${dayID}`);
@@ -237,7 +237,7 @@ describe("Aggregator", () => {
           [2, 2],
           ["0x60bb1e2aa1c9acafb4d34f71585d7e959f387769", ZERO_ADDRESS.toHex()],
           [1333, 1334],
-          [1, 1]
+          [1, 1],
         );
         handleOrderFulfilled(event);
         expectNothingHappened("Seaport", offerToken, ZERO_ADDRESS.toHex(), getTransactionId(event), dayID);
@@ -252,7 +252,7 @@ describe("Aggregator", () => {
       test("does nothing if consideration tokens are not the same", () => {
         const event = createMockOrderFulfilledEvent(
           [0, 0, 0],
-          [ZERO_ADDRESS.toHex(), ZERO_ADDRESS.toHex(), "0xA0b86991c6218b36c1d19D4a2e9Eb0cE3606eB48"]
+          [ZERO_ADDRESS.toHex(), ZERO_ADDRESS.toHex(), "0xA0b86991c6218b36c1d19D4a2e9Eb0cE3606eB48"],
         );
         handleOrderFulfilled(event);
         expectNothingHappened("Seaport", offerToken, ZERO_ADDRESS.toHex(), getTransactionId(event), dayID);
@@ -261,7 +261,7 @@ describe("Aggregator", () => {
       test("does nothing if consideration item types are not the same", () => {
         const event = createMockOrderFulfilledEvent(
           [0, 0, 1],
-          [ZERO_ADDRESS.toHex(), ZERO_ADDRESS.toHex(), ZERO_ADDRESS.toHex()]
+          [ZERO_ADDRESS.toHex(), ZERO_ADDRESS.toHex(), ZERO_ADDRESS.toHex()],
         );
         handleOrderFulfilled(event);
         expectNothingHappened("Seaport", offerToken, ZERO_ADDRESS.toHex(), getTransactionId(event), dayID);
@@ -278,7 +278,7 @@ describe("Aggregator", () => {
               Bytes.fromHexString("0x807273efecfbeb7ae7d3a2189d1ed5a7db80074eed86e7d80b10bb925cd1db74"),
               Bytes.fromHexString(originatorPadded),
             ],
-            event.transactionLogIndex.minus(BigInt.fromI32(1))
+            event.transactionLogIndex.minus(BigInt.fromI32(1)),
           ),
           event!.receipt!.logs[1],
         ];
@@ -288,7 +288,7 @@ describe("Aggregator", () => {
           newLog(
             Address.fromString("0x000000000000000000000000000000000000002a"),
             [Bytes.fromHexString(LOOKSRARE_AGGREGATOR_SWEEP_EVENT_TOPIC), Bytes.fromHexString(originatorPadded)],
-            event.transactionLogIndex.minus(BigInt.fromI32(1))
+            event.transactionLogIndex.minus(BigInt.fromI32(1)),
           ),
           event!.receipt!.logs[1],
         ];
@@ -333,7 +333,7 @@ describe("Aggregator", () => {
         collectionAddress,
         tokenId,
         price,
-        1671460823
+        1671460823,
       );
 
       // Fake a LooksRareAggregator Sweep event
@@ -341,7 +341,7 @@ describe("Aggregator", () => {
         newLog(
           LOOKSRARE_AGGREGATOR,
           [Bytes.fromHexString(LOOKSRARE_AGGREGATOR_SWEEP_EVENT_TOPIC), Bytes.fromHexString(originatorPadded)],
-          event.transactionLogIndex.minus(BigInt.fromI32(1))
+          event.transactionLogIndex.minus(BigInt.fromI32(1)),
         ),
         event!.receipt!.logs[0],
       ];
@@ -382,7 +382,7 @@ describe("Aggregator", () => {
         currency,
         transactionVolume,
         getTransactionId(event),
-        dayID
+        dayID,
       );
     });
 
@@ -436,7 +436,7 @@ describe("Aggregator", () => {
         currency,
         transactionVolume,
         getTransactionId(event),
-        dayID
+        dayID,
       );
     });
 
@@ -499,7 +499,7 @@ describe("Aggregator", () => {
             Bytes.fromHexString("0x807273efecfbeb7ae7d3a2189d1ed5a7db80074eed86e7d80b10bb925cd1db74"),
             Bytes.fromHexString(originatorPadded),
           ],
-          event.transactionLogIndex.minus(BigInt.fromI32(1))
+          event.transactionLogIndex.minus(BigInt.fromI32(1)),
         ),
         event!.receipt!.logs[1],
       ];
@@ -509,7 +509,7 @@ describe("Aggregator", () => {
         newLog(
           Address.fromString("0x000000000000000000000000000000000000002a"),
           [Bytes.fromHexString(LOOKSRARE_AGGREGATOR_SWEEP_EVENT_TOPIC), Bytes.fromHexString(originatorPadded)],
-          event.transactionLogIndex.minus(BigInt.fromI32(1))
+          event.transactionLogIndex.minus(BigInt.fromI32(1)),
         ),
         event!.receipt!.logs[1],
       ];

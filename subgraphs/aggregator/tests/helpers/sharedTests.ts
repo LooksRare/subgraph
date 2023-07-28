@@ -66,7 +66,7 @@ export const expectAggregatorDailyDataByCurrencyUpdated = (
   currency: string,
   volume: string,
   transactionId: string,
-  dayID: string
+  dayID: string,
 ): void => {
   const aggregatorDailyDataByCurrency = AggregatorDailyDataByCurrency.load(`${currency}-${dayID}`);
   assert.assertNotNull(aggregatorDailyDataByCurrency);
@@ -94,7 +94,7 @@ export const expectCollectionByCurrencyUpdated = (
   collectionAddress: string,
   currency: string,
   volume: string,
-  dayID: string
+  dayID: string,
 ): void => {
   const collectionByCurrency = CollectionByCurrency.load(`${collectionAddress}-${currency}`);
   assert.assertNotNull(collectionByCurrency);
@@ -119,13 +119,13 @@ export const expectCollectionDailyDataByCurrencyUpdated = (
   currency: string,
   volume: string,
   transactionId: string,
-  dayID: string
+  dayID: string,
 ): void => {
   const collectionDailyDataByCurrency = CollectionDailyDataByCurrency.load(`${collectionAddress}-${currency}-${dayID}`);
   assert.assertNotNull(collectionDailyDataByCurrency);
   assert.stringEquals(
     collectionDailyDataByCurrency!.collectionByCurrency.toString(),
-    `${collectionAddress}-${currency}`
+    `${collectionAddress}-${currency}`,
   );
   assert.stringEquals(collectionDailyDataByCurrency!.currency.toHexString(), currency);
   assert.bigIntEquals(collectionDailyDataByCurrency!.date, BigInt.fromString(dayID).times(BigInt.fromI32(86400)));
@@ -150,7 +150,7 @@ export const expectMarketplaceByCurrencyUpdated = (
   id: string,
   currency: string,
   volume: string,
-  dayID: string
+  dayID: string,
 ): void => {
   const marketplaceByCurrency = MarketplaceByCurrency.load(`${id}-${currency}`);
   assert.assertNotNull(marketplaceByCurrency);
@@ -179,7 +179,7 @@ export const expectMarketplaceDailyDataByCurrencyUpdated = (
   currency: string,
   volume: string,
   transactionId: string,
-  dayID: string
+  dayID: string,
 ): void => {
   const marketplaceDailyDataByCurrency = MarketplaceDailyDataByCurrency.load(`${id}-${currency}-${dayID}`);
   assert.assertNotNull(marketplaceDailyDataByCurrency);
@@ -232,7 +232,7 @@ export const expectUserDailyDataByCurrencyUpdated = (
   currency: string,
   volume: string,
   transactionId: string,
-  dayID: string
+  dayID: string,
 ): void => {
   const userDailyDataByCurrency = UserDailyDataByCurrency.load(`${originator}-${currency}-${dayID}`);
   assert.assertNotNull(userDailyDataByCurrency);
@@ -250,7 +250,7 @@ export const expectNothingHappened = (
   collectionAddress: string,
   currency: string,
   transactionId: string,
-  dayID: string
+  dayID: string,
 ): void => {
   const collection = Collection.load(collectionAddress);
   assert.assertNull(collection);
