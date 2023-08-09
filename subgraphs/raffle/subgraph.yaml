@@ -1,0 +1,87 @@
+specVersion: 0.0.5
+description: LooksRare Raffle
+repository: https://github.com/looksrare
+schema:
+  file: ./schema.graphql
+features:
+  - grafting
+graft:
+  base: QmPPZkk4G6PtUoC1Kvvqg5dDayhg4PMZRPw56Q6tJfFf79
+  block: 17687869
+dataSources:
+  - kind: ethereum/contract
+    name: Raffle
+    network: mainnet
+    source:
+      abi: Raffle
+      address: "0x0000000000009703EcD0fFEa3143fc9096DE91B0"
+      startBlock: 17236721
+    mapping:
+      kind: ethereum/events
+      apiVersion: 0.0.7
+      language: wasm/assemblyscript
+      file: ./mappings/index.ts
+      entities:
+        - Raffle
+        - Currency
+        - Pricing
+        - Prize
+        - Participant
+        - Entry
+      abis:
+        - name: Raffle
+          file: ./abis/Raffle.json
+        - name: IRaffle
+          file: ./abis/IRaffle.json
+        - name: ERC20
+          file: ./abis/ERC20.json
+      eventHandlers:
+        - event: CurrenciesStatusUpdated(address[],bool)
+          handler: handleCurrenciesStatusUpdatedV1
+        - event: RaffleStatusUpdated(uint256,uint8)
+          handler: handleRaffleStatusUpdatedV1
+        - event: EntrySold(uint256,address,uint40,uint208)
+          handler: handleEntrySoldV1
+        - event: EntryRefunded(uint256,address,uint208)
+          handler: handleEntryRefundedV1
+        - event: PrizesClaimed(uint256,uint256[])
+          handler: handlePrizesClaimedV1
+  - kind: ethereum/contract
+    name: RaffleV2
+    network: mainnet
+    source:
+      abi: RaffleV2
+      address: "0x0000000000aDEaD599C11A0C9a7475B67852c1D0"
+      startBlock: 17687869
+    mapping:
+      kind: ethereum/events
+      apiVersion: 0.0.7
+      language: wasm/assemblyscript
+      file: ./mappings/index.ts
+      entities:
+        - Raffle
+        - Currency
+        - Pricing
+        - Prize
+        - Participant
+        - Entry
+      abis:
+        - name: RaffleV2
+          file: ./abis/RaffleV2.json
+        - name: IRaffleV2
+          file: ./abis/IRaffleV2.json
+        - name: ERC20
+          file: ./abis/ERC20.json
+      eventHandlers:
+        - event: CurrenciesStatusUpdated(address[],bool)
+          handler: handleCurrenciesStatusUpdatedV2
+        - event: RaffleStatusUpdated(uint256,uint8)
+          handler: handleRaffleStatusUpdatedV2
+        - event: EntrySold(uint256,address,address,uint40,uint208)
+          handler: handleEntrySoldV2
+        - event: EntryRefunded(uint256,address,uint208)
+          handler: handleEntryRefundedV2
+        - event: PrizeClaimed(uint256,uint256)
+          handler: handlePrizeClaimedV2
+        - event: PrizesClaimed(uint256,uint256[])
+          handler: handlePrizesClaimedV2

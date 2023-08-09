@@ -1,0 +1,848 @@
+[
+  {
+    "inputs": [],
+    "name": "CutoffTimeNotReached",
+    "type": "error"
+  },
+  {
+    "inputs": [],
+    "name": "CutoffTimeReached",
+    "type": "error"
+  },
+  {
+    "inputs": [],
+    "name": "DrawExpirationTimeNotReached",
+    "type": "error"
+  },
+  {
+    "inputs": [],
+    "name": "InsufficientNativeTokensSupplied",
+    "type": "error"
+  },
+  {
+    "inputs": [],
+    "name": "InvalidCaller",
+    "type": "error"
+  },
+  {
+    "inputs": [],
+    "name": "InvalidCount",
+    "type": "error"
+  },
+  {
+    "inputs": [],
+    "name": "InvalidCurrency",
+    "type": "error"
+  },
+  {
+    "inputs": [],
+    "name": "InvalidCutoffTime",
+    "type": "error"
+  },
+  {
+    "inputs": [],
+    "name": "InvalidIndex",
+    "type": "error"
+  },
+  {
+    "inputs": [],
+    "name": "InvalidPricingOption",
+    "type": "error"
+  },
+  {
+    "inputs": [],
+    "name": "InvalidPricingOptionsCount",
+    "type": "error"
+  },
+  {
+    "inputs": [],
+    "name": "InvalidPrize",
+    "type": "error"
+  },
+  {
+    "inputs": [],
+    "name": "InvalidPrizesCount",
+    "type": "error"
+  },
+  {
+    "inputs": [],
+    "name": "InvalidProtocolFeeBp",
+    "type": "error"
+  },
+  {
+    "inputs": [],
+    "name": "InvalidProtocolFeeRecipient",
+    "type": "error"
+  },
+  {
+    "inputs": [],
+    "name": "InvalidStatus",
+    "type": "error"
+  },
+  {
+    "inputs": [],
+    "name": "InvalidWinnersCount",
+    "type": "error"
+  },
+  {
+    "inputs": [],
+    "name": "MaximumEntriesPerParticipantReached",
+    "type": "error"
+  },
+  {
+    "inputs": [],
+    "name": "MaximumEntriesReached",
+    "type": "error"
+  },
+  {
+    "inputs": [],
+    "name": "NotEnoughEntries",
+    "type": "error"
+  },
+  {
+    "inputs": [],
+    "name": "NothingToClaim",
+    "type": "error"
+  },
+  {
+    "inputs": [],
+    "name": "RandomnessRequestAlreadyExists",
+    "type": "error"
+  },
+  {
+    "inputs": [],
+    "name": "RandomnessRequestDoesNotExist",
+    "type": "error"
+  },
+  {
+    "anonymous": false,
+    "inputs": [
+      {
+        "indexed": false,
+        "internalType": "address[]",
+        "name": "currencies",
+        "type": "address[]"
+      },
+      {
+        "indexed": false,
+        "internalType": "bool",
+        "name": "isAllowed",
+        "type": "bool"
+      }
+    ],
+    "name": "CurrenciesStatusUpdated",
+    "type": "event"
+  },
+  {
+    "anonymous": false,
+    "inputs": [
+      {
+        "indexed": false,
+        "internalType": "uint256",
+        "name": "raffleId",
+        "type": "uint256"
+      },
+      {
+        "indexed": false,
+        "internalType": "address",
+        "name": "buyer",
+        "type": "address"
+      },
+      {
+        "indexed": false,
+        "internalType": "uint208",
+        "name": "amount",
+        "type": "uint208"
+      }
+    ],
+    "name": "EntryRefunded",
+    "type": "event"
+  },
+  {
+    "anonymous": false,
+    "inputs": [
+      {
+        "indexed": false,
+        "internalType": "uint256",
+        "name": "raffleId",
+        "type": "uint256"
+      },
+      {
+        "indexed": false,
+        "internalType": "address",
+        "name": "buyer",
+        "type": "address"
+      },
+      {
+        "indexed": false,
+        "internalType": "address",
+        "name": "recipient",
+        "type": "address"
+      },
+      {
+        "indexed": false,
+        "internalType": "uint40",
+        "name": "entriesCount",
+        "type": "uint40"
+      },
+      {
+        "indexed": false,
+        "internalType": "uint208",
+        "name": "price",
+        "type": "uint208"
+      }
+    ],
+    "name": "EntrySold",
+    "type": "event"
+  },
+  {
+    "anonymous": false,
+    "inputs": [
+      {
+        "indexed": false,
+        "internalType": "uint256",
+        "name": "raffleId",
+        "type": "uint256"
+      },
+      {
+        "indexed": false,
+        "internalType": "uint256",
+        "name": "amount",
+        "type": "uint256"
+      }
+    ],
+    "name": "FeesClaimed",
+    "type": "event"
+  },
+  {
+    "anonymous": false,
+    "inputs": [
+      {
+        "indexed": false,
+        "internalType": "uint256",
+        "name": "raffleId",
+        "type": "uint256"
+      },
+      {
+        "indexed": false,
+        "internalType": "uint256",
+        "name": "winnerIndex",
+        "type": "uint256"
+      }
+    ],
+    "name": "PrizeClaimed",
+    "type": "event"
+  },
+  {
+    "anonymous": false,
+    "inputs": [
+      {
+        "indexed": false,
+        "internalType": "uint256",
+        "name": "raffleId",
+        "type": "uint256"
+      },
+      {
+        "indexed": false,
+        "internalType": "uint256[]",
+        "name": "winnerIndex",
+        "type": "uint256[]"
+      }
+    ],
+    "name": "PrizesClaimed",
+    "type": "event"
+  },
+  {
+    "anonymous": false,
+    "inputs": [
+      {
+        "indexed": false,
+        "internalType": "uint16",
+        "name": "protocolFeeBp",
+        "type": "uint16"
+      }
+    ],
+    "name": "ProtocolFeeBpUpdated",
+    "type": "event"
+  },
+  {
+    "anonymous": false,
+    "inputs": [
+      {
+        "indexed": false,
+        "internalType": "address",
+        "name": "protocolFeeRecipient",
+        "type": "address"
+      }
+    ],
+    "name": "ProtocolFeeRecipientUpdated",
+    "type": "event"
+  },
+  {
+    "anonymous": false,
+    "inputs": [
+      {
+        "indexed": false,
+        "internalType": "uint256",
+        "name": "raffleId",
+        "type": "uint256"
+      },
+      {
+        "indexed": false,
+        "internalType": "enum IRaffleV2.RaffleStatus",
+        "name": "status",
+        "type": "uint8"
+      }
+    ],
+    "name": "RaffleStatusUpdated",
+    "type": "event"
+  },
+  {
+    "anonymous": false,
+    "inputs": [
+      {
+        "indexed": false,
+        "internalType": "uint256",
+        "name": "raffleId",
+        "type": "uint256"
+      },
+      {
+        "indexed": false,
+        "internalType": "uint256",
+        "name": "requestId",
+        "type": "uint256"
+      }
+    ],
+    "name": "RandomnessRequested",
+    "type": "event"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "uint256",
+        "name": "raffleId",
+        "type": "uint256"
+      }
+    ],
+    "name": "cancel",
+    "outputs": [],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "uint256",
+        "name": "raffleId",
+        "type": "uint256"
+      }
+    ],
+    "name": "cancelAfterRandomnessRequest",
+    "outputs": [],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "uint256",
+        "name": "raffleId",
+        "type": "uint256"
+      }
+    ],
+    "name": "claimFees",
+    "outputs": [],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "uint256",
+        "name": "raffleId",
+        "type": "uint256"
+      },
+      {
+        "internalType": "uint256",
+        "name": "winnerIndex",
+        "type": "uint256"
+      }
+    ],
+    "name": "claimPrize",
+    "outputs": [],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "components": [
+          {
+            "internalType": "uint256",
+            "name": "raffleId",
+            "type": "uint256"
+          },
+          {
+            "internalType": "uint256[]",
+            "name": "winnerIndices",
+            "type": "uint256[]"
+          }
+        ],
+        "internalType": "struct IRaffleV2.ClaimPrizesCalldata[]",
+        "name": "claimPrizesCalldata",
+        "type": "tuple[]"
+      }
+    ],
+    "name": "claimPrizes",
+    "outputs": [],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "uint256[]",
+        "name": "raffleIds",
+        "type": "uint256[]"
+      }
+    ],
+    "name": "claimRefund",
+    "outputs": [],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "components": [
+          {
+            "internalType": "uint40",
+            "name": "cutoffTime",
+            "type": "uint40"
+          },
+          {
+            "internalType": "bool",
+            "name": "isMinimumEntriesFixed",
+            "type": "bool"
+          },
+          {
+            "internalType": "uint40",
+            "name": "minimumEntries",
+            "type": "uint40"
+          },
+          {
+            "internalType": "uint40",
+            "name": "maximumEntriesPerParticipant",
+            "type": "uint40"
+          },
+          {
+            "internalType": "uint16",
+            "name": "protocolFeeBp",
+            "type": "uint16"
+          },
+          {
+            "internalType": "address",
+            "name": "feeTokenAddress",
+            "type": "address"
+          },
+          {
+            "components": [
+              {
+                "internalType": "uint40",
+                "name": "winnersCount",
+                "type": "uint40"
+              },
+              {
+                "internalType": "uint40",
+                "name": "cumulativeWinnersCount",
+                "type": "uint40"
+              },
+              {
+                "internalType": "enum IRaffleV2.TokenType",
+                "name": "prizeType",
+                "type": "uint8"
+              },
+              {
+                "internalType": "uint8",
+                "name": "prizeTier",
+                "type": "uint8"
+              },
+              {
+                "internalType": "address",
+                "name": "prizeAddress",
+                "type": "address"
+              },
+              {
+                "internalType": "uint256",
+                "name": "prizeId",
+                "type": "uint256"
+              },
+              {
+                "internalType": "uint256",
+                "name": "prizeAmount",
+                "type": "uint256"
+              }
+            ],
+            "internalType": "struct IRaffleV2.Prize[]",
+            "name": "prizes",
+            "type": "tuple[]"
+          },
+          {
+            "components": [
+              {
+                "internalType": "uint40",
+                "name": "entriesCount",
+                "type": "uint40"
+              },
+              {
+                "internalType": "uint208",
+                "name": "price",
+                "type": "uint208"
+              }
+            ],
+            "internalType": "struct IRaffleV2.PricingOption[]",
+            "name": "pricingOptions",
+            "type": "tuple[]"
+          }
+        ],
+        "internalType": "struct IRaffleV2.CreateRaffleCalldata",
+        "name": "params",
+        "type": "tuple"
+      }
+    ],
+    "name": "createRaffle",
+    "outputs": [
+      {
+        "internalType": "uint256",
+        "name": "raffleId",
+        "type": "uint256"
+      }
+    ],
+    "stateMutability": "payable",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "uint256",
+        "name": "raffleId",
+        "type": "uint256"
+      }
+    ],
+    "name": "drawWinners",
+    "outputs": [],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "components": [
+          {
+            "internalType": "uint256",
+            "name": "raffleId",
+            "type": "uint256"
+          },
+          {
+            "internalType": "uint256",
+            "name": "pricingOptionIndex",
+            "type": "uint256"
+          },
+          {
+            "internalType": "uint40",
+            "name": "count",
+            "type": "uint40"
+          },
+          {
+            "internalType": "address",
+            "name": "recipient",
+            "type": "address"
+          }
+        ],
+        "internalType": "struct IRaffleV2.EntryCalldata[]",
+        "name": "entries",
+        "type": "tuple[]"
+      }
+    ],
+    "name": "enterRaffles",
+    "outputs": [],
+    "stateMutability": "payable",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "uint256",
+        "name": "raffleId",
+        "type": "uint256"
+      }
+    ],
+    "name": "getEntries",
+    "outputs": [
+      {
+        "components": [
+          {
+            "internalType": "uint40",
+            "name": "currentEntryIndex",
+            "type": "uint40"
+          },
+          {
+            "internalType": "address",
+            "name": "participant",
+            "type": "address"
+          }
+        ],
+        "internalType": "struct IRaffleV2.Entry[]",
+        "name": "",
+        "type": "tuple[]"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "uint256",
+        "name": "raffleId",
+        "type": "uint256"
+      }
+    ],
+    "name": "getPricingOptions",
+    "outputs": [
+      {
+        "components": [
+          {
+            "internalType": "uint40",
+            "name": "entriesCount",
+            "type": "uint40"
+          },
+          {
+            "internalType": "uint208",
+            "name": "price",
+            "type": "uint208"
+          }
+        ],
+        "internalType": "struct IRaffleV2.PricingOption[]",
+        "name": "",
+        "type": "tuple[]"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "uint256",
+        "name": "raffleId",
+        "type": "uint256"
+      }
+    ],
+    "name": "getPrizes",
+    "outputs": [
+      {
+        "components": [
+          {
+            "internalType": "uint40",
+            "name": "winnersCount",
+            "type": "uint40"
+          },
+          {
+            "internalType": "uint40",
+            "name": "cumulativeWinnersCount",
+            "type": "uint40"
+          },
+          {
+            "internalType": "enum IRaffleV2.TokenType",
+            "name": "prizeType",
+            "type": "uint8"
+          },
+          {
+            "internalType": "uint8",
+            "name": "prizeTier",
+            "type": "uint8"
+          },
+          {
+            "internalType": "address",
+            "name": "prizeAddress",
+            "type": "address"
+          },
+          {
+            "internalType": "uint256",
+            "name": "prizeId",
+            "type": "uint256"
+          },
+          {
+            "internalType": "uint256",
+            "name": "prizeAmount",
+            "type": "uint256"
+          }
+        ],
+        "internalType": "struct IRaffleV2.Prize[]",
+        "name": "",
+        "type": "tuple[]"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "uint256",
+        "name": "raffleId",
+        "type": "uint256"
+      }
+    ],
+    "name": "getWinners",
+    "outputs": [
+      {
+        "components": [
+          {
+            "internalType": "address",
+            "name": "participant",
+            "type": "address"
+          },
+          {
+            "internalType": "bool",
+            "name": "claimed",
+            "type": "bool"
+          },
+          {
+            "internalType": "uint8",
+            "name": "prizeIndex",
+            "type": "uint8"
+          },
+          {
+            "internalType": "uint40",
+            "name": "entryIndex",
+            "type": "uint40"
+          }
+        ],
+        "internalType": "struct IRaffleV2.Winner[]",
+        "name": "",
+        "type": "tuple[]"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "uint256[]",
+        "name": "refundableRaffleIds",
+        "type": "uint256[]"
+      },
+      {
+        "components": [
+          {
+            "internalType": "uint256",
+            "name": "raffleId",
+            "type": "uint256"
+          },
+          {
+            "internalType": "uint256",
+            "name": "pricingOptionIndex",
+            "type": "uint256"
+          },
+          {
+            "internalType": "uint40",
+            "name": "count",
+            "type": "uint40"
+          },
+          {
+            "internalType": "address",
+            "name": "recipient",
+            "type": "address"
+          }
+        ],
+        "internalType": "struct IRaffleV2.EntryCalldata[]",
+        "name": "entries",
+        "type": "tuple[]"
+      }
+    ],
+    "name": "rollover",
+    "outputs": [],
+    "stateMutability": "payable",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "uint256",
+        "name": "requestId",
+        "type": "uint256"
+      }
+    ],
+    "name": "selectWinners",
+    "outputs": [],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "uint16",
+        "name": "protocolFeeBp",
+        "type": "uint16"
+      }
+    ],
+    "name": "setProtocolFeeBp",
+    "outputs": [],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "address",
+        "name": "protocolFeeRecipient",
+        "type": "address"
+      }
+    ],
+    "name": "setProtocolFeeRecipient",
+    "outputs": [],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [],
+    "name": "togglePaused",
+    "outputs": [],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "address[]",
+        "name": "currencies",
+        "type": "address[]"
+      },
+      {
+        "internalType": "bool",
+        "name": "isAllowed",
+        "type": "bool"
+      }
+    ],
+    "name": "updateCurrenciesStatus",
+    "outputs": [],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "uint256",
+        "name": "raffleId",
+        "type": "uint256"
+      }
+    ],
+    "name": "withdrawPrizes",
+    "outputs": [],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  }
+]
